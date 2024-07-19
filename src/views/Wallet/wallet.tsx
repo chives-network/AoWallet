@@ -44,8 +44,8 @@ import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 
 import { winstonToAr } from 'src/functions/ChivesWallets'
 
-import UploadFiles from 'src/views/Wallet/Uploadfiles1';
-import SendOut from 'src/views/Wallet/Sendout1';
+import UploadFiles from 'src/views/Wallet/Uploadfiles';
+import SendOut from 'src/views/Wallet/Sendout';
 import Tooltip from '@mui/material/Tooltip'
 
 // ** Icon Imports
