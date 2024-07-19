@@ -104,7 +104,6 @@
     "@types/react-datepicker": "4.11.2",
     "@types/react-draft-wysiwyg": "1.13.4",
     "@types/react-redux": "7.1.25",
-    "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.3.2",
