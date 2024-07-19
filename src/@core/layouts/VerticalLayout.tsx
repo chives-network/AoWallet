@@ -6,10 +6,8 @@ import Box, { BoxProps } from '@mui/material/Box'
 // ** Type Import
 import { LayoutProps } from 'src/@core/layouts/types'
 
-// ** Components
-import AppBar from './components/vertical/appBar'
-
-import Footer from './components/shared-components/footer'
+import Footer from './components/shared-components/Footer'
+import Header from './components/shared-components/Header'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -37,7 +35,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const VerticalLayout = (props: LayoutProps) => {
   // ** Props
-  const { settings, children, contentHeightFixed, verticalLayoutProps, footerProps } = props
+  const { settings, children, contentHeightFixed } = props
 
   // ** Vars
   const { contentWidth } = settings
@@ -50,12 +48,7 @@ const VerticalLayout = (props: LayoutProps) => {
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
           
-          {/* AppBar Component */}
-          <AppBar
-            appBarContent={verticalLayoutProps.appBar?.content}
-            appBarProps={verticalLayoutProps.appBar?.componentProps}
-            {...props}
-          />
+          <Header {...props}/>
 
           {/* Content */}
           <ContentWrapper
@@ -75,8 +68,8 @@ const VerticalLayout = (props: LayoutProps) => {
             {children}
           </ContentWrapper>
 
-          {/* Footer Component */}
-          <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
+          <Footer {...props} />
+
         </MainContentWrapper>
       </VerticalLayoutWrapper>
 
