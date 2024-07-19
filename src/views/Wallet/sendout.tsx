@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid'
 import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
 
 // ** Demo Components Imports
-import SendOutForm from 'src/views/form/SendOutForm'
+import SendOutForm from 'src/views/Wallet/SendOutForm'
 
 const SendOut = () => {
   return (

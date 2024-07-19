@@ -28,7 +28,7 @@ import Button from '@mui/material/Button'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import UploadWalletJsonFile from 'src/views/form/UploadWalletJsonFile'
+import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, parseBundleTx, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
 

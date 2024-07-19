@@ -9,7 +9,7 @@ import PageHeader from 'src/@core/components/page-header'
 import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
 
 // ** Demo Components Imports
-import FileUploaderMultiple from 'src/views/form/FileUploaderMultiple'
+import FileUploaderMultiple from 'src/views/Wallet/FileUploaderMultiple'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
