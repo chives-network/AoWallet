@@ -37,7 +37,6 @@ interface Props {
   navVisible?: boolean
   collapsedNavWidth: number
   navigationBorderWidth: number
-  toggleNavVisibility: () => void
   isSubToSub?: NavGroup | undefined
 }
 
@@ -76,10 +75,8 @@ const VerticalNavLink = ({
   parent,
   navHover,
   settings,
-  navVisible,
   isSubToSub,
   collapsedNavWidth,
-  toggleNavVisibility,
   navigationBorderWidth
 }: Props) => {
   // ** Hooks
@@ -116,9 +113,6 @@ const VerticalNavLink = ({
             if (item.path === undefined) {
               e.preventDefault()
               e.stopPropagation()
-            }
-            if (navVisible) {
-              toggleNavVisibility()
             }
           }}
           sx={{

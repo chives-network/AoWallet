@@ -21,7 +21,6 @@ interface Props {
   collapsedNavWidth: number
   hidden: LayoutProps['hidden']
   navigationBorderWidth: number
-  toggleNavVisibility: () => void
   settings: LayoutProps['settings']
   saveSettings: LayoutProps['saveSettings']
   navMenuBranding?: LayoutProps['verticalLayoutProps']['navMenu']['branding']
@@ -61,7 +60,6 @@ const VerticalNavHeader = (props: Props) => {
     settings,
     saveSettings,
     collapsedNavWidth,
-    toggleNavVisibility,
     navigationBorderWidth,
     menuLockedIcon: userMenuLockedIcon,
     navMenuBranding: userNavMenuBranding,
@@ -165,7 +163,6 @@ const VerticalNavHeader = (props: Props) => {
         <IconButton
           disableRipple
           disableFocusRipple
-          onClick={toggleNavVisibility}
           sx={{ p: 0, backgroundColor: 'transparent !important' }}
         >
           <Icon icon='mdi:close' fontSize={20} />

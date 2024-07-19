@@ -32,7 +32,6 @@ interface Props {
   collapsedNavWidth: number
   hidden: LayoutProps['hidden']
   navigationBorderWidth: number
-  toggleNavVisibility: () => void
   settings: LayoutProps['settings']
   children: LayoutProps['children']
   setNavVisible: (value: boolean) => void

@@ -1,6 +1,6 @@
 {
-  "name": "aoconnect",
-  "version": "2.2.0",
+  "name": "aowallet",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
