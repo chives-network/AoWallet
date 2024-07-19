@@ -30,12 +30,12 @@ import { formatHash, formatXWE, formatTimestampAge, formatStorageSize } from 'sr
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
 
-import FormatTxInfoInRow from 'src/pages/preview/FormatTxInfoInRow';
+import FormatTxInfoInRow from 'src/views/preview/FormatTxInfoInRow';
 
 // ** Next Import
 import { useRouter } from 'next/router'
 
-import StringDisplay from 'src/pages/preview/StringDisplay'
+import StringDisplay from 'src/views/preview/StringDisplay'
 
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'

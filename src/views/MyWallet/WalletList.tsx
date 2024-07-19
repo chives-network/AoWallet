@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid'
 import Table from '@mui/material/Table'
 import Divider from '@mui/material/Divider'
 import TableRow from '@mui/material/TableRow'
-import TableHead from '@mui/material/TableHead'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import CardContent from '@mui/material/CardContent'
@@ -30,11 +29,11 @@ import Icon from 'src/@core/components/icon'
 
 import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, parseBundleTx, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { isMobile, formatHash } from 'src/configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 const MyWallet = () => {
   // ** Hook
@@ -49,7 +48,6 @@ const MyWallet = () => {
   const [wantDeleteWalletId, setWantDeleteWalletId] = useState<string>("")
   const [wantDeleteWalletAddress, setWantDeleteWalletAddress] = useState<string>("")
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
-  const isMobileData = isMobile()
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
   
@@ -167,13 +165,6 @@ const MyWallet = () => {
               <CardHeader title={`${t(`My Wallets`)}`}
                           action={
                             <div>
-                              {currentAddress && currentAddress == "Ei-psc7SkN7kLsUNMLCUxA-Tk6AhtEDm90-czY20pbQ" ?
-                              <Button size='small' variant='contained' onClick={() => parseBundleTx()} sx={{mr: 5}}>
-                                {`${t(`Parse Bundle Tx`)}`}
-                              </Button>
-                              :
-                              null
-                              }
                               <Button size='small' variant='contained' onClick={() => setCreateWalletWindow(true)}>
                                 {`${t(`Create Wallet`)}`}
                               </Button>
@@ -181,121 +172,77 @@ const MyWallet = () => {
                           }
                           />
               <Divider sx={{ m: '0 !important' }} />
-              {isMobileData ? 
-                <Grid container spacing={6}>
-                  {getAllWalletsData.map((wallet: any, index: number) => {
-                    return (
-                      <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                        <Card>
-                          <CardContent>      
-                            <TableContainer>
-                              <Table size='small' sx={{ width: '95%' }}>
-                                <TableBody
-                                  sx={{
-                                    '& .MuiTableCell-root': {
-                                      border: 0,
-                                      pb: 1.5,
-                                      pl: '0 !important',
-                                      pr: '0 !important',
-                                      '&:first-of-type': {
-                                        width: 148
-                                      }
+              <Grid container spacing={6}>
+                {getAllWalletsData.map((wallet: any, index: number) => {
+                  return (
+                    <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                      <Card>
+                        <CardContent>      
+                          <TableContainer>
+                            <Table size='small' sx={{ width: '95%' }}>
+                              <TableBody
+                                sx={{
+                                  '& .MuiTableCell-root': {
+                                    border: 0,
+                                    pb: 1.5,
+                                    pl: '0 !important',
+                                    pr: '0 !important',
+                                    '&:first-of-type': {
+                                      width: 148
                                     }
-                                  }}
-                                >
-                                  <TableRow>
-                                    <TableCell>
-                                      <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center', whiteSpace: 'pre-line' }}>
-                                      {`${t(`Address`)}`}: {formatHash(wallet.data.arweave.key, 12)}
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                      {`${t(`Balance`)}`}: {walletBalanceMap[wallet.data.arweave.key]}
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                        <TextField  id={wallet.data.arweave.key} 
-                                          label={`${t(`Nickname`)}`} 
-                                          variant='standard' 
-                                          color='success'
-                                          defaultValue={getWalletNicknamesData[wallet.data.arweave.key]}
-                                          onChange={(event) => handleInputNicknameChange(event, wallet.data.arweave.key)}
-                                          />
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                        <Button variant='contained' size='small' endIcon={<Icon icon='mdi:export' />} onClick={(event) => handleClickToExport(event, wallet.data.arweave.key)}  sx={{ whiteSpace: 'nowrap', mr: 2 }}>
-                                          {`${t(`Export`)}`}
-                                        </Button>
-                                        <Button variant='contained' size='small' endIcon={<Icon icon='mdi:delete'/>} onClick={(event) => handleClickToDelete(event, wallet.data.arweave.key, wallet.id)} color="info" sx={{ whiteSpace: 'nowrap', mr: 2 }}>
-                                          {`${t(`Delete`)}`}
-                                        </Button>
-                                      </Typography> 
-                                    </TableCell>
-                                  </TableRow>
-
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          </CardContent>      
-                        </Card>
-                      </Grid>
-                    )
-                  })}
-                </Grid>
-                :
-                <TableContainer>
-                  <Table sx={{ minWidth: 600 }}>
-                    <TableHead >
-                      <TableRow>
-                        <TableCell align="center">{`${t(`Id`)}`}</TableCell>
-                        <TableCell align="center">{`${t(`Address`)}`}</TableCell>
-                        <TableCell align="center">{`${t(`Balance`)}`}</TableCell>
-                        <TableCell align="center" sx={{whiteSpace: 'nowrap'}}>{`${t(`Nickname`)}`}</TableCell>
-                        <TableCell align="center">{`${t(`Export`)}`}</TableCell>
-                        <TableCell align="center">{`${t(`Delete`)}`}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {getAllWalletsData.map((wallet: any, index: number) => (
-                        <TableRow hover key={index} sx={{ '&:last-of-type td': { border: 0 } }}>
-                          <TableCell align="center">{(index+1)}</TableCell>
-                          <TableCell align="center">{wallet.data.arweave.key}</TableCell>
-                          <TableCell align="right">{walletBalanceMap[wallet.data.arweave.key]}</TableCell>
-                          <TableCell align="center">
-                            <TextField  id={wallet.data.arweave.key} 
+                                  }
+                                }}
+                              >
+                                <TableRow>
+                                  <TableCell>
+                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center', whiteSpace: 'pre-line' }}>
+                                    {`${t(`Address`)}`}: {formatHash(wallet.data.arweave.key, 12)}
+                                    {currentAddress}
+                                    </Typography>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>
+                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
+                                    {`${t(`Balance`)}`}: {walletBalanceMap[wallet.data.arweave.key]}
+                                    </Typography>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>
+                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
+                                      <TextField  id={wallet.data.arweave.key} 
                                         label={`${t(`Nickname`)}`} 
                                         variant='standard' 
                                         color='success'
                                         defaultValue={getWalletNicknamesData[wallet.data.arweave.key]}
                                         onChange={(event) => handleInputNicknameChange(event, wallet.data.arweave.key)}
                                         />
-                          </TableCell>
-                          <TableCell align="center">
-                            <Button variant='contained' size='small' endIcon={<Icon icon='mdi:export' />} onClick={(event) => handleClickToExport(event, wallet.data.arweave.key)}  sx={{ whiteSpace: 'nowrap' }}>
-                            {`${t(`Export`)}`}
-                            </Button>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Button variant='contained' size='small' endIcon={<Icon icon='mdi:delete'/>} onClick={(event) => handleClickToDelete(event, wallet.data.arweave.key, wallet.id)} color="info" sx={{ whiteSpace: 'nowrap' }}>
-                            {`${t(`Delete`)}`}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              }
+                                    </Typography>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>
+                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
+                                      <Button variant='contained' size='small' endIcon={<Icon icon='mdi:export' />} onClick={(event) => handleClickToExport(event, wallet.data.arweave.key)}  sx={{ whiteSpace: 'nowrap', mr: 2 }}>
+                                        {`${t(`Export`)}`}
+                                      </Button>
+                                      <Button variant='contained' size='small' endIcon={<Icon icon='mdi:delete'/>} onClick={(event) => handleClickToDelete(event, wallet.data.arweave.key, wallet.id)} color="info" sx={{ whiteSpace: 'nowrap', mr: 2 }}>
+                                        {`${t(`Delete`)}`}
+                                      </Button>
+                                    </Typography> 
+                                  </TableCell>
+                                </TableRow>
+
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </CardContent>      
+                      </Card>
+                    </Grid>
+                  )
+                })}
+              </Grid>
             </Card>
           </Grid>
         </Grid>

@@ -1,46 +1,33 @@
-// ** Next Import
-import Link from 'next/link'
+import { useState, SyntheticEvent } from 'react';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import { Theme } from '@mui/material/styles'
-import { styled } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import authConfig from 'src/configs/auth'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Icon from 'src/@core/components/icon'
 
-const LinkStyled = styled(Link)(({ theme }) => ({
-  textDecoration: 'none',
-  color: theme.palette.primary.main
-}))
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
 
 const FooterContent = () => {
-  // ** Var
-  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
+  
+  const [value, setValue] = useState(0);
+  
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
-        <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
-        </Box>
-        {` by `}
-        <LinkStyled target='_blank' href={authConfig.AoConnectWebSite}>
-        AoConnect WebSite
-        </LinkStyled>
-      </Typography>
-      {hidden ? null : (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
-          <LinkStyled target='_blank' href={authConfig.AoConnectGithub}>
-            Github
-          </LinkStyled>
-          <LinkStyled target='_blank' href='https://discord.gg/YQXphqQnwK'>
-            Discord
-          </LinkStyled>
-        </Box>
-      )}
-    </Box>
+      <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+          console.log("FooterContent event", event)
+        }}
+      >
+        <BottomNavigationAction label="Wallet" icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
+        <BottomNavigationAction label="Swap" icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
+        <BottomNavigationAction label="Apps" icon={<Icon icon='tdesign:app' />} />
+        <BottomNavigationAction label="Setting" icon={<Icon icon='material-symbols:settings-outline' />} />
+      </BottomNavigation>
   )
 }
 

@@ -9,6 +9,8 @@ import { LayoutProps } from 'src/@core/layouts/types'
 // ** Components
 import AppBar from './components/vertical/appBar'
 
+import Footer from './components/shared-components/footer'
+
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
   display: 'flex'
@@ -35,7 +37,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const VerticalLayout = (props: LayoutProps) => {
   // ** Props
-  const { settings, children, contentHeightFixed, verticalLayoutProps } = props
+  const { settings, children, contentHeightFixed, verticalLayoutProps, footerProps } = props
 
   // ** Vars
   const { contentWidth } = settings
@@ -73,6 +75,8 @@ const VerticalLayout = (props: LayoutProps) => {
             {children}
           </ContentWrapper>
 
+          {/* Footer Component */}
+          <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
         </MainContentWrapper>
       </VerticalLayoutWrapper>
 

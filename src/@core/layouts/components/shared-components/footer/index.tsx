@@ -17,13 +17,13 @@ interface Props {
 
 const Footer = (props: Props) => {
   // ** Props
-  const { settings, footerStyles, footerContent: userFooterContent } = props
+  const { settings, footerStyles } = props
 
   // ** Hook
   const theme = useTheme()
 
   // ** Vars
-  const { skin, footer, layout, contentWidth } = settings
+  const { skin, footer, layout } = settings
 
   if (footer === 'hidden') {
     return null
@@ -55,30 +55,11 @@ const Footer = (props: Props) => {
         className='footer-content-container'
         sx={{
           width: '100%',
-          py: theme.spacing(footer === 'fixed' && skin === 'bordered' ? 3.875 : 4),
-          ...(contentWidth === 'boxed' && { '@media (min-width:1440px)': { maxWidth: 1680 } }),
-          ...(layout === 'vertical' && {
-            borderTopLeftRadius: 14,
-            borderTopRightRadius: 14,
-            ...(footer === 'fixed' && { backgroundColor: 'background.paper' })
-          }),
-          ...(footer === 'fixed'
-            ? {
-                px: [5, 6],
-                ...(contentWidth === 'boxed' &&
-                  layout === 'vertical' && {
-                    '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
-                  }),
-                ...(layout === 'vertical' && {
-                  ...(skin === 'bordered'
-                    ? { border: `1px solid ${theme.palette.divider}`, borderBottomWidth: 0 }
-                    : { boxShadow: 6 })
-                })
-              }
-            : { px: [4, 6] })
+          borderRadius: '6px',
+          backgroundColor: 'background.paper',
         }}
       >
-        {userFooterContent ? userFooterContent(props) : <FooterContent />}
+        <FooterContent />
       </Box>
     </Box>
   )

@@ -57,7 +57,7 @@ const themeConfig: ThemeConfig = {
   direction: 'ltr' /* ltr | rtl */,
   skin: 'default' /* default | bordered */,
   contentWidth: 'boxed' /* full | boxed */,
-  footer: 'hidden' /* fixed | static | hidden */,
+  footer: 'fixed' /* fixed | static | hidden */,
 
   // ** Routing Configs
   routingLoader: true /* true | false */,
@@ -76,7 +76,7 @@ const themeConfig: ThemeConfig = {
   horizontalMenuAnimation: true /* true | false */,
 
   // ** AppBar Configs
-  appBar: 'static' /* fixed | static | hidden /*! Note: hidden value will only work for Vertical Layout */,
+  appBar: 'fixed' /* fixed | static | hidden /*! Note: hidden value will only work for Vertical Layout */,
   appBarBlur: false /* true | false */,
 
   // ** Other Configs
