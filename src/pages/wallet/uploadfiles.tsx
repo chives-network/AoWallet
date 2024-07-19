@@ -2,7 +2,7 @@ import MyWalletModel from 'src/views/Wallet/wallet';
 
 const UploadFilesApp = () => {
 
-  const activeTab = "uploadfiles"; 
+  const activeTab = "Uploadfiles"; 
 
   return <MyWalletModel activeTab={activeTab} />
 

@@ -44,8 +44,8 @@ import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 
 import { winstonToAr } from 'src/functions/ChivesWallets'
 
-import UploadFiles from 'src/views/Wallet/uploadfiles';
-import SendOut from 'src/views/Wallet/sendout';
+import UploadFiles from 'src/views/Wallet/Uploadfiles1';
+import SendOut from 'src/views/Wallet/Sendout1';
 import Tooltip from '@mui/material/Tooltip'
 
 // ** Icon Imports
@@ -358,7 +358,7 @@ const MyWalletModel = ({ activeTab } : any) => {
             aria-label='forced scroll tabs example'
           >
             <Tab
-              value='sendout'
+              value='Sendout'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
                   <Icon fontSize={20} icon='material-symbols:send' />
@@ -367,7 +367,7 @@ const MyWalletModel = ({ activeTab } : any) => {
               }
             />
             <Tab
-              value='uploadfiles'
+              value='Uploadfiles'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
                   <Icon fontSize={20} icon='material-symbols:backup' />
@@ -377,7 +377,7 @@ const MyWalletModel = ({ activeTab } : any) => {
             />
           </TabList>
         </TabContext>
-          {store && store.data != undefined && activeTab != "sendout" && activeTab !="uploadfiles" ?
+          {store && store.data != undefined && activeTab != "Sendout" && activeTab !="Uploadfiles" ?
             <Fragment>
               {isMobileData ? 
               <Fragment>
@@ -491,7 +491,7 @@ const MyWalletModel = ({ activeTab } : any) => {
           :
             <Fragment></Fragment>
           }
-          {activeTab == "sendout" ?
+          {activeTab == "Sendout" ?
             <Card>
               <CardContent>
                 <SendOut />
@@ -500,7 +500,7 @@ const MyWalletModel = ({ activeTab } : any) => {
           :
             <Fragment></Fragment>
           }
-          {activeTab == "uploadfiles" ?
+          {activeTab == "Uploadfiles" ?
             <Card>
               <CardContent>
                 <UploadFiles />
