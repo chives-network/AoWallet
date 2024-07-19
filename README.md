@@ -1,7 +1,7 @@
-# **AOConnect**
+# **AoWallet**
 
 ## Introduction
-AOConnect is an application based on the AO Open Network, aiming to become a graphical operating system on the AO network, providing developers with the ability to build and iterate AO applications quickly. The design goal of AOConnect is to reduce the development complexity of AO network applications and provide some classic application scenarios for developers to learn and reference.
+AoWallet is an application based on the AO Open Network, aiming to become a graphical operating system on the AO network, providing developers with the ability to build and iterate AO applications quickly. The design goal of AoWallet is to reduce the development complexity of AO network applications and provide some classic application scenarios for developers to learn and reference.
 
 
 ## **Email**
@@ -18,7 +18,7 @@ Email is a tool developed based on AO for managing emails, with the following ke
    
 5. Folder Support: Starred, Spam, Trash, and directories Important, Social, Updates, Forums, Promotions.
 
-<img src="https://raw.githubusercontent.com/chives-network/AoConnect/main/public/screen/Email/Email-List-1.png" width="600" />
+<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Email/Email-List-1.png" width="600" />
 
 
 ## **Token**
@@ -47,9 +47,9 @@ Token is a tool developed based on AO for managing TOKENs, with the following ma
    
 11. Support bookmarking external TOKENs.
 
-<img src="https://raw.githubusercontent.com/chives-network/AoConnect/main/public/screen/Token/TokenSummary.png" width="600" />
+<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Token/TokenSummary.png" width="600" />
 
-<img src="https://raw.githubusercontent.com/chives-network/AoConnect/main/public/screen/Token/AllHolders.png" width="600" />
+<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Token/AllHolders.png" width="600" />
 
 
 ## **Chat**
@@ -62,9 +62,9 @@ Chat is a tool for Chat built on AO, with the following main functions:
 4. Engage in Chatting
 5. Set Administrators, including add admin, del admin.
 
-<img src="https://raw.githubusercontent.com/chives-network/AoConnect/main/public/screen/Chat/ChatList.png" width="600" />
+<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Chat/ChatList.png" width="600" />
 
-<img src="https://raw.githubusercontent.com/chives-network/AoConnect/main/public/screen/Chat/ChatSummary.png" width="600" />
+<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Chat/ChatSummary.png" width="600" />
 
 
 ## Requirements
@@ -73,8 +73,8 @@ Chat is a tool for Chat built on AO, with the following main functions:
 ## Install
 ```bash
 Dev:
-git clone https://github.com/chives-network/AoConnect
-cd AoConnect
+git clone https://github.com/chives-network/AoWallet
+cd AoWallet
 npm run dev
 
 Build:
@@ -91,5 +91,5 @@ npm run build
 Discord：https://discord.gg/aAkMH9Q3AY
 
 <!-- LINK GROUP -->
-[vercel-deploy-link]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchives-network/%2FAoConnect&project-name=AoConnect&repository-name=AoConnect
+[vercel-deploy-link]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchives-network/%2FAoWallet&project-name=AoWallet&repository-name=AoWallet
 [vercel-deploy-shield]: https://vercel.com/button
