@@ -39,9 +39,40 @@ import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames,
 import { useTranslation } from 'react-i18next'
 import { formatHash, formatAR } from 'src/configs/functions'
 
+import { styled } from '@mui/material/styles'
+import Footer from '../Layout/Footer'
+import Header from '../Layout/Header'
+
+const ContentWrapper = styled('main')(({ theme }) => ({
+  flexGrow: 1,
+  width: '100%',
+  padding: theme.spacing(6),
+  transition: 'padding .25s ease-in-out',
+  [theme.breakpoints.down('sm')]: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4)
+  }
+}))
+
 const MyWallet = () => {
   // ** Hook
   const { t } = useTranslation()
+
+  const contentHeightFixed = {}
+  
+  const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
+  const [FooterHidden, setFooterHidden] = useState<boolean>(false)
+  const [LeftIcon, setLeftIcon] = useState<string>('mdi:arrow-left-thin')
+  const [Title, setTitle] = useState<string>('My Wallet')
+  const [RightButtonText, setRightButtonText] = useState<string>('Edit')
+
+  const LeftIconOnClick = () => {
+    setLeftIcon('material-symbols:menu-rounded')
+  }
+
+  const RightButtonOnClick = () => {
+    setLeftIcon('mdi:arrow-left-thin')
+  }
     
   const [walletBalanceMap, setWalletBalanceMap] = useState<any>({})
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
@@ -135,118 +166,132 @@ const MyWallet = () => {
 
   return (
     <Fragment>
+      <Header Hidden={HeaderHidden} LeftIcon={LeftIcon} LeftIconOnClick={LeftIconOnClick} Title={Title} RightButtonText={RightButtonText} RightButtonOnClick={RightButtonOnClick} />
 
-      {isDialog == true ? 
-      <Fragment>
-          <Dialog
-              open={open}
-              disableEscapeKeyDown
-              aria-labelledby='alert-dialog-title'
-              aria-describedby='alert-dialog-description'
-              >
-              <DialogTitle id='alert-dialog-title'>{`${t(`Are you deleting your wallet?`)}`}</DialogTitle>
-              <DialogContent>
-                  <DialogContentText id='alert-dialog-description'>
-                  {`${t(`Once this wallet is deleted, it cannot be restored.`)}`}
-                  {`${t(`Do you want delete this wallet`)}`} {wantDeleteWalletAddress} ?
-                  </DialogContentText>
-              </DialogContent>
-              <DialogActions className='dialog-actions-dense'>
-                  <Button onClick={handleNoClose} color="error" size='large' variant='contained' >{`${t(`No`)}`}</Button>
-                  <Button onClick={handleYesClose} color="primary">{`${t(`Yes`)}`}</Button>
-              </DialogActions>
-          </Dialog>
-      </Fragment>
-      :
-      <Fragment></Fragment>
-      }
-      
-      {getAllWalletsData && createWalletWindow == false ? 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-              <Grid container spacing={2}>
-                {getAllWalletsData.map((wallet: any, index: number) => {
+      <ContentWrapper
+          className='layout-page-content'
+          sx={{
+              ...(contentHeightFixed && {
+              overflow: 'hidden',
+              '& > :first-of-type': { height: '100%' }
+              })
+          }}
+          >
 
-                  return (
-                    <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                      <Card>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                          <CustomAvatar
-                            skin='light'
-                            color={'primary'}
-                            sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                          >
-                            {getInitials(wallet.data.arweave.key).toUpperCase()}
-                          </CustomAvatar>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-                            >
-                            <Typography sx={{ 
-                              color: 'text.primary',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}
-                            >
-                              {getWalletNicknamesData[wallet.data.arweave.key] ?? 'My Wallet'}
-                            </Typography>
-                            <Box sx={{ display: 'flex'}}>
-                              <Typography variant='body2' sx={{ 
-                                color: `primary.dark`, 
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                flex: 1
-                              }}>
-                                {formatHash(wallet.data.arweave.key, 5)}
-                              </Typography>
-                              
-                            </Box>
-                          </Box>
-                          <Box sx={{ }} textAlign="right">
-                            <Typography variant='h6' sx={{ 
-                              color: `info.dark`,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              mr: 2
-                            }}>
-                              {formatAR(walletBalanceMap[wallet.data.arweave.key] ?? 0, 2)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Card>
-                    </Grid>
-                  )
-
-                })}
-              </Grid>
-          </Grid>
-        </Grid>
-      :
-        <Fragment></Fragment>
-      }
-      {createWalletWindow == true ? 
-        <Grid container spacing={6}>
+          {isDialog == true ? 
+          <Fragment>
+              <Dialog
+                  open={open}
+                  disableEscapeKeyDown
+                  aria-labelledby='alert-dialog-title'
+                  aria-describedby='alert-dialog-description'
+                  >
+                  <DialogTitle id='alert-dialog-title'>{`${t(`Are you deleting your wallet?`)}`}</DialogTitle>
+                  <DialogContent>
+                      <DialogContentText id='alert-dialog-description'>
+                      {`${t(`Once this wallet is deleted, it cannot be restored.`)}`}
+                      {`${t(`Do you want delete this wallet`)}`} {wantDeleteWalletAddress} ?
+                      </DialogContentText>
+                  </DialogContent>
+                  <DialogActions className='dialog-actions-dense'>
+                      <Button onClick={handleNoClose} color="error" size='large' variant='contained' >{`${t(`No`)}`}</Button>
+                      <Button onClick={handleYesClose} color="primary">{`${t(`Yes`)}`}</Button>
+                  </DialogActions>
+              </Dialog>
+          </Fragment>
+          :
+          <Fragment></Fragment>
+          }
           
-          <Grid item xs={12}>
-            <Card>
-              <CardHeader title={`${t(`Create Wallet`)}`}
-                          action={
-                            <div>
-                              <Button size='small' variant='contained' onClick={() => setCreateWalletWindow(false)}>
-                              {`${t(`Wallet List`)}`}
-                              </Button>
-                            </div>
-                          }
-                          />
-              <Divider sx={{ m: '0 !important' }} />
-              <UploadWalletJsonFile  handleRefreshWalletData={handleRefreshWalletData} />
-            </Card>
-          </Grid>
-        </Grid>
-      :
-        <Fragment></Fragment>
-      }
+          {getAllWalletsData && createWalletWindow == false ? 
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    {getAllWalletsData.map((wallet: any, index: number) => {
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                              >
+                                {getInitials(wallet.data.arweave.key).toUpperCase()}
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {getWalletNicknamesData[wallet.data.arweave.key] ?? 'My Wallet'}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `primary.dark`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {formatHash(wallet.data.arweave.key, 5)}
+                                  </Typography>
+                                  
+                                </Box>
+                              </Box>
+                              <Box sx={{ }} textAlign="right">
+                                <Typography variant='h6' sx={{ 
+                                  color: `info.dark`,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  mr: 2
+                                }}>
+                                  {formatAR(walletBalanceMap[wallet.data.arweave.key] ?? 0, 2)}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+
+                    })}
+                  </Grid>
+              </Grid>
+            </Grid>
+          :
+            <Fragment></Fragment>
+          }
+          {createWalletWindow == true ? 
+            <Grid container spacing={6}>
+              
+              <Grid item xs={12}>
+                <Card>
+                  <CardHeader title={`${t(`Create Wallet`)}`}
+                              action={
+                                <div>
+                                  <Button size='small' variant='contained' onClick={() => setCreateWalletWindow(false)}>
+                                  {`${t(`Wallet List`)}`}
+                                  </Button>
+                                </div>
+                              }
+                              />
+                  <Divider sx={{ m: '0 !important' }} />
+                  <UploadWalletJsonFile  handleRefreshWalletData={handleRefreshWalletData} />
+                </Card>
+              </Grid>
+            </Grid>
+          :
+            <Fragment></Fragment>
+          }
+      </ContentWrapper>
+
+      <Footer Hidden={FooterHidden} />
     </Fragment>
   )
 }
