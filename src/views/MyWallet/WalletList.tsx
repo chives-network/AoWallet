@@ -2,6 +2,7 @@
 import { useState, useEffect, Fragment } from 'react'
 
 // ** MUI Imports
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Table from '@mui/material/Table'
@@ -14,12 +15,15 @@ import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 import TextField from '@mui/material/TextField'
+import CustomAvatar from 'src/@core/components/mui/avatar'
+import { getInitials } from 'src/@core/utils/get-initials'
 
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
+import authConfig from 'src/configs/auth'
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
@@ -33,7 +37,7 @@ import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames,
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from 'src/configs/functions'
+import { formatHash, formatAR } from 'src/configs/functions'
 
 const MyWallet = () => {
   // ** Hook
@@ -156,94 +160,66 @@ const MyWallet = () => {
       :
       <Fragment></Fragment>
       }
-
+      
       {getAllWalletsData && createWalletWindow == false ? 
-        <Grid container spacing={6}>
-          
+        <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Card>
-              <CardHeader title={`${t(`My Wallets`)}`}
-                          action={
-                            <div>
-                              <Button size='small' variant='contained' onClick={() => setCreateWalletWindow(true)}>
-                                {`${t(`Create Wallet`)}`}
-                              </Button>
-                            </div>
-                          }
-                          />
-              <Divider sx={{ m: '0 !important' }} />
-              <Grid container spacing={6}>
+              <Grid container spacing={2}>
                 {getAllWalletsData.map((wallet: any, index: number) => {
+
                   return (
                     <Grid item xs={12} sx={{ py: 0 }} key={index}>
                       <Card>
-                        <CardContent>      
-                          <TableContainer>
-                            <Table size='small' sx={{ width: '95%' }}>
-                              <TableBody
-                                sx={{
-                                  '& .MuiTableCell-root': {
-                                    border: 0,
-                                    pb: 1.5,
-                                    pl: '0 !important',
-                                    pr: '0 !important',
-                                    '&:first-of-type': {
-                                      width: 148
-                                    }
-                                  }
-                                }}
-                              >
-                                <TableRow>
-                                  <TableCell>
-                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center', whiteSpace: 'pre-line' }}>
-                                    {`${t(`Address`)}`}: {formatHash(wallet.data.arweave.key, 12)}
-                                    {currentAddress}
-                                    </Typography>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>
-                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                    {`${t(`Balance`)}`}: {walletBalanceMap[wallet.data.arweave.key]}
-                                    </Typography>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>
-                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                      <TextField  id={wallet.data.arweave.key} 
-                                        label={`${t(`Nickname`)}`} 
-                                        variant='standard' 
-                                        color='success'
-                                        defaultValue={getWalletNicknamesData[wallet.data.arweave.key]}
-                                        onChange={(event) => handleInputNicknameChange(event, wallet.data.arweave.key)}
-                                        />
-                                    </Typography>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>
-                                    <Typography variant='body2' sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
-                                      <Button variant='contained' size='small' endIcon={<Icon icon='mdi:export' />} onClick={(event) => handleClickToExport(event, wallet.data.arweave.key)}  sx={{ whiteSpace: 'nowrap', mr: 2 }}>
-                                        {`${t(`Export`)}`}
-                                      </Button>
-                                      <Button variant='contained' size='small' endIcon={<Icon icon='mdi:delete'/>} onClick={(event) => handleClickToDelete(event, wallet.data.arweave.key, wallet.id)} color="info" sx={{ whiteSpace: 'nowrap', mr: 2 }}>
-                                        {`${t(`Delete`)}`}
-                                      </Button>
-                                    </Typography> 
-                                  </TableCell>
-                                </TableRow>
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </CardContent>      
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                          <CustomAvatar
+                            skin='light'
+                            color={'primary'}
+                            sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                          >
+                            {getInitials(wallet.data.arweave.key).toUpperCase()}
+                          </CustomAvatar>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                            >
+                            <Typography sx={{ 
+                              color: 'text.primary',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                            >
+                              {getWalletNicknamesData[wallet.data.arweave.key] ?? 'My Wallet'}
+                            </Typography>
+                            <Box sx={{ display: 'flex'}}>
+                              <Typography variant='body2' sx={{ 
+                                color: `primary.dark`, 
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                flex: 1
+                              }}>
+                                {formatHash(wallet.data.arweave.key, 5)}
+                              </Typography>
+                              
+                            </Box>
+                          </Box>
+                          <Box sx={{ }} textAlign="right">
+                            <Typography variant='h6' sx={{ 
+                              color: `info.dark`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              mr: 2
+                            }}>
+                              {formatAR(walletBalanceMap[wallet.data.arweave.key], 2)}
+                            </Typography>
+                          </Box>
+                        </Box>
                       </Card>
                     </Grid>
                   )
+
                 })}
               </Grid>
-            </Card>
           </Grid>
         </Grid>
       :

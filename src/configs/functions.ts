@@ -20,6 +20,17 @@ export function formatHash(inputString: string, spliceSize: number): string {
 
 }
 
+export function formatAR(dividend: number, precision: number) {
+  if(dividend == 0) {
+
+    return '0';
+  }
+  const divisor = 1000000000000;
+  const result = (dividend / divisor).toFixed(precision);
+  
+  return result;
+}
+
 export function formatXWE(dividend: number, precision: number) {
   if(dividend == 0) {
 

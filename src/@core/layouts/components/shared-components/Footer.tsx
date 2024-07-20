@@ -10,6 +10,7 @@ import Icon from 'src/@core/components/icon'
 
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { useTranslation } from 'react-i18next'
 
 
 interface Props {
@@ -22,6 +23,7 @@ interface Props {
 const Footer = (props: Props) => {
   // ** Props
   const { settings } = props
+  const { t } = useTranslation()
 
   const [value, setValue] = useState(0);
 
@@ -54,10 +56,10 @@ const Footer = (props: Props) => {
           }}
           sx={{width: '100%'}}
         >
-          <BottomNavigationAction label="Wallet" icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
-          <BottomNavigationAction label="Swap" icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label="Apps" icon={<Icon icon='tdesign:app' />} />
-          <BottomNavigationAction label="Setting" icon={<Icon icon='material-symbols:settings-outline' />} />
+          <BottomNavigationAction label={t("Wallet")} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
+          <BottomNavigationAction label={t("Swap")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
+          <BottomNavigationAction label={t("Apps")} icon={<Icon icon='tdesign:app' />} />
+          <BottomNavigationAction label={t("Setting")} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>
   )

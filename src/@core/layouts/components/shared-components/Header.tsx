@@ -6,6 +6,8 @@ import { LayoutProps } from 'src/@core/layouts/types'
 
 import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
 
+import { useTranslation } from 'react-i18next'
+
 
 interface Props {
   settings: LayoutProps['settings']
@@ -18,6 +20,7 @@ interface Props {
 const Header = (props: Props) => {
   // ** Props
   const { settings } = props
+  const { t } = useTranslation()
 
   // ** Vars
   const { skin, footer } = settings
@@ -40,9 +43,9 @@ const Header = (props: Props) => {
           <Icon icon='material-symbols:swap-horiz-rounded' />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          My App
+          {t('My Wallet')}
         </Typography>
-        <Button size="small" color="inherit">Action</Button>
+        <Button size="small" color="inherit">{t('Edit')}</Button>
       </Toolbar>
     </AppBar>
   )
