@@ -39,9 +39,11 @@ import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 
+import TextField2 from 'src/views/Chat/TextField2'
+
 import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, getCurrentWalletAddress, jwkToMnemonic } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -73,15 +75,27 @@ const MyWallet = () => {
   const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
-  const [LeftIcon, setLeftIcon] = useState<string>('mdi:arrow-left-thin')
+  const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
   const [Title, setTitle] = useState<string>('My Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
   
-  const LeftIconOnClick = () => {
+  
+  const handleWalletGoHome = () => {
+    setModel('View')
+    setRefreshWalletData(refreshWalletData+1)
+    setPageModel('ListWallet')
     setLeftIcon('material-symbols:menu-rounded')
+    setTitle(t('My Wallet') as string)
+    setRightButtonText(t('Edit') as string)
+  }
+  
+  const LeftIconOnClick = () => {
+    if(pageModel != 'ListWallet') {
+      handleWalletGoHome()
+    }
   }
 
   const RightButtonOnClick = () => {
@@ -92,6 +106,8 @@ const MyWallet = () => {
     else {
       setModel('View')
       setRightButtonText(t('Edit') as string)
+      setRefreshWalletData(refreshWalletData+1)
+      setPageModel('ListWallet')
     }
   }
     
@@ -138,43 +154,74 @@ const MyWallet = () => {
     processWallets();
   }, [getAllWalletsData])
 
+
   const handleOpenWalletMenu = (wallet: any) => {
     setChooseWallet(wallet)
     const bottomMenusList: any[] = []
     bottomMenusList.push({icon: 'material-symbols:copy-all-outline', title: t('Copy Address'), function: 'handleWalletCopyAddress'})
     bottomMenusList.push({icon: 'material-symbols:edit-outline', title: t('Rename Wallet'), function: 'handleWalletRename'})
     bottomMenusList.push({icon: 'mdi:file-export-outline', title: t('Export Key'), function: 'handleWalletExportKey'})
-    bottomMenusList.push({icon: 'typcn:export-outline', title: t('Export Recovery Phrase'), function: 'handleWalletExportPhrase'})
+    //bottomMenusList.push({icon: 'typcn:export-outline', title: t('Export Recovery Phrase'), function: 'handleWalletExportPhrase'})
     setBottomMenus(bottomMenusList)
     setDrawerStatus(true)
   }
+
+  const handleWalletCreate = () => {
+    setPageModel('CreateWallet')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Create Wallet') as string)
+    setRightButtonText('')
+  }
   
   const handleWalletCopyAddress = () => {
-    console.log("wallet.data.arweave.key", chooseWallet.data.arweave.key)
+    console.log("handleWalletCopyAddress", chooseWallet.data.arweave.key)
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
 
   const handleWalletRename = () => {
     setPageModel('RenameWallet')
-    console.log("wallet.data.arweave.key", chooseWallet)
+    console.log("handleWalletRename", chooseWallet)
     chooseWallet && setChooseWalletName(getWalletNicknamesData[chooseWallet.data.arweave.key] ?? 'My Wallet')
-  }
-
-  const handleWalletExportKey = () => {
-    setPageModel('RenameWallet')
-  }
-
-  const handleWalletExportPhrase = () => {
-    setPageModel('RenameWallet')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Rename Wallet') as string)
+    setRightButtonText('')
   }
 
   const handleWalletRenameSave = () => {
     setWalletNickname(chooseWallet.data.arweave.key, chooseWalletName);
     console.log("chooseWalletName", chooseWalletName);
     setRefreshWalletData(refreshWalletData+1)
-    setPageModel('ListWallet')
+    handleWalletGoHome()
   };
+
+  const handleWalletExportKeyShow = () => {
+    console.log("handleWalletExportKeyShow", chooseWallet)
+    setPageModel('ExportKeyShow')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Show Wallet Key') as string)
+    setRightButtonText('')
+  }
+
+  const handleWalletExportKeyHidden = () => {
+    console.log("handleWalletExportKeyHidden", chooseWallet)
+    setPageModel('ExportKeyHidden')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Hidden Wallet Key') as string)
+    setRightButtonText('')
+  }
+
+  const handleWalletExportPhraseShow = async () => {
+    console.log("handleWalletExportPhraseShow", chooseWallet)
+    const Phrase = await jwkToMnemonic(chooseWallet.jwk)
+    console.log("Phrase", Phrase)
+    setPageModel('ExportPhraseShow')
+  }
+
+  const handleWalletExportPhraseHidden = () => {
+    console.log("handleWalletExportPhraseHidden", chooseWallet)
+    setPageModel('ExportPhraseHidden')
+  }
 
   const handleClickToExport = (event: any, Address: string) => {
     console.log("event", event.target.value);
@@ -322,6 +369,15 @@ const MyWallet = () => {
                     })}
                   </Grid>
               </Grid>
+                    
+              {model == 'Edit' && (
+                <Box sx={{width: '100%', mr: 2}}>
+                  <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreate()}>
+                    {t("Create Wallet")}
+                  </Button>
+                </Box>
+              )}
+
               <Drawer
                 anchor={'bottom'}
                 open={drawerStatus}
@@ -344,10 +400,10 @@ const MyWallet = () => {
                             handleWalletRename();
                             break;
                           case 'handleWalletExportKey':
-                            handleWalletExportKey();
+                            handleWalletExportKeyHidden();
                             break;
                           case 'handleWalletExportPhrase':
-                            handleWalletExportPhrase();
+                            handleWalletExportPhraseHidden();
                             break;
                         }
                       }}>
@@ -372,16 +428,6 @@ const MyWallet = () => {
               
               <Grid item xs={12}>
                 <Card>
-                  <CardHeader title={`${t(`Create Wallet`)}`}
-                              action={
-                                <div>
-                                  <Button size='small' variant='contained' onClick={() => setCreateWalletWindow(false)}>
-                                  {`${t(`Wallet List`)}`}
-                                  </Button>
-                                </div>
-                              }
-                              />
-                  <Divider sx={{ m: '0 !important' }} />
                   <UploadWalletJsonFile  handleRefreshWalletData={handleRefreshWalletData} />
                 </Card>
               </Grid>
@@ -410,6 +456,203 @@ const MyWallet = () => {
             </Grid>
           </Grid>
           )}
+
+          {pageModel == 'ExportKeyHidden' && ( 
+            <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
+              <Box
+                position="relative"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  right={0}
+                  bottom={0}
+                  sx={{
+                    backdropFilter: 'blur(5px)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: 1
+                  }}
+                />
+                <TextField2
+                    disabled
+                    multiline
+                    rows={8}
+                    size="small"
+                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                />
+                </Box>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    sx={{ mt: 5, width: '100px' }}
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                    }}
+                    disabled
+                    startIcon={<Icon icon='mdi:pencil' />}
+                  >
+                    {t("Copy")}
+                  </Button>
+                </Box>
+                <div style={{ flexGrow: 1 }}></div>
+                <Card>
+                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                </Card>
+                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
+                  {t("Show")}
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+          )}
+
+          {pageModel == 'ExportKeyShow' && ( 
+            <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <TextField2
+                    multiline
+                    rows={8}
+                    size="small"
+                    value={JSON.stringify(chooseWallet.jwk)}
+                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                    placeholder={t("ChannelGroup") as string}
+                    onChange={(e: any) => {
+                    }}
+                />
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    sx={{ mt: 5, width: '100px' }}
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                    }}
+                    startIcon={<Icon icon='mdi:pencil' />}
+                  >
+                    {t("Copy")}
+                  </Button>
+                </Box>
+                <div style={{ flexGrow: 1 }}></div>
+                <Card>
+                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                </Card>
+                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
+                  {t("Hidden")}
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+          )}
+
+          {pageModel == 'ExportPhraseHidden' && ( 
+            <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
+              <Box
+                position="relative"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ background: 'url(/path/to/your/image.jpg) no-repeat center center/cover', borderRadius: 1 }}
+                
+              >
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  right={0}
+                  bottom={0}
+                  sx={{
+                    backdropFilter: 'blur(5px)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: 1
+                  }}
+                />
+                <TextField2
+                    disabled
+                    multiline
+                    rows={8}
+                    size="small"
+                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                />
+                </Box>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    sx={{ mt: 5, width: '100px' }}
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                    }}
+                    disabled
+                    startIcon={<Icon icon='mdi:pencil' />}
+                  >
+                    {t("Copy")}
+                  </Button>
+                </Box>
+                <div style={{ flexGrow: 1 }}></div>
+                <Card>
+                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                </Card>
+                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseShow()}>
+                  {t("Show")}
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+          )}
+
+          {pageModel == 'ExportPhraseShow' && ( 
+            <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <TextField2
+                    multiline
+                    rows={8}
+                    size="small"
+                    value={JSON.stringify(chooseWallet.jwk)}
+                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                    placeholder={t("ChannelGroup") as string}
+                    onChange={(e: any) => {
+                    }}
+                />
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    sx={{ mt: 5, width: '100px' }}
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                    }}
+                    startIcon={<Icon icon='mdi:pencil' />}
+                  >
+                    {t("Copy")}
+                  </Button>
+                </Box>
+                <div style={{ flexGrow: 1 }}></div>
+                <Card>
+                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                </Card>
+                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseHidden()}>
+                  {t("Hidden")}
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+          )}
+
       </ContentWrapper>
 
       <Footer Hidden={FooterHidden} />

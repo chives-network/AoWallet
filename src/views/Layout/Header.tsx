@@ -22,17 +22,21 @@ const Header = (props: any) => {
     >
       <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', 'min-height': 48 }}>
         <Box width='100px'>
-          <IconButton size="small" edge="start" color="inherit" aria-label="menu">
-            <Icon icon={LeftIcon} onClick={ () => LeftIconOnClick && LeftIconOnClick()}/>
-          </IconButton>
+          {LeftIcon && (
+            <IconButton size="small" edge="start" color="inherit" aria-label="menu">
+              <Icon icon={LeftIcon} onClick={ () => LeftIconOnClick && LeftIconOnClick()}/>
+            </IconButton>
+          )}
         </Box>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
           {Title}
         </Typography>
         <Box display="flex" justifyContent="flex-end" width="100px">
-          <Button size="small" color="inherit" onClick={RightButtonOnClick}>
-            {RightButtonText}
-          </Button>
+          {RightButtonText && (
+            <Button size="small" color="inherit" onClick={ () => RightButtonOnClick && RightButtonOnClick()}>
+              {RightButtonText}
+            </Button>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
