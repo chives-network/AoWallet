@@ -35,10 +35,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const VerticalLayout = (props: LayoutProps) => {
   // ** Props
-  const { settings, children, contentHeightFixed } = props
-
-  // ** Vars
-  const { contentWidth } = settings
+  const { children, contentHeightFixed } = props
 
   return (
     <>
@@ -47,29 +44,7 @@ const VerticalLayout = (props: LayoutProps) => {
           className='layout-content-wrapper'
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
-          
-          <Header {...props}/>
-
-          {/* Content */}
-          <ContentWrapper
-            className='layout-page-content'
-            sx={{
-              ...(contentHeightFixed && {
-                overflow: 'hidden',
-                '& > :first-of-type': { height: '100%' }
-              }),
-              ...(contentWidth === 'boxed' && {
-                mx: 'auto',
-                '@media (min-width:1440px)': { maxWidth: 1680 },
-                '@media (min-width:1200px)': { maxWidth: '100%' }
-              })
-            }}
-          >
-            {children}
-          </ContentWrapper>
-
-          <Footer {...props} />
-
+          {children}
         </MainContentWrapper>
       </VerticalLayoutWrapper>
 

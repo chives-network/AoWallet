@@ -210,7 +210,7 @@ const MyWallet = () => {
                               whiteSpace: 'nowrap',
                               mr: 2
                             }}>
-                              {formatAR(walletBalanceMap[wallet.data.arweave.key], 2)}
+                              {formatAR(walletBalanceMap[wallet.data.arweave.key] ?? 0, 2)}
                             </Typography>
                           </Box>
                         </Box>
