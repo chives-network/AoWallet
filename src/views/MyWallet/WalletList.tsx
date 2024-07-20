@@ -199,7 +199,7 @@ const MyWallet = () => {
     console.log("handleWalletExportKeyShow", chooseWallet)
     setPageModel('ExportKeyShow')
     setLeftIcon('mdi:arrow-left-thin')
-    setTitle(t('Show Wallet Key') as string)
+    setTitle(t('Show Key') as string)
     setRightButtonText('')
   }
 
@@ -207,7 +207,7 @@ const MyWallet = () => {
     console.log("handleWalletExportKeyHidden", chooseWallet)
     setPageModel('ExportKeyHidden')
     setLeftIcon('mdi:arrow-left-thin')
-    setTitle(t('Hidden Wallet Key') as string)
+    setTitle(t('Hidden Key') as string)
     setRightButtonText('')
   }
 
@@ -459,198 +459,235 @@ const MyWallet = () => {
 
           {pageModel == 'ExportKeyHidden' && ( 
             <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
-              <Box
-                position="relative"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Grid item xs={12}>
+                <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
                 <Box
-                  position="absolute"
-                  top={0}
-                  left={0}
-                  right={0}
-                  bottom={0}
-                  sx={{
-                    backdropFilter: 'blur(5px)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: 1
-                  }}
-                />
-                <TextField2
-                    disabled
-                    multiline
-                    rows={8}
-                    size="small"
-                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                />
-                </Box>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Button
-                    sx={{ mt: 5, width: '100px' }}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                  position="relative"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    sx={{
+                      backdropFilter: 'blur(5px)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: 1
                     }}
-                    disabled
-                    startIcon={<Icon icon='mdi:pencil' />}
-                  >
-                    {t("Copy")}
+                  />
+                  <TextField2
+                      disabled
+                      multiline
+                      rows={8}
+                      size="small"
+                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                  />
+                  </Box>
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      sx={{ mt: 5, width: '100px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                      }}
+                      disabled
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
+                    </Button>
+                  </Box>
+                  <div style={{ flexGrow: 1 }}></div>
+                  <Card>
+                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                  </Card>
+                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
+                    {t("Show")}
                   </Button>
-                </Box>
-                <div style={{ flexGrow: 1 }}></div>
-                <Card>
-                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                </Card>
-                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
-                  {t("Show")}
-                </Button>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
           )}
 
           {pageModel == 'ExportKeyShow' && ( 
             <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <TextField2
-                    multiline
-                    rows={8}
-                    size="small"
-                    value={JSON.stringify(chooseWallet.jwk)}
-                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                    placeholder={t("ChannelGroup") as string}
-                    onChange={(e: any) => {
-                    }}
-                />
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Button
-                    sx={{ mt: 5, width: '100px' }}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
-                    }}
-                    startIcon={<Icon icon='mdi:pencil' />}
-                  >
-                    {t("Copy")}
+              <Grid item xs={12}>
+                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <TextField2
+                      multiline
+                      rows={8}
+                      size="small"
+                      value={JSON.stringify(chooseWallet.jwk)}
+                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                      placeholder={t("ChannelGroup") as string}
+                      onChange={(e: any) => {
+                      }}
+                  />
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      sx={{ mt: 5, width: '100px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                      }}
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
+                    </Button>
+                  </Box>
+                  <div style={{ flexGrow: 1 }}></div>
+                  <Card>
+                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                  </Card>
+                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
+                    {t("Hidden")}
                   </Button>
-                </Box>
-                <div style={{ flexGrow: 1 }}></div>
-                <Card>
-                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                </Card>
-                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
-                  {t("Hidden")}
-                </Button>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
           )}
 
           {pageModel == 'ExportPhraseHidden' && ( 
             <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
-              <Box
-                position="relative"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ background: 'url(/path/to/your/image.jpg) no-repeat center center/cover', borderRadius: 1 }}
-                
-              >
+              <Grid item xs={12}>
+                <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
                 <Box
-                  position="absolute"
-                  top={0}
-                  left={0}
-                  right={0}
-                  bottom={0}
-                  sx={{
-                    backdropFilter: 'blur(5px)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: 1
-                  }}
-                />
-                <TextField2
-                    disabled
-                    multiline
-                    rows={8}
-                    size="small"
-                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                />
-                </Box>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Button
-                    sx={{ mt: 5, width: '100px' }}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                  position="relative"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{ background: 'url(/path/to/your/image.jpg) no-repeat center center/cover', borderRadius: 1 }}
+                  
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    sx={{
+                      backdropFilter: 'blur(5px)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: 1
                     }}
-                    disabled
-                    startIcon={<Icon icon='mdi:pencil' />}
-                  >
-                    {t("Copy")}
+                  />
+                  <TextField2
+                      disabled
+                      multiline
+                      rows={8}
+                      size="small"
+                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                  />
+                  </Box>
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      sx={{ mt: 5, width: '100px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                      }}
+                      disabled
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
+                    </Button>
+                  </Box>
+                  <div style={{ flexGrow: 1 }}></div>
+                  <Card>
+                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                  </Card>
+                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseShow()}>
+                    {t("Show")}
                   </Button>
-                </Box>
-                <div style={{ flexGrow: 1 }}></div>
-                <Card>
-                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                </Card>
-                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseShow()}>
-                  {t("Show")}
-                </Button>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
           )}
 
           {pageModel == 'ExportPhraseShow' && ( 
             <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <TextField2
-                    multiline
-                    rows={8}
-                    size="small"
-                    value={JSON.stringify(chooseWallet.jwk)}
-                    sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                    placeholder={t("ChannelGroup") as string}
-                    onChange={(e: any) => {
-                    }}
-                />
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Button
-                    sx={{ mt: 5, width: '100px' }}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
-                    }}
-                    startIcon={<Icon icon='mdi:pencil' />}
-                  >
-                    {t("Copy")}
+              <Grid item xs={12}>
+                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <TextField2
+                      multiline
+                      rows={8}
+                      size="small"
+                      value={JSON.stringify(chooseWallet.jwk)}
+                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                      placeholder={t("ChannelGroup") as string}
+                      onChange={(e: any) => {
+                      }}
+                  />
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      sx={{ mt: 5, width: '100px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                      }}
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
+                    </Button>
+                  </Box>
+                  <div style={{ flexGrow: 1 }}></div>
+                  <Card>
+                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
+                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
+                  </Card>
+                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseHidden()}>
+                    {t("Hidden")}
                   </Button>
-                </Box>
-                <div style={{ flexGrow: 1 }}></div>
-                <Card>
-                  <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                  <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                </Card>
-                <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseHidden()}>
-                  {t("Hidden")}
-                </Button>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
+
+          {pageModel == 'PinCode' && ( 
+            <Grid container spacing={6}>
+              <Grid item xs={12}>
+                <Box display="flex" flexDirection="column" alignItems="center" mt={10}>
+                  <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+                      <Button
+                        key={num}
+                        variant="contained"
+                        sx={{
+                          width: 55,
+                          height: 60,
+                          borderRadius: '50%',
+                          fontSize: '1.5rem',
+                        }}
+                      >
+                        {num}
+                      </Button>
+                    ))}
+                    <Button
+                      key={11}
+                      variant="contained"
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: '50%',
+                        fontSize: '1.5rem',
+                      }}
+                    >
+                      {11}
+                    </Button>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
           )}
 
       </ContentWrapper>
