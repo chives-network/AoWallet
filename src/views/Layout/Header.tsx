@@ -1,7 +1,7 @@
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 
-import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/material';
 
 const Header = (props: any) => {
   // ** Props
@@ -21,13 +21,19 @@ const Header = (props: any) => {
       }}
     >
       <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', 'min-height': 48 }}>
-        <IconButton size="small" edge="start" color="inherit" aria-label="menu">
-          <Icon icon={LeftIcon} onClick={ () => LeftIconOnClick && LeftIconOnClick()}/>
-        </IconButton>
+        <Box width='100px'>
+          <IconButton size="small" edge="start" color="inherit" aria-label="menu">
+            <Icon icon={LeftIcon} onClick={ () => LeftIconOnClick && LeftIconOnClick()}/>
+          </IconButton>
+        </Box>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
           {Title}
         </Typography>
-        <Button size="small" color="inherit" onClick={ () => RightButtonOnClick && RightButtonOnClick()} >{RightButtonText}</Button>
+        <Box display="flex" justifyContent="flex-end" width="100px">
+          <Button size="small" color="inherit" onClick={RightButtonOnClick}>
+            {RightButtonText}
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   )
