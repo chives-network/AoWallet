@@ -1,4 +1,4 @@
-import MyWalletModel from 'src/views/Wallet/wallet';
+import MyWalletModel from 'src/views/Wallet/Wallet_List';
 
 const SendOutApp = () => {
 
