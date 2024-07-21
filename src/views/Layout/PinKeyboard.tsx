@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Grid, Container, Typography, Box, styled } from '@mui/material';
+import { Button, Grid, Container, Box, styled } from '@mui/material';
 
 // 圆形按钮样式
-const RoundButton = styled(Button)(({ theme }) => ({
+const RoundButton = styled(Button)(() => ({
   borderRadius: '50%',
   minWidth: '60px',
   minHeight: '60px',

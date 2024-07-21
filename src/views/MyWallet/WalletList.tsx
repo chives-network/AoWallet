@@ -34,7 +34,7 @@ import toast from 'react-hot-toast'
 import TextField2 from 'src/views/Chat/TextField2'
 import { useRouter } from 'next/router'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, getCurrentWalletAddress, setCurrentWallet } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet } from 'src/functions/ChivesWallets'
 import { generateNewMnemonicAndGetWalletData, importWalletJsonFile } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
@@ -647,8 +647,6 @@ const MyWallet = () => {
                       value={JSON.stringify(chooseWallet.jwk)}
                       sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
                       placeholder={t("ChannelGroup") as string}
-                      onChange={(e: any) => {
-                      }}
                   />
                   <Box display="flex" justifyContent="center" alignItems="center">
                     <Button
@@ -678,105 +676,6 @@ const MyWallet = () => {
                     <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
                   </Card>
                   <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
-                    {t("Hidden")}
-                  </Button>
-                </div>
-              </Grid>
-            </Grid>
-          )}
-
-          {pageModel == 'ExportPhraseHidden' && ( 
-            <Grid container spacing={6}>
-              <Grid item xs={12}>
-                <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
-                <Box
-                  position="relative"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  sx={{ background: 'url(/path/to/your/image.jpg) no-repeat center center/cover', borderRadius: 1 }}
-                  
-                >
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    bottom={0}
-                    sx={{
-                      backdropFilter: 'blur(5px)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      borderRadius: 1
-                    }}
-                  />
-                  <TextField2
-                      disabled
-                      multiline
-                      rows={8}
-                      size="small"
-                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                  />
-                  </Box>
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    <Button
-                      sx={{ mt: 5, width: '100px' }}
-                      size="small"
-                      variant="outlined"
-                      onClick={() => {
-                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
-                      }}
-                      disabled
-                      startIcon={<Icon icon='mdi:pencil' />}
-                    >
-                      {t("Copy")}
-                    </Button>
-                  </Box>
-                  <div style={{ flexGrow: 1 }}></div>
-                  <Card>
-                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                  </Card>
-                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseShow()}>
-                    {t("Show")}
-                  </Button>
-                </div>
-              </Grid>
-            </Grid>
-          )}
-
-          {pageModel == 'ExportPhraseShow' && ( 
-            <Grid container spacing={6}>
-              <Grid item xs={12}>
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  <TextField2
-                      multiline
-                      rows={8}
-                      size="small"
-                      value={JSON.stringify(chooseWallet.jwk)}
-                      sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
-                      placeholder={t("ChannelGroup") as string}
-                      onChange={(e: any) => {
-                      }}
-                  />
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    <Button
-                      sx={{ mt: 5, width: '100px' }}
-                      size="small"
-                      variant="outlined"
-                      onClick={() => {
-                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
-                      }}
-                      startIcon={<Icon icon='mdi:pencil' />}
-                    >
-                      {t("Copy")}
-                    </Button>
-                  </Box>
-                  <div style={{ flexGrow: 1 }}></div>
-                  <Card>
-                    <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
-                    <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
-                  </Card>
-                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportPhraseHidden()}>
                     {t("Hidden")}
                   </Button>
                 </div>

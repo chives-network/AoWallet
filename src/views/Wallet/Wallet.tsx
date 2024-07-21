@@ -5,21 +5,13 @@ import { useState, useEffect, Fragment } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
-import Table from '@mui/material/Table'
-import Divider from '@mui/material/Divider'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import TableBody from '@mui/material/TableBody'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
-import TableContainer from '@mui/material/TableContainer'
-import TextField from '@mui/material/TextField'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
 import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
-import CircularProgress from '@mui/material/CircularProgress'
+
+import { CallReceived, History, Casino, Send } from '@mui/icons-material';
 
 
 import List from '@mui/material/List';
@@ -32,12 +24,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
+import authConfig from 'src/configs/auth'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatAR } from 'src/configs/functions'
+import { formatHash, formatTimestampAge } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
@@ -74,6 +68,7 @@ const Wallet = () => {
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
+  const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
 
 
   const handleWalletGoHome = () => {
@@ -90,6 +85,7 @@ const Wallet = () => {
   }
 
   const RightButtonOnClick = () => {
+    handleWalletGoHome()
   }
     
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
@@ -97,6 +93,7 @@ const Wallet = () => {
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
+  const [currentBalance, setCurrentBalance] = useState<string>("")
   
 
   useEffect(() => {
@@ -116,6 +113,20 @@ const Wallet = () => {
     return () => clearInterval(intervalId);
 
   }, []);
+  
+  useEffect(() => {
+    const processWallets = async () => {
+      if(currentAddress && currentAddress.length == 43)  {
+        const currentBalance = await getWalletBalance(currentAddress);
+        setCurrentBalance(Number(currentBalance).toFixed(4))
+        const allTxs = await GetArWalletAllTxs(currentAddress)
+        if(allTxs)  {
+          setCurrentWalletTxs(allTxs)
+        }
+      }
+    };  
+    processWallets();
+  }, [currentAddress])
 
   useEffect(() => {
     setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
@@ -148,14 +159,16 @@ const Wallet = () => {
 
   const handleWalletCreateMenu = () => {
     handleCreateWalletMenu()
+    
+    handleOpenWalletMenu(null) // ----------------
   }
-
 
   const handleWalletCopyAddress = () => {
     console.log("handleWalletCopyAddress", chooseWallet.data.arweave.key)
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
+
 
   return (
     <Fragment>
@@ -174,9 +187,118 @@ const Wallet = () => {
           {getAllWalletsData && pageModel == 'MainWallet' ?  
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
-                  <Grid container spacing={2}>
-                    0000
-                  </Grid>
+                <Grid container spacing={2}>
+                  <Box p={2} textAlign="center">
+                    <CustomAvatar
+                      skin='light'
+                      color='primary'
+                      sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
+                    >
+                      {getInitials(currentAddress).toUpperCase()}
+                    </CustomAvatar>
+                    <Typography variant="h5" mt={6}>
+                      {currentBalance} {authConfig.tokenName}
+                    </Typography>
+                    <Typography variant="h6" mt={2}>
+                      {formatHash(currentAddress, 6)}
+                    </Typography>
+                    <Grid container spacing={4} justifyContent="center" mt={2}>
+                      <Grid item sx={{mx: 2}}>
+                        <IconButton>
+                          <CallReceived />
+                        </IconButton>
+                        <Typography>接收</Typography>
+                      </Grid>
+                      <Grid item sx={{mx: 2}}>
+                        <IconButton>
+                          <History />
+                        </IconButton>
+                        <Typography>记录</Typography>
+                      </Grid>
+                      <Grid item sx={{mx: 2}}>
+                        <IconButton>
+                          <Casino />
+                        </IconButton>
+                        <Typography>赌注</Typography>
+                      </Grid>
+                      <Grid item sx={{mx: 2}}>
+                        <IconButton>
+                          <Send />
+                        </IconButton>
+                        <Typography>发送</Typography>
+                      </Grid>
+                    </Grid>
+
+                    {currentWalletTxs && currentWalletTxs.edges && currentWalletTxs.edges.length > 0 && (
+                      <Fragment>
+                        <Grid container spacing={2} sx={{mt: 4}}>
+                        {currentWalletTxs && currentWalletTxs.edges.map((Tx: any, index: number) => {
+
+                          return (
+                            <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                              <Card>
+                                <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                  <CustomAvatar
+                                    skin='light'
+                                    color={'primary'}
+                                    sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                  >
+                                    {getInitials(Tx.node.id).toUpperCase()}
+                                  </CustomAvatar>
+                                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                                    <Typography 
+                                      sx={{ 
+                                        color: 'text.primary',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        textAlign: 'left'
+                                      }}
+                                    >
+                                      {formatHash(Tx.node.recipient, 10)}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex' }}>
+                                      <Typography 
+                                        variant='body2' 
+                                        sx={{ 
+                                          color: `primary.dark`, 
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          flex: 1,
+                                          textAlign: 'left'
+                                        }}
+                                      >
+                                        {formatTimestampAge(Tx.node.block.timestamp)}
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+
+                                  <Box textAlign="right">
+                                    {model == 'View' && (
+                                      <Typography variant='h6' sx={{ 
+                                        color: `info.dark`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        mr: 2
+                                      }}>
+                                        {Number(Tx.node.fee.ar).toFixed(2)}
+                                      </Typography>
+                                    )}
+
+                                  </Box>
+                                </Box>
+                              </Card>
+                            </Grid>
+                          )
+
+                        })}
+                      </Grid>
+                      </Fragment>
+                    )}
+                  </Box>
+                </Grid>
               </Grid>
                     
               {model == 'Edit' && (
