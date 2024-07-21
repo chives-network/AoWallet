@@ -19,6 +19,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
 import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
+import CircularProgress from '@mui/material/CircularProgress'
 
 
 import List from '@mui/material/List';
@@ -44,6 +45,7 @@ import TextField2 from 'src/views/Chat/TextField2'
 import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletByWallet, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { generateNewMnemonicAndGetWalletData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -83,6 +85,10 @@ const MyWallet = () => {
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
   const [pinCodeStatus, setPinCodeStatus] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [importKeyValue, setImportKeyValue] = useState<string>("")
+  
+
   
   
   const handleWalletGoHome = () => {
@@ -169,13 +175,69 @@ const MyWallet = () => {
     setDrawerStatus(true)
   }
 
+  const handleCreateWalletMenu = () => {
+    const bottomMenusList: any[] = []
+    bottomMenusList.push({icon: 'material-symbols:add', title: t('Add Wallet'), function: 'handleWalletCreate'})
+    bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Key'), function: 'handleWalletImportKey'})
+    setBottomMenus(bottomMenusList)
+    setDrawerStatus(true)
+  }
+
+  const handleWalletCreateMenu = () => {
+    handleCreateWalletMenu()
+  }
+
   const handleWalletCreate = () => {
+    setChooseWalletName('')
     setPageModel('CreateWallet')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Create Wallet') as string)
     setRightButtonText('')
   }
-  
+
+  const handleWalletImportKey = () => {
+    setPageModel('ImportKey')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Import Key') as string)
+    setRightButtonText('')
+  }
+
+  const handleWalletCreateWalletData = async () => {
+    setIsLoading(true)
+    const NewWalletData = await generateNewMnemonicAndGetWalletData("")
+    console.log("NewWalletData", NewWalletData)
+    if(NewWalletData) {
+        setIsLoading(false)
+        setWalletNickname(NewWalletData.data.arweave.key, chooseWalletName)
+        handleWalletGoHome()
+    }
+  }
+
+  const handleWalletImportKeyData = async () => {
+    try {
+      const ImportWallet = JSON.parse(importKeyValue)
+      const IsExist = getAllWalletsData.filter((wallet: any) => wallet.jwk.n == ImportWallet.n)
+      if(IsExist && IsExist.length > 0)  {
+        setChooseWalletName('')
+        setImportKeyValue('')
+        handleWalletGoHome()
+        toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
+      }
+      else {
+        const NewWalletData = await importWalletJsonFile(ImportWallet)
+        if(NewWalletData) {
+            setWalletNickname(NewWalletData.data.arweave.key, chooseWalletName)
+            setChooseWalletName('')
+            setImportKeyValue('')
+            handleWalletGoHome()
+        }
+      }
+    }
+    catch(e: any) {
+      console.log("handleWalletImportKeyData Error:", e)
+    }
+  }
+
   const handleWalletCopyAddress = () => {
     console.log("handleWalletCopyAddress", chooseWallet.data.arweave.key)
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
@@ -239,7 +301,6 @@ const MyWallet = () => {
     setIsDialog(false)
     deleteWalletByWallet(chooseWallet.jwk)
     setRefreshWalletData(refreshWalletData+1)
-
     setPageModel('ListWallet')
   }
 
@@ -280,7 +341,7 @@ const MyWallet = () => {
                       </DialogContentText>
                   </DialogContent>
                   <DialogActions className='dialog-actions-dense'>
-                      <Button onClick={handleNoClose} color="error" size='large' variant='contained' >{`${t(`No`)}`}</Button>
+                      <Button onClick={handleNoClose} color="error" size='small' variant='contained' >{`${t(`No`)}`}</Button>
                       <Button onClick={handleYesClose} color="primary">{`${t(`Yes`)}`}</Button>
                   </DialogActions>
               </Dialog>
@@ -291,7 +352,7 @@ const MyWallet = () => {
           
           {getAllWalletsData && pageModel == 'ListWallet' ?  
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
                   <Grid container spacing={2}>
                     {getAllWalletsData.map((wallet: any, index: number) => {
 
@@ -360,7 +421,7 @@ const MyWallet = () => {
                     
               {model == 'Edit' && (
                 <Box sx={{width: '100%', mr: 2}}>
-                  <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreate()}>
+                  <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
                     {t("Create Wallet")}
                   </Button>
                 </Box>
@@ -393,6 +454,12 @@ const MyWallet = () => {
                           case 'handleWalletDelete':
                             handleWalletDelete();
                             break;
+                          case 'handleWalletCreate':
+                            handleWalletCreate();
+                            break;
+                          case 'handleWalletImportKey':
+                            handleWalletImportKey();
+                            break;
                         }
                       }}>
                         <ListItemButton>
@@ -411,38 +478,124 @@ const MyWallet = () => {
             <Fragment></Fragment>
           }
 
-          {pageModel == 'CreateWallet' ? 
-            <Grid container spacing={6}>
+          {pageModel == 'CreateWallet' && ( 
+            <Grid container spacing={2}>
+
+              {isLoading ? 
+              <Fragment>
+                <CardContent>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12}>
+                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
+                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+              </Fragment>
+              :
+              <Fragment>
+                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid container spacing={2}>
+                    <TextField
+                      fullWidth
+                      size='small'
+                      value={chooseWalletName}
+                      onChange={(e) => setChooseWalletName(e.target.value)}
+                      placeholder={t('Wallet Name') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 } }}
+                    />
+                  </Grid>
+                </Grid>
+                      
+                <Box sx={{width: '100%', mr: 2}}>
+                  <Button sx={{mt: 3, ml: 2}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
+                    {t("Create Wallet")}
+                  </Button>
+                </Box>
+              </Fragment>
+              }
               
-              <Grid item xs={12}>
-                <Card>
-                  <UploadWalletJsonFile  handleRefreshWalletData={handleRefreshWalletData} />
-                </Card>
-              </Grid>
+              
             </Grid>
-          :
-            <Fragment></Fragment>
-          }
+          )}
+
+          {pageModel == 'ImportKey' && ( 
+            <Grid container spacing={2}>
+
+              {isLoading ? 
+              <Fragment>
+                <CardContent>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12}>
+                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
+                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+              </Fragment>
+              :
+              <Fragment>
+                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid container spacing={2}>
+                    <TextField
+                      fullWidth
+                      size='small'
+                      value={chooseWalletName}
+                      onChange={(e) => setChooseWalletName(e.target.value)}
+                      placeholder={t('Wallet Name') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 } }}
+                    />
+                    <TextField
+                      multiline
+                      rows={8}
+                      fullWidth
+                      size='small'
+                      value={importKeyValue}
+                      onChange={(e) => setImportKeyValue(e.target.value)}
+                      placeholder={t('Wallet Name') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 3 }}
+                    />
+                  </Grid>
+                </Grid>
+                      
+                <Box sx={{width: '100%', mr: 2}}>
+                  <Button sx={{mt: 3, ml: 2}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
+                    {t("Import Key")}
+                  </Button>
+                </Box>
+              </Fragment>
+              }
+              
+              
+            </Grid>
+          )}
 
           {pageModel == 'RenameWallet' && ( 
-            <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <TextField
-                  fullWidth
-                  size='small'
-                  value={chooseWalletName}
-                  onChange={(e) => setChooseWalletName(e.target.value)}
-                  placeholder={t('My Wallet') as string}
-                  sx={{ '& .MuiInputBase-root': { borderRadius: 5 } }}
-                />
-                <div style={{ flexGrow: 1 }}></div>
-                <Button fullWidth variant='contained' onClick={() => handleWalletRenameSave()}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid container spacing={2}>
+                  <TextField
+                    fullWidth
+                    size='small'
+                    value={chooseWalletName}
+                    onChange={(e) => setChooseWalletName(e.target.value)}
+                    placeholder={t('My Wallet') as string}
+                    sx={{ '& .MuiInputBase-root': { borderRadius: 5 } }}
+                  />
+                </Grid>
+              </Grid>
+                    
+              <Box sx={{width: '100%', mr: 2}}>
+                <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
                   {t("Save")}
                 </Button>
-              </div>
+              </Box>
+              
             </Grid>
-          </Grid>
           )}
 
           {pageModel == 'ExportKeyHidden' && ( 
