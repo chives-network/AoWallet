@@ -101,6 +101,10 @@ const Wallet = () => {
 
   useEffect(() => {
 
+    setHeaderHidden(false)
+    setFooterHidden(false)
+    setRightButtonIcon('mdi:qrcode')
+
     const currentAddressTemp = getCurrentWalletAddress()
     setCurrentAddress(String(currentAddressTemp))
 

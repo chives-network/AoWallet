@@ -5,15 +5,8 @@ import { useState, useEffect, Fragment } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
-import Table from '@mui/material/Table'
-import Divider from '@mui/material/Divider'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import TableBody from '@mui/material/TableBody'
 import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
-import TableContainer from '@mui/material/TableContainer'
 import TextField from '@mui/material/TextField'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
@@ -33,7 +26,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
-import authConfig from 'src/configs/auth'
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
@@ -42,10 +34,8 @@ import toast from 'react-hot-toast'
 import TextField2 from 'src/views/Chat/TextField2'
 import { useRouter } from 'next/router'
 
-import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
-
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletByWallet, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
-import { generateNewMnemonicAndGetWalletData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, getCurrentWalletAddress, setCurrentWallet } from 'src/functions/ChivesWallets'
+import { generateNewMnemonicAndGetWalletData, importWalletJsonFile } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -85,7 +75,6 @@ const MyWallet = () => {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
-  const [pinCodeStatus, setPinCodeStatus] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [importKeyValue, setImportKeyValue] = useState<string>("")
   
@@ -124,24 +113,18 @@ const MyWallet = () => {
   const [walletBalanceMap, setWalletBalanceMap] = useState<any>({})
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
   const [getWalletNicknamesData, setGetWalletNicknamesData] = useState<any>({})
-  const [createWalletWindow, setCreateWalletWindow] = useState<boolean>(false)
-  const [isDialog, setIsDialog] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
-  const [wantDeleteWalletId, setWantDeleteWalletId] = useState<string>("")
-  const [wantDeleteWalletAddress, setWantDeleteWalletAddress] = useState<string>("")
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
-
-  const [currentAddress, setCurrentAddress] = useState<string>("")
-  
 
   useEffect(() => {
 
-    const currentAddressTemp = getCurrentWalletAddress()
-    setCurrentAddress(String(currentAddressTemp))
+    setHeaderHidden(false)
+    setFooterHidden(false)
 
     const myTask = () => {
       setRefreshWalletData(refreshWalletData+1);
     };
+
     const intervalId = setInterval(myTask, 2 * 60 * 1000);
     
     return () => clearInterval(intervalId);
@@ -183,6 +166,11 @@ const MyWallet = () => {
     bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Key'), function: 'handleWalletImportKey'})
     setBottomMenus(bottomMenusList)
     setDrawerStatus(true)
+  }
+
+  const handleSetCurrentWallet = (wallet: any) => {
+    setCurrentWallet(wallet.data.arweave.key)
+    router.push('/wallet')
   }
 
   const handleWalletCreateMenu = () => {
@@ -280,7 +268,6 @@ const MyWallet = () => {
 
   const handleWalletDelete = async () => {
     console.log("handleWalletDelete", chooseWallet)
-    setIsDialog(true);
     setOpen(true);
     setPageModel('DeleteWallet')
   }
@@ -294,24 +281,16 @@ const MyWallet = () => {
 
   const handleNoClose = () => {
     setOpen(false)
-    setIsDialog(false)
     setPageModel('ListWallet')
   }
 
   const handleYesClose = () => {
     setOpen(false)
-    setIsDialog(false)
     deleteWalletByWallet(chooseWallet.jwk)
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('ListWallet')
   }
 
-  const handleRefreshWalletData = () => {
-    setRefreshWalletData(refreshWalletData+1)
-    setOpen(false)
-    setIsDialog(false)
-    setCreateWalletWindow(false)
-  }
 
   return (
     <Fragment>
@@ -339,7 +318,7 @@ const MyWallet = () => {
                   <DialogContent>
                       <DialogContentText id='alert-dialog-description'>
                       {`${t(`Once this wallet is deleted, it cannot be restored.`)}`}
-                      {`${t(`Do you want delete this wallet`)}`} {wantDeleteWalletAddress} ?
+                      {`${t(`Do you want delete this wallet`)}`} {chooseWallet.data.arweave.key} ?
                       </DialogContentText>
                   </DialogContent>
                   <DialogActions className='dialog-actions-dense'>
@@ -369,7 +348,7 @@ const MyWallet = () => {
                               >
                                 {getInitials(wallet.data.arweave.key).toUpperCase()}
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSetCurrentWallet(wallet)}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -393,7 +372,7 @@ const MyWallet = () => {
                                   
                                 </Box>
                               </Box>
-                              <Box sx={{ }} textAlign="right">
+                              <Box textAlign="right">
                                 {model == 'View' && (
                                   <Typography variant='h6' sx={{ 
                                     color: `info.dark`,
