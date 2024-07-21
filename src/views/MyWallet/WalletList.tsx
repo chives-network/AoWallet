@@ -43,7 +43,7 @@ import TextField2 from 'src/views/Chat/TextField2'
 
 import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletById, getCurrentWalletAddress, jwkToMnemonic } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, getWalletByAddress, downloadTextFile, removePunctuation, deleteWalletByWallet, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -52,6 +52,7 @@ import { formatHash, formatAR } from 'src/configs/functions'
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
+import PinKeyboard from '../Layout/PinKeyboard'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -81,6 +82,7 @@ const MyWallet = () => {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
+  const [pinCodeStatus, setPinCodeStatus] = useState<boolean>(false)
   
   
   const handleWalletGoHome = () => {
@@ -135,6 +137,7 @@ const MyWallet = () => {
     const intervalId = setInterval(myTask, 2 * 60 * 1000);
     
     return () => clearInterval(intervalId);
+
   }, []);
 
   useEffect(() => {
@@ -161,7 +164,7 @@ const MyWallet = () => {
     bottomMenusList.push({icon: 'material-symbols:copy-all-outline', title: t('Copy Address'), function: 'handleWalletCopyAddress'})
     bottomMenusList.push({icon: 'material-symbols:edit-outline', title: t('Rename Wallet'), function: 'handleWalletRename'})
     bottomMenusList.push({icon: 'mdi:file-export-outline', title: t('Export Key'), function: 'handleWalletExportKey'})
-    //bottomMenusList.push({icon: 'typcn:export-outline', title: t('Export Recovery Phrase'), function: 'handleWalletExportPhrase'})
+    bottomMenusList.push({icon: 'material-symbols:delete-outline', title: t('Delete Wallet'), color: 'rgb(255, 76, 81)', function: 'handleWalletDelete'})
     setBottomMenus(bottomMenusList)
     setDrawerStatus(true)
   }
@@ -211,48 +214,33 @@ const MyWallet = () => {
     setRightButtonText('')
   }
 
-  const handleWalletExportPhraseShow = async () => {
-    console.log("handleWalletExportPhraseShow", chooseWallet)
-    const Phrase = await jwkToMnemonic(chooseWallet.jwk)
-    console.log("Phrase", Phrase)
-    setPageModel('ExportPhraseShow')
-  }
-
-  const handleWalletExportPhraseHidden = () => {
-    console.log("handleWalletExportPhraseHidden", chooseWallet)
-    setPageModel('ExportPhraseHidden')
-  }
-
-  const handleClickToExport = (event: any, Address: string) => {
-    console.log("event", event.target.value);
-    console.log("Address", Address);
-    const fileName = "chivesweave_keyfile_" + Address + "____" + removePunctuation(getWalletNicknamesData[Address]) + ".json";
-    const mimeType = "text/plain";
-    downloadTextFile(JSON.stringify(getWalletByAddress(Address).jwk), fileName, mimeType);
-  };
-
-  const handleClickToDelete = (event: any, Address: string, WalletId: string) => {
-    setWantDeleteWalletId(WalletId)
-    setWantDeleteWalletAddress(Address)
+  const handleWalletDelete = async () => {
+    console.log("handleWalletDelete", chooseWallet)
     setIsDialog(true);
     setOpen(true);
+    setPageModel('DeleteWallet')
+  }
+
+  const handleClickToExport = () => {
+    const Address = chooseWallet.data.arweave.key
+    const fileName = "chivesweave_keyfile_" + Address + "____" + removePunctuation(getWalletNicknamesData[Address]) + ".json";
+    const mimeType = "text/plain";
+    downloadTextFile(JSON.stringify(chooseWallet.jwk), fileName, mimeType);
   };
 
   const handleNoClose = () => {
     setOpen(false)
     setIsDialog(false)
+    setPageModel('ListWallet')
   }
 
   const handleYesClose = () => {
     setOpen(false)
     setIsDialog(false)
-    console.log("wantDeleteWalletId", wantDeleteWalletId)
-    if(wantDeleteWalletId!=="" && wantDeleteWalletId!==undefined) {
-      deleteWalletById(Number(wantDeleteWalletId))
-    }
-    setWantDeleteWalletId("")
-    setWantDeleteWalletAddress("")
+    deleteWalletByWallet(chooseWallet.jwk)
     setRefreshWalletData(refreshWalletData+1)
+
+    setPageModel('ListWallet')
   }
 
   const handleRefreshWalletData = () => {
@@ -402,14 +390,14 @@ const MyWallet = () => {
                           case 'handleWalletExportKey':
                             handleWalletExportKeyHidden();
                             break;
-                          case 'handleWalletExportPhrase':
-                            handleWalletExportPhraseHidden();
+                          case 'handleWalletDelete':
+                            handleWalletDelete();
                             break;
                         }
                       }}>
                         <ListItemButton>
                           <ListItemIcon>
-                            <Icon icon={menu.icon} fontSize={20} />
+                            <Icon icon={menu.icon} fontSize={20} color={menu?.color && menu?.color != '' && 'rgb(255, 76, 81)'}/>
                           </ListItemIcon>
                           <ListItemText primary={menu.title} />
                         </ListItemButton>
@@ -540,6 +528,15 @@ const MyWallet = () => {
                     >
                       {t("Copy")}
                     </Button>
+                    <Button
+                      sx={{ ml: 3, mt: 5, width: '100px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleClickToExport()}
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Export")}
+                    </Button>
                   </Box>
                   <div style={{ flexGrow: 1 }}></div>
                   <Card>
@@ -656,36 +653,7 @@ const MyWallet = () => {
           {pageModel == 'PinCode' && ( 
             <Grid container spacing={6}>
               <Grid item xs={12}>
-                <Box display="flex" flexDirection="column" alignItems="center" mt={10}>
-                  <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
-                      <Button
-                        key={num}
-                        variant="contained"
-                        sx={{
-                          width: 55,
-                          height: 60,
-                          borderRadius: '50%',
-                          fontSize: '1.5rem',
-                        }}
-                      >
-                        {num}
-                      </Button>
-                    ))}
-                    <Button
-                      key={11}
-                      variant="contained"
-                      sx={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: '50%',
-                        fontSize: '1.5rem',
-                      }}
-                    >
-                      {11}
-                    </Button>
-                  </Box>
-                </Box>
+                <PinKeyboard />
               </Grid>
             </Grid>
           )}

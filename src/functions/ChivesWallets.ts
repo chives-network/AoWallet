@@ -270,6 +270,17 @@ export function deleteWalletById(WalletId: number) {
     return true
 };
 
+export function deleteWalletByWallet(WalletJwk: any) {
+    const chivesWalletsList = window.localStorage.getItem(chivesWallets)
+    const walletExists = chivesWalletsList ? JSON.parse(chivesWalletsList) : []
+    const leftWallets = walletExists.filter((wallet: any) => wallet.jwk.n !== WalletJwk.n);
+    window.localStorage.setItem(chivesWallets, JSON.stringify(leftWallets))
+    
+    return true
+};
+
+
+
 export async function getWalletBalance(Address: string) {
     
     return arweave.ar.winstonToAr(await arweave.wallets.getBalance(Address))
