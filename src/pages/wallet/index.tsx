@@ -1,10 +1,8 @@
-import MyWalletModel from 'src/views/Wallet/Wallet_List';
+import MyWalletModel from 'src/views/Wallet/Wallet';
 
 const IndexApp = () => {
 
-  const activeTab = "all"; 
-
-  return <MyWalletModel activeTab={activeTab} />
+  return <MyWalletModel />
 
 }
 

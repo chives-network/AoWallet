@@ -39,8 +39,8 @@ import authConfig from 'src/configs/auth'
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
-
 import TextField2 from 'src/views/Chat/TextField2'
+import { useRouter } from 'next/router'
 
 import UploadWalletJsonFile from 'src/views/Wallet/UploadWalletJsonFile'
 
@@ -70,6 +70,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const MyWallet = () => {
   // ** Hook
   const { t } = useTranslation()
+  const router = useRouter()
 
   const contentHeightFixed = {}
   
@@ -78,7 +79,7 @@ const MyWallet = () => {
   const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
-  const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
+  const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-open')
   const [Title, setTitle] = useState<string>('My Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
@@ -89,13 +90,11 @@ const MyWallet = () => {
   const [importKeyValue, setImportKeyValue] = useState<string>("")
   
 
-  
-  
   const handleWalletGoHome = () => {
     setModel('View')
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('ListWallet')
-    setLeftIcon('material-symbols:menu-rounded')
+    setLeftIcon('material-symbols:menu-open')
     setTitle(t('My Wallet') as string)
     setRightButtonText(t('Edit') as string)
   }
@@ -103,6 +102,9 @@ const MyWallet = () => {
   const LeftIconOnClick = () => {
     if(pageModel != 'ListWallet') {
       handleWalletGoHome()
+    }
+    else {
+      router.push('/wallet')
     }
   }
 

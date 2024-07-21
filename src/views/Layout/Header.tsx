@@ -5,7 +5,7 @@ import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/mater
 
 const Header = (props: any) => {
   // ** Props
-  const { Hidden, LeftIcon, LeftIconOnClick, Title, RightButtonText, RightButtonOnClick } = props
+  const { Hidden, LeftIcon, LeftIconOnClick, Title, RightButtonText, RightButtonOnClick, RightButtonIcon } = props
 
   if (Hidden == true) {
     return null
@@ -32,10 +32,15 @@ const Header = (props: any) => {
           {Title}
         </Typography>
         <Box display="flex" justifyContent="flex-end" width="100px">
-          {RightButtonText && (
+          {RightButtonText && RightButtonIcon == null && (
             <Button size="small" color="inherit" onClick={ () => RightButtonOnClick && RightButtonOnClick()}>
               {RightButtonText}
             </Button>
+          )}
+          {RightButtonIcon && (
+            <IconButton size="small" edge="start" color="inherit" aria-label="menu">
+              <Icon icon={RightButtonIcon} onClick={ () => RightButtonOnClick && RightButtonOnClick()}/>
+            </IconButton>
           )}
         </Box>
       </Toolbar>
