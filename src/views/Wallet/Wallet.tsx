@@ -75,7 +75,7 @@ const Wallet = () => {
   const router = useRouter()
 
   const contentHeightFixed = {}
-  
+
   const [model, setModel] = useState<string>('View')
   const [pageModel, setPageModel] = useState<string>('MainWallet')
   const [bottomMenus, setBottomMenus] = useState<any>([])
