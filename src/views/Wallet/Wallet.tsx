@@ -719,7 +719,7 @@ const Wallet = () => {
 
           {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
             <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+              <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
                   <Grid item xs={12} sx={{ py: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
                         <CustomAvatar
