@@ -392,10 +392,10 @@ const Wallet = () => {
                         <Typography>{t('Lottery') as string}</Typography>
                       </Grid>
                       <Grid item sx={{mx: 2}}>
-                        <IconButton onClick={()=>handleClickSendButton()}>
+                        <IconButton onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
                           <Send />
                         </IconButton>
-                        <Typography onClick={()=>handleClickSendButton()}>{t('Send') as string}</Typography>
+                        <Typography onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>{t('Send') as string}</Typography>
                       </Grid>
                     </Grid>
 
