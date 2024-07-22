@@ -131,7 +131,7 @@ const MyWalletModel = ({ activeTab } : any) => {
   useEffect(() => {
     if(id != undefined && id.length == 43) {
       axios
-        .get(authConfig.backEndApiAr + '/wallet/' + id + "/balance", { headers: { }, params: { } })
+        .get(authConfig.backEndApi + '/wallet/' + id + "/balance", { headers: { }, params: { } })
         .then(res => {
           setAddressBalance(winstonToAr(res.data));
         })
@@ -332,7 +332,7 @@ const MyWalletModel = ({ activeTab } : any) => {
                           {`${t(`Balance`)}`}:
                           </Typography>
                         </TableCell>
-                        <TableCell>{addressBalance} {authConfig.tokenNameAr}</TableCell>
+                        <TableCell>{addressBalance} {authConfig.tokenName}</TableCell>
                       </TableRow>
 
                     </TableBody>

@@ -986,7 +986,7 @@ export const SendMessageToChivesChat = async (currentWalletJwk: any, chatroomTxI
 
 export const GetChatroomAvatar = (Logo: string) => {
     if(Logo && Logo.length == 43)  {
-        return authConfig.backEndApiAr + "/" + Logo
+        return authConfig.backEndApi + "/" + Logo
     }
     else {
         return '/images/chives.png'

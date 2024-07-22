@@ -1,11 +1,8 @@
 const config = {
   productName: 'AoWallet',
-  tokenNameAr: 'AR',
-  tokenNameXwe: 'XWE',
   tokenType: 'XWE', // AR or XWE
+  tokenName: '',
   backEndApi: '',
-  backEndApiAr: 'https://arweave.net',
-  backEndApiXwe: 'https://api.chivesweave.org:1986',
   backEndApiChatBook: '',
   AoConnectWebSite: "https://www.ao.link",
   AoConnectAoLink: "https://www.ao.link/#",
@@ -31,6 +28,7 @@ const config = {
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E']
 }
 
-config.backEndApi = config.tokenType === 'AR' ? config.backEndApiAr : config.backEndApiXwe;
+config.backEndApi = config.tokenType === 'AR' ? 'https://arweave.net' : 'https://api.chivesweave.org:1986';
+config.tokenName = config.tokenType === 'AR' ? 'AR' : 'XWE';
 
 export default config;

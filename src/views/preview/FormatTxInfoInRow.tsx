@@ -96,7 +96,7 @@ function FormatTxInfoInRow({ TxRecord }: any) {
         case 'JPEG':
         case 'JPG':
         case 'WEBM':
-            return ImagePreview(`${authConfig.backEndApiAr}/${TxRecord?.id}/thumbnail`)
+            return ImagePreview(`${authConfig.backEndApi}/${TxRecord?.id}/thumbnail`)
         case 'PDF':
             return <Tooltip title={FileMap['File-Name']}><LinkStyled href={`/txs/view/${TxRecord?.id}`}>{FileMap['File-Name']}</LinkStyled></Tooltip>
         case 'XLS':

@@ -17,7 +17,7 @@ import Arweave from 'arweave'
 import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
-const arweave = Arweave.init(urlToSettings(authConfig.backEndApiAr))
+const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
 
 const chivesWallets: string = authConfig.chivesWallets
 const chivesCurrentWallet: string = authConfig.chivesCurrentWallet
@@ -570,7 +570,7 @@ async function deduplicate (transactions: ArDataItemParams[], trustedAddresses?:
 	while (entries.length) { chunks.push(entries.splice(0, 500)) }
 	
     return (await PromisePool.for(chunks).withConcurrency(3).process(async chunk => {
-        const checkResultOnMainnet: any[] = await axios.get(authConfig.backEndApiAr + '/statistics_network', { headers: { }, params: { } })
+        const checkResultOnMainnet: any[] = await axios.get(authConfig.backEndApi + '/statistics_network', { headers: { }, params: { } })
                                 .then(() => {
                                         
                                         //console.log("deduplicate in lib", res.data)
@@ -878,7 +878,7 @@ export async function CheckBundleTxStatus() {
             chivesTxStatusList.map(async (Item: any) => {
                 try {
                     const TxId = Item.TxResult.id;
-                    const response = await axios.get(authConfig.backEndApiAr + '/tx/' + TxId + '/unbundle/0/9');
+                    const response = await axios.get(authConfig.backEndApi + '/tx/' + TxId + '/unbundle/0/9');
                     if(response && response.data && response.data.txs && response.data.txs.length > 0) {
                         console.log("response.data", response.data)
                         deleteLockStatus(TxId)
@@ -899,11 +899,11 @@ export async function CheckBundleTxStatus() {
 }
 
 export async function parseBundleTx() {
-    const response = await axios.get(authConfig.backEndApiAr + '/bundletx/0/60' );
+    const response = await axios.get(authConfig.backEndApi + '/bundletx/0/60' );
     if(response && response.data && response.data.data && response.data.data.length>0) {
         for (const item of response.data.data) {
             try {
-              await axios.get(authConfig.backEndApiAr + '/tx/' + item.id + '/unbundle/0/6');
+              await axios.get(authConfig.backEndApi + '/tx/' + item.id + '/unbundle/0/6');
             } 
             catch (error) {
             }
@@ -913,7 +913,7 @@ export async function parseBundleTx() {
 }
 
 export async function getWalletProfile(currentAddress: string) {
-    const response = await axios.get(authConfig.backEndApiAr + '/profile/' + currentAddress );
+    const response = await axios.get(authConfig.backEndApi + '/profile/' + currentAddress );
     if(response && response.data && response.data.Profile && response.data.Profile.Name) {
         return response.data
     }
@@ -923,7 +923,7 @@ export async function getWalletProfile(currentAddress: string) {
 }
 
 export async function checkNodeStatus() {
-    const response = await axios.get(authConfig.backEndApiAr + '/info' );
+    const response = await axios.get(authConfig.backEndApi + '/info' );
     const Node = response.data
     if(Node.height < Node.blocks) {
         return true

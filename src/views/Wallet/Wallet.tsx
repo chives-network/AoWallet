@@ -307,7 +307,7 @@ const Wallet = () => {
                     >
                     </CustomAvatar>
                     <Typography variant="h5" mt={6}>
-                      {currentBalance} {authConfig.tokenNameAr}
+                      {currentBalance} {authConfig.tokenName}
                     </Typography>
                     <Typography variant="h6" mt={2}>
                       {formatHash(currentAddress, 6)}
@@ -721,7 +721,7 @@ const Wallet = () => {
                       sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
                     />
                     <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                      {t('Max')}: {currentBalance} {authConfig.tokenNameAr}
+                      {t('Max')}: {currentBalance} {authConfig.tokenName}
                     </Typography>
                 </Grid>
               </Grid>

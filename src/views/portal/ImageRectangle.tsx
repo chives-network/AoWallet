@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 
 import authConfig from 'src/configs/auth'
 
-const ImageRectangle = ( {item, backEndApiAr, FileType} : any) => {
+const ImageRectangle = ( {item, backEndApi, FileType} : any) => {
   // ** Hook
   const { t } = useTranslation()
   
@@ -60,14 +60,14 @@ const ImageRectangle = ( {item, backEndApiAr, FileType} : any) => {
     <Card>
       {FileType && (FileType=="png" || FileType=="jpeg" || FileType=="gif" || FileType=="image" || FileType=="word" || FileType=="excel" || FileType=="pptx") ?
         <Link href={`/txs/view/${item.id}`}>
-          <CardMedia image={`${backEndApiAr}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
+          <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
       }
       {FileType && FileType=="video" && authConfig.productName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
-          <CardMedia image={`${backEndApiAr}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
+          <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
@@ -81,21 +81,21 @@ const ImageRectangle = ( {item, backEndApiAr, FileType} : any) => {
       }
       {FileType && FileType=="audio" && authConfig.productName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
-          <ReactAudioPlayer src={`${backEndApiAr}/${ImageUrl}`} controls style={{width: '100%'}}/>
+          <ReactAudioPlayer src={`${backEndApi}/${ImageUrl}`} controls style={{width: '100%'}}/>
         </Link>
         :
         <Fragment></Fragment>
       }
       {FileType && FileType=="audio" && authConfig.productName == "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
-          <ReactAudioPlayer src={`${backEndApiAr}/${ImageUrl}`} controls style={{width: '100%'}}/>
+          <ReactAudioPlayer src={`${backEndApi}/${ImageUrl}`} controls style={{width: '100%'}}/>
         </Link>
         :
         <Fragment></Fragment>
       }
       {FileType && FileType=="pdf" && authConfig.productName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
-          <CardMedia image={`${backEndApiAr}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
+          <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
@@ -109,7 +109,7 @@ const ImageRectangle = ( {item, backEndApiAr, FileType} : any) => {
       }
       {FileType && FileType=="stl" ?
         <Link href={`/txs/view/${ImageUrl}`}>
-          <CardMedia image={`${backEndApiAr}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
+          <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>

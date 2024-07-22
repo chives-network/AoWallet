@@ -348,7 +348,7 @@ export const GetChatRecordsFromLocalStorage = (currentAddress: string, channelId
 export const GetAppAvatar = (logo: string) => {
     if(logo && logo.length == 43) {
 
-        return authConfig.backEndApiAr + "/" + logo
+        return authConfig.backEndApi + "/" + logo
     }
     else {
 
