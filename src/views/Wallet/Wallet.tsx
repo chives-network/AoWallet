@@ -179,7 +179,7 @@ const Wallet = () => {
   
   useEffect(() => {
     const processWallets = async () => {
-      if(currentAddress && currentAddress.length == 43)  {
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet')  {
         const currentBalance = await getWalletBalance(currentAddress);
         setCurrentBalance(Number(currentBalance).toFixed(4))
         
@@ -195,7 +195,7 @@ const Wallet = () => {
       }
     };
     processWallets();
-  }, [currentAddress])
+  }, [currentAddress, pageModel])
 
   useEffect(() => {
     setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
