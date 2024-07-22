@@ -7,7 +7,7 @@ const WalletListModelApp = () => {
 
 }
 
-//WalletListModelApp.contentHeightFixed = true
+WalletListModelApp.contentHeightFixed = true
 
 export default WalletListModelApp
 
