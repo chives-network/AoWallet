@@ -49,6 +49,20 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
+const preventDefault = (e: any) => {
+  e.preventDefault();
+};
+
+const disableScroll = () => {
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('touchmove', preventDefault, { passive: false });
+};
+
+const enableScroll = () => {
+  document.body.style.overflow = '';
+  document.removeEventListener('touchmove', preventDefault);
+};
+
 const Wallet = () => {
   // ** Hook
   const { t } = useTranslation()
@@ -69,6 +83,13 @@ const Wallet = () => {
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
 
+
+  useEffect(() => {
+    disableScroll();
+    return () => {
+      enableScroll();
+    };
+  }, []);
 
   const handleWalletGoHome = () => {
     setModel('View')
