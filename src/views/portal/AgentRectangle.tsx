@@ -21,7 +21,7 @@ import { formatHash } from 'src/configs/functions';
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
-const AgentRectangle = ( {item, backEndApi, FileType} : any) => {
+const AgentRectangle = ( {item, backEndApiAr, FileType} : any) => {
   // ** Hook
   const { t } = useTranslation()
   
@@ -32,7 +32,7 @@ const AgentRectangle = ( {item, backEndApi, FileType} : any) => {
 
   let ImageUrl = ""
   if(item && item.Profile.Avatar && item.Profile.Avatar && item.Profile.Avatar.length == 43) {
-    ImageUrl = `${backEndApi}/${item.Profile.Avatar}/thumbnail`
+    ImageUrl = `${backEndApiAr}/${item.Profile.Avatar}/thumbnail`
   }
   else {
     ImageUrl = '/images/chives.png'

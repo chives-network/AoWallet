@@ -70,7 +70,7 @@ const SendOutForm = () => {
   const [addressBalance, setAddressBalance] = useState<number>(0)
   useEffect(() => {
     if(currentAddress != undefined && currentAddress.length == 43) {
-      axios.get(authConfig.backEndApi + '/wallet/' + currentAddress + "/balance", { headers: { }, params: { } })
+      axios.get(authConfig.backEndApiAr + '/wallet/' + currentAddress + "/balance", { headers: { }, params: { } })
         .then(res => {
           setAddressBalance(res.data);
         })

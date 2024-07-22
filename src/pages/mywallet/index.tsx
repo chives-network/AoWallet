@@ -1,11 +1,13 @@
-import MyWalletModel from 'src/views/MyWallet/WalletList';
+import WalletListModel from 'src/views/MyWallet/WalletList';
 
-const MyWallet = () => {
+const WalletListModelApp = () => {
 
 
-  return <MyWalletModel />
+  return <WalletListModel />
 
 }
 
-export default MyWallet
+//WalletListModelApp.contentHeightFixed = true
+
+export default WalletListModelApp
 

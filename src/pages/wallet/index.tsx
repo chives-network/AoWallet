@@ -1,12 +1,12 @@
 import MyWalletModel from 'src/views/Wallet/Wallet';
 
-const IndexApp = () => {
+const MyWalletModelApp = () => {
 
   return <MyWalletModel />
 
 }
 
-IndexApp.contentHeightFixed = true
+//MyWalletModelApp.contentHeightFixed = true
 
-export default IndexApp
+export default MyWalletModelApp
 

@@ -251,7 +251,7 @@ export function parseTxAndGetMemoFileType(TxRecord: TxRecordType): string {
 export function parseTxAndGetMemoInfo(TxRecord: TxRecordType): string {
   if(TxRecord.recipient!="" && TxRecord.quantity.winston > 0) {
     
-    return formatXWE(TxRecord.quantity.winston, 6) + " " + authConfig.tokenName + " -> " + formatHash(TxRecord.recipient, 6);
+    return formatXWE(TxRecord.quantity.winston, 6) + " " + authConfig.tokenNameAr + " -> " + formatHash(TxRecord.recipient, 6);
   }
   const FileInfo: { [key: string]: string } = {}
   TxRecord.tags.map((Item: { [key: string]: string }) => {

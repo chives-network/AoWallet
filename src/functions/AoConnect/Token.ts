@@ -764,7 +764,7 @@ export const AoTokenInBoxDryRun = async (TargetTxId: string) => {
 
 export const GetTokenAvatar = (Logo: string) => {
     if(Logo && Logo.length == 43)  {
-        return authConfig.backEndApi + "/" + Logo
+        return authConfig.backEndApiAr + "/" + Logo
     }
     else {
         return ''

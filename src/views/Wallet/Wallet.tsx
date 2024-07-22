@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
+import TextField from '@mui/material/TextField'
+import { getInitials } from 'src/@core/utils/get-initials'
 
 import { CallReceived, History, Casino, Send } from '@mui/icons-material';
 
@@ -75,7 +77,7 @@ const Wallet = () => {
   const contentHeightFixed = {}
   
   const [model, setModel] = useState<string>('View')
-  const [pageModel, setPageModel] = useState<string>('ReceiveMoney')
+  const [pageModel, setPageModel] = useState<string>('MainWallet')
   const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
@@ -87,11 +89,16 @@ const Wallet = () => {
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
 
+  const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'})
+  const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
+
 
   useEffect(() => {
+    
     disableScroll();
 
     return () => {
+      
       enableScroll();
     };
 
@@ -107,7 +114,20 @@ const Wallet = () => {
   }
   
   const LeftIconOnClick = () => {
-    router.push('/mywallet')
+    switch(pageModel) {
+      case 'ReceiveMoney':
+        handleWalletGoHome()
+        break
+      case 'SendMoneySelectContact':
+        handleWalletGoHome()
+        break
+      case 'SendMoneyInputAmount':
+        handleWalletGoHome()
+        break
+      case 'MainWallet':
+        router.push('/mywallet')
+        break
+    }
   }
 
   const RightButtonOnClick = () => {
@@ -193,7 +213,6 @@ const Wallet = () => {
   }
 
   const handleWalletCopyAddress = () => {
-    console.log("handleWalletCopyAddress", chooseWallet)
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
@@ -213,6 +232,52 @@ const Wallet = () => {
       console.log('Share not supported on this browser');
     }
   };
+
+  const handleClickReceiveButton = () => {
+    setPageModel('ReceiveMoney')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Receive') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickSendButton = () => {
+    setPageModel('SendMoneySelectContact')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Select Contact') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleSelectAddress = (MoneyAddress: any) => {
+    setSendMoneyAddress(MoneyAddress)
+    setPageModel('SendMoneyInputAmount')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Input Amount') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleWalletSendMoney = () => {
+    handleWalletGoHome()
+  }
+
+  const ContactData = [
+      {name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人2', address: '9P8x4T0GTOvDFnYRfDlBoD7n5mX_FdINkCXGzpXmTzs'},
+      {name: '联系人3', address: 'xwA8HpOT9BI0iSKRDYTWhM7awHV6Xi_iTmtnGrAm4Xk'},
+      {name: '联系人4', address: '7U5p0rXSgSPuNHtCCrfKNCEk-NtqMSwZe28xCWJV5QM'},
+      {name: '联系人5', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人6', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人7', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人8', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人9', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人10', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人11', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人12', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人13', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人14', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+    ]
 
 
   return (
@@ -242,35 +307,35 @@ const Wallet = () => {
                     >
                     </CustomAvatar>
                     <Typography variant="h5" mt={6}>
-                      {currentBalance} {authConfig.tokenName}
+                      {currentBalance} {authConfig.tokenNameAr}
                     </Typography>
                     <Typography variant="h6" mt={2}>
                       {formatHash(currentAddress, 6)}
                     </Typography>
                     <Grid container spacing={4} justifyContent="center" mt={2}>
                       <Grid item sx={{mx: 2}}>
-                        <IconButton>
+                        <IconButton onClick={()=>handleClickReceiveButton()}>
                           <CallReceived />
                         </IconButton>
-                        <Typography>接收</Typography>
+                        <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
                       </Grid>
                       <Grid item sx={{mx: 2}}>
                         <IconButton>
                           <History />
                         </IconButton>
-                        <Typography>记录</Typography>
+                        <Typography>{t('Txs') as string}</Typography>
                       </Grid>
                       <Grid item sx={{mx: 2}}>
                         <IconButton>
                           <Casino />
                         </IconButton>
-                        <Typography>赌注</Typography>
+                        <Typography>{t('Lottery') as string}</Typography>
                       </Grid>
                       <Grid item sx={{mx: 2}}>
-                        <IconButton>
+                        <IconButton onClick={()=>handleClickSendButton()}>
                           <Send />
                         </IconButton>
-                        <Typography>发送</Typography>
+                        <Typography onClick={()=>handleClickSendButton()}>{t('Send') as string}</Typography>
                       </Grid>
                     </Grid>
 
@@ -303,7 +368,7 @@ const Wallet = () => {
                                     textAlign: 'left'
                                   }}
                                 >
-                                  {formatHash(currentAddress, 10)}
+                                  {formatHash(currentAddress, 8)}
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
                                   <Typography 
@@ -358,7 +423,7 @@ const Wallet = () => {
                                     textAlign: 'left'
                                   }}
                                 >
-                                  {formatHash(currentAddress, 10)}
+                                  {formatHash(currentAddress, 8)}
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
                                   <Typography 
@@ -537,6 +602,136 @@ const Wallet = () => {
                 {t('Share') as string}
                 </Button>
               </Grid>
+            </Grid>
+          )}
+
+          {pageModel == 'SendMoneySelectContact' && ( 
+            <Grid container spacing={2}>
+              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid container spacing={2}>
+                    <TextField
+                      fullWidth
+                      size='small'
+                      value={""}
+                      placeholder={t('Search or Input Address') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                    />
+                  </Grid>
+                  <Grid container spacing={2}>
+                  {ContactData.map((contact: any, index: number) => {
+
+                    return (
+                      <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                        <Card>
+                          <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                            <CustomAvatar
+                              skin='light'
+                              color={'primary'}
+                              sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                            >
+                              {getInitials(contact.address).toUpperCase()}
+                            </CustomAvatar>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress(contact)}
+                              >
+                              <Typography sx={{ 
+                                color: 'text.primary',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              >
+                                {contact.name}
+                              </Typography>
+                              <Box sx={{ display: 'flex'}}>
+                                <Typography variant='body2' sx={{ 
+                                  color: `primary.dark`, 
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  flex: 1
+                                }}>
+                                  {formatHash(contact.address, 10)}
+                                </Typography>
+                                
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Card>
+                      </Grid>
+                    )
+
+                  })}
+                  </Grid>
+
+              </Grid>
+            </Grid>
+          )}
+
+          {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
+            <Grid container spacing={2}>
+              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid item xs={12} sx={{ py: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
+                        <CustomAvatar
+                          skin='light'
+                          color={'primary'}
+                          sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
+                        >
+                          {getInitials(sendMoneyAddress.address).toUpperCase()}
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                          >
+                          <Typography sx={{ 
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                          >
+                            {sendMoneyAddress.name}
+                          </Typography>
+                          <Box sx={{ display: 'flex'}}>
+                            <Typography variant='body2' sx={{ 
+                              color: `primary.dark`, 
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              flex: 1
+                            }}>
+                              {formatHash(sendMoneyAddress.address, 10)}
+                            </Typography>
+                            
+                          </Box>
+                        </Box>
+                      </Box>
+                  </Grid>
+                  <Grid item xs={12} sx={{ py: 1 }}>
+                    <TextField
+                      fullWidth
+                      size='small'
+                      value={sendMoneyAmount}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const regex = /^[0-9]*\.?[0-9]*$/;
+                        if (regex.test(value)) {
+                          setSendMoneyAmount(value);
+                        }
+                      }}
+                      placeholder={t('Amount') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
+                    />
+                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                      {t('Max')}: {currentBalance} {authConfig.tokenNameAr}
+                    </Typography>
+                </Grid>
+              </Grid>
+                    
+              <Box sx={{width: '100%', mr: 2}}>
+                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={Number(sendMoneyAmount) > 0 && Number(sendMoneyAmount) < Number(currentBalance) ? false : true} variant='contained' onClick={()=>handleWalletSendMoney()}>
+                  {t("Send")}
+                </Button>
+              </Box>
+              
             </Grid>
           )}
 
