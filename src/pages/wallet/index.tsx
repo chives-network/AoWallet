@@ -6,5 +6,7 @@ const IndexApp = () => {
 
 }
 
+IndexApp.contentHeightFixed = true
+
 export default IndexApp
 

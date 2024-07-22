@@ -7,7 +7,6 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import { getInitials } from 'src/@core/utils/get-initials'
 import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
 
@@ -188,13 +187,13 @@ const Wallet = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
                 <Grid container spacing={2}>
-                  <Box p={2} textAlign="center">
+                  <Box p={2} textAlign="center" sx={{width: '100%'}}>
                     <CustomAvatar
                       skin='light'
                       color='primary'
                       sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
+                      src={'/images/logo/AR.png'}
                     >
-                      {getInitials(currentAddress).toUpperCase()}
                     </CustomAvatar>
                     <Typography variant="h5" mt={6}>
                       {currentBalance} {authConfig.tokenName}
@@ -229,23 +228,139 @@ const Wallet = () => {
                       </Grid>
                     </Grid>
 
-                    {currentWalletTxs && currentWalletTxs.edges && currentWalletTxs.edges.length > 0 && (
-                      <Fragment>
-                        <Grid container spacing={2} sx={{mt: 4}}>
-                        {currentWalletTxs && currentWalletTxs.edges.map((Tx: any, index: number) => {
+                    <Fragment>
+                      <Grid container spacing={2} sx={{mt: 4}}>
+
+                        <Grid item xs={12} sx={{ py: 0 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                              {t('My Assets') as string}
+                            </Box>
+                        </Grid>
+
+                        <Grid item xs={12} sx={{ py: 0 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 0, width: 43, height: 43 }}
+                                src={'/images/logo/AO.png'}
+                              >
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                <Typography 
+                                  sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    textAlign: 'left'
+                                  }}
+                                >
+                                  {formatHash(currentAddress, 10)}
+                                </Typography>
+                                <Box sx={{ display: 'flex' }}>
+                                  <Typography 
+                                    variant='body2' 
+                                    sx={{ 
+                                      color: `primary.dark`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1,
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {currentBalance}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                {model == 'View' && (
+                                  <Typography variant='h6' sx={{ 
+                                    color: `info.dark`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    mr: 2
+                                  }}>
+                                    {currentBalance}
+                                  </Typography>
+                                )}
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+
+                        <Grid item xs={12} sx={{ py: 0 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 0, width: 43, height: 43 }}
+                                src={'/images/logo/AO.png'}
+                              >
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                <Typography 
+                                  sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    textAlign: 'left'
+                                  }}
+                                >
+                                  {formatHash(currentAddress, 10)}
+                                </Typography>
+                                <Box sx={{ display: 'flex' }}>
+                                  <Typography 
+                                    variant='body2' 
+                                    sx={{ 
+                                      color: `primary.dark`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1,
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {currentBalance}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                {model == 'View' && (
+                                  <Typography variant='h6' sx={{ 
+                                    color: `info.dark`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    mr: 2
+                                  }}>
+                                    {currentBalance}
+                                  </Typography>
+                                )}
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+
+                        {currentWalletTxs && false && currentWalletTxs.edges.map((Tx: any, index: number) => {
 
                           return (
                             <Grid item xs={12} sx={{ py: 0 }} key={index}>
                               <Card>
                                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                                  <CustomAvatar
-                                    skin='light'
-                                    color={'primary'}
-                                    sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                  >
-                                    {getInitials(Tx.node.id).toUpperCase()}
-                                  </CustomAvatar>
-                                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 0, width: 43, height: 43 }}
+                                  src={'/images/logo/AO.png'}
+                                >
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
                                     <Typography 
                                       sx={{ 
                                         color: 'text.primary',
@@ -292,11 +407,22 @@ const Wallet = () => {
                               </Card>
                             </Grid>
                           )
-
                         })}
+
+                        <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
+                            <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => { 
+                              // 处理点击事件
+                            }}>
+                              {t('Add Assets') as string}
+                            </Button>
+                          </Box>
+                        </Grid>
+
+
                       </Grid>
-                      </Fragment>
-                    )}
+                    </Fragment>
+
                   </Box>
                 </Grid>
               </Grid>
