@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
 import TextField from '@mui/material/TextField'
 import { getInitials } from 'src/@core/utils/get-initials'
+import Slider from '@mui/material/Slider'
 
 import { CallReceived, History, Casino, Send } from '@mui/icons-material';
 
@@ -30,8 +31,10 @@ import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
+import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice } from 'src/functions/ChivesWallets'
+import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
@@ -43,6 +46,9 @@ import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
 import { useRouter } from 'next/router'
+
+import { createTheme, ThemeProvider } from '@mui/material';
+
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -73,6 +79,7 @@ const Wallet = () => {
   // ** Hook
   const { t } = useTranslation()
   const router = useRouter()
+  const theme = useTheme()
 
   const contentHeightFixed = {}
 
@@ -140,8 +147,9 @@ const Wallet = () => {
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [currentBalance, setCurrentBalance] = useState<string>("")
+  const [currentFee, setCurrentFee] = useState<number>(0)
   
-
+  
   useEffect(() => {
 
     setHeaderHidden(false)
@@ -168,6 +176,7 @@ const Wallet = () => {
       if(currentAddress && currentAddress.length == 43)  {
         const currentBalance = await getWalletBalance(currentAddress);
         setCurrentBalance(Number(currentBalance).toFixed(4))
+        
         const allTxs = await GetArWalletAllTxs(currentAddress)
         if(allTxs)  {
           setCurrentWalletTxs(allTxs)
@@ -185,6 +194,20 @@ const Wallet = () => {
     setGetAllWalletsData(getAllWallets())
     setGetWalletNicknamesData(getWalletNicknames())
   }, [refreshWalletData])
+
+  useEffect(() => {
+    if(pageModel == "SendMoneyInputAmount") {
+      const getPriceDataFunction = async () => {
+        try {
+          const getPriceData = await getPrice(100)
+          setCurrentFee(Number(getPriceData))
+        } catch (error) {
+          console.error('SendMoneyInputAmount Error:', error);
+        }
+      }
+      getPriceDataFunction()
+    }
+  }, [pageModel])
 
 
   const handleOpenWalletMenu = (wallet: any) => {
@@ -263,7 +286,7 @@ const Wallet = () => {
   }
 
   const ContactData = [
-      {name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人1', address: 'M_XtWZkr1bSvwjZ6wEnXAKTnVErvRR__UAEWwdS8Xgs'},
       {name: '联系人2', address: '9P8x4T0GTOvDFnYRfDlBoD7n5mX_FdINkCXGzpXmTzs'},
       {name: '联系人3', address: 'xwA8HpOT9BI0iSKRDYTWhM7awHV6Xi_iTmtnGrAm4Xk'},
       {name: '联系人4', address: '7U5p0rXSgSPuNHtCCrfKNCEk-NtqMSwZe28xCWJV5QM'},
@@ -279,6 +302,17 @@ const Wallet = () => {
       {name: '联系人14', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
     ]
 
+    const themeSlider = createTheme({
+      components: {
+        MuiSlider: {
+          styleOverrides: {
+            root: {
+              color: theme.palette.primary.main,
+            },
+          },
+        },
+      },
+    });
 
   return (
     <Fragment>
@@ -720,14 +754,35 @@ const Wallet = () => {
                       placeholder={t('Amount') as string}
                       sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
                     />
+                    <ThemeProvider theme={themeSlider}>
+                      <Slider size="small" 
+                              defaultValue={0} 
+                              aria-labelledby="small-slider" 
+                              min={0}
+                              max={100}
+                              onChange={( _ , newValue: number | number[])=>{
+                                if (Array.isArray(newValue)) {
+                                  newValue = newValue[0];
+                                }
+                                const TotalLeft = BalanceMinus(Number(currentBalance), Number(currentFee))
+                                const MultiValue = newValue / 100
+                                const result = BalanceTimes(Number(TotalLeft), MultiValue)
+                                setSendMoneyAmount( String(result) )
+                              }} 
+                              sx={{m: 0, p: 0 }}
+                              />
+                    </ThemeProvider>
                     <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
                       {t('Max')}: {currentBalance} {authConfig.tokenName}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                      {t('Fee')}: {currentFee}
                     </Typography>
                 </Grid>
               </Grid>
                     
               <Box sx={{width: '100%', mr: 2}}>
-                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={Number(sendMoneyAmount) > 0 && Number(sendMoneyAmount) < Number(currentBalance) ? false : true} variant='contained' onClick={()=>handleWalletSendMoney()}>
+                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true} variant='contained' onClick={()=>handleWalletSendMoney()}>
                   {t("Send")}
                 </Button>
               </Box>
