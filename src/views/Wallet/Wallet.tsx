@@ -363,7 +363,7 @@ const Wallet = () => {
                       skin='light'
                       color='primary'
                       sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
-                      src={'/images/logo/AR.png'}
+                      src={'/images/logo/' + authConfig.tokenName + '.png'}
                     >
                     </CustomAvatar>
                     <Typography variant="h5" mt={6}>
@@ -415,7 +415,7 @@ const Wallet = () => {
                                 skin='light'
                                 color={'primary'}
                                 sx={{ mr: 0, width: 43, height: 43 }}
-                                src={'/images/logo/AO.png'}
+                                src={'/images/logo/' + authConfig.tokenName + '.png'}
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -453,7 +453,7 @@ const Wallet = () => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    mr: 2
+                                    mr: 1
                                   }}>
                                     {currentBalance}
                                   </Typography>
@@ -462,61 +462,64 @@ const Wallet = () => {
                             </Box>
                           </Card>
                         </Grid>
+                        
+                        {authConfig.tokenName && authConfig.tokenName == "AR" && (
+                          <Grid item xs={12} sx={{ py: 0 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 0, width: 43, height: 43 }}
+                                  src={'/images/logo/AO.png'}
+                                >
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                  <Typography 
+                                    sx={{ 
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {formatHash(currentAddress, 8)}
+                                  </Typography>
+                                  <Box sx={{ display: 'flex' }}>
+                                    <Typography 
+                                      variant='body2' 
+                                      sx={{ 
+                                        color: `primary.dark`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1,
+                                        textAlign: 'left'
+                                      }}
+                                    >
+                                      {currentBalance}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                  {model == 'View' && (
+                                    <Typography variant='h6' sx={{ 
+                                      color: `info.dark`,
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      mr: 2
+                                    }}>
+                                      {currentBalance}
+                                    </Typography>
+                                  )}
+                                </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
 
-                        <Grid item xs={12} sx={{ py: 0 }}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                              <CustomAvatar
-                                skin='light'
-                                color={'primary'}
-                                sx={{ mr: 0, width: 43, height: 43 }}
-                                src={'/images/logo/AO.png'}
-                              >
-                              </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                <Typography 
-                                  sx={{ 
-                                    color: 'text.primary',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    textAlign: 'left'
-                                  }}
-                                >
-                                  {formatHash(currentAddress, 8)}
-                                </Typography>
-                                <Box sx={{ display: 'flex' }}>
-                                  <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                      color: `primary.dark`, 
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      flex: 1,
-                                      textAlign: 'left'
-                                    }}
-                                  >
-                                    {currentBalance}
-                                  </Typography>
-                                </Box>
-                              </Box>
-                              <Box textAlign="right">
-                                {model == 'View' && (
-                                  <Typography variant='h6' sx={{ 
-                                    color: `info.dark`,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    mr: 2
-                                  }}>
-                                    {currentBalance}
-                                  </Typography>
-                                )}
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
+                        )}
 
                         {currentWalletTxs && false && currentWalletTxs.edges.map((Tx: any, index: number) => {
 
@@ -782,7 +785,8 @@ const Wallet = () => {
                       sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
                     />
                     <ThemeProvider theme={themeSlider}>
-                      <Slider size="small" 
+                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
+                        <Slider size="small" 
                               disabled={isDisabledButton}
                               defaultValue={0} 
                               aria-labelledby="small-slider" 
@@ -803,8 +807,9 @@ const Wallet = () => {
                                   setSendMoneyAmount( String(Number(result).toFixed(4)) )
                                 }
                               }} 
-                              sx={{m: 0, p: 0 }}
+                              sx={{m: 0, p: 0, width: '90%' }}
                               />
+                      </Box>
                     </ThemeProvider>
                     <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
                       {t('Max')}: {currentBalance} {authConfig.tokenName}
