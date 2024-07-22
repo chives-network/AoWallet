@@ -22,9 +22,9 @@ const Header = (props: any) => {
     >
       <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', 'min-height': 48 }}>
         <Box width='100px'>
-          {LeftIcon && (
-            <IconButton size="small" edge="start" color="inherit" aria-label="menu">
-              <Icon icon={LeftIcon} onClick={ () => LeftIconOnClick && LeftIconOnClick()}/>
+          {LeftIcon && LeftIconOnClick && (
+            <IconButton size="small" edge="start" color="inherit" aria-label="menu" onClick={ () => LeftIconOnClick && LeftIconOnClick()}>
+              <Icon icon={LeftIcon}/>
             </IconButton>
           )}
         </Box>
@@ -32,14 +32,14 @@ const Header = (props: any) => {
           {Title}
         </Typography>
         <Box display="flex" justifyContent="flex-end" width="100px">
-          {RightButtonText && RightButtonIcon == null && (
+          {RightButtonText && RightButtonIcon == null && RightButtonOnClick && (
             <Button size="small" color="inherit" onClick={ () => RightButtonOnClick && RightButtonOnClick()}>
               {RightButtonText}
             </Button>
           )}
-          {RightButtonIcon && (
-            <IconButton size="small" edge="start" color="inherit" aria-label="menu">
-              <Icon icon={RightButtonIcon} onClick={ () => RightButtonOnClick && RightButtonOnClick()}/>
+          {RightButtonIcon && RightButtonOnClick && (
+            <IconButton size="small" edge="start" color="inherit" aria-label="menu"  onClick={ () => RightButtonOnClick && RightButtonOnClick()}>
+              <Icon icon={RightButtonIcon}/>
             </IconButton>
           )}
         </Box>

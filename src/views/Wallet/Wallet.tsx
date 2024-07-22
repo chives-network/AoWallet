@@ -19,13 +19,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+import { QRCode } from 'react-qrcode-logo';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ShareIcon from '@mui/icons-material/Share';
+
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet } from 'src/functions/ChivesWallets'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
@@ -71,7 +75,7 @@ const Wallet = () => {
   const contentHeightFixed = {}
   
   const [model, setModel] = useState<string>('View')
-  const [pageModel, setPageModel] = useState<string>('MainWallet')
+  const [pageModel, setPageModel] = useState<string>('ReceiveMoney')
   const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
@@ -90,7 +94,7 @@ const Wallet = () => {
     return () => {
       enableScroll();
     };
-    
+
   }, []);
 
   const handleWalletGoHome = () => {
@@ -126,6 +130,9 @@ const Wallet = () => {
 
     const currentAddressTemp = getCurrentWalletAddress()
     setCurrentAddress(String(currentAddressTemp))
+
+    const getCurrentWalletTemp = getCurrentWallet()
+    setChooseWallet(getCurrentWalletTemp)
 
     const myTask = () => {
       setRefreshWalletData(refreshWalletData+1);
@@ -186,10 +193,26 @@ const Wallet = () => {
   }
 
   const handleWalletCopyAddress = () => {
-    console.log("handleWalletCopyAddress", chooseWallet.data.arweave.key)
+    console.log("handleWalletCopyAddress", chooseWallet)
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
+
+  const handleAddressShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: t('Share Wallet Address') as string,
+        text: `${t('Here is my wallet address') as string}: ${currentAddress}`,
+        url: window.location.href,
+      }).then(() => {
+        console.log('Successful share');
+      }).catch((error) => {
+        console.log('Error sharing', error);
+      });
+    } else {
+      console.log('Share not supported on this browser');
+    }
+  };
 
 
   return (
@@ -493,6 +516,29 @@ const Wallet = () => {
           :
             <Fragment></Fragment>
           }
+
+          {pageModel == 'ReceiveMoney' && ( 
+            <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
+              <Grid item>
+                <QRCode value={currentAddress} size={150} />
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" sx={{mt: 1, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
+                  {currentAddress}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />} onClick={()=>handleWalletCopyAddress()}>
+                  {t('Copy') as string}
+                </Button>
+              </Grid>
+              <Grid item sx={{ mt: 'auto', width: '100%' }}>
+                <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
+                {t('Share') as string}
+                </Button>
+              </Grid>
+            </Grid>
+          )}
 
           {pageModel == 'PinCode' && ( 
             <Grid container spacing={6}>
