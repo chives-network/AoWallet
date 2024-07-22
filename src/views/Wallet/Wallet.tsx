@@ -12,9 +12,10 @@ import Drawer from '@mui/material/Drawer'
 import TextField from '@mui/material/TextField'
 import { getInitials } from 'src/@core/utils/get-initials'
 import Slider from '@mui/material/Slider'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { CallReceived, History, Casino, Send } from '@mui/icons-material';
-
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -33,7 +34,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
@@ -148,6 +149,11 @@ const Wallet = () => {
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [currentBalance, setCurrentBalance] = useState<string>("")
   const [currentFee, setCurrentFee] = useState<number>(0)
+
+  
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
+  const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
+  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
   
   
   useEffect(() => {
@@ -177,12 +183,17 @@ const Wallet = () => {
         const currentBalance = await getWalletBalance(currentAddress);
         setCurrentBalance(Number(currentBalance).toFixed(4))
         
-        const allTxs = await GetArWalletAllTxs(currentAddress)
-        if(allTxs)  {
-          setCurrentWalletTxs(allTxs)
+        if(authConfig.tokenType == "AR")  {
+          const allTxs = await GetArWalletAllTxs(currentAddress)
+          if(allTxs)  {
+            setCurrentWalletTxs(allTxs)
+          }
         }
+        if(authConfig.tokenType == "XWE")  {
+        }
+
       }
-    };  
+    };
     processWallets();
   }, [currentAddress])
 
@@ -199,7 +210,7 @@ const Wallet = () => {
     if(pageModel == "SendMoneyInputAmount") {
       const getPriceDataFunction = async () => {
         try {
-          const getPriceData = await getPrice(100)
+          const getPriceData = await getPrice(50)
           setCurrentFee(Number(getPriceData))
         } catch (error) {
           console.error('SendMoneyInputAmount Error:', error);
@@ -270,6 +281,7 @@ const Wallet = () => {
     setTitle(t('Select Contact') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
+    setSendMoneyAddress(null)
   }
 
   const handleSelectAddress = (MoneyAddress: any) => {
@@ -279,21 +291,35 @@ const Wallet = () => {
     setTitle(t('Input Amount') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
+    setSendMoneyAmount('')
   }
 
-  const handleWalletSendMoney = () => {
+  const handleWalletSendMoney = async () => {
+    setIsDisabledButton(true)
+    setUploadingButton(`${t('Submitting...')}`)
+    const TxResult: any = await sendAmount(chooseWallet, sendMoneyAddress.address, String(sendMoneyAmount), [], 'inputData', "SubmitStatus", setUploadProgress);
+    if(TxResult && TxResult.status == 800) {
+      toast.error(TxResult.statusText, { duration: 2500 })
+    }
+    if(TxResult && TxResult.signature)  {
+      toast.success(t("Successful Sent") as string, { duration: 2500 })
+    }
+    setIsDisabledButton(false)
+    setUploadingButton(`${t('Send')}`)
+    setSendMoneyAmount('')
     handleWalletGoHome()
+    console.log("uploadProgress", uploadProgress)
   }
 
   const ContactData = [
       {name: '联系人1', address: 'M_XtWZkr1bSvwjZ6wEnXAKTnVErvRR__UAEWwdS8Xgs'},
-      {name: '联系人2', address: '9P8x4T0GTOvDFnYRfDlBoD7n5mX_FdINkCXGzpXmTzs'},
+      {name: '联系人2', address: 'mIZnYPDjIf5PlxE8nG3CALOU7-BngKJSc0N-Tit7cSM'},
       {name: '联系人3', address: 'xwA8HpOT9BI0iSKRDYTWhM7awHV6Xi_iTmtnGrAm4Xk'},
-      {name: '联系人4', address: '7U5p0rXSgSPuNHtCCrfKNCEk-NtqMSwZe28xCWJV5QM'},
-      {name: '联系人5', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人6', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人7', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人8', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
+      {name: '联系人4', address: 'XrjRoNDx-WVhgK_xJfowYrTrzaFxabt7tGwjVpCf2yE'},
+      {name: '联系人5', address: 'xPIvsc-poD6p_w63jHUNA-5i2l7iD-Fa1WP86_rhJjg'},
+      {name: '联系人6', address: 'bVgbGVe8xoUMZUTotUs73Q35dgzqk65R8Dzauaj0WdU'},
+      {name: '联系人7', address: 'IFVuoVlOzKnUbNZCOljFYXojP4fSIGhHp6bh8BSF9Dg'},
+      {name: '联系人8', address: '72i2l5UJFwIb53gbUuiS9tKM-y1ooJnJFnyWltNEEBo'},
       {name: '联系人9', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
       {name: '联系人10', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
       {name: '联系人11', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
@@ -741,6 +767,7 @@ const Wallet = () => {
                   </Grid>
                   <Grid item xs={12} sx={{ py: 1 }}>
                     <TextField
+                      disabled={isDisabledButton}
                       fullWidth
                       size='small'
                       value={sendMoneyAmount}
@@ -756,6 +783,7 @@ const Wallet = () => {
                     />
                     <ThemeProvider theme={themeSlider}>
                       <Slider size="small" 
+                              disabled={isDisabledButton}
                               defaultValue={0} 
                               aria-labelledby="small-slider" 
                               min={0}
@@ -767,7 +795,13 @@ const Wallet = () => {
                                 const TotalLeft = BalanceMinus(Number(currentBalance), Number(currentFee))
                                 const MultiValue = newValue / 100
                                 const result = BalanceTimes(Number(TotalLeft), MultiValue)
-                                setSendMoneyAmount( String(result) )
+                                if(newValue == 100) {
+                                  setSendMoneyAmount( String(Number(result)) )
+
+                                }
+                                else {
+                                  setSendMoneyAmount( String(Number(result).toFixed(4)) )
+                                }
                               }} 
                               sx={{m: 0, p: 0 }}
                               />
@@ -782,10 +816,21 @@ const Wallet = () => {
               </Grid>
                     
               <Box sx={{width: '100%', mr: 2}}>
-                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true} variant='contained' onClick={()=>handleWalletSendMoney()}>
-                  {t("Send")}
+                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={
+                  (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
+                  ||
+                  (isDisabledButton)                  
+                  } variant='contained' onClick={()=>handleWalletSendMoney()}>
+                  {uploadingButton}
                 </Button>
               </Box>
+
+              <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isDisabledButton}
+              >
+                <CircularProgress color="inherit" size={45}/>
+              </Backdrop>
               
             </Grid>
           )}
