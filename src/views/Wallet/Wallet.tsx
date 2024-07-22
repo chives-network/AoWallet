@@ -805,18 +805,19 @@ const Wallet = () => {
                       {t('Fee')}: {currentFee}
                     </Typography>
                 </Grid>
+                <Grid item xs={12} sx={{ py: 1 }}>
+                  <Box sx={{width: '100%', mr: 2}}>
+                    <Button sx={{mt: 8}} fullWidth disabled={
+                      (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
+                      ||
+                      (isDisabledButton)                  
+                      } variant='contained' onClick={()=>handleWalletSendMoney()}>
+                      {uploadingButton}
+                    </Button>
+                  </Box>
+                </Grid>
               </Grid>
                     
-              <Box sx={{width: '100%', mr: 2}}>
-                <Button sx={{mt: 3, ml: 2}} fullWidth disabled={
-                  (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
-                  ||
-                  (isDisabledButton)                  
-                  } variant='contained' onClick={()=>handleWalletSendMoney()}>
-                  {uploadingButton}
-                </Button>
-              </Box>
-
               <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={isDisabledButton}
