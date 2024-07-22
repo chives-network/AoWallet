@@ -281,25 +281,45 @@ export function deleteWalletByWallet(WalletJwk: any) {
 
 
 
-export async function getWalletBalance(Address: string) {
-    
-    return arweave.ar.winstonToAr(await arweave.wallets.getBalance(Address))
+export async function getWalletBalance(Address: string) {    
+    try {
+
+        return arweave.ar.winstonToAr(await arweave.wallets.getBalance(Address))
+    } 
+    catch (e) { 
+        console.warn('getWalletBalance failed') 
+    }
 }
 
 export async function getWalletBalanceWinston(Address: string) {
-    
-    return await arweave.wallets.getBalance(Address)
+    try {
+
+        return await arweave.wallets.getBalance(Address)
+    } 
+    catch (e) { 
+        console.warn('getWalletBalance failed') 
+    }
 }
 
 export async function getPrice(byteSize: number) {
-    
-    return arweave.ar.winstonToAr(await arweave.transactions.getPrice(byteSize))
+    try {
+
+        return arweave.ar.winstonToAr(await arweave.transactions.getPrice(byteSize))
+    } 
+    catch (e) { 
+        console.warn('getWalletBalance failed') 
+    }
 }
 
 
 export async function getPriceWinston(byteSize: number) {
-    
-    return await arweave.transactions.getPrice(byteSize)
+    try {
+
+        return await arweave.transactions.getPrice(byteSize)
+    } 
+    catch (e) { 
+        console.warn('getWalletBalance failed') 
+    }
 }
 
 export function winstonToAr(winston: string) {

@@ -62,19 +62,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const preventDefault = (e: any) => {
-  e.preventDefault();
-};
-
-const disableScroll = () => {
-  document.body.style.overflow = 'hidden';
-  document.addEventListener('touchmove', preventDefault, { passive: false });
-};
-
-const enableScroll = () => {
-  document.body.style.overflow = '';
-  document.removeEventListener('touchmove', preventDefault);
-};
 
 const Wallet = () => {
   // ** Hook
@@ -103,11 +90,11 @@ const Wallet = () => {
 
   useEffect(() => {
     
-    disableScroll();
+    //disableScroll();
 
     return () => {
       
-      enableScroll();
+      //enableScroll();
     };
 
   }, []);
