@@ -87,14 +87,27 @@ const Wallet = () => {
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
 
+  const preventDefault = (e: any) => {
+    e.preventDefault();
+  };
+
+  const disableScroll = () => {
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('touchmove', preventDefault, { passive: false });
+  };
+
+  const enableScroll = () => {
+    document.body.style.overflow = '';
+    document.removeEventListener('touchmove', preventDefault);
+  };
 
   useEffect(() => {
     
-    //disableScroll();
+    disableScroll();
 
     return () => {
       
-      //enableScroll();
+      enableScroll();
     };
 
   }, []);
