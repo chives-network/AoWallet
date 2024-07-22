@@ -86,9 +86,11 @@ const Wallet = () => {
 
   useEffect(() => {
     disableScroll();
+
     return () => {
       enableScroll();
     };
+    
   }, []);
 
   const handleWalletGoHome = () => {
