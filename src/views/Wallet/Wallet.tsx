@@ -648,10 +648,10 @@ const Wallet = () => {
           {pageModel == 'ReceiveMoney' && ( 
             <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
               <Grid item>
-                <QRCode value={currentAddress} size={150} />
+                <QRCode value={currentAddress} size={180} />
               </Grid>
               <Grid item>
-                <Typography variant="body1" sx={{mt: 1, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
+                <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
                   {currentAddress}
                 </Typography>
               </Grid>
