@@ -6,7 +6,7 @@ const MyWalletModelApp = () => {
 
 }
 
-MyWalletModelApp.contentHeightFixed = true
+//MyWalletModelApp.contentHeightFixed = true
 
 export default MyWalletModelApp
 

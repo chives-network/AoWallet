@@ -14,7 +14,7 @@ const Header = (props: any) => {
   return (
     <AppBar
       color='default'
-      position='sticky'
+      position='fixed'
       elevation={0}
       sx={{
         backgroundColor: 'background.paper',

@@ -30,7 +30,7 @@ const Footer = (props: any) => {
           alignItems: 'center',
           justifyContent: 'center',
           bottom: 0,
-          position: 'sticky',
+          position: 'fixed',
         }}
       >
         <BottomNavigation

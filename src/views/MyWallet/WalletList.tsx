@@ -39,7 +39,7 @@ import { generateNewMnemonicAndGetWalletData, importWalletJsonFile } from 'src/f
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatAR } from 'src/configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
@@ -147,7 +147,6 @@ const MyWallet = () => {
     };  
     processWallets();
   }, [getAllWalletsData])
-
 
   const handleOpenWalletMenu = (wallet: any) => {
     setChooseWallet(wallet)
@@ -299,6 +298,8 @@ const MyWallet = () => {
       <ContentWrapper
           className='layout-page-content'
           sx={{
+              mt: '48px',
+              mb: '56px',
               ...(contentHeightFixed && {
               overflow: 'hidden',
               '& > :first-of-type': { height: '100%' }
@@ -375,13 +376,13 @@ const MyWallet = () => {
                               <Box textAlign="right">
                                 {model == 'View' && (
                                   <Typography variant='h6' sx={{ 
-                                    color: `info.dark`,
+                                    color: Number(walletBalanceMap[wallet.data.arweave.key]) > 0 ? 'info.dark' : 'secondary.dark',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
                                     mr: 2
                                   }}>
-                                    {formatAR(walletBalanceMap[wallet.data.arweave.key] ?? 0, 2)}
+                                    {Number(walletBalanceMap[wallet.data.arweave.key]) > 0 ? Number(walletBalanceMap[wallet.data.arweave.key]).toFixed(2) : '0'}
                                   </Typography>
                                 )}
                                 {model == 'Edit' && (

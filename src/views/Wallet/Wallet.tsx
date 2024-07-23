@@ -92,13 +92,19 @@ const Wallet = () => {
   };
 
   const disableScroll = () => {
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('touchmove', preventDefault, { passive: false });
+
+    console.log("preventDefault", preventDefault)
+
+    //document.body.style.overflow = 'hidden';
+    //document.addEventListener('touchmove', preventDefault, { passive: false });
   };
 
   const enableScroll = () => {
-    document.body.style.overflow = '';
-    document.removeEventListener('touchmove', preventDefault);
+
+    console.log("preventDefault", preventDefault)
+
+    //document.body.style.overflow = '';
+    //document.removeEventListener('touchmove', preventDefault);
   };
 
   useEffect(() => {
@@ -183,10 +189,9 @@ const Wallet = () => {
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet')  {
         const currentBalance = await getWalletBalance(currentAddress);
+        setCurrentBalance(Number(currentBalance).toFixed(4))
         
         if(authConfig.tokenType == "AR")  {
-          setCurrentBalance(Number(currentBalance).toFixed(4))
-
           const allTxs = await GetArWalletAllTxs(currentAddress)
           if(allTxs)  {
             setCurrentWalletTxs(allTxs)
@@ -205,9 +210,7 @@ const Wallet = () => {
             const MinusBalance = BalanceMinus(Number(currentBalance) , Number(currentTxsInMemory['send'][currentAddress]))
             setCurrentBalance(Number(MinusBalance).toFixed(4))
           }
-          else {
-            setCurrentBalance(Number(currentBalance).toFixed(4))
-          }
+
         }
 
       }
@@ -365,6 +368,8 @@ const Wallet = () => {
       <ContentWrapper
           className='layout-page-content'
           sx={{
+              mt: '48px',
+              mb: '56px',
               ...(contentHeightFixed && {
               overflow: 'hidden',
               '& > :first-of-type': { height: '100%' }
