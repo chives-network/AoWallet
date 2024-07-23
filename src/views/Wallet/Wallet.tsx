@@ -370,7 +370,7 @@ const Wallet = () => {
         sx={{
           flex: 1,
           overflowY: 'auto',
-          marginTop: '64px', // Adjust according to the height of the AppBar
+          marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}
       >
@@ -379,7 +379,7 @@ const Wallet = () => {
             sx={{
                 ...(contentHeightFixed && {
                 overflow: 'hidden',
-                '& > :first-of-type': { height: '100%' }
+                '& > :first-of-type': { height: `calc(100% - 104px)` }
                 })
             }}
             >

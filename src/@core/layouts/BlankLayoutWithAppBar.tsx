@@ -18,7 +18,7 @@ const BlankLayoutWithAppBarWrapper = styled(Box)<BoxProps>(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing(5),
-    minHeight: `calc(100vh - ${theme.spacing((theme.mixins.toolbar.minHeight as number) / 4)})`
+    minHeight: `(100vh - ${theme.spacing((theme.mixins.toolbar.minHeight as number) / 4)})`
   },
 
   // For V2 Blank layout pages
