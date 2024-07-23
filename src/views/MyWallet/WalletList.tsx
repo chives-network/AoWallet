@@ -405,16 +405,19 @@ const MyWallet = () => {
                       )
 
                     })}
+
+                    {model == 'Edit' && (
+                      <Box sx={{width: '100%', mr: 2}}>
+                        <Button sx={{mt: 5, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
+                          {t("Create Wallet")}
+                        </Button>
+                      </Box>
+                    )}
+
                   </Grid>
               </Grid>
                     
-              {model == 'Edit' && (
-                <Box sx={{width: '100%', mr: 2}}>
-                  <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
-                    {t("Create Wallet")}
-                  </Button>
-                </Box>
-              )}
+              
 
               <Drawer
                 anchor={'bottom'}
@@ -495,18 +498,16 @@ const MyWallet = () => {
                       placeholder={t('Wallet Name') as string}
                       sx={{ '& .MuiInputBase-root': { borderRadius: 1 } }}
                     />
+                    <Box sx={{width: '100%', mt: 2}}>
+                      <Button sx={{mt: 8}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
+                        {t("Create Wallet")}
+                      </Button>
+                    </Box>
                   </Grid>
                 </Grid>
-                      
-                <Box sx={{width: '100%', mr: 2}}>
-                  <Button sx={{mt: 3, ml: 2}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
-                    {t("Create Wallet")}
-                  </Button>
-                </Box>
               </Fragment>
               }
-              
-              
+
             </Grid>
           )}
 
@@ -548,14 +549,15 @@ const MyWallet = () => {
                       placeholder={t('Wallet Name') as string}
                       sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 3 }}
                     />
+                    <Box sx={{width: '100%', mr: 2}}>
+                      <Button sx={{mt: 8, ml: 2}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
+                        {t("Import Key")}
+                      </Button>
+                    </Box>
                   </Grid>
                 </Grid>
                       
-                <Box sx={{width: '100%', mr: 2}}>
-                  <Button sx={{mt: 3, ml: 2}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
-                    {t("Import Key")}
-                  </Button>
-                </Box>
+                
               </Fragment>
               }
               
@@ -575,14 +577,15 @@ const MyWallet = () => {
                     placeholder={t('My Wallet') as string}
                     sx={{ '& .MuiInputBase-root': { borderRadius: 5 } }}
                   />
+                  <Box sx={{width: '100%', mr: 3}}>
+                    <Button sx={{mt: 8, mx: 2}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
+                      {t("Save")}
+                    </Button>
+                  </Box>
                 </Grid>
               </Grid>
                     
-              <Box sx={{width: '100%', mr: 2}}>
-                <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
-                  {t("Save")}
-                </Button>
-              </Box>
+             
               
             </Grid>
           )}
@@ -631,14 +634,15 @@ const MyWallet = () => {
                       {t("Copy")}
                     </Button>
                   </Box>
-                  <div style={{ flexGrow: 1 }}></div>
-                  <Card>
+
+                  <Card sx={{mt: 8}}>
                     <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
                     <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
                   </Card>
-                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
+                  <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
                     {t("Show")}
                   </Button>
+                  
                 </div>
               </Grid>
             </Grid>
@@ -678,14 +682,15 @@ const MyWallet = () => {
                       {t("Export")}
                     </Button>
                   </Box>
-                  <div style={{ flexGrow: 1 }}></div>
-                  <Card>
+
+                  <Card sx={{mt: 8}}>
                     <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
                     <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
                   </Card>
-                  <Button sx={{mt: 3}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
+                  <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
                     {t("Hidden")}
                   </Button>
+                  
                 </div>
               </Grid>
             </Grid>
