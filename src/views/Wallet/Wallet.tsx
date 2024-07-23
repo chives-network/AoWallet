@@ -365,153 +365,104 @@ const Wallet = () => {
     <Fragment>
       <Header Hidden={HeaderHidden} LeftIcon={LeftIcon} LeftIconOnClick={LeftIconOnClick} Title={Title} RightButtonText={RightButtonText} RightButtonOnClick={RightButtonOnClick} RightButtonIcon={RightButtonIcon}/>
 
-      <ContentWrapper
-          className='layout-page-content'
-          sx={{
-              mt: '48px',
-              mb: '56px',
-              ...(contentHeightFixed && {
-              overflow: 'hidden',
-              '& > :first-of-type': { height: '100%' }
-              })
-          }}
-          >
-          
-          {getAllWalletsData && pageModel == 'MainWallet' ?  
-            <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
-                <Grid container spacing={2}>
-                  <Box p={2} textAlign="center" sx={{width: '100%'}}>
-                    <CustomAvatar
-                      skin='light'
-                      color='primary'
-                      sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
-                      src={'/images/logo/' + authConfig.tokenName + '.png'}
-                    >
-                    </CustomAvatar>
-                    <Typography variant="h5" mt={6}>
-                      {currentBalance} {authConfig.tokenName}
-                    </Typography>
-                    {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
-                      <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
-                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Icon icon='tdesign:plus' />
-                          {currentTxsInMemory['receive'][currentAddress]} {authConfig.tokenName}
-                        </Box>
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          marginTop: '64px', // Adjust according to the height of the AppBar
+          marginBottom: '56px', // Adjust according to the height of the Footer
+        }}
+      >
+        <ContentWrapper
+            className='layout-page-content'
+            sx={{
+                ...(contentHeightFixed && {
+                overflow: 'hidden',
+                '& > :first-of-type': { height: '100%' }
+                })
+            }}
+            >
+            
+            {getAllWalletsData && pageModel == 'MainWallet' ?  
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                  <Grid container spacing={2}>
+                    <Box p={2} textAlign="center" sx={{width: '100%'}}>
+                      <CustomAvatar
+                        skin='light'
+                        color='primary'
+                        sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
+                        src={'/images/logo/' + authConfig.tokenName + '.png'}
+                      >
+                      </CustomAvatar>
+                      <Typography variant="h5" mt={6}>
+                        {currentBalance} {authConfig.tokenName}
                       </Typography>
-                    )}
-                    {currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
-                      <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
-                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Icon icon='tdesign:minus' />
-                          {currentTxsInMemory['send'][currentAddress]} {authConfig.tokenName}
-                        </Box>
+                      {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
+                        <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Icon icon='tdesign:plus' />
+                            {currentTxsInMemory['receive'][currentAddress]} {authConfig.tokenName}
+                          </Box>
+                        </Typography>
+                      )}
+                      {currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
+                        <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
+                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Icon icon='tdesign:minus' />
+                            {currentTxsInMemory['send'][currentAddress]} {authConfig.tokenName}
+                          </Box>
+                        </Typography>
+                      )}
+                      {currentBalanceReservedRewards && Number(currentBalanceReservedRewards) > 0 && (
+                        <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
+                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Icon icon='hugeicons:mining-02' />
+                            {Number(currentBalanceReservedRewards).toFixed(4)} {authConfig.tokenName}
+                          </Box>
+                        </Typography>
+                      )}
+
+                      <Typography variant="h6" mt={2}>
+                        {formatHash(currentAddress, 6)}
                       </Typography>
-                    )}
-                    {currentBalanceReservedRewards && Number(currentBalanceReservedRewards) > 0 && (
-                      <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
-                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Icon icon='hugeicons:mining-02' />
-                          {Number(currentBalanceReservedRewards).toFixed(4)} {authConfig.tokenName}
-                        </Box>
-                      </Typography>
-                    )}
-
-                    <Typography variant="h6" mt={2}>
-                      {formatHash(currentAddress, 6)}
-                    </Typography>
-                    <Grid container spacing={4} justifyContent="center" mt={2}>
-                      <Grid item sx={{mx: 2}}>
-                        <IconButton onClick={()=>handleClickReceiveButton()}>
-                          <CallReceived />
-                        </IconButton>
-                        <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
-                      </Grid>
-                      <Grid item sx={{mx: 2}}>
-                        <IconButton>
-                          <History />
-                        </IconButton>
-                        <Typography>{t('Txs') as string}</Typography>
-                      </Grid>
-                      <Grid item sx={{mx: 2}}>
-                        <IconButton>
-                          <Casino />
-                        </IconButton>
-                        <Typography>{t('Lottery') as string}</Typography>
-                      </Grid>
-                      <Grid item sx={{mx: 2}}>
-                        <IconButton onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
-                          <Send />
-                        </IconButton>
-                        <Typography onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>{t('Send') as string}</Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Fragment>
-                      <Grid container spacing={2} sx={{mt: 4}}>
-
-                        <Grid item xs={12} sx={{ py: 0 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                              {t('My Assets') as string}
-                            </Box>
+                      <Grid container spacing={4} justifyContent="center" mt={2}>
+                        <Grid item sx={{mx: 2}}>
+                          <IconButton onClick={()=>handleClickReceiveButton()}>
+                            <CallReceived />
+                          </IconButton>
+                          <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
                         </Grid>
-
-                        <Grid item xs={12} sx={{ py: 0 }}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                              <CustomAvatar
-                                skin='light'
-                                color={'primary'}
-                                sx={{ mr: 0, width: 43, height: 43 }}
-                                src={'/images/logo/' + authConfig.tokenName + '.png'}
-                              >
-                              </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                <Typography 
-                                  sx={{ 
-                                    color: 'text.primary',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    textAlign: 'left'
-                                  }}
-                                >
-                                  {formatHash(currentAddress, 8)}
-                                </Typography>
-                                <Box sx={{ display: 'flex' }}>
-                                  <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                      color: `primary.dark`, 
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      flex: 1,
-                                      textAlign: 'left'
-                                    }}
-                                  >
-                                    {currentBalance}
-                                  </Typography>
-                                </Box>
-                              </Box>
-                              <Box textAlign="right">
-                                {model == 'View' && (
-                                  <Typography variant='h6' sx={{ 
-                                    color: `info.dark`,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    mr: 1
-                                  }}>
-                                    {currentBalance}
-                                  </Typography>
-                                )}
-                              </Box>
-                            </Box>
-                          </Card>
+                        <Grid item sx={{mx: 2}}>
+                          <IconButton>
+                            <History />
+                          </IconButton>
+                          <Typography>{t('Txs') as string}</Typography>
                         </Grid>
-                        
-                        {authConfig.tokenName && authConfig.tokenName == "AR" && (
+                        <Grid item sx={{mx: 2}}>
+                          <IconButton>
+                            <Casino />
+                          </IconButton>
+                          <Typography>{t('Lottery') as string}</Typography>
+                        </Grid>
+                        <Grid item sx={{mx: 2}}>
+                          <IconButton onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
+                            <Send />
+                          </IconButton>
+                          <Typography onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>{t('Send') as string}</Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Fragment>
+                        <Grid container spacing={2} sx={{mt: 4}}>
+
+                          <Grid item xs={12} sx={{ py: 0 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                {t('My Assets') as string}
+                              </Box>
+                          </Grid>
+
                           <Grid item xs={12} sx={{ py: 0 }}>
                             <Card>
                               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
@@ -519,7 +470,7 @@ const Wallet = () => {
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'/images/logo/AO.png'}
+                                  src={'/images/logo/' + authConfig.tokenName + '.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -557,7 +508,7 @@ const Wallet = () => {
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
-                                      mr: 2
+                                      mr: 1
                                     }}>
                                       {currentBalance}
                                     </Typography>
@@ -566,23 +517,19 @@ const Wallet = () => {
                               </Box>
                             </Card>
                           </Grid>
-
-                        )}
-
-                        {currentWalletTxs && false && currentWalletTxs.edges.map((Tx: any, index: number) => {
-
-                          return (
-                            <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                          
+                          {authConfig.tokenName && authConfig.tokenName == "AR" && (
+                            <Grid item xs={12} sx={{ py: 0 }}>
                               <Card>
                                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                                <CustomAvatar
-                                  skin='light'
-                                  color={'primary'}
-                                  sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'/images/logo/AO.png'}
-                                >
-                                </CustomAvatar>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                  <CustomAvatar
+                                    skin='light'
+                                    color={'primary'}
+                                    sx={{ mr: 0, width: 43, height: 43 }}
+                                    src={'/images/logo/AO.png'}
+                                  >
+                                  </CustomAvatar>
+                                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
                                     <Typography 
                                       sx={{ 
                                         color: 'text.primary',
@@ -592,7 +539,7 @@ const Wallet = () => {
                                         textAlign: 'left'
                                       }}
                                     >
-                                      {formatHash(Tx.node.recipient, 10)}
+                                      {formatHash(currentAddress, 8)}
                                     </Typography>
                                     <Box sx={{ display: 'flex' }}>
                                       <Typography 
@@ -606,11 +553,10 @@ const Wallet = () => {
                                           textAlign: 'left'
                                         }}
                                       >
-                                        {formatTimestampAge(Tx.node.block.timestamp)}
+                                        {currentBalance}
                                       </Typography>
                                     </Box>
                                   </Box>
-
                                   <Box textAlign="right">
                                     {model == 'View' && (
                                       <Typography variant='h6' sx={{ 
@@ -620,285 +566,346 @@ const Wallet = () => {
                                         whiteSpace: 'nowrap',
                                         mr: 2
                                       }}>
-                                        {Number(Tx.node.fee.ar).toFixed(2)}
+                                        {currentBalance}
                                       </Typography>
                                     )}
-
                                   </Box>
                                 </Box>
                               </Card>
                             </Grid>
-                          )
-                        })}
 
-                        <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                            <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => { 
-                              // 处理点击事件
-                            }}>
-                              {t('Add Assets') as string}
-                            </Button>
-                          </Box>
+                          )}
+
+                          {currentWalletTxs && false && currentWalletTxs.edges.map((Tx: any, index: number) => {
+
+                            return (
+                              <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                                <Card>
+                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                  <CustomAvatar
+                                    skin='light'
+                                    color={'primary'}
+                                    sx={{ mr: 0, width: 43, height: 43 }}
+                                    src={'/images/logo/AO.png'}
+                                  >
+                                  </CustomAvatar>
+                                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                      <Typography 
+                                        sx={{ 
+                                          color: 'text.primary',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          textAlign: 'left'
+                                        }}
+                                      >
+                                        {formatHash(Tx.node.recipient, 10)}
+                                      </Typography>
+                                      <Box sx={{ display: 'flex' }}>
+                                        <Typography 
+                                          variant='body2' 
+                                          sx={{ 
+                                            color: `primary.dark`, 
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            flex: 1,
+                                            textAlign: 'left'
+                                          }}
+                                        >
+                                          {formatTimestampAge(Tx.node.block.timestamp)}
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+
+                                    <Box textAlign="right">
+                                      {model == 'View' && (
+                                        <Typography variant='h6' sx={{ 
+                                          color: `info.dark`,
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          mr: 2
+                                        }}>
+                                          {Number(Tx.node.fee.ar).toFixed(2)}
+                                        </Typography>
+                                      )}
+
+                                    </Box>
+                                  </Box>
+                                </Card>
+                              </Grid>
+                            )
+                          })}
+
+                          <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
+                              <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => { 
+                                // 处理点击事件
+                              }}>
+                                {t('Add Assets') as string}
+                              </Button>
+                            </Box>
+                          </Grid>
+
+
                         </Grid>
+                      </Fragment>
 
-
-                      </Grid>
-                    </Fragment>
-
+                    </Box>
+                  </Grid>
+                </Grid>
+                      
+                {model == 'Edit' && (
+                  <Box sx={{width: '100%', mr: 2}}>
+                    <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
+                      {t("Create Wallet")}
+                    </Button>
                   </Box>
+                )}
+
+                <Drawer
+                  anchor={'bottom'}
+                  open={drawerStatus}
+                  onClose={()=>setDrawerStatus(false)}
+                >
+                  <Box
+                    sx={{ width: 'auto' }}
+                    role="presentation"
+                    onClick={()=>setDrawerStatus(false)}
+                    onKeyDown={()=>setDrawerStatus(false)}
+                  >
+                    <List>
+                      {bottomMenus.map((menu: any, index: number) => (
+                        <ListItem key={index} disablePadding onClick={()=>{
+                          switch(menu.function) {
+                            case 'handleWalletCopyAddress':
+                              handleWalletCopyAddress();
+                              break;
+                          }
+                        }}>
+                          <ListItemButton>
+                            <ListItemIcon>
+                              <Icon icon={menu.icon} fontSize={20} color={menu?.color && menu?.color != '' && 'rgb(255, 76, 81)'}/>
+                            </ListItemIcon>
+                            <ListItemText primary={menu.title} />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                </Drawer>
+              </Grid>
+            :
+              <Fragment></Fragment>
+            }
+
+            {pageModel == 'ReceiveMoney' && ( 
+              <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
+                <Grid item>
+                  <QRCode value={currentAddress} size={180} />
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
+                    {currentAddress}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />} onClick={()=>handleWalletCopyAddress()}>
+                    {t('Copy') as string}
+                  </Button>
+                </Grid>
+                <Grid item sx={{ mt: 'auto', width: '100%' }}>
+                  <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
+                  {t('Share') as string}
+                  </Button>
                 </Grid>
               </Grid>
-                    
-              {model == 'Edit' && (
-                <Box sx={{width: '100%', mr: 2}}>
-                  <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
-                    {t("Create Wallet")}
-                  </Button>
-                </Box>
-              )}
+            )}
 
-              <Drawer
-                anchor={'bottom'}
-                open={drawerStatus}
-                onClose={()=>setDrawerStatus(false)}
-              >
-                <Box
-                  sx={{ width: 'auto' }}
-                  role="presentation"
-                  onClick={()=>setDrawerStatus(false)}
-                  onKeyDown={()=>setDrawerStatus(false)}
-                >
-                  <List>
-                    {bottomMenus.map((menu: any, index: number) => (
-                      <ListItem key={index} disablePadding onClick={()=>{
-                        switch(menu.function) {
-                          case 'handleWalletCopyAddress':
-                            handleWalletCopyAddress();
-                            break;
-                        }
-                      }}>
-                        <ListItemButton>
-                          <ListItemIcon>
-                            <Icon icon={menu.icon} fontSize={20} color={menu?.color && menu?.color != '' && 'rgb(255, 76, 81)'}/>
-                          </ListItemIcon>
-                          <ListItemText primary={menu.title} />
-                        </ListItemButton>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              </Drawer>
-            </Grid>
-          :
-            <Fragment></Fragment>
-          }
+            {pageModel == 'SendMoneySelectContact' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                    <Grid container spacing={2}>
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={""}
+                        placeholder={t('Search or Input Address') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                      />
+                    </Grid>
+                    <Grid container spacing={2}>
+                    {ContactData.map((contact: any, index: number) => {
 
-          {pageModel == 'ReceiveMoney' && ( 
-            <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
-              <Grid item>
-                <QRCode value={currentAddress} size={180} />
-              </Grid>
-              <Grid item>
-                <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
-                  {currentAddress}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />} onClick={()=>handleWalletCopyAddress()}>
-                  {t('Copy') as string}
-                </Button>
-              </Grid>
-              <Grid item sx={{ mt: 'auto', width: '100%' }}>
-                <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
-                {t('Share') as string}
-                </Button>
-              </Grid>
-            </Grid>
-          )}
-
-          {pageModel == 'SendMoneySelectContact' && ( 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
-                  <Grid container spacing={2}>
-                    <TextField
-                      fullWidth
-                      size='small'
-                      value={""}
-                      placeholder={t('Search or Input Address') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
-                    />
-                  </Grid>
-                  <Grid container spacing={2}>
-                  {ContactData.map((contact: any, index: number) => {
-
-                    return (
-                      <Grid item xs={12} sx={{ py: 1 }} key={index}>
-                        <Card>
-                          <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                            <CustomAvatar
-                              skin='light'
-                              color={'primary'}
-                              sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                            >
-                              {getInitials(contact.address).toUpperCase()}
-                            </CustomAvatar>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress(contact)}
+                      return (
+                        <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
                               >
-                              <Typography sx={{ 
-                                color: 'text.primary',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                              >
-                                {contact.name}
-                              </Typography>
-                              <Box sx={{ display: 'flex'}}>
-                                <Typography variant='body2' sx={{ 
-                                  color: `primary.dark`, 
+                                {getInitials(contact.address).toUpperCase()}
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress(contact)}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap',
-                                  flex: 1
-                                }}>
-                                  {formatHash(contact.address, 10)}
+                                }}
+                                >
+                                  {contact.name}
                                 </Typography>
-                                
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `primary.dark`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {formatHash(contact.address, 10)}
+                                  </Typography>
+                                  
+                                </Box>
                               </Box>
                             </Box>
-                          </Box>
-                        </Card>
-                      </Grid>
-                    )
+                          </Card>
+                        </Grid>
+                      )
 
-                  })}
-                  </Grid>
+                    })}
+                    </Grid>
 
+                </Grid>
               </Grid>
-            </Grid>
-          )}
+            )}
 
-          {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
-                  <Grid item xs={12} sx={{ py: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
-                        <CustomAvatar
-                          skin='light'
-                          color={'primary'}
-                          sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
-                        >
-                          {getInitials(sendMoneyAddress.address).toUpperCase()}
-                        </CustomAvatar>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+            {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
+                    <Grid item xs={12} sx={{ py: 1 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
+                          <CustomAvatar
+                            skin='light'
+                            color={'primary'}
+                            sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
                           >
-                          <Typography sx={{ 
-                            color: 'text.primary',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                          >
-                            {sendMoneyAddress.name}
-                          </Typography>
-                          <Box sx={{ display: 'flex'}}>
-                            <Typography variant='body2' sx={{ 
-                              color: `primary.dark`, 
+                            {getInitials(sendMoneyAddress.address).toUpperCase()}
+                          </CustomAvatar>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                            >
+                            <Typography sx={{ 
+                              color: 'text.primary',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
-                              flex: 1
-                            }}>
-                              {formatHash(sendMoneyAddress.address, 10)}
+                            }}
+                            >
+                              {sendMoneyAddress.name}
                             </Typography>
-                            
+                            <Box sx={{ display: 'flex'}}>
+                              <Typography variant='body2' sx={{ 
+                                color: `primary.dark`, 
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                flex: 1
+                              }}>
+                                {formatHash(sendMoneyAddress.address, 10)}
+                              </Typography>
+                              
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sx={{ py: 1 }}>
+                      <TextField
+                        disabled={isDisabledButton}
+                        fullWidth
+                        size='small'
+                        value={sendMoneyAmount}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const regex = /^[0-9]*\.?[0-9]*$/;
+                          if (regex.test(value)) {
+                            setSendMoneyAmount(value);
+                          }
+                        }}
+                        placeholder={t('Amount') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
+                      />
+                      <ThemeProvider theme={themeSlider}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
+                          <Slider size="small" 
+                                disabled={isDisabledButton}
+                                defaultValue={0} 
+                                aria-labelledby="small-slider" 
+                                min={0}
+                                max={100}
+                                onChange={( _ , newValue: number | number[])=>{
+                                  if (Array.isArray(newValue)) {
+                                    newValue = newValue[0];
+                                  }
+                                  const TotalLeft = BalanceMinus(Number(currentBalance), Number(currentFee))
+                                  const MultiValue = newValue / 100
+                                  const result = BalanceTimes(Number(TotalLeft), MultiValue)
+                                  if(newValue == 100) {
+                                    setSendMoneyAmount( String(Number(result)) )
+
+                                  }
+                                  else {
+                                    setSendMoneyAmount( String(Number(result).toFixed(4)) )
+                                  }
+                                }} 
+                                sx={{m: 0, p: 0, width: '90%' }}
+                                />
+                        </Box>
+                      </ThemeProvider>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                        {t('Max')}: {currentBalance} {authConfig.tokenName}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                        {t('Fee')}: {currentFee}
+                      </Typography>
                   </Grid>
                   <Grid item xs={12} sx={{ py: 1 }}>
-                    <TextField
-                      disabled={isDisabledButton}
-                      fullWidth
-                      size='small'
-                      value={sendMoneyAmount}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const regex = /^[0-9]*\.?[0-9]*$/;
-                        if (regex.test(value)) {
-                          setSendMoneyAmount(value);
-                        }
-                      }}
-                      placeholder={t('Amount') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
-                    />
-                    <ThemeProvider theme={themeSlider}>
-                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
-                        <Slider size="small" 
-                              disabled={isDisabledButton}
-                              defaultValue={0} 
-                              aria-labelledby="small-slider" 
-                              min={0}
-                              max={100}
-                              onChange={( _ , newValue: number | number[])=>{
-                                if (Array.isArray(newValue)) {
-                                  newValue = newValue[0];
-                                }
-                                const TotalLeft = BalanceMinus(Number(currentBalance), Number(currentFee))
-                                const MultiValue = newValue / 100
-                                const result = BalanceTimes(Number(TotalLeft), MultiValue)
-                                if(newValue == 100) {
-                                  setSendMoneyAmount( String(Number(result)) )
-
-                                }
-                                else {
-                                  setSendMoneyAmount( String(Number(result).toFixed(4)) )
-                                }
-                              }} 
-                              sx={{m: 0, p: 0, width: '90%' }}
-                              />
-                      </Box>
-                    </ThemeProvider>
-                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                      {t('Max')}: {currentBalance} {authConfig.tokenName}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                      {t('Fee')}: {currentFee}
-                    </Typography>
+                    <Box sx={{width: '100%', mr: 2}}>
+                      <Button sx={{mt: 8}} fullWidth disabled={
+                        (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
+                        ||
+                        (isDisabledButton)                  
+                        } variant='contained' onClick={()=>handleWalletSendMoney()}>
+                        {uploadingButton}
+                      </Button>
+                    </Box>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sx={{ py: 1 }}>
-                  <Box sx={{width: '100%', mr: 2}}>
-                    <Button sx={{mt: 8}} fullWidth disabled={
-                      (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
-                      ||
-                      (isDisabledButton)                  
-                      } variant='contained' onClick={()=>handleWalletSendMoney()}>
-                      {uploadingButton}
-                    </Button>
-                  </Box>
+                      
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={isDisabledButton}
+                >
+                  <CircularProgress color="inherit" size={45}/>
+                </Backdrop>
+                
+              </Grid>
+            )}
+
+            {pageModel == 'PinCode' && ( 
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <PinKeyboard />
                 </Grid>
               </Grid>
-                    
-              <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={isDisabledButton}
-              >
-                <CircularProgress color="inherit" size={45}/>
-              </Backdrop>
-              
-            </Grid>
-          )}
+            )}
 
-          {pageModel == 'PinCode' && ( 
-            <Grid container spacing={6}>
-              <Grid item xs={12}>
-                <PinKeyboard />
-              </Grid>
-            </Grid>
-          )}
-
-      </ContentWrapper>
-
+        </ContentWrapper>
+      </Box>
       <Footer Hidden={FooterHidden} />
     </Fragment>
   )

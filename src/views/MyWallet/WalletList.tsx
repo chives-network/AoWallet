@@ -295,11 +295,18 @@ const MyWallet = () => {
     <Fragment>
       <Header Hidden={HeaderHidden} LeftIcon={LeftIcon} LeftIconOnClick={LeftIconOnClick} Title={Title} RightButtonText={RightButtonText} RightButtonOnClick={RightButtonOnClick} />
 
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          marginTop: '64px', // Adjust according to the height of the AppBar
+          marginBottom: '56px', // Adjust according to the height of the Footer
+        }}
+      >
       <ContentWrapper
           className='layout-page-content'
           sx={{
-              mt: '48px',
-              mb: '56px',
               ...(contentHeightFixed && {
               overflow: 'hidden',
               '& > :first-of-type': { height: '100%' }
@@ -693,6 +700,7 @@ const MyWallet = () => {
           )}
 
       </ContentWrapper>
+      </Box>
 
       <Footer Hidden={FooterHidden} />
     </Fragment>
