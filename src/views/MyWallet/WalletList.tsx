@@ -585,8 +585,6 @@ const MyWallet = () => {
                 </Grid>
               </Grid>
                     
-             
-              
             </Grid>
           )}
 

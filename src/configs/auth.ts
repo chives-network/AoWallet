@@ -22,6 +22,7 @@ const config = {
   chivesLanguage: 'ChivesLanguage',
   chivesProfile: 'ChivesProfile',
   chivesReferee: 'ChivesReferee',
+  chivesContacts: 'chivesContacts',
   'App-Name': 'AoWallet',
   'App-Version': '0.1',
   'App-Instance': '',

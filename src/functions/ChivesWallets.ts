@@ -28,6 +28,8 @@ const chivesTxStatus: string = authConfig.chivesTxStatus
 const chivesLanguage: string = authConfig.chivesLanguage
 const chivesProfile: string = authConfig.chivesProfile
 const chivesReferee: string = authConfig.chivesReferee
+const chivesContacts: string = authConfig.chivesContacts
+
 
 export async function generateNewMnemonicAndGetWalletData (mnemonic: string) {
     try {
@@ -960,6 +962,68 @@ export function getChivesReferee() {
 
 export function deleteChivesReferee() {
     window.localStorage.removeItem(chivesReferee)
+}
+
+export function setChivesContacts(Address: string, Name: string) {
+    try {
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)      
+        const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
+        chivesContactsList[Address] = Name
+        window.localStorage.setItem(chivesContacts, JSON.stringify(chivesContactsList))
+
+        return chivesContactsList
+    }
+    catch (error: any) {
+        console.error(`setChivesContacts Error`, error);
+    }
+}
+
+export function deleteChivesContacts(Address: string) {
+    try {
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)      
+        const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
+        if (Address in chivesContactsList) {
+            delete chivesContactsList[Address];
+        }
+        window.localStorage.setItem(chivesContacts, JSON.stringify(chivesContactsList))
+
+        return chivesContactsList
+    }
+    catch (error: any) {
+        console.error(`deleteChivesContacts Error`, error);
+    }
+}
+
+
+export function searchChivesContacts(searchValue: string) {
+    try {
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)      
+        const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
+        
+        let result: any = {};
+        for (const key in chivesContactsList) {
+            if (key.toLowerCase().includes(searchValue.toLowerCase()) || chivesContactsList[key].toLowerCase().includes(searchValue.toLowerCase())) {
+                result[key] = chivesContactsList[key]
+            }
+        }
+
+        return result
+    }
+    catch (error: any) {
+        console.error(`deleteChivesContacts Error`, error);
+    }
+}
+
+export function getChivesContacts() {
+    try {
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)      
+        const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
+
+        return chivesContactsList
+    }
+    catch (error: any) {
+        console.error(`getChivesContacts Error`, error);
+    }
 }
 
 export async function CheckBundleTxStatus() {
