@@ -10,41 +10,25 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
 import { getInitials } from 'src/@core/utils/get-initials'
-import Slider from '@mui/material/Slider'
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
-import Tab from '@mui/material/Tab'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
-import { CallReceived, History, Casino, Send } from '@mui/icons-material';
-
-import { QRCode } from 'react-qrcode-logo';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ShareIcon from '@mui/icons-material/Share';
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
-import toast from 'react-hot-toast'
-import authConfig from 'src/configs/auth'
-import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
-import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
-import { GetArWalletAllTxs } from 'src/functions/Arweave'
+import { setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp } from 'src/configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
-import { useRouter } from 'next/router'
-
-import { createTheme, ThemeProvider } from '@mui/material';
-
-import Tabs from '@mui/material/Tabs';
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -60,8 +44,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const Setting = () => {
   // ** Hook
   const { t } = useTranslation()
-  const router = useRouter()
-  const theme = useTheme()
 
   const contentHeightFixed = {}
 
@@ -78,6 +60,27 @@ const Setting = () => {
   const [contactsAll, setContactsAll] = useState<any>({})
   const [counter, setCounter] = useState<number>(0)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
+  const [languageValue, setLanguageValue] = useState<string>('en')
+  const [themeValue, setThemeValue] = useState<string>('light')
+  const [currencyValue, setCurrencyValue] = useState<string>('us')
+  const [networkValue, setNetworkValue] = useState<string>('mainnet')
+
+  const LanguageArray = [
+        {name:'English', value:'en'},
+        {name:'Chinese', value:'zh-CN'},
+        {name:'Korean', value:'Kr'},
+        {name:'Russia', value:'Ru'}
+  ]
+  const themeArray = [
+    {name:'Dark', value:'dark'},
+    {name:'Light', value:'light'}
+  ]
+  const currencyArray = [
+    {name:'United Status', value:'us'}
+  ]
+  const networkArray = [
+    {name:'Main Network', value:'mainnet'}
+  ]
 
   const preventDefault = (e: any) => {
     e.preventDefault();
@@ -129,11 +132,26 @@ const Setting = () => {
       case 'MainSetting':
         handleWalletGoHome()
         break
+      case 'General':
       case 'Contacts':
+      case 'Security':
+      case 'Support':
         handleWalletGoHome()
         break
       case 'NewContact':
         handleClickContactsButton()
+        break
+      case 'Language':
+        handleClickGeneralButton()
+        break
+      case 'Theme':
+        handleClickGeneralButton()
+        break
+      case 'Currency':
+        handleClickGeneralButton()
+        break
+      case 'Network':
+        handleClickGeneralButton()
         break
     }
   }
@@ -148,7 +166,6 @@ const Setting = () => {
     
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
-  
   useEffect(() => {
     setHeaderHidden(false)
     setFooterHidden(false)
@@ -176,6 +193,52 @@ const Setting = () => {
     setRightButtonIcon('mdi:add')
     setContactAddress('')
     setContactName('')
+    setSearchContactkeyWord('')
+  }
+
+  const handleClickGeneralButton = () => {
+    setCounter(counter + 1)
+    setPageModel('General')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('General Setting') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickLanguageButton = () => {
+    setCounter(counter + 1)
+    setPageModel('Language')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Language') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickThemeButton = () => {
+    setCounter(counter + 1)
+    setPageModel('Theme')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Theme') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickCurrencyButton = () => {
+    setCounter(counter + 1)
+    setPageModel('Currency')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Currency') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickNetworkButton = () => {
+    setCounter(counter + 1)
+    setPageModel('Network')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Network') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
   }
 
   const handleClickNewContactButton = () => {
@@ -198,34 +261,29 @@ const Setting = () => {
     setRightButtonIcon('')
   }
 
-  const ContactData = [
-      {name: '联系人1', address: 'M_XtWZkr1bSvwjZ6wEnXAKTnVErvRR__UAEWwdS8Xgs'},
-      {name: '联系人2', address: 'mIZnYPDjIf5PlxE8nG3CALOU7-BngKJSc0N-Tit7cSM'},
-      {name: '联系人3', address: 'xwA8HpOT9BI0iSKRDYTWhM7awHV6Xi_iTmtnGrAm4Xk'},
-      {name: '联系人4', address: 'XrjRoNDx-WVhgK_xJfowYrTrzaFxabt7tGwjVpCf2yE'},
-      {name: '联系人5', address: 'xPIvsc-poD6p_w63jHUNA-5i2l7iD-Fa1WP86_rhJjg'},
-      {name: '联系人6', address: 'bVgbGVe8xoUMZUTotUs73Q35dgzqk65R8Dzauaj0WdU'},
-      {name: '联系人7', address: 'IFVuoVlOzKnUbNZCOljFYXojP4fSIGhHp6bh8BSF9Dg'},
-      {name: '联系人8', address: '72i2l5UJFwIb53gbUuiS9tKM-y1ooJnJFnyWltNEEBo'},
-      {name: '联系人9', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人10', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人11', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人12', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人13', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人14', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-    ]
+  const handleSelectLanguage = (Language: string) => {
+    setLanguageValue(Language)
+    setTitle(Language)
+  }
 
-    const themeSlider = createTheme({
-      components: {
-        MuiSlider: {
-          styleOverrides: {
-            root: {
-              color: theme.palette.primary.main,
-            },
-          },
-        },
-      },
-    });
+  const handleSelectTheme = (Theme: string) => {
+    console.log("Theme", Theme)
+    setThemeValue(Theme)
+    setTitle(Theme)
+  }
+
+  const handleSelectCurrency = (Currency: string) => {
+    setCurrencyValue(Currency)
+    setTitle(Currency)
+  }
+
+  const handleSelectNetwork = (Network: string) => {
+    setNetworkValue(Network)
+    setTitle(Network)
+  }
+
+  
+
 
   return (
     <Fragment>
@@ -257,10 +315,10 @@ const Setting = () => {
                         <Grid item xs={12} sx={{ py: 1 }}>
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                                <IconButton sx={{ p: 0 }} onClick={()=>null}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickGeneralButton()}>
                                     <Icon icon='oui:integration-general' fontSize={38} />
                                 </IconButton>
-                                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
+                                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickGeneralButton()}
                                     >
                                     <Typography sx={{ 
                                     color: 'text.primary',
@@ -284,7 +342,7 @@ const Setting = () => {
                                     </Box>
                                 </Box>
                                 <Box textAlign="right">
-                                    <IconButton sx={{ p: 0 }} onClick={()=>null}>
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickGeneralButton()}>
                                         <Icon icon='mdi:chevron-right' fontSize={30} />
                                     </IconButton>
                                 </Box>
@@ -397,9 +455,159 @@ const Setting = () => {
                             </Box>
                           </Card>
                         </Grid>
-
                     </Grid>
+                </Grid>
+              </Grid>
+            )}
 
+            {pageModel == 'General' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
+                                    <Icon icon='clarity:language-line' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickLanguageButton()}
+                                    >
+                                    <Typography sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Language') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{ 
+                                        color: `secondary.primary`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Language') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickThemeButton()}>
+                                <Icon icon='line-md:light-dark' fontSize={34} />
+                              </IconButton>
+                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickThemeButton()}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {t('Theme') as string}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `secondary.primary`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {t('Theme') as string}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickThemeButton()}>
+                                    <Icon icon='mdi:chevron-right' fontSize={30} />
+                                </IconButton>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCurrencyButton()}>
+                                <Icon icon='mdi:dollar' fontSize={34} />
+                              </IconButton>
+                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCurrencyButton()}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {t('Currency') as string}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `secondary.primary`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {t('Currency') as string}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickCurrencyButton()}>
+                                    <Icon icon='mdi:chevron-right' fontSize={30} />
+                                </IconButton>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickNetworkButton()}>
+                                <Icon icon='tabler:world-dollar' fontSize={34} />
+                              </IconButton>
+                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickNetworkButton()}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {t('Network') as string}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `secondary.primary`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {t('Network') as string}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                    </Grid>
                 </Grid>
               </Grid>
             )}
@@ -505,6 +713,122 @@ const Setting = () => {
                         </Grid>
                     </Grid>
                         
+                </Grid>
+            )}
+
+            {pageModel == 'Language' && (
+                <Grid container spacing={2}>
+
+                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectLanguage(e.target.value)}>
+                        {LanguageArray.map((Language: any, index: number) => {
+
+                            return (
+                                <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                                    <Card sx={{ml: 2}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectLanguage(Language.value)}>
+                                                <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
+                                                    {Language.name}
+                                                </Typography>
+                                            </Box>
+                                            <Box textAlign="right" sx={{m: 0, p: 0}}>
+                                                <FormControlLabel value={Language.value} control={<Radio sx={{justifyContent: 'center', ml: 3, mr: 0}} checked={languageValue == Language.value}/>} label="" />
+                                            </Box>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                            )
+
+                        })}
+                    </RadioGroup>
+
+                </Grid>
+            )}
+
+            {pageModel == 'Theme' && (
+                <Grid container spacing={2}>
+
+                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectTheme(e.target.value)}>
+                        {themeArray.map((Theme: any, index: number) => {
+
+                            return (
+                                <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                                    <Card sx={{ml: 2}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }}  onClick={()=>handleSelectTheme(Theme.value)}>
+                                                <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
+                                                    {Theme.name}
+                                                </Typography>
+                                            </Box>
+                                            <Box textAlign="right" sx={{m: 0, p: 0}}>
+                                                <FormControlLabel value={Theme.value} control={<Radio sx={{justifyContent: 'center', ml: 3, mr: 0}} checked={themeValue == Theme.value}/>} label="" />
+                                            </Box>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                            )
+
+                        })}
+                    </RadioGroup>
+
+                </Grid>
+            )}
+
+            {pageModel == 'Currency' && (
+                <Grid container spacing={2}>
+
+                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectCurrency(e.target.value)}>
+                        {currencyArray.map((Currency: any, index: number) => {
+
+                            return (
+                                <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                                    <Card sx={{ml: 2}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectCurrency(Currency.value)} >
+                                                <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
+                                                    {Currency.name}
+                                                </Typography>
+                                            </Box>
+                                            <Box textAlign="right" sx={{m: 0, p: 0}}>
+                                                <FormControlLabel value={Currency.value} control={<Radio sx={{justifyContent: 'center', ml: 3, mr: 0}} checked={currencyValue == Currency.value}/>} label="" />
+                                            </Box>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                            )
+
+                        })}
+                    </RadioGroup>
+
+                </Grid>
+            )}
+
+            {pageModel == 'Network' && (
+                <Grid container spacing={2}>
+
+                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectNetwork(e.target.value)}>
+                        {networkArray.map((Network: any, index: number) => {
+
+                            return (
+                                <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                                    <Card sx={{ml: 2}}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectNetwork(Network.value)} >
+                                                <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
+                                                    {Network.name}
+                                                </Typography>
+                                            </Box>
+                                            <Box textAlign="right" sx={{m: 0, p: 0}}>
+                                                <FormControlLabel value={Network.value} control={<Radio sx={{justifyContent: 'center', ml: 3, mr: 0}} checked={networkValue == Network.value}/>} label="" />
+                                            </Box>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                            )
+
+                        })}
+                    </RadioGroup>
+
                 </Grid>
             )}
 

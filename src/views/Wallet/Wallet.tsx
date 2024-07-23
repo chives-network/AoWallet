@@ -28,7 +28,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
@@ -74,6 +74,8 @@ const Wallet = () => {
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
+  const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
+  const [contactsAll, setContactsAll] = useState<any>({})
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
@@ -162,6 +164,9 @@ const Wallet = () => {
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+
+  
+
   
   
   useEffect(() => {
@@ -183,6 +188,11 @@ const Wallet = () => {
     
     return () => clearInterval(intervalId);
 
+  }, []);
+
+  useEffect(() => {
+    const contactsAll = getChivesContacts()
+    setContactsAll(contactsAll)
   }, []);
   
   useEffect(() => {
@@ -327,34 +337,17 @@ const Wallet = () => {
     console.log("uploadProgress", uploadProgress)
   }
 
-  const ContactData = [
-      {name: '联系人1', address: 'M_XtWZkr1bSvwjZ6wEnXAKTnVErvRR__UAEWwdS8Xgs'},
-      {name: '联系人2', address: 'mIZnYPDjIf5PlxE8nG3CALOU7-BngKJSc0N-Tit7cSM'},
-      {name: '联系人3', address: 'xwA8HpOT9BI0iSKRDYTWhM7awHV6Xi_iTmtnGrAm4Xk'},
-      {name: '联系人4', address: 'XrjRoNDx-WVhgK_xJfowYrTrzaFxabt7tGwjVpCf2yE'},
-      {name: '联系人5', address: 'xPIvsc-poD6p_w63jHUNA-5i2l7iD-Fa1WP86_rhJjg'},
-      {name: '联系人6', address: 'bVgbGVe8xoUMZUTotUs73Q35dgzqk65R8Dzauaj0WdU'},
-      {name: '联系人7', address: 'IFVuoVlOzKnUbNZCOljFYXojP4fSIGhHp6bh8BSF9Dg'},
-      {name: '联系人8', address: '72i2l5UJFwIb53gbUuiS9tKM-y1ooJnJFnyWltNEEBo'},
-      {name: '联系人9', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人10', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人11', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人12', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人13', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-      {name: '联系人14', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'},
-    ]
-
-    const themeSlider = createTheme({
-      components: {
-        MuiSlider: {
-          styleOverrides: {
-            root: {
-              color: theme.palette.primary.main,
-            },
+  const themeSlider = createTheme({
+    components: {
+      MuiSlider: {
+        styleOverrides: {
+          root: {
+            color: theme.palette.primary.main,
           },
         },
       },
-    });
+    },
+  });
 
   return (
     <Fragment>
@@ -798,13 +791,19 @@ const Wallet = () => {
                       <TextField
                         fullWidth
                         size='small'
-                        value={""}
+                        value={searchContactkeyWord}
                         placeholder={t('Search or Input Address') as string}
                         sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setSearchContactkeyWord(e.target.value)
+                          const searchChivesContactsData = searchChivesContacts(e.target.value)
+                          setContactsAll(searchChivesContactsData)
+                          console.log("e.target.value", e.target.value)
+                        }}
                       />
                     </Grid>
                     <Grid container spacing={2}>
-                    {ContactData.map((contact: any, index: number) => {
+                    {Object.keys(contactsAll).map((Address: any, index: number) => {
 
                       return (
                         <Grid item xs={12} sx={{ py: 1 }} key={index}>
@@ -815,9 +814,9 @@ const Wallet = () => {
                                 color={'primary'}
                                 sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
                               >
-                                {getInitials(contact.address).toUpperCase()}
+                                {getInitials(Address).toUpperCase()}
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress(contact)}
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress({name: contactsAll[Address], address: Address})}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -826,7 +825,7 @@ const Wallet = () => {
                                   whiteSpace: 'nowrap',
                                 }}
                                 >
-                                  {contact.name}
+                                  {contactsAll[Address]}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
                                   <Typography variant='body2' sx={{ 
@@ -836,7 +835,7 @@ const Wallet = () => {
                                     whiteSpace: 'nowrap',
                                     flex: 1
                                   }}>
-                                    {formatHash(contact.address, 10)}
+                                    {formatHash(Address, 10)}
                                   </Typography>
                                   
                                 </Box>

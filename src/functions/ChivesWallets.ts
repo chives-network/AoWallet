@@ -1000,7 +1000,7 @@ export function searchChivesContacts(searchValue: string) {
         const chivesContactsText = window.localStorage.getItem(chivesContacts)      
         const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
         
-        let result: any = {};
+        const result: any = {};
         for (const key in chivesContactsList) {
             if (key.toLowerCase().includes(searchValue.toLowerCase()) || chivesContactsList[key].toLowerCase().includes(searchValue.toLowerCase())) {
                 result[key] = chivesContactsList[key]
