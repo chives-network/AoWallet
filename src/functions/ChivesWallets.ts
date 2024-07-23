@@ -7,6 +7,8 @@ import type { JWKInterface } from 'arweave/web/lib/wallet'
 
 import { TxRecordType } from 'src/types/apps/Chivesweave'
 
+import { BalancePlus } from 'src/functions/AoConnect/AoConnect'
+
 // @ts-ignore
 import { v4 } from 'uuid'
 import BigNumber from 'bignumber.js'
@@ -311,7 +313,6 @@ export async function getPrice(byteSize: number) {
     }
 }
 
-
 export async function getPriceWinston(byteSize: number) {
     try {
 
@@ -319,6 +320,48 @@ export async function getPriceWinston(byteSize: number) {
     } 
     catch (e) { 
         console.warn('getWalletBalance failed') 
+    }
+}
+
+export async function getWalletBalanceReservedRewards(Address: string) {
+    try {
+        const reserved_rewards_total = await axios.get(authConfig.backEndApi + '/wallet/' + Address + '/reserved_rewards_total' ).then(res=>res.data);
+
+        return arweave.ar.winstonToAr(reserved_rewards_total)
+    } 
+    catch (e) { 
+        console.warn('getWalletBalance failed') 
+    }
+}
+
+export async function getTxsInMemory() {
+    try {
+        if(authConfig.tokenType == "XWE")           {
+            const response = await axios.get(authConfig.backEndApi + '/tx/pending/record' ).then(res=>res.data);
+            if(response && response.length>0) {
+                const SendTxsInMemory: any = {}
+                const ReceiveTxsInMemory: any = {}
+                for (const item of response) {
+                    if(SendTxsInMemory[item.owner.address])  {
+                        SendTxsInMemory[item.owner.address] = BalancePlus(Number(item.quantity.xwe), Number(SendTxsInMemory[item.owner.address]))
+                    }
+                    else {
+                        SendTxsInMemory[item.owner.address] = Number(item.quantity.xwe)
+                    }
+                    if(ReceiveTxsInMemory[item.recipient])  {
+                        ReceiveTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(ReceiveTxsInMemory[item.recipient]))
+                    }
+                    else {
+                        ReceiveTxsInMemory[item.recipient] = Number(item.quantity.xwe)
+                    }
+                }
+                
+                return {send: SendTxsInMemory, receive: ReceiveTxsInMemory}
+            }
+        }
+    } 
+    catch (e) { 
+        console.warn('getTxsInMemory failed') 
     }
 }
 

@@ -34,7 +34,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
@@ -148,6 +148,8 @@ const Wallet = () => {
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [currentBalance, setCurrentBalance] = useState<string>("")
+  const [currentBalanceReservedRewards, setCurrentBalanceReservedRewards] = useState<string>("")
+  const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({})
   const [currentFee, setCurrentFee] = useState<number>(0)
 
   
@@ -181,15 +183,31 @@ const Wallet = () => {
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet')  {
         const currentBalance = await getWalletBalance(currentAddress);
-        setCurrentBalance(Number(currentBalance).toFixed(4))
         
         if(authConfig.tokenType == "AR")  {
+          setCurrentBalance(Number(currentBalance).toFixed(4))
+
           const allTxs = await GetArWalletAllTxs(currentAddress)
           if(allTxs)  {
             setCurrentWalletTxs(allTxs)
           }
         }
+
         if(authConfig.tokenType == "XWE")  {
+          const getTxsInMemoryData = await getTxsInMemory()
+          setCurrentTxsInMemory(getTxsInMemoryData)
+          const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress)
+          if(balanceReservedRewards) {
+            setCurrentBalanceReservedRewards(balanceReservedRewards)
+          }
+
+          if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
+            const MinusBalance = BalanceMinus(Number(currentBalance) , Number(currentTxsInMemory['send'][currentAddress]))
+            setCurrentBalance(Number(MinusBalance).toFixed(4))
+          }
+          else {
+            setCurrentBalance(Number(currentBalance).toFixed(4))
+          }
         }
 
       }
@@ -369,6 +387,31 @@ const Wallet = () => {
                     <Typography variant="h5" mt={6}>
                       {currentBalance} {authConfig.tokenName}
                     </Typography>
+                    {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
+                      <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Icon icon='tdesign:plus' />
+                          {currentTxsInMemory['receive'][currentAddress]} {authConfig.tokenName}
+                        </Box>
+                      </Typography>
+                    )}
+                    {currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
+                      <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
+                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Icon icon='tdesign:minus' />
+                          {currentTxsInMemory['send'][currentAddress]} {authConfig.tokenName}
+                        </Box>
+                      </Typography>
+                    )}
+                    {currentBalanceReservedRewards && Number(currentBalanceReservedRewards) > 0 && (
+                      <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
+                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Icon icon='hugeicons:mining-02' />
+                          {Number(currentBalanceReservedRewards).toFixed(4)} {authConfig.tokenName}
+                        </Box>
+                      </Typography>
+                    )}
+
                     <Typography variant="h6" mt={2}>
                       {formatHash(currentAddress, 6)}
                     </Typography>
