@@ -8,11 +8,13 @@ import Icon from 'src/@core/components/icon'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 
 const Footer = (props: any) => {
   // ** Props
   const { footer } = props
   const { t } = useTranslation()
+  const router = useRouter()
 
   const [value, setValue] = useState(0);
 
@@ -38,7 +40,21 @@ const Footer = (props: any) => {
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
-            console.log("FooterContent event", event)
+            console.log("FooterContent event", newValue)
+            switch(newValue) {
+              case 0:
+                router.push('/wallet')
+                break;
+              case 1:
+                router.push('/mywallet')
+                break;
+              case 2:
+                router.push('/wallet')
+                break;
+              case 3:
+                router.push('/setting')
+                break;
+            }
           }}
           sx={{width: '100%'}}
         >
