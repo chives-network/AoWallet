@@ -488,7 +488,7 @@ const MyWallet = () => {
               </Fragment>
               :
               <Fragment>
-                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
                     <TextField
                       fullWidth

@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
-import Drawer from '@mui/material/Drawer'
 import TextField from '@mui/material/TextField'
 import { getInitials } from 'src/@core/utils/get-initials'
 import Slider from '@mui/material/Slider'
@@ -16,12 +15,6 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { CallReceived, History, Casino, Send } from '@mui/icons-material';
-
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 
 import { QRCode } from 'react-qrcode-logo';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -71,16 +64,13 @@ const Wallet = () => {
 
   const contentHeightFixed = {}
 
-  const [model, setModel] = useState<string>('View')
   const [pageModel, setPageModel] = useState<string>('MainWallet')
-  const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
   const [Title, setTitle] = useState<string>('Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
-  const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
 
@@ -119,7 +109,6 @@ const Wallet = () => {
   }, []);
 
   const handleWalletGoHome = () => {
-    setModel('View')
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('MainWallet')
     setLeftIcon('material-symbols:menu-rounded')
@@ -241,32 +230,6 @@ const Wallet = () => {
     }
   }, [pageModel])
 
-
-  const handleOpenWalletMenu = (wallet: any) => {
-    setChooseWallet(wallet)
-    const bottomMenusList: any[] = []
-    bottomMenusList.push({icon: 'material-symbols:copy-all-outline', title: t('Copy Address'), function: 'handleWalletCopyAddress'})
-    bottomMenusList.push({icon: 'material-symbols:edit-outline', title: t('Rename Wallet'), function: 'handleWalletRename'})
-    bottomMenusList.push({icon: 'mdi:file-export-outline', title: t('Export Key'), function: 'handleWalletExportKey'})
-    bottomMenusList.push({icon: 'material-symbols:delete-outline', title: t('Delete Wallet'), color: 'rgb(255, 76, 81)', function: 'handleWalletDelete'})
-    setBottomMenus(bottomMenusList)
-    setDrawerStatus(true)
-  }
-
-  const handleCreateWalletMenu = () => {
-    const bottomMenusList: any[] = []
-    bottomMenusList.push({icon: 'material-symbols:add', title: t('Add Wallet'), function: 'handleWalletCreate'})
-    bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Key'), function: 'handleWalletImportKey'})
-    setBottomMenus(bottomMenusList)
-    setDrawerStatus(true)
-  }
-
-  const handleWalletCreateMenu = () => {
-    handleCreateWalletMenu()
-    
-    handleOpenWalletMenu(null) // ----------------
-  }
-
   const handleWalletCopyAddress = () => {
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
@@ -386,7 +349,7 @@ const Wallet = () => {
             
             {getAllWalletsData && pageModel == 'MainWallet' ?  
               <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
                     <Box p={2} textAlign="center" sx={{width: '100%'}}>
                       <CustomAvatar
@@ -502,17 +465,15 @@ const Wallet = () => {
                                   </Box>
                                 </Box>
                                 <Box textAlign="right">
-                                  {model == 'View' && (
-                                    <Typography variant='h6' sx={{ 
-                                      color: `info.dark`,
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      mr: 1
-                                    }}>
-                                      {currentBalance}
-                                    </Typography>
-                                  )}
+                                  <Typography variant='h6' sx={{ 
+                                    color: `info.dark`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    mr: 1
+                                  }}>
+                                    {currentBalance}
+                                  </Typography>
                                 </Box>
                               </Box>
                             </Card>
@@ -558,17 +519,15 @@ const Wallet = () => {
                                     </Box>
                                   </Box>
                                   <Box textAlign="right">
-                                    {model == 'View' && (
-                                      <Typography variant='h6' sx={{ 
-                                        color: `info.dark`,
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        mr: 2
-                                      }}>
-                                        {currentBalance}
-                                      </Typography>
-                                    )}
+                                    <Typography variant='h6' sx={{ 
+                                      color: `info.dark`,
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      mr: 2
+                                    }}>
+                                      {currentBalance}
+                                    </Typography>
                                   </Box>
                                 </Box>
                               </Card>
@@ -619,17 +578,15 @@ const Wallet = () => {
                                     </Box>
 
                                     <Box textAlign="right">
-                                      {model == 'View' && (
-                                        <Typography variant='h6' sx={{ 
-                                          color: `info.dark`,
-                                          overflow: 'hidden',
-                                          textOverflow: 'ellipsis',
-                                          whiteSpace: 'nowrap',
-                                          mr: 2
-                                        }}>
-                                          {Number(Tx.node.fee.ar).toFixed(2)}
-                                        </Typography>
-                                      )}
+                                      <Typography variant='h6' sx={{ 
+                                        color: `info.dark`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        mr: 2
+                                      }}>
+                                        {Number(Tx.node.fee.ar).toFixed(2)}
+                                      </Typography>
 
                                     </Box>
                                   </Box>
@@ -655,46 +612,7 @@ const Wallet = () => {
                     </Box>
                   </Grid>
                 </Grid>
-                      
-                {model == 'Edit' && (
-                  <Box sx={{width: '100%', mr: 2}}>
-                    <Button sx={{mt: 3, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
-                      {t("Create Wallet")}
-                    </Button>
-                  </Box>
-                )}
 
-                <Drawer
-                  anchor={'bottom'}
-                  open={drawerStatus}
-                  onClose={()=>setDrawerStatus(false)}
-                >
-                  <Box
-                    sx={{ width: 'auto' }}
-                    role="presentation"
-                    onClick={()=>setDrawerStatus(false)}
-                    onKeyDown={()=>setDrawerStatus(false)}
-                  >
-                    <List>
-                      {bottomMenus.map((menu: any, index: number) => (
-                        <ListItem key={index} disablePadding onClick={()=>{
-                          switch(menu.function) {
-                            case 'handleWalletCopyAddress':
-                              handleWalletCopyAddress();
-                              break;
-                          }
-                        }}>
-                          <ListItemButton>
-                            <ListItemIcon>
-                              <Icon icon={menu.icon} fontSize={20} color={menu?.color && menu?.color != '' && 'rgb(255, 76, 81)'}/>
-                            </ListItemIcon>
-                            <ListItemText primary={menu.title} />
-                          </ListItemButton>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                </Drawer>
               </Grid>
             :
               <Fragment></Fragment>
