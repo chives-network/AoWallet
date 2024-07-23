@@ -341,7 +341,7 @@ const MyWallet = () => {
           
           {getAllWalletsData && pageModel == 'ListWallet' ?  
             <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+              <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                   <Grid container spacing={2}>
                     {getAllWalletsData.map((wallet: any, index: number) => {
 
@@ -529,7 +529,7 @@ const MyWallet = () => {
               </Fragment>
               :
               <Fragment>
-                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                   <Grid container spacing={2}>
                     <TextField
                       fullWidth
@@ -567,7 +567,7 @@ const MyWallet = () => {
 
           {pageModel == 'RenameWallet' && ( 
             <Grid container spacing={2}>
-              <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+              <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                   <Grid container spacing={2}>
                   <TextField
                     fullWidth

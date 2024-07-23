@@ -13,6 +13,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import Slider from '@mui/material/Slider'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import Tab from '@mui/material/Tab'
 
 import { CallReceived, History, Casino, Send } from '@mui/icons-material';
 
@@ -27,13 +28,13 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestampAge } from 'src/configs/functions'
+import { formatHash, formatTimestamp } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
@@ -43,6 +44,7 @@ import { useRouter } from 'next/router'
 
 import { createTheme, ThemeProvider } from '@mui/material';
 
+import Tabs from '@mui/material/Tabs';
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -54,7 +56,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
     paddingRight: theme.spacing(4)
   }
 }))
-
 
 const Wallet = () => {
   // ** Hook
@@ -76,6 +77,13 @@ const Wallet = () => {
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
+
+  const [activeTab, setActiveTab] = useState<string>('AllTxs')
+
+  const handleChangeActiveTab = (event: any, value: string) => {
+    setActiveTab(value)
+    console.log("handleChangeActiveTab", event)
+  }
 
   const preventDefault = (e: any) => {
     e.preventDefault();
@@ -121,6 +129,9 @@ const Wallet = () => {
       case 'ReceiveMoney':
         handleWalletGoHome()
         break
+      case 'AllTxs':
+        handleWalletGoHome()
+        break
       case 'SendMoneySelectContact':
         handleWalletGoHome()
         break
@@ -132,7 +143,7 @@ const Wallet = () => {
         break
     }
   }
-
+  
   const RightButtonOnClick = () => {
     handleWalletGoHome()
   }
@@ -180,13 +191,6 @@ const Wallet = () => {
         const currentBalance = await getWalletBalance(currentAddress);
         setCurrentBalance(Number(currentBalance).toFixed(4))
         
-        if(authConfig.tokenType == "AR")  {
-          const allTxs = await GetArWalletAllTxs(currentAddress)
-          if(allTxs)  {
-            setCurrentWalletTxs(allTxs)
-          }
-        }
-
         if(authConfig.tokenType == "XWE")  {
           const getTxsInMemoryData = await getTxsInMemory()
           setCurrentTxsInMemory(getTxsInMemoryData)
@@ -203,9 +207,29 @@ const Wallet = () => {
         }
 
       }
+
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs')  {
+        if(authConfig.tokenType == "AR")  {
+          setIsDisabledButton(true)
+          const allTxs = await GetArWalletAllTxs(currentAddress)
+          if(allTxs)  {
+            setCurrentWalletTxs(allTxs)
+          }
+          setIsDisabledButton(false)
+        }
+        if(authConfig.tokenType == "XWE")  {
+          setIsDisabledButton(true)
+          const allTxs = await getXweWalletAllTxs(currentAddress, activeTab, 0, 150)
+          if(allTxs)  {
+            setCurrentWalletTxs(allTxs)
+          }
+          setIsDisabledButton(false)
+        }
+      }
+
     };
     processWallets();
-  }, [currentAddress, pageModel])
+  }, [currentAddress, pageModel, activeTab])
 
   useEffect(() => {
     setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
@@ -249,12 +273,20 @@ const Wallet = () => {
     } else {
       console.log('Share not supported on this browser');
     }
-  };
+  }
 
   const handleClickReceiveButton = () => {
     setPageModel('ReceiveMoney')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Receive') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleClickAllTxsButton = () => {
+    setPageModel('AllTxs')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Wallet Txs') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
   }
@@ -398,10 +430,10 @@ const Wallet = () => {
                           <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton>
+                          <IconButton onClick={()=>handleClickAllTxsButton()}>
                             <History />
                           </IconButton>
-                          <Typography>{t('Txs') as string}</Typography>
+                          <Typography onClick={()=>handleClickAllTxsButton()}>{t('Txs') as string}</Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
                           <IconButton>
@@ -535,66 +567,6 @@ const Wallet = () => {
 
                           )}
 
-                          {currentWalletTxs && false && currentWalletTxs.edges.map((Tx: any, index: number) => {
-
-                            return (
-                              <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                                <Card>
-                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                                  <CustomAvatar
-                                    skin='light'
-                                    color={'primary'}
-                                    sx={{ mr: 0, width: 43, height: 43 }}
-                                    src={'/images/logo/AO.png'}
-                                  >
-                                  </CustomAvatar>
-                                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                      <Typography 
-                                        sx={{ 
-                                          color: 'text.primary',
-                                          overflow: 'hidden',
-                                          textOverflow: 'ellipsis',
-                                          whiteSpace: 'nowrap',
-                                          textAlign: 'left'
-                                        }}
-                                      >
-                                        {formatHash(Tx.node.recipient, 10)}
-                                      </Typography>
-                                      <Box sx={{ display: 'flex' }}>
-                                        <Typography 
-                                          variant='body2' 
-                                          sx={{ 
-                                            color: `primary.dark`, 
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                            flex: 1,
-                                            textAlign: 'left'
-                                          }}
-                                        >
-                                          {formatTimestampAge(Tx.node.block.timestamp)}
-                                        </Typography>
-                                      </Box>
-                                    </Box>
-
-                                    <Box textAlign="right">
-                                      <Typography variant='h6' sx={{ 
-                                        color: `info.dark`,
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        mr: 2
-                                      }}>
-                                        {Number(Tx.node.fee.ar).toFixed(2)}
-                                      </Typography>
-
-                                    </Box>
-                                  </Box>
-                                </Card>
-                              </Grid>
-                            )
-                          })}
-
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
                               <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => { 
@@ -618,6 +590,184 @@ const Wallet = () => {
               <Fragment></Fragment>
             }
 
+            {pageModel == 'AllTxs' && ( 
+              <Grid container spacing={0}>
+                <Box
+                  component='header'
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    width: '91%',
+                    zIndex: 10,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    top: -10,
+                    position: 'fixed',
+                    mt: '48px',
+                    height: '48px'
+                  }}
+                >
+                  <Tabs
+                    value={activeTab}
+                    onChange={handleChangeActiveTab}
+                    aria-label="icon position tabs example"
+                    sx={{ height: '48px', my: 0, py: 0}}
+                  >
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label="All Txs" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
+                  </Tabs>
+                </Box>
+                
+                <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
+                    <Grid container spacing={2}>
+
+                    {authConfig.tokenName && authConfig.tokenName == "AR" && currentWalletTxs && currentWalletTxs.edges.map((Tx: any, index: number) => {
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                            <CustomAvatar
+                              skin='light'
+                              color={'primary'}
+                              sx={{ mr: 0, width: 38, height: 38 }}
+                              src={'/images/logo/AO.png'}
+                            >
+                            </CustomAvatar>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                <Typography 
+                                  sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    textAlign: 'left'
+                                  }}
+                                >
+                                  {formatHash(Tx.node.recipient, 10)}
+                                </Typography>
+                                <Box sx={{ display: 'flex' }}>
+                                  <Typography 
+                                    variant='body2' 
+                                    sx={{ 
+                                      color: `primary.dark`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1,
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {formatTimestamp(Tx.node.block.timestamp)}
+                                  </Typography>
+                                </Box>
+                              </Box>
+
+                              <Box textAlign="right">
+                                <Typography variant='h6' sx={{ 
+                                  color: `info.dark`,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  mr: 2
+                                }}>
+                                  {Number(Tx.node.fee.ar).toFixed(2)}
+                                </Typography>
+
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+                    })}
+
+                    {authConfig.tokenName && authConfig.tokenName == "XWE" && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                            <CustomAvatar
+                              skin='light'
+                              color={'primary'}
+                              sx={{ mr: 0, width: 38, height: 38 }}
+                              src={'/images/logo/XWE.png'}
+                            >
+                            </CustomAvatar>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={()=>{
+                              navigator.clipboard.writeText(Tx.owner.address == currentAddress ? Tx.recipient : Tx.owner.address)
+                              toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                            }}>
+                                <Typography 
+                                  sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    textAlign: 'left'
+                                  }}
+                                >
+                                  {Tx.owner.address == currentAddress ? formatHash(Tx.recipient, 8) : formatHash(Tx.owner.address, 8)}
+                                </Typography>
+                                <Box sx={{ display: 'flex' }}>
+                                  <Typography 
+                                    variant='body2' 
+                                    sx={{ 
+                                      color: `primary.dark`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1,
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {formatTimestamp(Tx.block.timestamp)}
+                                  </Typography>
+                                </Box>
+                              </Box>
+
+                              <Box textAlign="right">
+                                <Typography variant='h6' sx={{ 
+                                  color: `info.dark`,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  mr: 2
+                                }}>
+                                  {Tx.owner.address == currentAddress ? ' - ' : ' + '}
+                                  {Number(Tx.quantity.xwe).toFixed(2)}
+                                </Typography>
+
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+                    })}
+
+                    {authConfig.tokenName && authConfig.tokenName == "XWE" && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
+                      <Grid item xs={12} sx={{ py: 0 }}>
+                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                          {t('No Record')}
+                        </Box>
+                      </Grid>
+                    )}
+                    
+                    </Grid>
+
+                </Grid>
+                      
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={isDisabledButton}
+                >
+                  <CircularProgress color="inherit" size={45}/>
+                </Backdrop>
+
+              </Grid>
+            )}
+
             {pageModel == 'ReceiveMoney' && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item>
@@ -633,7 +783,7 @@ const Wallet = () => {
                     {t('Copy') as string}
                   </Button>
                 </Grid>
-                <Grid item sx={{ mt: 'auto', width: '100%' }}>
+                <Grid item sx={{ mt: 8, width: '100%' }}>
                   <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
                   {t('Share') as string}
                   </Button>
@@ -643,7 +793,7 @@ const Wallet = () => {
 
             {pageModel == 'SendMoneySelectContact' && ( 
               <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 35px)'}}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                     <Grid container spacing={2}>
                       <TextField
                         fullWidth

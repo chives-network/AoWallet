@@ -365,6 +365,38 @@ export async function getTxsInMemory() {
     }
 }
 
+export async function getXweWalletAllTxs(Address: string, Type: string, pageId = 0, pageSize = 10) {
+
+    let addressApiType = ''
+    switch(Type) {
+        case 'AllTxs':
+            addressApiType = "txsrecord";
+            break;
+        case 'Sent':
+            addressApiType = "send";
+            break;
+        case 'Received':
+            addressApiType = "deposits";
+            break;
+        case 'Files':
+            addressApiType = "datarecord";
+            break;
+    }
+    try {
+        if(addressApiType && addressApiType!="" && Address && Address.length == 43)  {
+            const response = await axios.get(authConfig.backEndApi + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize).then(res=>res.data)
+            const NewData: any[] = response.data.filter((record: any) => record.recipient)
+            response.data = NewData
+            
+            return response
+        }
+    } 
+    catch (e) { 
+        console.warn('getXweWalletAllTxs failed') 
+    }
+
+}
+
 export function winstonToAr(winston: string) {
     
     return arweave.ar.winstonToAr(winston)

@@ -174,7 +174,6 @@ export function formatTimestamp(timestamp: number): string {
   return formattedDate;
 }
 
-
 export function formatTimestampLocalTime(timestamp: number): string {
   if(timestamp == undefined) return ""
   
