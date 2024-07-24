@@ -72,10 +72,12 @@ const ArWalletRecord = ({ currentWalletTxs, isDisabledButton, currentAddress, ha
                 let RightOne = ''
                 let RightTwo = ''
                 let Logo = ''
+                let RightOneFullText = ''
                 if(TagsMap['SDK'] == "aoconnect" || TagsMap['Variant'] == "ao.TN.1")   {
                     LeftOne = TagsMap['Action'] ?? TagsMap['Variant']
                     LeftTwo = "AO "  + TagsMap['Type']
-                    RightOne = Tx.node.block.height
+                    RightOne = TagsMap['From-Process'] ? formatHash(TagsMap['From-Process'], 6) : formatHash(Tx.node.recipient, 6)
+                    RightOneFullText = TagsMap['From-Process'] ? TagsMap['From-Process'] : Tx.node.recipient
                     RightTwo = formatTimestamp(Tx.node.block.timestamp)
                     Logo = '/images/logo/AO.png'
                 }
@@ -135,6 +137,9 @@ const ArWalletRecord = ({ currentWalletTxs, isDisabledButton, currentAddress, ha
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
                                     textAlign: 'right'
+                                    }}
+                                    onClick={()=>{
+                                        navigator.clipboard.writeText(RightOneFullText)
                                     }}
                                 >
                                     {RightOne}

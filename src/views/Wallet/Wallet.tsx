@@ -31,7 +31,12 @@ import { useTheme } from '@mui/material/styles'
 import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
+import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
+import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
+
 import { AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+
+import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
@@ -83,6 +88,9 @@ const Wallet = () => {
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
   const [currentWalletTxsCursor, setCurrentWalletTxsCursor] = useState<any>({})
   const [currentWalletTxsHasNextPage, setCurrentWalletTxsHasNextPage] = useState<any>({'Sent': true, 'Received': true, 'AllTxs': true})
+
+  const [mySavingTokensData, setMySavingTokensData] = useState<any[]>([])
+  const [assetsAll, setAssetsAll] = useState<any[]>([])
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
@@ -136,15 +144,10 @@ const Wallet = () => {
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'ReceiveMoney':
-        handleWalletGoHome()
-        break
       case 'AllTxs':
-        handleWalletGoHome()
-        break
       case 'SendMoneySelectContact':
-        handleWalletGoHome()
-        break
       case 'SendMoneyInputAmount':
+      case 'ManageAssets':
         handleWalletGoHome()
         break
       case 'MainWallet':
@@ -265,6 +268,8 @@ const Wallet = () => {
         if(authConfig.tokenType == "AR")  {
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun("Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk", String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
+          
+          handleGetMySavingTokensData()
         }
 
       }
@@ -336,7 +341,29 @@ const Wallet = () => {
       }
       getPriceDataFunction()
     }
+    if(pageModel == "ManageAssets") {
+      handleGetServerData()
+    }
   }, [pageModel])
+
+  const handleGetServerData = async () => {
+    setIsDisabledButton(true)
+    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
+    if(ChivesServerDataGetTokensData1) {
+        const dataArray = Object.values(ChivesServerDataGetTokensData1);
+        dataArray.sort((a: any, b: any) => {
+            if (a.TokenGroup == b.TokenGroup) {
+                return Number(a.TokenSort) - Number(b.TokenSort);
+            } else {
+                return a.TokenGroup.localeCompare(b.TokenGroup);
+            }
+        });
+        setAssetsAll(dataArray)
+        console.log("ChivesServerDataGetTokensData1 dataArray", dataArray)
+    }
+    setIsDisabledButton(false)
+
+  }
 
   
 
@@ -390,6 +417,15 @@ const Wallet = () => {
     setSendMoneyAddress(null)
   }
 
+  const handleClickManageAssetsButton = () => {
+    setPageModel('ManageAssets')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Manage Assets') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('mdi:add')
+  }
+
+
   const handleSelectAddress = (MoneyAddress: any) => {
     setSendMoneyAddress(MoneyAddress)
     setPageModel('SendMoneyInputAmount')
@@ -416,6 +452,33 @@ const Wallet = () => {
     handleWalletGoHome()
     console.log("uploadProgress", uploadProgress)
   }
+
+  const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
+    setIsDisabledButton(true)
+    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', TokenData.Name, JSON.stringify(TokenData) )
+    setIsDisabledButton(false)
+    if(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+      toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
+    }
+    handleWalletGoHome()
+    console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
+  }
+
+  const handleGetMySavingTokensData = async () => {
+    const MyProcessTxIdsGetTokensData = await MyProcessTxIdsGetTokens(authConfig.AoConnectMyProcessTxIds, currentAddress);
+    if (MyProcessTxIdsGetTokensData) {
+        const dataArray = Object.values(MyProcessTxIdsGetTokensData);
+        dataArray.sort((a: any, b: any) => {
+            if (a.TokenGroup == b.TokenGroup) {
+                return Number(a.TokenSort) - Number(b.TokenSort);
+            } else {
+                return a.TokenGroup.localeCompare(b.TokenGroup);
+            }
+        });
+        setMySavingTokensData(dataArray)
+    }
+  }
+  
 
   const themeSlider = createTheme({
     components: {
@@ -639,15 +702,80 @@ const Wallet = () => {
                                 </Box>
                               </Card>
                             </Grid>
-
                           )}
+
+                          {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
+
+                            let TokenData: any = {}
+                            try {
+                              TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
+                            }
+                            catch(e: any) {
+                              console.log("assetsAll List", e)
+                            }
+
+                            return (
+                              <Grid item xs={12} sx={{ py: 0 }} key={Index}>
+                                <Card>
+                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                    <CustomAvatar
+                                      skin='light'
+                                      color={'primary'}
+                                      sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                      src={GetAppAvatar(TokenData.Logo)}
+                                    >
+                                    </CustomAvatar>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                      <Typography 
+                                        sx={{ 
+                                          color: 'text.primary',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          textAlign: 'left'
+                                        }}
+                                      >
+                                        {TokenData.Name}
+                                      </Typography>
+                                      <Box sx={{ display: 'flex' }}>
+                                        <Typography 
+                                          variant='body2' 
+                                          sx={{ 
+                                            color: `primary.dark`, 
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            flex: 1,
+                                            textAlign: 'left'
+                                          }}
+                                        >
+                                          {formatHash(Token.TokenId, 6)}
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+                                    <Box textAlign="right">
+                                      <Typography variant='h6' sx={{ 
+                                        color: `info.dark`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        mr: 2,
+                                        ml: 2
+                                      }}>
+                                        0
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                </Card>
+                              </Grid>
+                            )
+
+                          })}
 
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                              <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => { 
-                                // 处理点击事件
-                              }}>
-                                {t('Add Assets') as string}
+                              <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
+                                {t('Manage Assets') as string}
                               </Button>
                             </Box>
                           </Grid>
@@ -986,6 +1114,94 @@ const Wallet = () => {
                   <CircularProgress color="inherit" size={45}/>
                 </Backdrop>
                 
+              </Grid>
+            )}
+
+            {pageModel == 'ManageAssets' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                    <Grid container spacing={2}>
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={searchContactkeyWord}
+                        placeholder={t('Search Assets') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setSearchContactkeyWord(e.target.value)
+                          const searchChivesContactsData = searchChivesContacts(e.target.value)
+                          setContactsAll(searchChivesContactsData)
+                          console.log("e.target.value", e.target.value)
+                        }}
+                      />
+                    </Grid>
+                    <Grid container spacing={2}>
+                    {assetsAll.map((Token: any, index: number) => {
+
+                      let TokenData: any = {}
+                      try {
+                        TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
+                      }
+                      catch(e: any) {
+                        console.log("assetsAll List", e)
+                      }
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                src={GetAppAvatar(TokenData.Logo)}
+                              >
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {TokenData.Name}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `primary.dark`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {formatHash(Token.TokenId, 6)}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, TokenData)} >
+                                    <Icon icon='tdesign:plus' />
+                                    Add
+                                  </Box>
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+
+                    })}
+                    </Grid>
+
+                </Grid>
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={isDisabledButton}
+                >
+                  <CircularProgress color="inherit" size={45}/>
+                </Backdrop>
               </Grid>
             )}
 

@@ -600,7 +600,7 @@ const TokenIndexModel = (prop: any) => {
     
     setIsDisabledButton(true)
 
-    const AoTokenTransferData = await AoTokenTransfer(currentWallet.jwk, TokenProcessTxId, myProcessTxIdInPage, ReceivedAddress, Number(Amount))
+    const AoTokenTransferData = await AoTokenTransfer(currentWallet.jwk, TokenProcessTxId, ReceivedAddress, Number(Amount))
     if(AoTokenTransferData && tokenInfo && tokenInfo.Denomination) {
       console.log("AoTokenTransferData", AoTokenTransferData)
       if(AoTokenTransferData?.msg?.Output?.data?.output)  {
@@ -659,7 +659,7 @@ const TokenIndexModel = (prop: any) => {
 
   const handleGetServerData = async () => {
     
-    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerData, authConfig.AoConnectChivesServerData)
+    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerTxId)
     
     if(ChivesServerDataGetTokensData1) {
         const dataArray = Object.values(ChivesServerDataGetTokensData1);
