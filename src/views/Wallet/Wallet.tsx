@@ -40,6 +40,8 @@ import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
+import ArWalletRecord from './ArWalletRecord'
+
 import { useRouter } from 'next/router'
 
 import { createTheme, ThemeProvider } from '@mui/material';
@@ -73,14 +75,16 @@ const Wallet = () => {
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
-  const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
   const [contactsAll, setContactsAll] = useState<any>({})
+  const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
+  const [currentWalletTxsCursor, setCurrentWalletTxsCursor] = useState<any>({})
+  const [currentWalletTxsHasNextPage, setCurrentWalletTxsHasNextPage] = useState<any>({'Sent': true, 'Received': true, 'AllTxs': true})
 
-  const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '联系人1', address: 'B7IT6nWYrkE7JDfSgIM_wiuRylP9W3Tagicl428m1gI'})
+  const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
 
-  const [activeTab, setActiveTab] = useState<string>('AllTxs')
+  const [activeTab, setActiveTab] = useState<string>('Sent')
 
   const handleChangeActiveTab = (event: any, value: string) => {
     setActiveTab(value)
@@ -194,10 +198,48 @@ const Wallet = () => {
     const contactsAll = getChivesContacts()
     setContactsAll(contactsAll)
   }, []);
-  
+
+  const [page, setPage] = useState<number>(0)
+  const [innerHeight, setInnerHeight] = useState<number | string>(0)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerHeight(window.innerHeight);
+    };
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.body.scrollHeight;
+
+      console.log("documentHeight", documentHeight);
+      console.log("innerHeight", innerHeight);
+      console.log("scrollY", scrollY);
+      console.log("page", page);
+
+      if (scrollY + windowHeight >= documentHeight) {
+        setPage(prevPage => {
+          
+          return prevPage + 1;
+        });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
+
+    // 初始设置 innerHeight
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [innerHeight, page]);
+
   useEffect(() => {
     const processWallets = async () => {
-      if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet')  {
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
         const currentBalance = await getWalletBalance(currentAddress);
         setCurrentBalance(Number(currentBalance).toFixed(4))
         
@@ -217,13 +259,36 @@ const Wallet = () => {
         }
 
       }
-
-      if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs')  {
+      
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs' && currentWalletTxsHasNextPage[activeTab] == true)  {
         if(authConfig.tokenType == "AR")  {
           setIsDisabledButton(true)
-          const allTxs = await GetArWalletAllTxs(currentAddress)
+          const allTxs = await GetArWalletAllTxs(currentAddress, activeTab, currentWalletTxsCursor)
           if(allTxs)  {
-            setCurrentWalletTxs(allTxs)
+            const currentWalletTxsCursorTemp = currentWalletTxsCursor
+            if(allTxs['Sent'])  {
+              currentWalletTxsCursorTemp['Sent'] = allTxs['Sent']
+            }
+            if(allTxs['Received'])  {
+              currentWalletTxsCursorTemp['Received'] = allTxs['Received']
+            }
+            setCurrentWalletTxsCursor(currentWalletTxsCursorTemp)
+            console.log("currentWalletTxs", currentWalletTxs)
+            console.log("allTxs", allTxs)
+            if(allTxs['data'])  {
+              const currentWalletTxsTemp = { ...currentWalletTxs };
+              if (!currentWalletTxsTemp[activeTab]) {
+                  currentWalletTxsTemp[activeTab] = [];
+              }
+              currentWalletTxsTemp[activeTab] = [...currentWalletTxsTemp[activeTab], ...allTxs['data']];
+              setCurrentWalletTxs(currentWalletTxsTemp);
+            }
+            if(allTxs['data'] && allTxs['data']['pageInfo'] && allTxs['data']['pageInfo']['hasNextPage'] == false)  {
+              setCurrentWalletTxsHasNextPage((prevData: any)=>({
+                ...prevData,
+                [activeTab]: false
+              }))
+            }
           }
           setIsDisabledButton(false)
         }
@@ -239,7 +304,7 @@ const Wallet = () => {
 
     };
     processWallets();
-  }, [currentAddress, pageModel, activeTab])
+  }, [currentAddress, pageModel, activeTab, page])
 
   useEffect(() => {
     setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
@@ -263,6 +328,8 @@ const Wallet = () => {
       getPriceDataFunction()
     }
   }, [pageModel])
+
+  
 
   const handleWalletCopyAddress = () => {
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
@@ -299,6 +366,10 @@ const Wallet = () => {
     setTitle(t('Wallet Txs') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
+    setCurrentWalletTxsCursor({})
+    setCurrentWalletTxs(null)
+    setPage(0)
+    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true})
   }
 
   const handleClickSendButton = () => {
@@ -583,7 +654,7 @@ const Wallet = () => {
               <Fragment></Fragment>
             }
 
-            {pageModel == 'AllTxs' && ( 
+            {pageModel == 'AllTxs' && authConfig.tokenName == "XWE" && ( 
               <Grid container spacing={0}>
                 <Box
                   component='header'
@@ -615,67 +686,7 @@ const Wallet = () => {
                 <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
                     <Grid container spacing={2}>
 
-                    {authConfig.tokenName && authConfig.tokenName == "AR" && currentWalletTxs && currentWalletTxs.edges.map((Tx: any, index: number) => {
-
-                      return (
-                        <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                            <CustomAvatar
-                              skin='light'
-                              color={'primary'}
-                              sx={{ mr: 0, width: 38, height: 38 }}
-                              src={'/images/logo/AO.png'}
-                            >
-                            </CustomAvatar>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                <Typography 
-                                  sx={{ 
-                                    color: 'text.primary',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    textAlign: 'left'
-                                  }}
-                                >
-                                  {formatHash(Tx.node.recipient, 10)}
-                                </Typography>
-                                <Box sx={{ display: 'flex' }}>
-                                  <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                      color: `primary.dark`, 
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      flex: 1,
-                                      textAlign: 'left'
-                                    }}
-                                  >
-                                    {formatTimestamp(Tx.node.block.timestamp)}
-                                  </Typography>
-                                </Box>
-                              </Box>
-
-                              <Box textAlign="right">
-                                <Typography variant='h6' sx={{ 
-                                  color: `info.dark`,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                  mr: 2
-                                }}>
-                                  {Number(Tx.node.fee.ar).toFixed(2)}
-                                </Typography>
-
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
-                      )
-                    })}
-
-                    {authConfig.tokenName && authConfig.tokenName == "XWE" && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
+                    {authConfig.tokenName && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
 
                       return (
                         <Grid item xs={12} sx={{ py: 0 }} key={index}>
@@ -739,7 +750,7 @@ const Wallet = () => {
                       )
                     })}
 
-                    {authConfig.tokenName && authConfig.tokenName == "XWE" && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
+                    {authConfig.tokenName && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
                       <Grid item xs={12} sx={{ py: 0 }}>
                         <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
                           {t('No Record')}
@@ -759,6 +770,10 @@ const Wallet = () => {
                 </Backdrop>
 
               </Grid>
+            )}
+
+            {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && ( 
+              <ArWalletRecord currentWalletTxs={currentWalletTxs} isDisabledButton={isDisabledButton} currentAddress={currentAddress} handleChangeActiveTab={handleChangeActiveTab} activeTab={activeTab} currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}/>
             )}
 
             {pageModel == 'ReceiveMoney' && ( 

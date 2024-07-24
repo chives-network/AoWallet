@@ -1,6 +1,6 @@
 const config = {
   productName: 'AoWallet',
-  tokenType: 'XWE', // AR or XWE
+  tokenType: 'AR', // AR or XWE
   tokenName: '',
   backEndApi: '',
   backEndApiChatBook: '',

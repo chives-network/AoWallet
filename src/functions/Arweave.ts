@@ -3,12 +3,93 @@
 import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
-export async function GetArWalletAllTxs (Address: string) {
-    const query = "query getTransactions($ids: [ID!], $owners: [String!], $recipients: [String!], $tags: [TagFilter!], $bundledIn: [ID!], $block: BlockFilter, $first: Int = 10, $after: String, $sort: SortOrder = HEIGHT_DESC) {\n  transactions(\n    ids: $ids\n    owners: $owners\n    recipients: $recipients\n    tags: $tags\n    bundledIn: $bundledIn\n    block: $block\n    first: $first\n    after: $after\n    sort: $sort\n  ) {\n    pageInfo {\n      hasNextPage\n    }\n    edges {\n      cursor\n      node {\n        id\n        block {\n          height\n          id\n          timestamp\n        }\n        recipient\n        owner {\n          address\n          key\n        }\n        fee {\n          winston\n          ar\n        }\n        quantity {\n          winston\n          ar\n        }\n        tags {\n          name\n          value\n        }\n        data {\n          size\n          type\n        }\n        bundledIn {\n          id\n        }\n      }\n    }\n  }\n}\n"
+export async function GetArWalletAllTxs(Address: string, Type: string, After: any) {
+    console.log("After", After)
+    const query = 
+        `query getTransactions(
+            $ids: [ID!], 
+            $owners: [String!], 
+            $recipients: [String!], 
+            $tags: [TagFilter!], 
+            $bundledIn: [ID!], 
+            $block: BlockFilter, 
+            $first: Int = 2000, 
+            $after: String, 
+            $sort: SortOrder = HEIGHT_DESC
+            ) {
+                transactions(
+                    ids: $ids
+                    owners: $owners
+                    recipients: $recipients
+                    tags: $tags
+                    bundledIn: $bundledIn
+                    block: $block
+                    first: $first
+                    after: $after
+                    sort: $sort
+                ) {
+                    pageInfo {
+                        hasNextPage
+                    }
+                    edges {
+                        cursor
+                        node {
+                            id
+                            block {
+                                height
+                                id
+                                timestamp
+                            }
+                            recipient
+                                owner {
+                                address
+                                key
+                            }
+                            fee {
+                                winston
+                                ar
+                            }
+                            quantity {
+                                winston
+                                ar
+                            }
+                            tags {
+                                name
+                                value
+                            }
+                            data {
+                                size
+                                type
+                            }
+                            bundledIn {
+                                id
+                            }
+                        }
+                    }
+                }
+            }
+            `
+
     try {
-        const res = await axios.post(authConfig.backEndApi + '/graphql', { query, operationName: "getTransactions", variables: {owners: [Address]} }).then(res=>res.data);
-        if(res && res.data && res.data.transactions) {
-            return res.data.transactions
+        if(Type == "Sent")  {
+            const res = await axios.post(authConfig.backEndApi + '/graphql', { query, operationName: "getTransactions", variables: {
+                owners: [Address], after: After['Sent'] ?? ''
+            } }).then(res=>res.data);
+            if(res && res.data && res.data.transactions) {
+                const lastTx = res.data.transactions.edges.pop()
+
+                return { data: res.data.transactions.edges, [Type]: lastTx?.cursor ?? '', pageInfo: res.data.transactions.pageInfo  }
+            }
+        }
+        if(Type == "Received")  {
+            const res = await axios.post(authConfig.backEndApi + '/graphql', { query, operationName: "getTransactions", variables: {
+                recipients: [Address], after: After['Received'] ?? ''
+            } }).then(res=>res.data);
+            if(res && res.data && res.data.transactions) {
+                const lastTx = res.data.transactions.edges.pop()
+                
+                return { data: res.data.transactions.edges, [Type]: lastTx?.cursor ?? '', pageInfo: res.data.transactions.pageInfo }
+            }
         }
     } 
     catch (error) {

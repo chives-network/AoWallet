@@ -168,8 +168,7 @@ export function formatTimestamp(timestamp: number): string {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
-  const ampm = hours >= 12 ? "PM" : "AM";
-  const formattedDate = `${month} ${day}, ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+  const formattedDate = `${month} ${day}, ${year} ${hours}:${minutes}:${seconds}`;
 
   return formattedDate;
 }
