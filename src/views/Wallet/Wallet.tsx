@@ -29,7 +29,10 @@ import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
 import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
-import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
+import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
+
+import { AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
@@ -163,6 +166,7 @@ const Wallet = () => {
   const [currentBalanceReservedRewards, setCurrentBalanceReservedRewards] = useState<string>("")
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({})
   const [currentFee, setCurrentFee] = useState<number>(0)
+  const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
 
   
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
@@ -173,7 +177,7 @@ const Wallet = () => {
 
   
   
-  useEffect(() => {
+  useEffect(() => {    
 
     setHeaderHidden(false)
     setFooterHidden(false)
@@ -219,7 +223,7 @@ const Wallet = () => {
 
       if (scrollY + windowHeight >= documentHeight) {
         setPage(prevPage => {
-          
+
           return prevPage + 1;
         });
       }
@@ -256,6 +260,11 @@ const Wallet = () => {
             setCurrentBalance(Number(MinusBalance).toFixed(4))
           }
 
+        }
+
+        if(authConfig.tokenType == "AR")  {
+          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun("Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk", String(currentAddress))
+          setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
         }
 
       }
@@ -566,7 +575,8 @@ const Wallet = () => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    mr: 1
+                                    mr: 1,
+                                    ml: 2
                                   }}>
                                     {currentBalance}
                                   </Typography>
@@ -610,7 +620,7 @@ const Wallet = () => {
                                           textAlign: 'left'
                                         }}
                                       >
-                                        {currentBalance}
+                                        {currentAoBalance}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -620,9 +630,10 @@ const Wallet = () => {
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
-                                      mr: 2
+                                      mr: 2,
+                                      ml: 2
                                     }}>
-                                      {currentBalance}
+                                      {Number(currentAoBalance).toFixed(4)}
                                     </Typography>
                                   </Box>
                                 </Box>
