@@ -31,7 +31,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
-import TextField2 from 'src/views/Chat/TextField2'
+import TextField2 from 'src/views/Layout/TextField2'
 import { useRouter } from 'next/router'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet } from 'src/functions/ChivesWallets'
