@@ -24,9 +24,10 @@ import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
 import { BigNumber } from 'bignumber.js'
 
 import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions } from 'src/functions/AoConnect/Token'
+import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
 import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
-const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any) => {
+const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage } : any) => {
 
     const { t } = useTranslation()
 
@@ -42,7 +43,6 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
     console.log("chooseToken", TokenData, myAoTokensBalance)
 
     const [tokenListAction, setTokenListAction] = useState<string>("Holders")
-    const [pageCount, setPageCount] = useState<number>(0)
     const pageSize = 20
     const startIndex = TokenData.Release == "ChivesToken" ? (page) * pageSize : 0
     const endIndex = (page+1) * pageSize
@@ -59,30 +59,69 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
 
     const handleChangeActiveTab = (event: any, value: string) => {
         setTokenListAction(value)
-        console.log("handleChangeActiveTab", event, pageCount, "startIndex", startIndex, "endIndex", endIndex)
+        setPage(0)
+        switch(tokenListAction) {
+            case 'AllTxs':
+                setTokenAllTxs({})
+                break;
+            case 'MyTxs':
+                setTokenMyTxs({})
+                break;
+            case 'Sent':
+                setTokenSentTxs({})
+                break;
+            case 'Received':
+                setTokenReceivedTxs({})
+                break;
+            case 'Holders':
+                setTokenHoldersTxsChivesToken({})
+                break;
+        }
+        console.log("handleChangeActiveTab", event, value, "startIndex", startIndex, "endIndex", endIndex)
     }
-    console.log("handleChangeActiveTab", "startIndex", startIndex, "endIndex", endIndex)
 
     useEffect(()=>{
         if(TokenData && TokenData.TokenId) {
             switch(tokenListAction) {
                 case 'AllTxs':
+                    if(tokenAllTxs && tokenAllTxs[0] && tokenAllTxs[1] && startIndex > 0 && startIndex > tokenAllTxs[1]) {
+
+                        break;
+                    }
                     handleAoTokenAllTransactions(TokenData.TokenId)
                     console.log("handleAoTokenAllTransactions", page, TokenData)
                     break;
                 case 'MyTxs':
+                    if(tokenMyTxs && tokenMyTxs[0] && tokenMyTxs[1] && startIndex > 0 && startIndex > tokenMyTxs[1]) {
+
+                        break;
+                    }
                     handleAoTokenMyAllTransactions(TokenData.TokenId)
                     console.log("handleAoTokenMyAllTransactions", page, TokenData)
                     break;
                 case 'Sent':
+                    if(tokenSentTxs && tokenSentTxs[0] && tokenSentTxs[1] && startIndex > 0 && startIndex > tokenSentTxs[1]) {
+
+                        break;
+                    }
                     handleAoTokenSentTransactions(TokenData.TokenId)
                     console.log("handleAoTokenSentTransactions", page, TokenData)
                     break;
                 case 'Received':
+                    if(tokenReceivedTxs && tokenReceivedTxs[0] && tokenReceivedTxs[1] && startIndex > 0 && startIndex > tokenReceivedTxs[1]) {
+
+                        break;
+                    }
                     handleAoTokenReceivedTransactions(TokenData.TokenId)
                     console.log("handleAoTokenReceivedTransactions", page, TokenData)
                     break;
                 case 'Holders':
+                    if( TokenData && TokenData.Release == "ChivesToken" 
+                        && tokenHoldersTxsChivesToken && tokenHoldersTxsChivesToken[0] && tokenHoldersTxsChivesToken[1] 
+                        && startIndex > 0 && startIndex > tokenHoldersTxsChivesToken[1] ) {
+
+                        break;
+                    }
                     handleTokenBalancesPagination()
                     break;
             }
@@ -95,8 +134,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
             const AoDryRunData: any = await AoTokenAllTransactions(CurrentToken, String(startIndex), String(endIndex))
             console.log("AoDryRunData", AoDryRunData, CurrentToken, startIndex, endIndex)
             if(AoDryRunData) {
-                setPageCount(Math.ceil(AoDryRunData[1]/pageSize))
-                setTokenAllTxs(AoDryRunData)
+                setTokenAllTxs((prevData: any)=>{
+                    if(prevData && prevData[0] && prevData[1])  {
+                        const AllTxsTemp = [...prevData[0], ...AoDryRunData[0]]
+
+                        return [AllTxsTemp, AoDryRunData[1]]
+                    }
+                    else {
+
+                        return AoDryRunData
+                    }
+                })
             }
             setIsLoading(false)
         }
@@ -111,8 +159,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
             const AoDryRunData: any = await AoTokenMyAllTransactions(CurrentToken, currentAddress, String(startIndex), String(endIndex))
             console.log("AoDryRunData", AoDryRunData)
             if(AoDryRunData) {
-                setPageCount(Math.ceil(AoDryRunData[1]/pageSize))
-                setTokenMyTxs(AoDryRunData)
+                setTokenMyTxs((prevData: any)=>{
+                    if(prevData && prevData[0] && prevData[1])  {
+                        const AllTxsTemp = [...prevData[0], ...AoDryRunData[0]]
+
+                        return [AllTxsTemp, AoDryRunData[1]]
+                    }
+                    else {
+
+                        return AoDryRunData
+                    }
+                })
             }
             setIsLoading(false)
         }
@@ -127,8 +184,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
             const AoDryRunData: any = await AoTokenSentTransactions(CurrentToken, currentAddress, String(startIndex), String(endIndex))
             console.log("handleAoTokenSentTransactions AoDryRunData", AoDryRunData)
             if(AoDryRunData) {
-                setTokenSentTxs(AoDryRunData)
-                setPageCount(Math.ceil(AoDryRunData[1]/pageSize))
+                setTokenSentTxs((prevData: any)=>{
+                    if(prevData && prevData[0] && prevData[1])  {
+                        const AllTxsTemp = [...prevData[0], ...AoDryRunData[0]]
+
+                        return [AllTxsTemp, AoDryRunData[1]]
+                    }
+                    else {
+
+                        return AoDryRunData
+                    }
+                })
             }
             setIsLoading(false)
         }
@@ -143,8 +209,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
             const AoDryRunData: any = await AoTokenReceivedTransactions(CurrentToken, currentAddress, String(startIndex), String(endIndex))
             console.log("handleAoTokenReceivedTransactions AoDryRunData", AoDryRunData)
             if(AoDryRunData) {
-                setTokenReceivedTxs(AoDryRunData)
-                setPageCount(Math.ceil(AoDryRunData[1]/pageSize))
+                setTokenReceivedTxs((prevData: any)=>{
+                    if(prevData && prevData[0] && prevData[1])  {
+                        const AllTxsTemp = [...prevData[0], ...AoDryRunData[0]]
+
+                        return [AllTxsTemp, AoDryRunData[1]]
+                    }
+                    else {
+
+                        return AoDryRunData
+                    }
+                })
             }
             setIsLoading(false)
         }
@@ -168,10 +243,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
 
             return 
         }
+        const getTokenAllHolderTxsData = getTokenAllHolderTxs(CurrentToken);
+        if (getTokenAllHolderTxsData) {
+            const { AoDryRunBalancesJsonSorted, TokenHolders, CirculatingSupply } = getTokenAllHolderTxsData;
+            CirculatingSupply && setCirculatingSupply(String(Number(CirculatingSupply).toFixed(0)))
+            TokenHolders && setHoldersNumber(TokenHolders)
+            AoDryRunBalancesJsonSorted && setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSorted)
+        }
         if(CurrentToken)   {
             if(Denomination) {
                 try{
-                    setIsLoading(true)
+                    !getTokenAllHolderTxsData && setIsLoading(true) //只有在第一次执行的时候,需要增加一个加载中提示,第二次的时候,会直接使用缓存,然后后台进行更新.
                     const AoDryRunBalances = await AoTokenBalancesDryRun(CurrentToken)
                     const AoDryRunBalancesJson = JSON.parse(AoDryRunBalances)
                     const AoDryRunBalancesJsonMap = new Map(Object.entries(AoDryRunBalancesJson));
@@ -185,12 +267,12 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
 
                         return [Item[0], HolderBalance]
                     })
-                    setPageCount(Math.ceil(AoDryRunBalancesJsonSorted.length/pageSize))
                     setCirculatingSupply(String(CirculatingSupply.toFixed(0)))
                     setHoldersNumber(TokenHolders)
                     setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSorted)
+                    setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSorted, TokenHolders, CirculatingSupply})
                     console.log("handleAoTokenBalancesDryRunOfficialToken", AoDryRunBalancesJsonSortedResult, "TokenHolders", TokenHolders)
-                    setIsLoading(false)
+                    !getTokenAllHolderTxsData && setIsLoading(false)
                 }
                 catch(Error: any) {
                     console.log("handleAoTokenBalancesDryRunOfficialToken Error", Error)
@@ -223,7 +305,17 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
                                     }, {} as { [key: string]: number });
                 setCirculatingSupply(CirculatingSupply)
                 setHoldersNumber(TokenHolders)
-                setTokenHoldersTxsChivesToken(AoDryRunBalancesJsonSorted)
+                setTokenHoldersTxsChivesToken((prevData: any)=>{
+                    if(prevData)  {
+
+                        return {...prevData, ...AoDryRunBalancesJsonSorted}
+                    }
+                    else {
+
+                        return AoDryRunBalancesJsonSorted
+                    }
+                })
+
                 console.log("handleAoTokenBalancesDryRunChivesToken AoDryRunBalances", AoDryRunBalancesJsonSorted, "TokenHolders", TokenHolders, "CirculatingSupply", CirculatingSupply)
                 setIsLoading(false)
             }
@@ -260,7 +352,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
                 </Typography>
 
                 <Typography variant="h6" mt={2}>
-                    {formatHash(currentAddress, 6)}
+                    {formatHash(TokenId, 6)}
                 </Typography>
             </Box>
             {TokenData.Release == "ChivesToken" && (
@@ -455,22 +547,6 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
                         </Grid>
                     )
                 })}
-
-                {isLoading == false && tokenHoldersTxsChivesToken && Object.keys(tokenHoldersTxsChivesToken).length == 0 && (
-                    <Grid item xs={12} sx={{ py: 0 }}>
-                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                            {t('No Record')}
-                        </Box>
-                    </Grid>
-                )}
-
-                {isLoading == true && tokenHoldersTxsChivesToken && Object.keys(tokenHoldersTxsChivesToken).length == 0 && (
-                    <Grid item xs={12} sx={{ py: 0 }}>
-                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                            {t('Loading')}
-                        </Box>
-                    </Grid>
-                )}
 
                 {authConfig.tokenName && tokenHoldersTxsChivesToken && false && Object.keys(tokenHoldersTxsChivesToken).length > 0 && (
                     <Grid item xs={12} sx={{ py: 0 }}>
@@ -746,6 +822,22 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any)
                         </Grid>
                     )
                 })}
+
+                {isLoading == false && tokenHoldersTxsChivesToken && Object.keys(tokenHoldersTxsChivesToken).length == 0 && (
+                    <Grid item xs={12} sx={{ py: 0 }}>
+                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                            {t('No Record')}
+                        </Box>
+                    </Grid>
+                )}
+
+                {isLoading == true && tokenHoldersTxsChivesToken && Object.keys(tokenHoldersTxsChivesToken).length == 0 && (
+                    <Grid item xs={12} sx={{ py: 0 }}>
+                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                            {t('Loading')}
+                        </Box>
+                    </Grid>
+                )}
 
                 </Grid>
 

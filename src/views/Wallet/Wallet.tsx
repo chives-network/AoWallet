@@ -542,7 +542,7 @@ const Wallet = () => {
               if (!myAoTokensBalanceTemp[currentAddress]) {
                 myAoTokensBalanceTemp[currentAddress] = {};
               }
-              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = AoDryRunBalanceCoin;
+              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4) : 0;
             }
           })
         ).then(() => {
@@ -1035,6 +1035,7 @@ const Wallet = () => {
                 chooseToken={chooseToken}
                 myAoTokensBalance={myAoTokensBalance}
                 page={page}
+                setPage={setPage}
                 />
             )}
 

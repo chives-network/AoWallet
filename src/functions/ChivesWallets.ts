@@ -359,6 +359,23 @@ export function getAllAoTokens(Address: string) {
     }
 }
 
+export function setTokenAllHolderTxs(Address: string, AllHolderTxs: any) {
+    if (Address && Address.length === 43 && AllHolderTxs) {
+        window.localStorage.setItem("chivesAllHolderTxs____" + Address, JSON.stringify(AllHolderTxs))
+    }
+    
+    return true
+}
+
+export function getTokenAllHolderTxs(Address: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesAllHolderTxsData = window.localStorage.getItem("chivesAllHolderTxs____" + Address)
+        const chivesAllHolderTxsObject = chivesAllHolderTxsData ? JSON.parse(chivesAllHolderTxsData) : {}
+        
+        return chivesAllHolderTxsObject
+    }
+}
+
 export async function getWalletBalance(Address: string) {    
     try {
 
