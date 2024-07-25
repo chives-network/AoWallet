@@ -301,6 +301,30 @@ export function setMyAoTokens(Address: string, MyAoTokens: any) {
     return true
 }
 
+export function addMyAoToken(Address: string, TokenInfor: any) {
+    if (Address && Address.length === 43) {
+        const chivesTokenInforData = window.localStorage.getItem(chivesMyAoTokens)
+        const chivesTokenInforObject = chivesTokenInforData ? JSON.parse(chivesTokenInforData) : {}
+        chivesTokenInforObject[Address] = [...chivesTokenInforObject[Address], ...[TokenInfor]]
+        window.localStorage.setItem(chivesMyAoTokens, JSON.stringify(chivesTokenInforObject))
+    }
+    
+    return true
+}
+
+export function deleteMyAoToken(Address: string, TokenId: string) {
+    if (Address && Address.length === 43) {
+        const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)
+        const chivesMyAoTokensObject = chivesMyAoTokensData ? JSON.parse(chivesMyAoTokensData) : {}
+        const MyAoTokens = chivesMyAoTokensObject[Address]
+        const MyAoTokensFilter = MyAoTokens.filter((item: any)=>item.TokenId!=TokenId)
+        chivesMyAoTokensObject[Address] = MyAoTokensFilter
+        window.localStorage.setItem(chivesMyAoTokens, JSON.stringify(chivesMyAoTokensObject))
+    }
+    
+    return true
+}
+
 export function getMyAoTokens(Address: string) {
     if(typeof window !== 'undefined')  {
         const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)

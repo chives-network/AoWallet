@@ -28,7 +28,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
@@ -36,7 +36,7 @@ import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
 
 import { AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
 
-import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
+import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
@@ -446,9 +446,28 @@ const Wallet = () => {
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
+      addMyAoToken(currentAddress, Token)
+      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      if(getMyAoTokensData) {      
+        setMySavingTokensData(getMyAoTokensData)
+      }
     }
-    handleWalletGoHome()
     console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
+  }
+
+  const handleSelectDeleteMyToken = async (TokenId: string) => {
+    setIsDisabledButton(true)
+    const WantToDeleteTokenProcessTxIdData = await MyProcessTxIdsDelToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, TokenId)
+    setIsDisabledButton(false)
+    if(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+      toast.success(t(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
+      deleteMyAoToken(currentAddress, TokenId)
+      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      if(getMyAoTokensData) {      
+        setMySavingTokensData(getMyAoTokensData)
+      }
+    }
+    console.log("WantToDeleteTokenProcessTxIdData", WantToDeleteTokenProcessTxIdData)
   }
 
   const handleGetMySavingTokensData = async () => {
@@ -469,12 +488,21 @@ const Wallet = () => {
         });
         const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
         setMyAoTokens(currentAddress, dataArrayFilter)
+        setMySavingTokensData(dataArrayFilter)
         console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
     }
-    
+
     handleGetAllTokensData()
 
   }
+
+  const handleGetLeftAllTokens = (arr1: any[], arr2: any[]) =>  {
+    const TokenIdList = arr2.map(item=>item.TokenId)
+    const difference = arr1.filter((item: any) => !TokenIdList.includes(item.TokenId));
+
+    return difference;
+  }
+
   
   const handleGetAllTokensData = async () => {
 
@@ -495,6 +523,7 @@ const Wallet = () => {
         });
         const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
         setAllAoTokens(currentAddress, dataArrayFilter)
+        setAllTokensData(dataArrayFilter)
         console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
     }
 
@@ -1156,8 +1185,81 @@ const Wallet = () => {
                         }}
                       />
                     </Grid>
+                    
+                    {mySavingTokensData && mySavingTokensData.length > 0 && (
+                      <Grid item xs={12} sx={{ py: 0 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', px: 2, pt: 1, pb: 3}}>
+                            {t('My Assets') as string}
+                          </Box>
+                      </Grid>
+                    )}
                     <Grid container spacing={2}>
-                    {allTokensData.map((Token: any, index: number) => {
+                    {mySavingTokensData.map((Token: any, index: number) => {
+
+                      let TokenData: any = {}
+                      try {
+                        TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
+                      }
+                      catch(e: any) {
+                        console.log("allTokensData List", e)
+                      }
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                src={GetAppAvatar(TokenData.Logo)}
+                              >
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {TokenData.Name}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `primary.dark`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {formatHash(Token.TokenId, 6)}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectDeleteMyToken(Token.TokenId)} >
+                                    <Icon icon='mdi:delete-outline' />
+                                    Delete
+                                  </Box>
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+
+                    })}
+                    </Grid>
+                    
+                    <Grid item xs={12} sx={{ py: 0 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, pt: 2, pb: 3}}>
+                          {t('All Assets') as string}
+                        </Box>
+                    </Grid>
+                    <Grid container spacing={2}>
+                    {handleGetLeftAllTokens(allTokensData, mySavingTokensData).map((Token: any, index: number) => {
 
                       let TokenData: any = {}
                       try {
@@ -1215,6 +1317,22 @@ const Wallet = () => {
 
                     })}
                     </Grid>
+                    {mySavingTokensData && mySavingTokensData.length > 0 && handleGetLeftAllTokens(allTokensData, mySavingTokensData).length == 0 && (
+                      <Grid item xs={12} sx={{ py: 0 }}>
+                        <Box sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            color: 'secondary.main',
+                            px: 2, 
+                            pt: 2, 
+                            pb: 3 
+                        }}>
+                            {t('No Assets') as string}
+                        </Box>
+                      </Grid>
+                    )}
+                    
 
                 </Grid>
                 <Backdrop
