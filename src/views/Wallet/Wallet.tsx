@@ -48,8 +48,8 @@ import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
-import ArWalletRecord from './ArWallet'
-import AoTokenRecord from './AoToken'
+import ArWallet from './ArWallet'
+import AoToken from './AoToken'
 
 import { useRouter } from 'next/router'
 
@@ -1018,7 +1018,7 @@ const Wallet = () => {
             )}
 
             {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && ( 
-              <ArWalletRecord 
+              <ArWallet 
                 currentWalletTxs={currentWalletTxs} 
                 isDisabledButton={isDisabledButton} 
                 currentAddress={currentAddress} 
@@ -1029,7 +1029,7 @@ const Wallet = () => {
             )}
 
             {pageModel == 'ViewToken' && authConfig.tokenName == "AR" && ( 
-              <AoTokenRecord 
+              <AoToken 
                 currentWalletTxs={currentWalletTxs} 
                 isDisabledButton={isDisabledButton} 
                 currentAddress={currentAddress} 
