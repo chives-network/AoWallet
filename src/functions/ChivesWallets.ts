@@ -305,7 +305,12 @@ export function addMyAoToken(Address: string, TokenInfor: any) {
     if (Address && Address.length === 43) {
         const chivesTokenInforData = window.localStorage.getItem(chivesMyAoTokens)
         const chivesTokenInforObject = chivesTokenInforData ? JSON.parse(chivesTokenInforData) : {}
-        chivesTokenInforObject[Address] = [...chivesTokenInforObject[Address], ...[TokenInfor]]
+        if(chivesTokenInforObject[Address]) {
+            chivesTokenInforObject[Address] = [...chivesTokenInforObject[Address], ...[TokenInfor]]
+        }
+        else {
+            chivesTokenInforObject[Address] = [TokenInfor]
+        }
         window.localStorage.setItem(chivesMyAoTokens, JSON.stringify(chivesTokenInforObject))
     }
     
