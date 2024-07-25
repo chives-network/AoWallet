@@ -28,7 +28,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
@@ -90,7 +90,7 @@ const Wallet = () => {
   const [currentWalletTxsHasNextPage, setCurrentWalletTxsHasNextPage] = useState<any>({'Sent': true, 'Received': true, 'AllTxs': true})
 
   const [mySavingTokensData, setMySavingTokensData] = useState<any[]>([])
-  const [assetsAll, setAssetsAll] = useState<any[]>([])
+  const [allTokensData, setAllTokensData] = useState<any[]>([])
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
@@ -247,10 +247,12 @@ const Wallet = () => {
   useEffect(() => {
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
-        const currentBalance = await getWalletBalance(currentAddress);
-        setCurrentBalance(Number(currentBalance).toFixed(4))
+        
         
         if(authConfig.tokenType == "XWE")  {
+          const currentBalance = await getWalletBalance(currentAddress);
+          setCurrentBalance(Number(currentBalance).toFixed(4))
+
           const getTxsInMemoryData = await getTxsInMemory()
           setCurrentTxsInMemory(getTxsInMemoryData)
           const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress)
@@ -266,10 +268,15 @@ const Wallet = () => {
         }
 
         if(authConfig.tokenType == "AR")  {
-          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun("Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk", String(currentAddress))
+
+          handleGetMySavingTokensData()
+
+          const currentBalance = await getWalletBalance(currentAddress);
+          setCurrentBalance(Number(currentBalance).toFixed(4))
+
+          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
           
-          handleGetMySavingTokensData()
         }
 
       }
@@ -342,30 +349,10 @@ const Wallet = () => {
       getPriceDataFunction()
     }
     if(pageModel == "ManageAssets") {
-      handleGetServerData()
+      
+      //handleGetServerData()
     }
   }, [pageModel])
-
-  const handleGetServerData = async () => {
-    setIsDisabledButton(true)
-    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
-    if(ChivesServerDataGetTokensData1) {
-        const dataArray = Object.values(ChivesServerDataGetTokensData1);
-        dataArray.sort((a: any, b: any) => {
-            if (a.TokenGroup == b.TokenGroup) {
-                return Number(a.TokenSort) - Number(b.TokenSort);
-            } else {
-                return a.TokenGroup.localeCompare(b.TokenGroup);
-            }
-        });
-        setAssetsAll(dataArray)
-        console.log("ChivesServerDataGetTokensData1 dataArray", dataArray)
-    }
-    setIsDisabledButton(false)
-
-  }
-
-  
 
   const handleWalletCopyAddress = () => {
     navigator.clipboard.writeText(chooseWallet.data.arweave.key);
@@ -465,6 +452,11 @@ const Wallet = () => {
   }
 
   const handleGetMySavingTokensData = async () => {
+    const getMyAoTokensData = getMyAoTokens(currentAddress)
+    if(getMyAoTokensData) {      
+      setMySavingTokensData(getMyAoTokensData)
+    }
+
     const MyProcessTxIdsGetTokensData = await MyProcessTxIdsGetTokens(authConfig.AoConnectMyProcessTxIds, currentAddress);
     if (MyProcessTxIdsGetTokensData) {
         const dataArray = Object.values(MyProcessTxIdsGetTokensData);
@@ -475,10 +467,39 @@ const Wallet = () => {
                 return a.TokenGroup.localeCompare(b.TokenGroup);
             }
         });
-        setMySavingTokensData(dataArray)
+        const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
+        setMyAoTokens(currentAddress, dataArrayFilter)
+        console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
     }
+    
+    handleGetAllTokensData()
+
   }
   
+  const handleGetAllTokensData = async () => {
+
+    const getAllAoTokensData = getAllAoTokens(currentAddress)
+    if(getAllAoTokensData) {      
+      setAllTokensData(getAllAoTokensData)
+    }
+
+    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
+    if(ChivesServerDataGetTokensData1) {
+        const dataArray = Object.values(ChivesServerDataGetTokensData1);
+        dataArray.sort((a: any, b: any) => {
+            if (a.TokenGroup == b.TokenGroup) {
+                return Number(a.TokenSort) - Number(b.TokenSort);
+            } else {
+                return a.TokenGroup.localeCompare(b.TokenGroup);
+            }
+        });
+        const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
+        setAllAoTokens(currentAddress, dataArrayFilter)
+        console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
+    }
+
+
+  }
 
   const themeSlider = createTheme({
     components: {
@@ -528,7 +549,7 @@ const Wallet = () => {
                       >
                       </CustomAvatar>
                       <Typography variant="h5" mt={6}>
-                        {currentBalance} {authConfig.tokenName}
+                        {Number(currentBalance)} {authConfig.tokenName}
                       </Typography>
                       {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
                         <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
@@ -628,7 +649,7 @@ const Wallet = () => {
                                         textAlign: 'left'
                                       }}
                                     >
-                                      {currentBalance}
+                                      {Number(currentBalance)}
                                     </Typography>
                                   </Box>
                                 </Box>
@@ -638,10 +659,10 @@ const Wallet = () => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    mr: 1,
+                                    mr: 2,
                                     ml: 2
                                   }}>
-                                    {currentBalance}
+                                    {Number(currentBalance) > 0 ? Number(currentBalance).toFixed(4) : '0'}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -683,7 +704,7 @@ const Wallet = () => {
                                           textAlign: 'left'
                                         }}
                                       >
-                                        {currentAoBalance}
+                                        {Number(currentAoBalance)}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -696,7 +717,7 @@ const Wallet = () => {
                                       mr: 2,
                                       ml: 2
                                     }}>
-                                      {Number(currentAoBalance).toFixed(4)}
+                                      {Number(currentAoBalance) > 0 ? Number(currentAoBalance).toFixed(4) : '0'}
                                     </Typography>
                                   </Box>
                                 </Box>
@@ -711,7 +732,7 @@ const Wallet = () => {
                               TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
                             }
                             catch(e: any) {
-                              console.log("assetsAll List", e)
+                              console.log("allTokensData List", e)
                             }
 
                             return (
@@ -1136,14 +1157,14 @@ const Wallet = () => {
                       />
                     </Grid>
                     <Grid container spacing={2}>
-                    {assetsAll.map((Token: any, index: number) => {
+                    {allTokensData.map((Token: any, index: number) => {
 
                       let TokenData: any = {}
                       try {
                         TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
                       }
                       catch(e: any) {
-                        console.log("assetsAll List", e)
+                        console.log("allTokensData List", e)
                       }
 
                       return (

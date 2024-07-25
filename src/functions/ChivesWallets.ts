@@ -29,6 +29,8 @@ const chivesLanguage: string = authConfig.chivesLanguage
 const chivesProfile: string = authConfig.chivesProfile
 const chivesReferee: string = authConfig.chivesReferee
 const chivesContacts: string = authConfig.chivesContacts
+const chivesMyAoTokens: string = authConfig.chivesMyAoTokens
+const chivesAllAoTokens: string = authConfig.chivesAllAoTokens
 
 
 export async function generateNewMnemonicAndGetWalletData (mnemonic: string) {
@@ -288,7 +290,45 @@ export function deleteWalletByWallet(WalletJwk: any) {
     return true
 };
 
+export function setMyAoTokens(Address: string, MyAoTokens: any) {
+    if (Address && Address.length === 43) {
+        const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)
+        const chivesMyAoTokensObject = chivesMyAoTokensData ? JSON.parse(chivesMyAoTokensData) : {}
+        chivesMyAoTokensObject[Address] = MyAoTokens
+        window.localStorage.setItem(chivesMyAoTokens, JSON.stringify(chivesMyAoTokensObject))
+    }
+    
+    return true
+}
 
+export function getMyAoTokens(Address: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)
+        const chivesMyAoTokensObject = chivesMyAoTokensData ? JSON.parse(chivesMyAoTokensData) : {}
+        
+        return chivesMyAoTokensObject[Address] ?? []
+    }
+}
+
+export function setAllAoTokens(Address: string, AllAoTokens: any) {
+    if (Address && Address.length === 43) {
+        const chivesAllAoTokensData = window.localStorage.getItem(chivesAllAoTokens)
+        const chivesAllAoTokensObject = chivesAllAoTokensData ? JSON.parse(chivesAllAoTokensData) : {}
+        chivesAllAoTokensObject[Address] = AllAoTokens
+        window.localStorage.setItem(chivesAllAoTokens, JSON.stringify(chivesAllAoTokensObject))
+    }
+    
+    return true
+}
+
+export function getAllAoTokens(Address: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesAllAoTokensData = window.localStorage.getItem(chivesAllAoTokens)
+        const chivesAllAoTokensObject = chivesAllAoTokensData ? JSON.parse(chivesAllAoTokensData) : {}
+        
+        return chivesAllAoTokensObject[Address] ?? []
+    }
+}
 
 export async function getWalletBalance(Address: string) {    
     try {
