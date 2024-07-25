@@ -49,6 +49,7 @@ import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
 import ArWalletRecord from './ArWalletRecord'
+import AoTokenRecord from './AoTokenRecord'
 
 import { useRouter } from 'next/router'
 
@@ -83,6 +84,7 @@ const Wallet = () => {
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
+  const [chooseToken, setChooseToken] = useState<any>(null)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
   const [contactsAll, setContactsAll] = useState<any>({})
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
@@ -148,6 +150,7 @@ const Wallet = () => {
       case 'SendMoneySelectContact':
       case 'SendMoneyInputAmount':
       case 'ManageAssets':
+      case 'ViewToken':
         handleWalletGoHome()
         break
       case 'MainWallet':
@@ -248,7 +251,6 @@ const Wallet = () => {
   useEffect(() => {
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
-        
         
         if(authConfig.tokenType == "XWE")  {
           const currentBalanceTemp = await getWalletBalance(currentAddress);
@@ -415,6 +417,15 @@ const Wallet = () => {
     setTitle(t('Manage Assets') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:add')
+  }
+
+  const handleClickViewTokenButton = (Token: any) => {
+    setPageModel('ViewToken')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('View Asset') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+    setChooseToken(Token)
   }
 
 
@@ -812,7 +823,7 @@ const Wallet = () => {
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                                 <Card>
-                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>handleClickViewTokenButton(Token)}>
                                     <CustomAvatar
                                       skin='light'
                                       color={'primary'}
@@ -1007,7 +1018,27 @@ const Wallet = () => {
             )}
 
             {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && ( 
-              <ArWalletRecord currentWalletTxs={currentWalletTxs} isDisabledButton={isDisabledButton} currentAddress={currentAddress} handleChangeActiveTab={handleChangeActiveTab} activeTab={activeTab} currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}/>
+              <ArWalletRecord 
+                currentWalletTxs={currentWalletTxs} 
+                isDisabledButton={isDisabledButton} 
+                currentAddress={currentAddress} 
+                handleChangeActiveTab={handleChangeActiveTab} 
+                activeTab={activeTab} 
+                currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}
+                />
+            )}
+
+            {pageModel == 'ViewToken' && authConfig.tokenName == "AR" && ( 
+              <AoTokenRecord 
+                currentWalletTxs={currentWalletTxs} 
+                isDisabledButton={isDisabledButton} 
+                currentAddress={currentAddress} 
+                handleChangeActiveTab={handleChangeActiveTab} 
+                activeTab={activeTab} 
+                currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}
+                chooseToken={chooseToken}
+                myAoTokensBalance={myAoTokensBalance}
+                />
             )}
 
             {pageModel == 'ReceiveMoney' && ( 

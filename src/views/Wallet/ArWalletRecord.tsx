@@ -34,23 +34,23 @@ const ArWalletRecord = ({ currentWalletTxs, isDisabledButton, currentAddress, ha
         <Box
             component='header'
             sx={{
-            backgroundColor: 'background.paper',
-            width: '91%',
-            zIndex: 10,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            top: -10,
-            position: 'fixed',
-            mt: '48px',
-            height: '48px'
+                backgroundColor: 'background.paper',
+                width: '100%',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'fixed',
+                top: 45,
+                ml: -4,
+                height: '40px'
             }}
         >
             <Tabs
-            value={activeTab}
-            onChange={handleChangeActiveTab}
-            aria-label="icon position tabs example"
-            sx={{ height: '48px', my: 0, py: 0}}
+                value={activeTab}
+                onChange={handleChangeActiveTab}
+                aria-label="icon position tabs example"
+                sx={{ my: 0, py: 0}}
             >
             <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
             <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
