@@ -26,7 +26,7 @@ import { BigNumber } from 'bignumber.js'
 import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions } from 'src/functions/AoConnect/Token'
 import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
-const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any) => {
+const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page } : any) => {
 
     const { t } = useTranslation()
 
@@ -42,11 +42,10 @@ const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any)
     console.log("chooseToken", TokenData, myAoTokensBalance)
 
     const [tokenListAction, setTokenListAction] = useState<string>("Holders")
-    const [pageId, setPageId] = useState<number>(1)
     const [pageCount, setPageCount] = useState<number>(0)
-    const [startIndex, setStartIndex] = useState<number>(1)
-    const [endIndex, setEndIndex] = useState<number>(10)
-    const pageSize = 10
+    const pageSize = 20
+    const startIndex = TokenData.Release == "ChivesToken" ? (page) * pageSize : 0
+    const endIndex = (page+1) * pageSize
     
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [holdersNumber, setHoldersNumber] = useState<number>(0)
@@ -60,37 +59,35 @@ const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any)
 
     const handleChangeActiveTab = (event: any, value: string) => {
         setTokenListAction(value)
-        console.log("handleChangeActiveTab", event, pageCount, pageCount)
-        setPageId(1)
+        console.log("handleChangeActiveTab", event, pageCount, "startIndex", startIndex, "endIndex", endIndex)
     }
+    console.log("handleChangeActiveTab", "startIndex", startIndex, "endIndex", endIndex)
 
     useEffect(()=>{
         if(TokenData && TokenData.TokenId) {
-            setStartIndex((pageId - 1) * pageSize + 1) //start with 1, not 0
-            setEndIndex((pageId) * pageSize)
             switch(tokenListAction) {
                 case 'AllTxs':
                     handleAoTokenAllTransactions(TokenData.TokenId)
-                    console.log("handleAoTokenAllTransactions", pageId, TokenData)
+                    console.log("handleAoTokenAllTransactions", page, TokenData)
                     break;
                 case 'MyTxs':
                     handleAoTokenMyAllTransactions(TokenData.TokenId)
-                    console.log("handleAoTokenMyAllTransactions", pageId, TokenData)
+                    console.log("handleAoTokenMyAllTransactions", page, TokenData)
                     break;
                 case 'Sent':
                     handleAoTokenSentTransactions(TokenData.TokenId)
-                    console.log("handleAoTokenSentTransactions", pageId, TokenData)
+                    console.log("handleAoTokenSentTransactions", page, TokenData)
                     break;
                 case 'Received':
                     handleAoTokenReceivedTransactions(TokenData.TokenId)
-                    console.log("handleAoTokenReceivedTransactions", pageId, TokenData)
+                    console.log("handleAoTokenReceivedTransactions", page, TokenData)
                     break;
                 case 'Holders':
                     handleTokenBalancesPagination()
                     break;
             }
         }
-    }, [pageId, tokenListAction])
+    }, [page, tokenListAction])
 
     const handleAoTokenAllTransactions = async function (CurrentToken: string) {
         try{
@@ -160,7 +157,7 @@ const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any)
         if(TokenData && TokenData.Release == "ChivesToken") {
             await handleAoTokenBalancesDryRunChivesToken(TokenData.TokenId, TokenData.Denomination)
         }
-        else {
+        else if(page == 0){
             await handleAoTokenBalancesDryRunOfficialToken(TokenData.TokenId, TokenData.Denomination)
         }
     }
@@ -392,7 +389,7 @@ const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any)
                     )
                 })}
 
-                {TokenData.Release != "ChivesToken" && tokenListAction == "Holders" && tokenHoldersTxsOfficialToken && tokenHoldersTxsOfficialToken.map((TokenIdValue: string, index: number) => {
+                {TokenData.Release != "ChivesToken" && tokenListAction == "Holders" && tokenHoldersTxsOfficialToken && tokenHoldersTxsOfficialToken.slice(startIndex, endIndex).map((TokenIdValue: string, index: number) => {
 
                     return (
                         <Grid item xs={12} sx={{ py: 0 }} key={index}>
@@ -766,4 +763,4 @@ const AoTokenRecord = ({ currentAddress, chooseToken, myAoTokensBalance } : any)
 
 }
 
-export default AoTokenRecord
+export default AoToken

@@ -20,7 +20,7 @@ import { formatHash, formatTimestamp } from 'src/configs/functions'
 import Tabs from '@mui/material/Tabs';
 
 
-const ArWalletRecord = ({ currentWalletTxs, isDisabledButton, currentAddress, handleChangeActiveTab, activeTab, currentWalletTxsHasNextPage } : any) => {
+const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleChangeActiveTab, activeTab, currentWalletTxsHasNextPage } : any) => {
 
   const { t } = useTranslation()
 
@@ -204,4 +204,4 @@ const ArWalletRecord = ({ currentWalletTxs, isDisabledButton, currentAddress, ha
 
 }
 
-export default ArWalletRecord
+export default ArWallet

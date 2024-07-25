@@ -426,6 +426,7 @@ const Wallet = () => {
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
     setChooseToken(Token)
+    setPage(0)
   }
 
 
@@ -1030,14 +1031,10 @@ const Wallet = () => {
 
             {pageModel == 'ViewToken' && authConfig.tokenName == "AR" && ( 
               <AoToken 
-                currentWalletTxs={currentWalletTxs} 
-                isDisabledButton={isDisabledButton} 
                 currentAddress={currentAddress} 
-                handleChangeActiveTab={handleChangeActiveTab} 
-                activeTab={activeTab} 
-                currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}
                 chooseToken={chooseToken}
                 myAoTokensBalance={myAoTokensBalance}
+                page={page}
                 />
             )}
 
