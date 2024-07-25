@@ -48,8 +48,8 @@ import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
-import ArWalletRecord from './ArWalletRecord'
-import AoTokenRecord from './AoTokenRecord'
+import ArWalletRecord from './ArWallet'
+import AoTokenRecord from './AoToken'
 
 import { useRouter } from 'next/router'
 
