@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
+import Typography, { TypographyProps } from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
@@ -33,9 +33,10 @@ import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 import TextField2 from 'src/views/Layout/TextField2'
 import { useRouter } from 'next/router'
+import { useDropzone } from 'react-dropzone'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet } from 'src/functions/ChivesWallets'
-import { generateNewMnemonicAndGetWalletData, importWalletJsonFile } from 'src/functions/ChivesWallets'
+import { generateNewMnemonicAndGetWalletData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -162,7 +163,8 @@ const MyWallet = () => {
   const handleCreateWalletMenu = () => {
     const bottomMenusList: any[] = []
     bottomMenusList.push({icon: 'material-symbols:add', title: t('Add Wallet'), function: 'handleWalletCreate'})
-    bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Key'), function: 'handleWalletImportKey'})
+    bottomMenusList.push({icon: 'mdi:code-json', title: t('Import Key'), function: 'handleWalletImportKey'})
+    bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Json File'), function: 'handleWalletImportJsonFile'})
     setBottomMenus(bottomMenusList)
     setDrawerStatus(true)
   }
@@ -186,14 +188,23 @@ const MyWallet = () => {
 
   const handleWalletImportKey = () => {
     setPageModel('ImportKey')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('mdi:code-json')
     setTitle(t('Import Key') as string)
     setRightButtonText('')
   }
 
+  const handleWalletImportJsonFile = () => {
+    setPageModel('ImportJsonFile')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Import Json File') as string)
+    setRightButtonText('')
+  }
+
+  
+
   const handleWalletCreateWalletData = async () => {
     setIsLoading(true)
-    const NewWalletData = await generateNewMnemonicAndGetWalletData("")
+    const NewWalletData: any = await generateNewMnemonicAndGetWalletData("")
     console.log("NewWalletData", NewWalletData)
     if(NewWalletData) {
         setIsLoading(false)
@@ -213,9 +224,9 @@ const MyWallet = () => {
         toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
       }
       else {
-        const NewWalletData = await importWalletJsonFile(ImportWallet)
-        if(NewWalletData) {
-            setWalletNickname(NewWalletData.data.arweave.key, chooseWalletName)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet)
+        if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
+            setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName)
             setChooseWalletName('')
             setImportKeyValue('')
             handleWalletGoHome()
@@ -289,6 +300,52 @@ const MyWallet = () => {
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('ListWallet')
   }
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    multiple: false,
+    accept: {
+      'image/*': ['.json']
+    },
+    onDrop: (acceptedFiles: File[]) => {
+        acceptedFiles.map((file: File) => {
+            handleImportWalletJsonFile(file)
+        })
+    }
+  })
+  
+  const handleImportWalletJsonFile = async (file: File) => {
+    const jsonFileContent: string = await readFileText(file)
+    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent))
+    
+    if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
+        setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6))
+        handleWalletGoHome()
+        toast.success(t('Import Json Files Success') as string, { duration: 1000, position: 'top-center' })
+    }
+    else {      
+      toast.error(t('Import Json Files Failed') as string, { duration: 2500, position: 'top-center' })
+      handleWalletGoHome()
+    }
+  };
+
+  const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
+    marginBottom: theme.spacing(5),
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: theme.spacing(4)
+    }
+  }))
+
+  const Img = styled('img')(({ theme }) => ({
+    [theme.breakpoints.up('md')]: {
+      marginRight: theme.spacing(15.75)
+    },
+    [theme.breakpoints.down('md')]: {
+      marginBottom: theme.spacing(4)
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: 160
+    }
+  }))
 
 
   return (
@@ -452,6 +509,9 @@ const MyWallet = () => {
                           case 'handleWalletImportKey':
                             handleWalletImportKey();
                             break;
+                          case 'handleWalletImportJsonFile':
+                            handleWalletImportJsonFile();
+                            break;
                         }
                       }}>
                         <ListItemButton>
@@ -558,6 +618,49 @@ const MyWallet = () => {
                 </Grid>
                       
                 
+              </Fragment>
+              }
+              
+              
+            </Grid>
+          )}
+
+          {pageModel == 'ImportJsonFile' && ( 
+            <Grid container spacing={2}>
+
+              {isLoading ? 
+              <Fragment>
+                <CardContent>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12}>
+                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
+                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+              </Fragment>
+              :
+              <Fragment>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                  <Grid container spacing={2}>
+                    <Box sx={{width: '100%', mr: 2}}>
+                      <CardContent>
+                        <Box {...getRootProps({ className: 'dropzone' })} sx={acceptedFiles.length ? {} : {}}>
+                            <input {...getInputProps()} />
+                            <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
+                                <Img alt='Upload img' src='/images/misc/upload.png' />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+                                    <HeadingTypography variant='h5'>{`${t(`Click to choose your json file`)}`}</HeadingTypography>
+                                </Box>
+                            </Box>
+                        </Box>
+                      </CardContent>
+                    </Box>
+                  </Grid>
+                </Grid>
+                      
               </Fragment>
               }
               

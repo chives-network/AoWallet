@@ -102,31 +102,42 @@ export async function importWalletJsonFile (wallet: any) {
     const chivesWalletsList = window.localStorage.getItem(chivesWallets)      
     const walletExists = chivesWalletsList ? JSON.parse(chivesWalletsList) : []
     
-    //Get Wallet Max Id
-    let walletId = 0
-    while (walletExists.find((w: any) => +w.id === walletId)) { walletId++ }
-    
-    //Make walletData
-    const walletData: any = {...mnemonicToJwkValue}
-    walletData.id ??= walletId
-    walletData.uuid ??= v4() as string
-    walletData.settings ??= {}
-    walletData.state ??= {"hot": true}
-    
-    //Make Addresss From Jwk
-    const key = await arweave.wallets.jwkToAddress(walletData.jwk as any)
-    const publicKey = walletData.jwk.n
-    walletData.data ??= {}
-    walletData.data.arweave = { key, publicKey }            
-    
-    //Write New Wallet Data to LocalStorage
-    walletExists.push(walletData)
-    window.localStorage.setItem(chivesWallets, JSON.stringify(walletExists))
+    //Check wallet exist
+    const WalletExistFilter = walletExists.filter((item: any)=>item.jwk.n==wallet.n)
+    console.log("WalletExistFilter", WalletExistFilter)
+    if(WalletExistFilter && WalletExistFilter.length == 0)  {
 
-    //const addFileToJwkValue = await addFileToJwk('')
-    //console.log("addImportDataValue:", addImportDataValue)
+        //Get Wallet Max Id
+        let walletId = 0
+        while (walletExists.find((w: any) => +w.id === walletId)) { walletId++ }
+        
+        //Make walletData
+        const walletData: any = {...mnemonicToJwkValue}
+        walletData.id ??= walletId
+        walletData.uuid ??= v4() as string
+        walletData.settings ??= {}
+        walletData.state ??= {"hot": true}
+    
+        //Make Addresss From Jwk
+        const key = await arweave.wallets.jwkToAddress(walletData.jwk as any)
+        const publicKey = walletData.jwk.n
+        walletData.data ??= {}
+        walletData.data.arweave = { key, publicKey }            
+        
+        //Write New Wallet Data to LocalStorage
+        walletExists.push(walletData)
+        window.localStorage.setItem(chivesWallets, JSON.stringify(walletExists))
+    
+        //const addFileToJwkValue = await addFileToJwk('')
+        //console.log("addImportDataValue:", addImportDataValue)
 
-    return walletData
+        return key
+    }
+    else {
+
+        return ''
+    }
+
 };
 
 export async function checkMnemonicValidity (newMnemonic: string) {
