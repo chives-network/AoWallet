@@ -170,7 +170,8 @@ const Wallet = () => {
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({})
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
-
+  const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
+  
   
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
@@ -250,8 +251,10 @@ const Wallet = () => {
         
         
         if(authConfig.tokenType == "XWE")  {
-          const currentBalance = await getWalletBalance(currentAddress);
-          setCurrentBalance(Number(currentBalance).toFixed(4))
+          const currentBalanceTemp = await getWalletBalance(currentAddress);
+          if(currentBalanceTemp) {
+            setCurrentBalance(Number(currentBalanceTemp).toFixed(4))
+          }
 
           const getTxsInMemoryData = await getTxsInMemory()
           setCurrentTxsInMemory(getTxsInMemoryData)
@@ -261,7 +264,7 @@ const Wallet = () => {
           }
 
           if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
-            const MinusBalance = BalanceMinus(Number(currentBalance) , Number(currentTxsInMemory['send'][currentAddress]))
+            const MinusBalance = BalanceMinus(Number(currentBalanceTemp) , Number(currentTxsInMemory['send'][currentAddress]))
             setCurrentBalance(Number(MinusBalance).toFixed(4))
           }
 
@@ -271,8 +274,10 @@ const Wallet = () => {
 
           handleGetMySavingTokensData()
 
-          const currentBalance = await getWalletBalance(currentAddress);
-          setCurrentBalance(Number(currentBalance).toFixed(4))
+          const currentBalanceTemp = await getWalletBalance(currentAddress);
+          if(currentBalanceTemp) {
+            setCurrentBalance(Number(currentBalanceTemp).toFixed(4))
+          }
 
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
@@ -476,21 +481,28 @@ const Wallet = () => {
       setMySavingTokensData(getMyAoTokensData)
     }
 
-    const MyProcessTxIdsGetTokensData = await MyProcessTxIdsGetTokens(authConfig.AoConnectMyProcessTxIds, currentAddress);
-    if (MyProcessTxIdsGetTokensData) {
-        const dataArray = Object.values(MyProcessTxIdsGetTokensData);
-        dataArray.sort((a: any, b: any) => {
-            if (a.TokenGroup == b.TokenGroup) {
-                return Number(a.TokenSort) - Number(b.TokenSort);
-            } else {
-                return a.TokenGroup.localeCompare(b.TokenGroup);
-            }
-        });
-        const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
-        setMyAoTokens(currentAddress, dataArrayFilter)
-        setMySavingTokensData(dataArrayFilter)
-        console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
+    try {
+      const MyProcessTxIdsGetTokensData = await MyProcessTxIdsGetTokens(authConfig.AoConnectMyProcessTxIds, currentAddress);
+      if (MyProcessTxIdsGetTokensData) {
+          const dataArray = Object.values(MyProcessTxIdsGetTokensData);
+          dataArray.sort((a: any, b: any) => {
+              if (a.TokenGroup == b.TokenGroup) {
+                  return Number(a.TokenSort) - Number(b.TokenSort);
+              } else {
+                  return a.TokenGroup.localeCompare(b.TokenGroup);
+              }
+          });
+          const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
+          setMyAoTokens(currentAddress, dataArrayFilter)
+          setMySavingTokensData(dataArrayFilter)
+          console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
+      }
     }
+    catch(e: any) {
+      console.log("handleGetMySavingTokensData Error", e)      
+    }
+
+    handleGetMySavingTokensBalance()
 
     handleGetAllTokensData()
 
@@ -503,6 +515,34 @@ const Wallet = () => {
     return difference;
   }
 
+  const handleGetMySavingTokensBalance = async () => {
+
+    const getMyAoTokensData = getMyAoTokens(currentAddress);
+    const myAoTokensBalanceTemp: any = {};
+    try {
+      if (getMyAoTokensData) {
+        Promise.all(
+          getMyAoTokensData.map(async (Token: any) => {
+            const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
+            if (AoDryRunBalance) {
+              const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'));
+              const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenData.Denomination ? TokenData.Denomination : '12');
+              if (!myAoTokensBalanceTemp[currentAddress]) {
+                myAoTokensBalanceTemp[currentAddress] = {};
+              }
+              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = AoDryRunBalanceCoin;
+            }
+          })
+        ).then(() => {
+          setMyAoTokensBalance(myAoTokensBalanceTemp);
+        });
+      }
+    }
+    catch(e: any) {
+      console.log("handleGetMySavingTokensBalance Error", e)      
+    }
+  }
+
   
   const handleGetAllTokensData = async () => {
 
@@ -510,21 +550,26 @@ const Wallet = () => {
     if(getAllAoTokensData) {      
       setAllTokensData(getAllAoTokensData)
     }
-
-    const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
-    if(ChivesServerDataGetTokensData1) {
-        const dataArray = Object.values(ChivesServerDataGetTokensData1);
-        dataArray.sort((a: any, b: any) => {
-            if (a.TokenGroup == b.TokenGroup) {
-                return Number(a.TokenSort) - Number(b.TokenSort);
-            } else {
-                return a.TokenGroup.localeCompare(b.TokenGroup);
-            }
-        });
-        const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
-        setAllAoTokens(currentAddress, dataArrayFilter)
-        setAllTokensData(dataArrayFilter)
-        console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
+    
+    try {
+      const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
+      if(ChivesServerDataGetTokensData1) {
+          const dataArray = Object.values(ChivesServerDataGetTokensData1);
+          dataArray.sort((a: any, b: any) => {
+              if (a.TokenGroup == b.TokenGroup) {
+                  return Number(a.TokenSort) - Number(b.TokenSort);
+              } else {
+                  return a.TokenGroup.localeCompare(b.TokenGroup);
+              }
+          });
+          const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
+          setAllAoTokens(currentAddress, dataArrayFilter)
+          setAllTokensData(dataArrayFilter)
+          console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
+      }
+    }
+    catch(e: any) {
+      console.log("handleGetAllTokensData Error", e)      
     }
 
 
@@ -761,7 +806,7 @@ const Wallet = () => {
                               TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
                             }
                             catch(e: any) {
-                              console.log("allTokensData List", e)
+                              console.log("allTokensData Error", e)
                             }
 
                             return (
@@ -812,7 +857,7 @@ const Wallet = () => {
                                         mr: 2,
                                         ml: 2
                                       }}>
-                                        0
+                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : ''}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -1201,7 +1246,7 @@ const Wallet = () => {
                         TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
                       }
                       catch(e: any) {
-                        console.log("allTokensData List", e)
+                        console.log("allTokensData Error", e)
                       }
 
                       return (
@@ -1266,7 +1311,7 @@ const Wallet = () => {
                         TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
                       }
                       catch(e: any) {
-                        console.log("allTokensData List", e)
+                        console.log("allTokensData Error", e)
                       }
 
                       return (
