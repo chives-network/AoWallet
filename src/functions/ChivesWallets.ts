@@ -32,6 +32,20 @@ const chivesContacts: string = authConfig.chivesContacts
 const chivesMyAoTokens: string = authConfig.chivesMyAoTokens
 const chivesAllAoTokens: string = authConfig.chivesAllAoTokens
 
+export async function generateArWalletJsonData () {
+    
+    try {
+        const ArWalletJsonData = await arweave.wallets.generate()
+            
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData)
+
+        return ImportJsonFileWalletAddress
+
+    } 
+    catch (error) {
+        console.log('Error generateNewMnemonicAndGetJwk:', error);
+    }
+}
 
 export async function generateNewMnemonicAndGetWalletData (mnemonic: string) {
     try {
@@ -41,9 +55,7 @@ export async function generateNewMnemonicAndGetWalletData (mnemonic: string) {
         }
         const isValidMnemonic = await validateMnemonic(newMnemonic);
         if(isValidMnemonic) {
-            
-            //console.log("validateMnemonic:", newMnemonic)
-            
+
             const mnemonicToJwkValue = await mnemonicToJwk(newMnemonic)
             
             //console.log("mnemonicToJwkValue:", mnemonicToJwkValue)

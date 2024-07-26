@@ -36,7 +36,7 @@ import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet } from 'src/functions/ChivesWallets'
-import { generateNewMnemonicAndGetWalletData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
+import { generateArWalletJsonData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -204,13 +204,14 @@ const MyWallet = () => {
 
   const handleWalletCreateWalletData = async () => {
     setIsLoading(true)
-    const NewWalletData: any = await generateNewMnemonicAndGetWalletData("")
-    console.log("NewWalletData", NewWalletData)
-    if(NewWalletData) {
-        setIsLoading(false)
-        setWalletNickname(NewWalletData.data.arweave.key, chooseWalletName)
+    const ImportJsonFileWalletAddress: any = await generateArWalletJsonData()
+    if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
+        setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName)
+        setChooseWalletName('')
+        setImportKeyValue('')
         handleWalletGoHome()
     }
+    setIsLoading(false)
   }
 
   const handleWalletImportKeyData = async () => {
@@ -383,7 +384,7 @@ const MyWallet = () => {
                   <DialogContent>
                       <DialogContentText id='alert-dialog-description'>
                       {`${t(`Once this wallet is deleted, it cannot be restored.`)}`}
-                      {`${t(`Do you want delete this wallet`)}`} {chooseWallet.data.arweave.key} ?
+                      {`${t(`Do you want delete this wallet`)}`} {formatHash(chooseWallet.data.arweave.key, 5)} ?
                       </DialogContentText>
                   </DialogContent>
                   <DialogActions className='dialog-actions-dense'>
