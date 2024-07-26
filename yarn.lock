@@ -64,10 +64,35 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@capacitor/action-sheet@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/action-sheet/-/action-sheet-6.0.1.tgz"
+  integrity sha512-l6yY0x0WymWAvieWa7I1hq7URjlzKIeXfCyIBqu+GQUEVSdMv7spDFMepFtlHfIuk2YqyZgY8ko+sGLoKjRd7Q==
+
 "@capacitor/android@^6.1.1":
   version "6.1.1"
   resolved "https://registry.npmjs.org/@capacitor/android/-/android-6.1.1.tgz"
   integrity sha512-rhO/nH6NJizGV5KizoIoGxCmkos3HnyUzI9TNv8IVy/C8h6lPM5Gt9cxGclb6k0OBTtgv6iJVo654+m4kzv0Qg==
+
+"@capacitor/app@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@capacitor/app/-/app-6.0.0.tgz"
+  integrity sha512-X5UGd90Jh5p9rmoPyMqFyFWqOypdJgVJhYcM5X1YyDVJJGzmJ5MuYv1+ajj5DW9Qyh+5a3th9WYptdGby8jidA==
+
+"@capacitor/background-runner@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@capacitor/background-runner/-/background-runner-1.1.0.tgz"
+  integrity sha512-W5NAccuuIulPJzvT+8oRu3IypDWSiHKLPp05tcaxvTPRwpiuDMSPC4f3cHXpVI6luYlx/sNHs9g/qFCtXpplsg==
+
+"@capacitor/browser@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/browser/-/browser-6.0.1.tgz"
+  integrity sha512-KBK0PKfmUj0if+gYWEh0+LG70l1gcLGbDCWJt2Ig3naXHGlrLoWBqVArCgbwBzwJZL+VlwW7iEhAzGOWpg2jhw==
+
+"@capacitor/camera@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/camera/-/camera-6.0.1.tgz"
+  integrity sha512-KGfjv8q0Q9OEcpBGqSSZD2yb1KeDe12mlzOOPp4wr6GvcOY0EIvZ0o3KiPXegLVuRZeemz71/lCxPHAQ/5gAiA==
 
 "@capacitor/cli@^6.1.1":
   version "6.1.1"
@@ -93,6 +118,11 @@
     tslib "^2.4.0"
     xml2js "^0.5.0"
 
+"@capacitor/clipboard@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@capacitor/clipboard/-/clipboard-6.0.0.tgz"
+  integrity sha512-NjcGr2jncSZy9NM9grePo8zz0hhBYYBYZV71xXjLvJhVY4PSdZD/Sj+4jm0pvlOKSK8vAXYyF6VcWT4/Kh/xmw==
+
 "@capacitor/core@^6.1.1":
   version "6.1.1"
   resolved "https://registry.npmjs.org/@capacitor/core/-/core-6.1.1.tgz"
@@ -100,10 +130,35 @@
   dependencies:
     tslib "^2.1.0"
 
+"@capacitor/dialog@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@capacitor/dialog/-/dialog-6.0.0.tgz"
+  integrity sha512-TnkfngkfB+t9m6wM/NDCyOjencSHHFBB1rqTDgrcAyoyP+Fjmykg6iRD5W7j9v52vNY2BESPmp692uWNbh88zA==
+
 "@capacitor/ios@^6.1.1":
   version "6.1.1"
   resolved "https://registry.npmjs.org/@capacitor/ios/-/ios-6.1.1.tgz"
   integrity sha512-he6+Fhj6x1dSnOzM98xaPvioOU8MNO+qpodCJwnHE3mIRonTpFutXJK8DP8fnNhjDPk2km9VafLSfOeiZXNv3Q==
+
+"@capacitor/keyboard@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/keyboard/-/keyboard-6.0.1.tgz"
+  integrity sha512-fBjqQaMc5uhFj6ycLnLa2hzQsR77pj/iuLLATkWihMUze3dD+IkwqFnEyOLsyk+52uoOYM7WkziSpNTquU1sZA==
+
+"@capacitor/push-notifications@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/push-notifications/-/push-notifications-6.0.1.tgz"
+  integrity sha512-NFVAnmBsyuTFScTMUrgOr3EKnCl9etGeXignC2Y5QsOoqjT+fhVhIUco9BR7Bi48JGdvK/evqzwt36LMF82bBw==
+
+"@capacitor/share@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/share/-/share-6.0.1.tgz"
+  integrity sha512-KQev3omYZ5hgjoZA+NdFZTuFyu1dd/ZIYkE0RnLBB11ZmFEmGRSCYdYtOyqkVxGU1n6FDDqgPPy13CvAZKWNPQ==
+
+"@capacitor/toast@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/toast/-/toast-6.0.1.tgz"
+  integrity sha512-f3tpRcX60PhJoEDDokZc1+/aLWCNUvvlm9PjqJLEP2OYVYOay8NOBFsxut7j49YD6z6oN6NRd87sb7TI+CREvA==
 
 "@casl/ability@6.5.0":
   version "6.5.0"
