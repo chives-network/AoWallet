@@ -65,6 +65,7 @@
     "i18next-http-backend": "2.2.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
+    "minizlib": "^3.0.1",
     "next": "14.2.5",
     "node-forge": "^1.3.1",
     "npm": "^10.2.3",
@@ -93,6 +94,7 @@
     "secrets.js": "^0.1.8",
     "stylis": "4.1.4",
     "stylis-plugin-rtl": "2.1.1",
+    "tar": "^7.4.3",
     "uuid": "^9.0.1",
     "yup": "1.1.1"
   },
