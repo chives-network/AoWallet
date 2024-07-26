@@ -155,6 +155,11 @@
   resolved "https://registry.npmjs.org/@capacitor/share/-/share-6.0.1.tgz"
   integrity sha512-KQev3omYZ5hgjoZA+NdFZTuFyu1dd/ZIYkE0RnLBB11ZmFEmGRSCYdYtOyqkVxGU1n6FDDqgPPy13CvAZKWNPQ==
 
+"@capacitor/storage@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.npmjs.org/@capacitor/storage/-/storage-1.2.5.tgz"
+  integrity sha512-pWhnw4U7wN/zFV4lA4BLMypSufTktCbk548Yk4whSb0KAq3R0mLfSubRIHkGdcPqQWCsM6g/zUuszurhz6ncWQ==
+
 "@capacitor/toast@^6.0.1":
   version "6.0.1"
   resolved "https://registry.npmjs.org/@capacitor/toast/-/toast-6.0.1.tgz"
