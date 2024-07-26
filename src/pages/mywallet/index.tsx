@@ -1,4 +1,4 @@
-import WalletListModel from 'src/views/MyWallet/WalletList';
+import WalletListModel from 'src/views/MyWallet/MyWallet';
 
 const WalletListModelApp = () => {
 
