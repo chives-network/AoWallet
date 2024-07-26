@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.aowallet',
-  appName: 'com.aowallet',
+  appName: 'AoWallet',
   webDir: 'out'
 };
 
