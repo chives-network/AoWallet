@@ -34,7 +34,7 @@ import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConne
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
 import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
 
-import { AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+import { AoTokenBalanceDryRun, AoTokenTransfer } from 'src/functions/AoConnect/Token'
 
 import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
@@ -42,7 +42,7 @@ import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp } from 'src/configs/functions'
+import { formatHash, formatTimestamp, ansiRegex } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
@@ -85,6 +85,9 @@ const Wallet = () => {
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseToken, setChooseToken] = useState<any>(null)
+  const [chooseTokenBalance, setChooseTokenBalance] = useState<string | null>(null)
+  
+  const [isTokenModel, setIsTokenModel] = useState<boolean>(false)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
   const [contactsAll, setContactsAll] = useState<any>({})
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
@@ -99,11 +102,13 @@ const Wallet = () => {
 
   const [activeTab, setActiveTab] = useState<string>('Sent')
 
+  const currentFeeAO = 0
+
   const handleChangeActiveTab = (event: any, value: string) => {
     setActiveTab(value)
     console.log("handleChangeActiveTab", event)
   }
-
+  
   const preventDefault = (e: any) => {
     e.preventDefault();
   };
@@ -141,6 +146,9 @@ const Wallet = () => {
     setLeftIcon('material-symbols:menu-rounded')
     setTitle(t('Wallet') as string)
     setRightButtonText(t('QR') as string)
+    setChooseToken(null)
+    setChooseTokenBalance(null)
+    setIsTokenModel(false)
   }
   
   const LeftIconOnClick = () => {
@@ -153,6 +161,10 @@ const Wallet = () => {
       case 'ViewToken':
         handleWalletGoHome()
         break
+      case 'ReceiveMoneyAO':
+      case 'SendMoneyInputAmountAO':
+        handleClickViewTokenButtonAO()
+        break;
       case 'MainWallet':
         router.push('/mywallet')
         break
@@ -390,6 +402,14 @@ const Wallet = () => {
     setRightButtonIcon('')
   }
 
+  const handleClickReceiveButtonAO = () => {
+    setPageModel('ReceiveMoneyAO')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Receive') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
   const handleClickAllTxsButton = () => {
     setPageModel('AllTxs')
     setLeftIcon('mdi:arrow-left-thin')
@@ -411,6 +431,16 @@ const Wallet = () => {
     setSendMoneyAddress(null)
   }
 
+  const handleClickSendButtonAO = () => {
+    setPageModel('SendMoneySelectContact')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Select Contact') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+    setSendMoneyAddress(null)
+  }
+
+
   const handleClickManageAssetsButton = () => {
     setPageModel('ManageAssets')
     setLeftIcon('mdi:arrow-left-thin')
@@ -425,16 +455,41 @@ const Wallet = () => {
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
-    setChooseToken(Token)
+    let TokenData: any = {}
+    try {
+        TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
+        TokenData = {...TokenData, TokenId: Token.TokenId}
+        setChooseToken(TokenData)
+        setChooseTokenBalance(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenData.TokenId])
+        setIsTokenModel(true)
+        setPage(0)
+    }
+    catch(e: any) {
+        console.log("allTokensData Error", e)
+    }
+  }
+
+  const handleClickViewTokenButtonAO = () => {
+    setPageModel('ViewToken')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('View Asset') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
     setPage(0)
   }
 
 
   const handleSelectAddress = (MoneyAddress: any) => {
     setSendMoneyAddress(MoneyAddress)
-    setPageModel('SendMoneyInputAmount')
+    if(isTokenModel) {
+      setPageModel('SendMoneyInputAmountAO')
+      setTitle(t('Token Amount') as string)
+    }
+    else {
+      setPageModel('SendMoneyInputAmount')
+      setTitle(t('Input Amount') as string)
+    }
     setLeftIcon('mdi:arrow-left-thin')
-    setTitle(t('Input Amount') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
     setSendMoneyAmount('')
@@ -449,6 +504,25 @@ const Wallet = () => {
     }
     if(TxResult && TxResult.signature)  {
       toast.success(t("Successful Sent") as string, { duration: 2500 })
+    }
+    setIsDisabledButton(false)
+    setUploadingButton(`${t('Send')}`)
+    setSendMoneyAmount('')
+    handleWalletGoHome()
+    console.log("uploadProgress", uploadProgress)
+  }
+
+  const handleWalletSendMoneyAO = async () => {
+    setIsDisabledButton(true)
+    setUploadingButton(`${t('Submitting...')}`)
+    const TxResult: any = await AoTokenTransfer(chooseWallet.jwk, chooseToken.TokenId, sendMoneyAddress.address, Number(sendMoneyAmount), chooseToken.Denomination);
+    console.log("TxResult TxResult", TxResult)
+    if(TxResult?.msg?.Messages[0]?.Data)  {
+      toast.success(t(TxResult?.msg?.Messages[0]?.Data.replace(ansiRegex, '')) as string, { duration: 2500, position: 'top-center' })
+      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      if(getMyAoTokensData) {      
+        setMySavingTokensData(getMyAoTokensData)
+      }
     }
     setIsDisabledButton(false)
     setUploadingButton(`${t('Send')}`)
@@ -531,28 +605,41 @@ const Wallet = () => {
 
     const getMyAoTokensData = getMyAoTokens(currentAddress);
     const myAoTokensBalanceTemp: any = {};
+
     try {
       if (getMyAoTokensData) {
-        Promise.all(
+        Promise.any(
           getMyAoTokensData.map(async (Token: any) => {
-            const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
-            if (AoDryRunBalance) {
-              const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'));
-              const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenData.Denomination ? TokenData.Denomination : '12');
-              if (!myAoTokensBalanceTemp[currentAddress]) {
-                myAoTokensBalanceTemp[currentAddress] = {};
+            try {
+              const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
+              if (AoDryRunBalance) {
+                const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'));
+                const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenData.Denomination ? TokenData.Denomination : '12');
+                if (!myAoTokensBalanceTemp[currentAddress]) {
+                  myAoTokensBalanceTemp[currentAddress] = {};
+                }
+                myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4) : 0;
+                console.log("myAoTokensBalanceTemp", myAoTokensBalanceTemp);
+                setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
+
+                return myAoTokensBalanceTemp;
+              } 
+              else {
+                throw new Error('AoDryRunBalance is null or undefined');
               }
-              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4) : 0;
+            } catch (error) {
+              console.error(`Error processing token ${Token.TokenId}:`, error);
             }
           })
-        ).then(() => {
-          setMyAoTokensBalance(myAoTokensBalanceTemp);
+        ).catch((error) => {
+          console.error("All promises failed:", error);
         });
       }
+    } 
+    catch (e: any) {
+      console.log("handleGetMySavingTokensBalance Error", e);
     }
-    catch(e: any) {
-      console.log("handleGetMySavingTokensBalance Error", e)      
-    }
+
   }
 
   
@@ -869,7 +956,7 @@ const Wallet = () => {
                                         mr: 2,
                                         ml: 2
                                       }}>
-                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : ''}
+                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : '0'}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -1036,10 +1123,12 @@ const Wallet = () => {
                 myAoTokensBalance={myAoTokensBalance}
                 page={page}
                 setPage={setPage}
+                handleClickReceiveButtonAO={handleClickReceiveButtonAO}
+                handleClickSendButtonAO={handleClickSendButtonAO}
                 />
             )}
 
-            {pageModel == 'ReceiveMoney' && ( 
+            {(pageModel == 'ReceiveMoney' || pageModel == 'ReceiveMoneyAO') && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item>
                   <QRCode value={currentAddress} size={180} />
@@ -1225,6 +1314,117 @@ const Wallet = () => {
                         ||
                         (isDisabledButton)                  
                         } variant='contained' onClick={()=>handleWalletSendMoney()}>
+                        {uploadingButton}
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+                      
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={isDisabledButton}
+                >
+                  <CircularProgress color="inherit" size={45}/>
+                </Backdrop>
+                
+              </Grid>
+            )}
+
+            {pageModel == 'SendMoneyInputAmountAO' && sendMoneyAddress && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
+                    <Grid item xs={12} sx={{ py: 1 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
+                          <CustomAvatar
+                            skin='light'
+                            color={'primary'}
+                            sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
+                          >
+                            {getInitials(sendMoneyAddress.address).toUpperCase()}
+                          </CustomAvatar>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                            >
+                            <Typography sx={{ 
+                              color: 'text.primary',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                            >
+                              {sendMoneyAddress.name}
+                            </Typography>
+                            <Box sx={{ display: 'flex'}}>
+                              <Typography variant='body2' sx={{ 
+                                color: `primary.dark`, 
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                flex: 1
+                              }}>
+                                {formatHash(sendMoneyAddress.address, 10)}
+                              </Typography>
+                              
+                            </Box>
+                          </Box>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sx={{ py: 1 }}>
+                      <TextField
+                        disabled={isDisabledButton}
+                        fullWidth
+                        size='small'
+                        value={sendMoneyAmount}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const regex = /^[0-9]*\.?[0-9]*$/;
+                          if (regex.test(value)) {
+                            setSendMoneyAmount(value);
+                          }
+                        }}
+                        placeholder={t('Amount') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
+                      />
+                      <ThemeProvider theme={themeSlider}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
+                          <Slider size="small" 
+                                disabled={isDisabledButton}
+                                defaultValue={0} 
+                                aria-labelledby="small-slider" 
+                                min={0}
+                                max={100}
+                                onChange={( _ , newValue: number | number[])=>{
+                                  if (Array.isArray(newValue)) {
+                                    newValue = newValue[0];
+                                  }
+                                  const TotalLeft = BalanceMinus(Number(chooseTokenBalance), Number(currentFeeAO))
+                                  const MultiValue = newValue / 100
+                                  const result = BalanceTimes(Number(TotalLeft), MultiValue)
+                                  if(newValue == 100) {
+                                    setSendMoneyAmount( String(Number(result)) )
+
+                                  }
+                                  else {
+                                    setSendMoneyAmount( String(Number(result).toFixed(4)) )
+                                  }
+                                }} 
+                                sx={{m: 0, p: 0, width: '90%' }}
+                                />
+                        </Box>
+                      </ThemeProvider>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                        {t('Max')}: {chooseTokenBalance} {chooseToken.Ticker}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                        {t('Fee')}: {currentFeeAO}
+                      </Typography>
+                  </Grid>
+                  <Grid item xs={12} sx={{ py: 1 }}>
+                    <Box sx={{width: '100%', mr: 2}}>
+                      <Button sx={{mt: 8}} fullWidth disabled={
+                        (sendMoneyAddress && sendMoneyAddress.address && Number(sendMoneyAmount) > 0 && (Number(currentFeeAO) + Number(sendMoneyAmount)) < Number(chooseTokenBalance) ? false : true)
+                        ||
+                        (isDisabledButton)                  
+                        } variant='contained' onClick={()=>handleWalletSendMoneyAO()}>
                         {uploadingButton}
                       </Button>
                     </Box>

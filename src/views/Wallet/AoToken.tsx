@@ -10,6 +10,8 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
+import IconButton from '@mui/material/IconButton'
+import { CallReceived, History, Casino, Send } from '@mui/icons-material';
 
 // ** MUI Imports
 import authConfig from 'src/configs/auth'
@@ -27,21 +29,12 @@ import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions
 import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
 import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
-const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage } : any) => {
+const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 
     const { t } = useTranslation()
-
+    const TokenData = chooseToken
     const TokenId = chooseToken.TokenId
-    let TokenData: any = {}
-    try {
-        TokenData = JSON.parse(chooseToken.TokenData.replace(/\\"/g, '"'))
-        TokenData = {...TokenData, TokenId: chooseToken.TokenId}
-    }
-    catch(e: any) {
-        console.log("allTokensData Error", e)
-    }
-    console.log("chooseToken", TokenData, myAoTokensBalance)
-
+    
     const [tokenListAction, setTokenListAction] = useState<string>("Holders")
     const pageSize = 20
     const startIndex = TokenData.Release == "ChivesToken" ? (page) * pageSize : 0
@@ -56,6 +49,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
     const [tokenReceivedTxs, setTokenReceivedTxs] = useState<any>({})
     const [tokenHoldersTxsChivesToken, setTokenHoldersTxsChivesToken] = useState<any>({})
     const [tokenHoldersTxsOfficialToken, setTokenHoldersTxsOfficialToken] = useState<any[]>([])
+
 
     const handleChangeActiveTab = (event: any, value: string) => {
         setTokenListAction(value)
@@ -347,7 +341,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                         </Typography>
                     </Box>
                 </Box>
-                <Typography variant="h5" mt={4}>
+                <Typography variant="h5" mt={3}>
                     {myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId] } {TokenData.Ticker}
                 </Typography>
 
@@ -355,6 +349,35 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     {formatHash(TokenId, 6)}
                 </Typography>
             </Box>
+
+            
+            <Grid container spacing={4} justifyContent="center" mt={0} mb={2}>
+                <Grid item sx={{mx: 2}}>
+                    <IconButton onClick={()=>handleClickReceiveButtonAO()}>
+                    <CallReceived />
+                    </IconButton>
+                    <Typography onClick={()=>handleClickReceiveButtonAO()}>{t('Receive') as string}</Typography>
+                </Grid>
+                <Grid item sx={{mx: 2}}>
+                    <IconButton onClick={()=>handleClickReceiveButtonAO()}>
+                    <History />
+                    </IconButton>
+                    <Typography onClick={()=>handleClickReceiveButtonAO()}>{t('Txs') as string}</Typography>
+                </Grid>
+                <Grid item sx={{mx: 2}}>
+                    <IconButton>
+                    <Casino />
+                    </IconButton>
+                    <Typography>{t('Lottery') as string}</Typography>
+                </Grid>
+                <Grid item sx={{mx: 2}}>
+                    <IconButton onClick={()=> Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>
+                    <Send />
+                    </IconButton>
+                    <Typography onClick={()=>Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>{t('Send') as string}</Typography>
+                </Grid>
+            </Grid>
+                
             {TokenData.Release == "ChivesToken" && (
                 <Box
                     component='header'
@@ -377,10 +400,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                         allowScrollButtonsMobile
                         aria-label="icon position tabs example"
                     >
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Holders'} iconPosition="start" label="Holders" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'MyTxs'} iconPosition="start" label="MyTxs" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} iconPosition="start" label="Sent" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} iconPosition="start" label="Received" />
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Holders'} iconPosition="start" label="Holders" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'AllTxs'} iconPosition="start" label="AllTxs" />
                     </Tabs>
                 </Box>
