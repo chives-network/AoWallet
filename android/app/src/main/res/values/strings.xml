@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">com.aowallet</string>
-    <string name="title_activity_main">com.aowallet</string>
+    <string name="app_name">AoWallet</string>
+    <string name="title_activity_main">AoWallet</string>
     <string name="package_name">com.aowallet</string>
     <string name="custom_url_scheme">com.aowallet</string>
 </resources>
