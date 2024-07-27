@@ -3,45 +3,11 @@ import { useState, useEffect, Fragment } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
-import IconButton from '@mui/material/IconButton'
-import TextField from '@mui/material/TextField'
-import { getInitials } from 'src/@core/utils/get-initials'
-import Slider from '@mui/material/Slider'
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
-import Tab from '@mui/material/Tab'
 
-import { CallReceived, History, Casino, Send } from '@mui/icons-material';
-
-import { QRCode } from 'react-qrcode-logo';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ShareIcon from '@mui/icons-material/Share';
-
-// ** MUI Imports
-import Button from '@mui/material/Button'
-import Icon from 'src/@core/components/icon'
-import toast from 'react-hot-toast'
-import authConfig from 'src/configs/auth'
-import { useTheme } from '@mui/material/styles'
-
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken } from 'src/functions/ChivesWallets'
-import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
-
-import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
-
-import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar } from 'src/functions/AoConnect/Token'
-
-import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
-
-import { GetArWalletAllTxs } from 'src/functions/Arweave'
+import { getCurrentWallet } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp, ansiRegex } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Footer from '../Layout/Footer'
@@ -64,7 +30,6 @@ const Lottery = () => {
   // ** Hook
   const { t } = useTranslation()
   const router = useRouter()
-  const theme = useTheme()
 
   const contentHeightFixed = {}
 
@@ -79,11 +44,6 @@ const Lottery = () => {
   const [chooseToken, setChooseToken] = useState<any>(null)
   const [chooseTokenBalance, setChooseTokenBalance] = useState<string | null>(null)
   const [isTokenModel, setIsTokenModel] = useState<boolean>(false)
-
-  const [mySavingTokensData, setMySavingTokensData] = useState<any[]>([])
-  const [allTokensData, setAllTokensData] = useState<any[]>([])
-  
-  const currentFeeAO = 0
 
   const preventDefault = (e: any) => {
     e.preventDefault();
@@ -126,6 +86,7 @@ const Lottery = () => {
     setChooseToken(null)
     setChooseTokenBalance(null)
     setIsTokenModel(false)
+    console.log("isTokenModel", isTokenModel, chooseTokenBalance, chooseWallet)
   }
   
   const LeftIconOnClick = () => {
@@ -167,24 +128,12 @@ const Lottery = () => {
 
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
-  const [currentAddress, setCurrentAddress] = useState<string>("")
-  const [currentBalance, setCurrentBalance] = useState<string>("")
-  const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
-  const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
-  
-  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
-  const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
-  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
 
-  
   useEffect(() => {    
 
     setHeaderHidden(false)
     setFooterHidden(false)
     setRightButtonIcon('mdi:qrcode')
-
-    const currentAddressTemp = getCurrentWalletAddress()
-    setCurrentAddress(String(currentAddressTemp))
 
     const getCurrentWalletTemp = getCurrentWallet()
     setChooseWallet(getCurrentWalletTemp)
@@ -235,36 +184,6 @@ const Lottery = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [innerHeight, page]);
-
-  useEffect(() => {
-    const processWallets = async () => {
-      if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
-        
-        if(authConfig.tokenType == "AR")  {
-
-          //handleGetMySavingTokensData()
-
-          const currentBalanceTemp = await getWalletBalance(currentAddress);
-          if(currentBalanceTemp) {
-            setCurrentBalance(Number(currentBalanceTemp).toFixed(4))
-          }
-
-          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
-          setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
-          
-        }
-
-      }
-      
-
-    };
-    processWallets();
-  }, [currentAddress, pageModel, page])
-
-  const handleWalletCopyAddress = () => {
-    navigator.clipboard.writeText(chooseWallet.data.arweave.key);
-    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-  }
 
   return (
     <Fragment>

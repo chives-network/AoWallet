@@ -1,13 +1,13 @@
-import WalletListModel from 'src/views/Lottery/Lottery';
+import LotteryModel from 'src/views/Lottery/Lottery';
 
-const WalletListModelApp = () => {
+const LotteryModelApp = () => {
 
 
-  return <WalletListModel />
+  return <LotteryModel />
 
 }
 
 //WalletListModelApp.contentHeightFixed = true
 
-export default WalletListModelApp
+export default LotteryModelApp
 

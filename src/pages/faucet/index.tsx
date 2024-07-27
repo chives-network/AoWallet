@@ -1,11 +1,13 @@
-import Typography from '@mui/material/Typography'
+import FaucetModel from 'src/views/Lottery/Lottery';
 
-const FaucetModel = () => {
+const FaucetModelApp = () => {
 
 
-  return <Typography> Faucet Tokens. Dev not begin.</Typography>
+  return <FaucetModel />
 
 }
 
-export default FaucetModel
+//FaucetModelApp.contentHeightFixed = true
+
+export default FaucetModelApp
 
