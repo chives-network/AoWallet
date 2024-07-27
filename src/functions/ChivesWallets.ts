@@ -1115,12 +1115,17 @@ export function searchChivesContacts(searchValue: string) {
         const chivesContactsList = chivesContactsText ? JSON.parse(chivesContactsText) : {}
         
         const result: any = {};
+        
         for (const key in chivesContactsList) {
             if (key.toLowerCase().includes(searchValue.toLowerCase()) || chivesContactsList[key].toLowerCase().includes(searchValue.toLowerCase())) {
                 result[key] = chivesContactsList[key]
             }
         }
 
+        if(Object.keys(result).length == 0 && searchValue && searchValue.length == 43)  {
+            result[searchValue] = 'Input Address'
+        }
+        
         return result
     }
     catch (error: any) {
