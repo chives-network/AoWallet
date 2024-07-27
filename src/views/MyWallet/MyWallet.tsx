@@ -35,8 +35,7 @@ import TextField2 from 'src/views/Layout/TextField2'
 import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet } from 'src/functions/ChivesWallets'
-import { generateArWalletJsonData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWalletJsonData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -60,7 +59,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const MyWallet = () => {
   // ** Hook
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
 
   const contentHeightFixed = {}
@@ -118,6 +117,8 @@ const MyWallet = () => {
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
   useEffect(() => {
+
+    i18n.changeLanguage(getChivesLanguage())
 
     setHeaderHidden(false)
     setFooterHidden(false)

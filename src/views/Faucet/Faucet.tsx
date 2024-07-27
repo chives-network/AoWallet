@@ -27,7 +27,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Lottery = () => {
+const Faucet = () => {
   // ** Hook
   const { t } = useTranslation()
   const router = useRouter()
@@ -38,7 +38,7 @@ const Lottery = () => {
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
-  const [Title, setTitle] = useState<string>('Lottery')
+  const [Title, setTitle] = useState<string>('Faucet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
@@ -81,7 +81,7 @@ const Lottery = () => {
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('MainWallet')
     setLeftIcon('material-symbols:menu-rounded')
-    setTitle(t('Lottery') as string)
+    setTitle(t('Faucet') as string)
     setRightButtonText(t('QR') as string)
     setRightButtonIcon('mdi:qrcode')
     setChooseToken(null)
@@ -222,7 +222,7 @@ const Lottery = () => {
                 boxShadow: 1, 
               }} dangerouslySetInnerHTML={{ __html: `While from a user perspective, there will be a smooth experience and seem like one contest, there’ll actually be two draws: one for the lottery and one for the jackpot. Both will run simultaneously. Note that wagering puts you in for a chance of winning both, however, there are some key differences between the lottery and the jackpot:
 
-Lottery winners will always be paid out every 20 hours, with 100 prizes, or the total amount of players if less than 100, paid out regularly and the chance of winning depending on the amount of TokenA user wagers.
+Faucet winners will always be paid out every 20 hours, with 100 prizes, or the total amount of players if less than 100, paid out regularly and the chance of winning depending on the amount of TokenA user wagers.
 
 There’s a 2% chance that the jackpot will be won every 20 hours and a 0.1% chance that the entire Jackpot prize pool is won. If the jackpot is not won, it is rolled over to the next round and the prize pool increases until it is won.
 
@@ -247,4 +247,4 @@ There’s a 2% chance that the jackpot will be won every 20 hours and a 0.1% cha
   )
 }
 
-export default Lottery
+export default Faucet

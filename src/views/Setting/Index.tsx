@@ -104,6 +104,8 @@ const Setting = () => {
   };
 
   useEffect(() => {
+
+    i18n.changeLanguage(getChivesLanguage())
     
     disableScroll();
 
@@ -328,10 +330,10 @@ const Setting = () => {
                                 <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickGeneralButton()}
                                     >
                                     <Typography sx={{ 
-                                    color: 'text.primary',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
                                     }}
                                     >
                                     {t('General') as string}

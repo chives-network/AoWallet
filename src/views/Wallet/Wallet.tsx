@@ -28,7 +28,7 @@ import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken } from 'src/functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from 'src/functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
@@ -71,7 +71,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const Wallet = () => {
   // ** Hook
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
   const theme = useTheme()
 
@@ -131,6 +131,8 @@ const Wallet = () => {
   };
 
   useEffect(() => {
+
+    i18n.changeLanguage(getChivesLanguage())
     
     disableScroll();
 
