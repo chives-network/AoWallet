@@ -173,28 +173,27 @@ const Wallet = () => {
     }
   }
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [result, setResult] = useState<string | null>(null);
+  const videoQrCodeRef = useRef<HTMLVideoElement>(null);
+  const [qrCodeResult, setQrCodeResult] = useState<string | null>(null);
   const codeReader = new BrowserMultiFormatReader();
 
-  useEffect(() => {
+  useEffect(() =>   {
     return () => {
       codeReader.reset();
     };
   }, [codeReader]);
 
-  const startScanning = async () => {
+  const startQrCodeScanning = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-        codeReader.decodeFromVideoDevice(null, videoRef.current, (resultTemp: any) => {
+      if (videoQrCodeRef.current) {
+        videoQrCodeRef.current.srcObject = stream;
+        videoQrCodeRef.current.play();
+        codeReader.decodeFromVideoDevice(null, videoQrCodeRef.current, (resultTemp: any) => {
           if (resultTemp) {
-            setResult(resultTemp.getText());
+            setQrCodeResult(resultTemp.getText());
             codeReader.reset();
             stream.getTracks().forEach(track => track.stop());
-            console.log("result", result)
           }
         });
       }
@@ -207,7 +206,7 @@ const Wallet = () => {
     console.log("RightButtonIcon", RightButtonIcon)
 
     if(RightButtonIcon == 'mdi:qrcode')  {
-      startScanning()
+      startQrCodeScanning()
       setPageModel('ScanQRCode')
       setLeftIcon('mdi:arrow-left-thin')
       setTitle(t('Scan QRCode') as string)
@@ -1211,7 +1210,7 @@ const Wallet = () => {
             {(pageModel == 'ScanQRCode') && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item>
-                  <video ref={videoRef} width="300" height="200" autoPlay />
+                  <video ref={videoQrCodeRef} width="300" height="200" autoPlay />
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
@@ -1219,9 +1218,7 @@ const Wallet = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />} onClick={()=>handleWalletCopyAddress()}>
-                    {t('Copy') as string}
-                  </Button>
+                  {qrCodeResult}
                 </Grid>
               </Grid>
             )}
