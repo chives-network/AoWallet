@@ -1218,7 +1218,7 @@ const Wallet = () => {
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
-                    {t('Scan the AR address qrcode')}
+                    {t('Scan the wallet address qrcode')}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -1560,7 +1560,7 @@ const Wallet = () => {
                                 src={GetAppAvatar(TokenData.Logo)}
                               >
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
                                 <Typography sx={{ 
                                   color: 'text.primary',
                                   overflow: 'hidden',
@@ -1586,7 +1586,7 @@ const Wallet = () => {
                                 <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
                                   <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectDeleteMyToken(Token.TokenId)} >
                                     <Icon icon='mdi:delete-outline' />
-                                    Delete
+                                    {t('Delete') as string}
                                   </Box>
                                 </Typography>
                               </Box>
@@ -1625,7 +1625,7 @@ const Wallet = () => {
                                 src={GetAppAvatar(TokenData.Logo)}
                               >
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
                                 <Typography sx={{ 
                                   color: 'text.primary',
                                   overflow: 'hidden',
@@ -1648,10 +1648,10 @@ const Wallet = () => {
                                 </Box>
                               </Box>
                               <Box textAlign="right">
-                                <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                                <Typography variant="body1" component="div" sx={{ color: 'primary.main', wordWrap: 'noWrap' }}>
                                   <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, TokenData)} >
                                     <Icon icon='tdesign:plus' />
-                                    Add
+                                    {t('Add') as string}
                                   </Box>
                                 </Typography>
                               </Box>

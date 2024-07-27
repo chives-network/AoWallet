@@ -51,7 +51,7 @@ const Setting = () => {
   const [pageModel, setPageModel] = useState<string>('MainSetting')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [FooterHidden, setFooterHidden] = useState<boolean>(false)
-  const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
+  const [LeftIcon, setLeftIcon] = useState<string>('')
   const [Title, setTitle] = useState<string>('Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
@@ -123,9 +123,10 @@ const Setting = () => {
   const handleWalletGoHome = () => {
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('MainSetting')
-    setLeftIcon('material-symbols:menu-rounded')
+    setLeftIcon('')
     setTitle(t('Setting') as string)
     setRightButtonText(t('QR') as string)
+    setRightButtonIcon('')
   }
   
   const LeftIconOnClick = () => {
