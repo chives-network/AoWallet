@@ -1,11 +1,13 @@
-import Typography from '@mui/material/Typography'
+import WalletListModel from 'src/views/Lottery/Lottery';
 
-const LotteryModel = () => {
+const WalletListModelApp = () => {
 
 
-  return <Typography> Lottery Tokens. Dev not begin.</Typography>
+  return <WalletListModel />
 
 }
 
-export default LotteryModel
+//WalletListModelApp.contentHeightFixed = true
+
+export default WalletListModelApp
 

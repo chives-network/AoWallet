@@ -262,7 +262,7 @@ const Setting = () => {
     setRightButtonIcon('')
   }
 
-  const handleSelectLanguage = (Language: 'en' | 'zh' | 'Ru' | 'Kr') => {
+  const handleSelectLanguage = (Language: 'en' | 'zh-CN' | 'Ru' | 'Kr') => {
     setLanguageValue(Language)
     setTitle(Language)
     i18n.changeLanguage(Language)

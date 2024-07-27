@@ -9,6 +9,8 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+import { Casino } from '@mui/icons-material';
+
 
 const Footer = (props: any) => {
   // ** Props
@@ -46,10 +48,10 @@ const Footer = (props: any) => {
                 router.push('/wallet')
                 break;
               case 1:
-                router.push('/mywallet')
+                router.push('/faucet')
                 break;
               case 2:
-                router.push('/wallet')
+                router.push('/lottery')
                 break;
               case 3:
                 router.push('/setting')
@@ -59,8 +61,8 @@ const Footer = (props: any) => {
           sx={{width: '100%'}}
         >
           <BottomNavigationAction label={t("Wallet")} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
-          <BottomNavigationAction label={t("Swap")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label={t("Apps")} icon={<Icon icon='tdesign:app' />} />
+          <BottomNavigationAction label={t("Faucet")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
+          <BottomNavigationAction label={t("Lottery")} icon={<Casino />} />
           <BottomNavigationAction label={t("Setting")} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>
