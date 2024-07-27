@@ -34,6 +34,7 @@
     "@popperjs/core": "2.11.7",
     "@reduxjs/toolkit": "1.9.5",
     "@supercharge/promise-pool": "^3.1.0",
+    "@zxing/library": "^0.21.2",
     "apexcharts-clevision": "3.28.5",
     "arweave": "^1.14.4",
     "axios": "^1.6.8",

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useRef } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -55,6 +55,8 @@ import { useRouter } from 'next/router'
 import { createTheme, ThemeProvider } from '@mui/material';
 
 import Tabs from '@mui/material/Tabs';
+
+import { BrowserMultiFormatReader } from '@zxing/library';
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -158,6 +160,7 @@ const Wallet = () => {
       case 'SendMoneyInputAmount':
       case 'ManageAssets':
       case 'ViewToken':
+      case 'ScanQRCode':
         handleWalletGoHome()
         break
       case 'ReceiveMoneyAO':
@@ -169,9 +172,52 @@ const Wallet = () => {
         break
     }
   }
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [result, setResult] = useState<string | null>(null);
+  const codeReader = new BrowserMultiFormatReader();
+
+  useEffect(() => {
+    return () => {
+      codeReader.reset();
+    };
+  }, [codeReader]);
+
+  const startScanning = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+        codeReader.decodeFromVideoDevice(null, videoRef.current, (resultTemp: any) => {
+          if (resultTemp) {
+            setResult(resultTemp.getText());
+            codeReader.reset();
+            stream.getTracks().forEach(track => track.stop());
+            console.log("result", result)
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Error accessing camera:', err);
+    }
+  };
   
   const RightButtonOnClick = () => {
-    handleWalletGoHome()
+    console.log("RightButtonIcon", RightButtonIcon)
+
+    if(RightButtonIcon == 'mdi:qrcode')  {
+      startScanning()
+      setPageModel('ScanQRCode')
+      setLeftIcon('mdi:arrow-left-thin')
+      setTitle(t('Scan QRCode') as string)
+      setRightButtonText(t('') as string)
+      setRightButtonIcon('')
+      setPage(0)
+    }
+
+    //handleWalletGoHome()
+    
   }
     
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
@@ -191,9 +237,6 @@ const Wallet = () => {
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
 
-  
-
-  
   
   useEffect(() => {    
 
@@ -1160,6 +1203,24 @@ const Wallet = () => {
                 <Grid item sx={{ mt: 8, width: '100%' }}>
                   <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
                   {t('Share') as string}
+                  </Button>
+                </Grid>
+              </Grid>
+            )}
+
+            {(pageModel == 'ScanQRCode') && ( 
+              <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
+                <Grid item>
+                  <video ref={videoRef} width="300" height="200" autoPlay />
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
+                    {currentAddress}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />} onClick={()=>handleWalletCopyAddress()}>
+                    {t('Copy') as string}
                   </Button>
                 </Grid>
               </Grid>
