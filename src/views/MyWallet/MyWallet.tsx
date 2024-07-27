@@ -32,7 +32,6 @@ import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 import TextField2 from 'src/views/Layout/TextField2'
-import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWalletJsonData, importWalletJsonFile, readFileText } from 'src/functions/ChivesWallets'
@@ -59,7 +58,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const MyWallet = ({ setCurrentTab } : any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
-  const router = useRouter()
 
   const contentHeightFixed = {}
   
@@ -179,7 +177,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
 
   const handleSetCurrentWallet = (wallet: any) => {
     setCurrentWallet(wallet.data.arweave.key)
-    router.push('/wallet')
+    setCurrentTab('Wallet')
   }
 
   const handleWalletCreateMenu = () => {

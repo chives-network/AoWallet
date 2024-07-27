@@ -1,18 +1,11 @@
 // ** React Imports
 import { useEffect, useCallback, useState, ChangeEvent } from 'react'
 
-// ** Next Imports
-import { useRouter } from 'next/router'
-
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-
-// ** Third Party Imports
-import axios from 'axios'
-import authConfig from 'src/configs/auth'
 
 // ** Types Imports
 import { Settings } from 'src/@core/context/settingsContext'
@@ -25,41 +18,11 @@ interface Props {
   settings: Settings
 }
 
-const AutocompleteComponent = ({ hidden, settings }: Props) => {
+const AutocompleteComponent = ({ hidden }: Props) => {
   // ** States
   const [isMounted, setIsMounted] = useState<boolean>(false)
   const [searchValue, setSearchValue] = useState<string>('')
   const [openDialog, setOpenDialog] = useState<boolean>(false)
-
-  // ** Hooks & Vars
-  const router = useRouter()
-  const { layout } = settings
-  
-
-  // Get all data using API
-  useEffect(() => {
-    const searchValueTrim = searchValue.trim();
-    console.log("layout", layout)
-    switch(searchValueTrim.length)           {
-      case 43:
-        axios.get(authConfig.backEndApi + '/wallet/' + searchValueTrim + '/txrecord', { timeout: 10000 })
-        .then(res => {
-          if(res.data && res.data.id && res.data.id.length>0) {
-            router.push("/txs/view/" + searchValueTrim)
-          }
-          else {
-            router.push("/addresses/all/" + searchValueTrim)
-          }
-        })
-        break;
-      case 64:
-        router.push("/blocks/view/" + searchValueTrim)
-        break;
-    }
-    if(!isNaN(Number(searchValue)) && Number(searchValue) > 0) {
-      router.push("/blocks/view/" + Number(searchValue))
-    }
-  }, [searchValue])
 
   useEffect(() => {
     if (!openDialog) {

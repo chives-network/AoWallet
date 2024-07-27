@@ -13,8 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 
-import { useRouter } from 'next/router'
-
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
   width: '100%',
@@ -29,7 +27,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const Faucet = () => {
   // ** Hook
   const { t } = useTranslation()
-  const router = useRouter()
 
   const contentHeightFixed = {}
 
@@ -102,8 +99,6 @@ const Faucet = () => {
       case 'ReceiveMoneyAO':
       case 'SendMoneyInputAmountAO':
         break;
-      case 'MainWallet':
-        router.push('/mywallet')
         break
     }
   }

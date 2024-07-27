@@ -212,7 +212,7 @@ const TokenCreate = (props: any) => {
                             fullWidth
                             type='number'
                             label={`${t('Balance')}`}
-                            placeholder={`${t('Total Issues Amount, e.g. 1000')}`}
+                            placeholder={`${t('Total Issue Amount, e.g. 1000')}`}
                             disabled={tokenCreate.isDisabledButton}
                             value={tokenCreate?.Balance}
                             onChange={(e: any)=>{

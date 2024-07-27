@@ -336,7 +336,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     </Box>
                     <Box sx={{ position: 'absolute', top: 0, right: 0, marginRight: -2, marginTop: 3 }}>
                         <Typography variant="body2">
-                            {t('Issues')}: {circulatingSupply}
+                            {t('Issue')}: {circulatingSupply}
                         </Typography>
                     </Box>
                 </Box>
