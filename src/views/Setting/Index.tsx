@@ -61,8 +61,8 @@ const Setting = () => {
   const [contactsAll, setContactsAll] = useState<any>({})
   const [counter, setCounter] = useState<number>(0)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
-  const [languageValue, setLanguageValue] = useState<string>('en')
-  const [themeValue, setThemeValue] = useState<string>('light')
+  const [languageValue, setLanguageValue] = useState<string>(getChivesLanguage())
+  const [themeValue, setThemeValue] = useState<string>(settings.mode)
   const [currencyValue, setCurrencyValue] = useState<string>('us')
   const [networkValue, setNetworkValue] = useState<string>('mainnet')
 

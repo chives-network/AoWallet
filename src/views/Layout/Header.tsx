@@ -20,7 +20,7 @@ const Header = (props: any) => {
         backgroundColor: 'background.paper',
       }}
     >
-      <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', 'min-height': 48 }}>
+      <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', minHeight: 48 }}>
         <Box width='100px'>
           {LeftIcon && LeftIconOnClick && (
             <IconButton size="small" edge="start" color="inherit" aria-label="menu" onClick={ () => LeftIconOnClick && LeftIconOnClick()}>

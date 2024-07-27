@@ -1666,9 +1666,15 @@ function setTag (tags: Tag[], name: string, value?: string) {
 }
 
 export function getChivesLanguage() {
-    const ChivesLanguage = window.localStorage.getItem(chivesLanguage) || "en"
+    if(typeof window !== 'undefined')  {
+        const ChivesLanguage = window.localStorage.getItem(chivesLanguage) || "en"
 
-    return ChivesLanguage
+        return ChivesLanguage
+    }
+    else {
+
+        return "en"
+    }
 };
 
 export function setChivesLanguage(Language: string) {
