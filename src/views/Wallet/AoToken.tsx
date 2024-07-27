@@ -125,7 +125,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
         try{
             setIsLoading(true)
             const AoDryRunData: any = await AoTokenAllTransactions(CurrentToken, String(startIndex), String(endIndex))
-            console.log("AoDryRunData", AoDryRunData, CurrentToken, startIndex, endIndex)
+            console.log("handleAoTokenAllTransactions AoDryRunData", AoDryRunData, CurrentToken, startIndex, endIndex)
             if(AoDryRunData) {
                 setTokenAllTxs((prevData: any)=>{
                     if(prevData && prevData[0] && prevData[1])  {

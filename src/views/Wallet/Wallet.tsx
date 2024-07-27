@@ -572,7 +572,7 @@ const Wallet = () => {
     setIsDisabledButton(false)
     setUploadingButton(`${t('Send')}`)
     setSendMoneyAmount('')
-    handleWalletGoHome()
+    handleClickViewTokenButtonAO()
     console.log("uploadProgress", uploadProgress)
   }
 
