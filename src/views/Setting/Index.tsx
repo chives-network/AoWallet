@@ -14,12 +14,12 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
+import { useSettings } from 'src/@core/hooks/useSettings'
 
-import { setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts } from 'src/functions/ChivesWallets'
+import { setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -43,7 +43,8 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 
 const Setting = () => {
   // ** Hook
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const { settings, saveSettings } = useSettings()
 
   const contentHeightFixed = {}
 
@@ -261,15 +262,20 @@ const Setting = () => {
     setRightButtonIcon('')
   }
 
-  const handleSelectLanguage = (Language: string) => {
+  const handleSelectLanguage = (Language: 'en' | 'zh' | 'Ru' | 'Kr') => {
     setLanguageValue(Language)
     setTitle(Language)
+    i18n.changeLanguage(Language)
+    setChivesLanguage(Language)
   }
 
   const handleSelectTheme = (Theme: string) => {
     console.log("Theme", Theme)
     setThemeValue(Theme)
     setTitle(Theme)
+
+    //@ts-ignore
+    saveSettings({ ...settings, ['mode']: Theme })
   }
 
   const handleSelectCurrency = (Currency: string) => {
