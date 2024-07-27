@@ -11,7 +11,6 @@ import { getCurrentWallet } from 'src/functions/ChivesWallets'
 import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material/styles'
-import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 
 import { useRouter } from 'next/router'
@@ -36,7 +35,6 @@ const Lottery = () => {
 
   const [pageModel, setPageModel] = useState<string>('MainLottery')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
-  const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
   const [Title, setTitle] = useState<string>('Lottery')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
@@ -133,7 +131,6 @@ const Lottery = () => {
   useEffect(() => {    
 
     setHeaderHidden(false)
-    setFooterHidden(false)
     setRightButtonIcon('mdi:qrcode')
 
     const getCurrentWalletTemp = getCurrentWallet()
@@ -242,7 +239,6 @@ There’s a 2% chance that the jackpot will be won every 20 hours and a 0.1% cha
 
         </ContentWrapper>
       </Box>
-      <Footer Hidden={FooterHidden} />
     </Fragment>
   )
 }

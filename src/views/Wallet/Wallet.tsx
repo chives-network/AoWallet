@@ -44,13 +44,10 @@ import { useTranslation } from 'react-i18next'
 import { formatHash, formatTimestamp, ansiRegex } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
-import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
 import ArWallet from './ArWallet'
 import AoToken from './AoToken'
-
-import { useRouter } from 'next/router'
 
 import { createTheme, ThemeProvider } from '@mui/material';
 
@@ -69,17 +66,15 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = () => {
+const Wallet = ({ setCurrentTab }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
-  const router = useRouter()
   const theme = useTheme()
 
   const contentHeightFixed = {}
 
   const [pageModel, setPageModel] = useState<string>('MainWallet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
-  const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
   const [Title, setTitle] = useState<string>('Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
@@ -171,7 +166,7 @@ const Wallet = () => {
         handleClickViewTokenButtonAO()
         break;
       case 'MainWallet':
-        router.push('/mywallet')
+        setCurrentTab('MyWallet')
         break
     }
   }
@@ -246,7 +241,6 @@ const Wallet = () => {
   useEffect(() => {    
 
     setHeaderHidden(false)
-    setFooterHidden(false)
     setRightButtonIcon('mdi:qrcode')
 
     const currentAddressTemp = getCurrentWalletAddress()
@@ -1701,7 +1695,6 @@ const Wallet = () => {
 
         </ContentWrapper>
       </Box>
-      <Footer Hidden={FooterHidden} />
     </Fragment>
   )
 }

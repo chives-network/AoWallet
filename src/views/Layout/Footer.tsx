@@ -8,15 +8,13 @@ import Icon from 'src/@core/components/icon'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
 import { Casino } from '@mui/icons-material';
 
 
 const Footer = (props: any) => {
   // ** Props
-  const { footer } = props
+  const { footer, setCurrentTab } = props
   const { t } = useTranslation()
-  const router = useRouter()
 
   const [value, setValue] = useState(0);
 
@@ -45,16 +43,16 @@ const Footer = (props: any) => {
             console.log("FooterContent event", newValue)
             switch(newValue) {
               case 0:
-                router.push('/wallet')
+                setCurrentTab('Wallet')
                 break;
               case 1:
-                router.push('/faucet')
+                setCurrentTab('Faucet')
                 break;
               case 2:
-                router.push('/lottery')
+                setCurrentTab('Lottery')
                 break;
               case 3:
-                router.push('/setting')
+                setCurrentTab('Setting')
                 break;
             }
           }}

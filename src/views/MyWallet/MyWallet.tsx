@@ -42,7 +42,6 @@ import { useTranslation } from 'react-i18next'
 import { formatHash } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
-import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
 
@@ -57,7 +56,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const MyWallet = () => {
+const MyWallet = ({ setCurrentTab } : any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const router = useRouter()
@@ -68,7 +67,6 @@ const MyWallet = () => {
   const [pageModel, setPageModel] = useState<string>('ListWallet')
   const [bottomMenus, setBottomMenus] = useState<any>([])
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
-  const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-open')
   const [Title, setTitle] = useState<string>('My Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
@@ -93,7 +91,7 @@ const MyWallet = () => {
       handleWalletGoHome()
     }
     else {
-      router.push('/wallet')
+      setCurrentTab('Wallet')
     }
   }
 
@@ -121,7 +119,6 @@ const MyWallet = () => {
     i18n.changeLanguage(getChivesLanguage())
 
     setHeaderHidden(false)
-    setFooterHidden(false)
 
     const myTask = () => {
       setRefreshWalletData(refreshWalletData+1);
@@ -820,7 +817,6 @@ const MyWallet = () => {
       </ContentWrapper>
       </Box>
 
-      <Footer Hidden={FooterHidden} />
     </Fragment>
   )
 }

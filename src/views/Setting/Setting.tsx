@@ -26,7 +26,6 @@ import { useTranslation } from 'react-i18next'
 import { formatHash } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
-import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import PinKeyboard from '../Layout/PinKeyboard'
 
@@ -50,7 +49,6 @@ const Setting = () => {
 
   const [pageModel, setPageModel] = useState<string>('MainSetting')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
-  const [FooterHidden, setFooterHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('')
   const [Title, setTitle] = useState<string>('Wallet')
   const [RightButtonText, setRightButtonText] = useState<string>('')
@@ -172,7 +170,6 @@ const Setting = () => {
 
   useEffect(() => {
     setHeaderHidden(false)
-    setFooterHidden(false)
     setRightButtonIcon('')
   }, []);
   
@@ -851,7 +848,6 @@ const Setting = () => {
 
         </ContentWrapper>
       </Box>
-      <Footer Hidden={FooterHidden} />
     </Fragment>
   )
 }

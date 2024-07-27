@@ -1,4 +1,4 @@
-import SettingModel from 'src/views/Setting/Index';
+import SettingModel from 'src/views/Setting/Setting';
 
 const Setting = () => {
 
