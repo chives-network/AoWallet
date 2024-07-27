@@ -147,6 +147,7 @@ const Wallet = () => {
     setLeftIcon('material-symbols:menu-rounded')
     setTitle(t('Wallet') as string)
     setRightButtonText(t('QR') as string)
+    setRightButtonIcon('mdi:qrcode')
     setChooseToken(null)
     setChooseTokenBalance(null)
     setIsTokenModel(false)
@@ -190,10 +191,13 @@ const Wallet = () => {
         videoQrCodeRef.current.srcObject = stream;
         videoQrCodeRef.current.play();
         codeReader.decodeFromVideoDevice(null, videoQrCodeRef.current, (resultTemp: any) => {
-          if (resultTemp) {
+          if (resultTemp && resultTemp.getText() && ( resultTemp.getText().length == 43 || resultTemp.getText().slice(0, 10) == 'AoToken://') ) {
             setQrCodeResult(resultTemp.getText());
             codeReader.reset();
             stream.getTracks().forEach(track => track.stop());
+            if(resultTemp.getText().length == 43) {
+              handleSelectAddress({name: 'WalletFromQrCode', address: resultTemp.getText()})
+            }
           }
         });
       }
@@ -1210,11 +1214,11 @@ const Wallet = () => {
             {(pageModel == 'ScanQRCode') && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item>
-                  <video ref={videoQrCodeRef} width="300" height="200" autoPlay />
+                  <video ref={videoQrCodeRef} width="350px" height="350px" autoPlay />
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
-                    {currentAddress}
+                    {t('Scan the AR address qrcode')}
                   </Typography>
                 </Grid>
                 <Grid item>
