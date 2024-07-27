@@ -20,7 +20,7 @@ export const AoLoadBlueprintToken = async (currentWalletJwk: any, processTxId: s
             return 
         }
 
-        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/chivestoken.lua', { headers: { }, params: { } }).then(res => res.data)
+        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/chivestoken.lua', { timeout: 10000 }).then(res => res.data)
         
         //Filter Token Infor
         if(tokenInfo && tokenInfo.Name) {
@@ -696,7 +696,7 @@ export const GetTokenAvatar = (Logo: string) => {
         return authConfig.backEndApi + "/" + Logo
     }
     else {
-        
+
         return ''
     }
 }
@@ -723,4 +723,14 @@ export const GetAppAvatarModId = (logo: string) => {
         return "/images/chatroom/2.png"
     }
 
+}
+
+export function downloadCsv(JsonData: any, FileName: string) {
+    const blob = new Blob([JsonData], { type: 'application/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = FileName + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
 }

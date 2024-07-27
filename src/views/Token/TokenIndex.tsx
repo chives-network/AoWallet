@@ -43,11 +43,9 @@ import TokenReceivedTransactions from './TokenReceivedTransactions'
 import TokenSentTransaction from './TokenSentTransaction'
 
 import { GetMyLastMsg, AoCreateProcessAuto, FormatBalance, sleep, isOwner } from 'src/functions/AoConnect/AoConnect'
-import { AoLoadBlueprintToken, AoTokenTransfer, AoTokenMint, AoTokenAirdrop, AoTokenBalanceDryRun, AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenInfoDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetTokenAvatar } from 'src/functions/AoConnect/Token'
+import { AoLoadBlueprintToken, AoTokenTransfer, AoTokenMint, AoTokenAirdrop, AoTokenBalanceDryRun, AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenInfoDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetTokenAvatar, downloadCsv } from 'src/functions/AoConnect/Token'
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
-
-import { downloadCsv } from 'src/functions/ChatBook'
 
 // ** Third Party Components
 import { BigNumber } from 'bignumber.js'

@@ -299,7 +299,7 @@ export const GetMyLastMsg = async (currentWalletJwk: any, processTxId: string) =
 
 export const AoLoadBlueprintModule = async (currentWalletJwk: any, processTxId: string, module: string) => {
     try {
-        const Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/' + module + '.lua', { headers: { }, params: { } }).then(res => res.data)
+        const Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/' + module + '.lua', { timeout: 10000 }).then(res => res.data)
     
         const { message } = connect( { MU_URL, CU_URL, GATEWAY_URL } );
 

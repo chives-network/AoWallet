@@ -42,7 +42,7 @@ const AutocompleteComponent = ({ hidden, settings }: Props) => {
     console.log("layout", layout)
     switch(searchValueTrim.length)           {
       case 43:
-        axios.get(authConfig.backEndApi + '/wallet/' + searchValueTrim + '/txrecord', { headers: { }, params: { } })
+        axios.get(authConfig.backEndApi + '/wallet/' + searchValueTrim + '/txrecord', { timeout: 10000 })
         .then(res => {
           if(res.data && res.data.id && res.data.id.length>0) {
             router.push("/txs/view/" + searchValueTrim)
