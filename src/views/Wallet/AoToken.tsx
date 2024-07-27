@@ -21,13 +21,13 @@ import { useTranslation } from 'react-i18next'
 import { formatHash } from 'src/configs/functions'
 
 import Tabs from '@mui/material/Tabs';
-import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
+import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 
 import { BigNumber } from 'bignumber.js'
 
 import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions } from 'src/functions/AoConnect/Token'
 import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
-import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
+import { FormatBalance, FormatBalanceString } from 'src/functions/AoConnect/AoConnect'
 
 const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 
@@ -35,7 +35,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
     const TokenData = chooseToken
     const TokenId = chooseToken.TokenId
     
-    const [tokenListAction, setTokenListAction] = useState<string>("Holders")
+    const [tokenListAction, setTokenListAction] = useState<string>(TokenData.Release == "ChivesToken" ? "MyTxs" : "Holders")
     const pageSize = 20
     const startIndex = TokenData.Release == "ChivesToken" ? (page) * pageSize : 0
     const endIndex = (page+1) * pageSize
@@ -71,7 +71,6 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                 setTokenHoldersTxsChivesToken({})
                 break;
         }
-        console.log("handleChangeActiveTab", event, value, "startIndex", startIndex, "endIndex", endIndex)
     }
 
     useEffect(()=>{
@@ -346,35 +345,61 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                 </Typography>
 
                 <Typography variant="h6" mt={2}>
-                    {formatHash(TokenId, 6)}
+                    {formatHash(TokenId, 5)}
                 </Typography>
             </Box>
 
-            
-            <Grid container spacing={4} justifyContent="center" mt={0} mb={2}>
+            <Grid container spacing={4} justifyContent="center" mt={0} mb={2} alignItems="center">
                 <Grid item sx={{mx: 2}}>
                     <IconButton onClick={()=>handleClickReceiveButtonAO()}>
-                    <CallReceived />
+                        <CallReceived />
                     </IconButton>
-                    <Typography onClick={()=>handleClickReceiveButtonAO()}>{t('Receive') as string}</Typography>
+                    <Typography onClick={()=>handleClickReceiveButtonAO()} ml={-2}>{t('Receive') as string}</Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
-                    <IconButton onClick={()=>handleClickReceiveButtonAO()}>
-                    <History />
+                    <IconButton onClick={()=>{
+                        if(tokenListAction != "Holders")   {
+                            setTokenListAction('Holders')
+                            setPage(0)
+                            setTokenHoldersTxsChivesToken({})
+                        }
+                    }}>
+                        <History />
                     </IconButton>
-                    <Typography onClick={()=>handleClickReceiveButtonAO()}>{t('Txs') as string}</Typography>
+                    <Typography onClick={()=>{
+                        if(tokenListAction != "Holders")   {
+                            setTokenListAction('Holders')
+                            setPage(0)
+                            setTokenHoldersTxsChivesToken({})
+                        }
+                    }} ml={-2}>{t('Holders') as string}</Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
-                    <IconButton>
-                    <Casino />
+                    <IconButton
+                        disabled={Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? false : true}
+                        >
+                        <Casino />
                     </IconButton>
-                    <Typography>{t('Lottery') as string}</Typography>
+                    <Typography sx={{
+                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`, 
+                                    }}
+                                ml={-1}
+                                >
+                        {t('Lottery') as string}
+                    </Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
-                    <IconButton onClick={()=> Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>
-                    <Send />
+                    <IconButton
+                        disabled={Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? false : true}
+                        onClick={()=>handleClickSendButtonAO()}>
+                        <Send />
                     </IconButton>
-                    <Typography onClick={()=>Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>{t('Send') as string}</Typography>
+                    <Typography sx={{
+                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`, 
+                                    }}
+                                onClick={()=>Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>
+                        {t('Send') as string}
+                    </Typography>
                 </Grid>
             </Grid>
                 
@@ -400,11 +425,11 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                         allowScrollButtonsMobile
                         aria-label="icon position tabs example"
                     >
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Holders'} iconPosition="start" label="Holders" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'MyTxs'} iconPosition="start" label="MyTxs" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} iconPosition="start" label="Sent" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} iconPosition="start" label="Received" />
                         <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'AllTxs'} iconPosition="start" label="AllTxs" />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Holders'} iconPosition="start" label="Holders" />
                     </Tabs>
                 </Box>
             )}
@@ -460,7 +485,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'left'
                                             }}
                                         >
-                                                {formatHash(TokenIdValue, 8)}
+                                                {formatHash(TokenIdValue, 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -527,7 +552,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'left'
                                             }}
                                         >
-                                                {formatHash(TokenIdValue[0], 8)}
+                                                {formatHash(TokenIdValue[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -605,7 +630,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 navigator.clipboard.writeText(Tx[0])
                                             }}
                                         >
-                                            {t('From') as string}: {formatHash(Tx[0], 8)}
+                                            {t('From') as string}: {formatHash(Tx[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -622,7 +647,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                     navigator.clipboard.writeText(Tx[1])
                                                 }}
                                             >
-                                            {t('To') as string}: {formatHash(Tx[1], 8)}
+                                            {t('To') as string}: {formatHash(Tx[1], 5)}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -637,7 +662,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'right'
                                             }}
                                         >
-                                            {FormatBalance(Tx[2], TokenData.Denomination)}
+                                            {FormatBalanceString(Tx[2], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
@@ -674,7 +699,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 navigator.clipboard.writeText(Tx[0])
                                             }}
                                         >
-                                            {t('From') as string}: {formatHash(Tx[0], 8)}
+                                            {t('From') as string}: {formatHash(Tx[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -703,7 +728,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'right'
                                             }}
                                         >
-                                            {Tx[2]=="Received" ? "+" : "-"} {FormatBalance(Tx[1], TokenData.Denomination)}
+                                            {Tx[2]=="Received" ? "+" : "-"} {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
@@ -740,7 +765,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 navigator.clipboard.writeText(Tx[0])
                                             }}
                                         >
-                                            {formatHash(Tx[0], 8)}
+                                            {formatHash(Tx[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -769,7 +794,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'right'
                                             }}
                                         >
-                                           - {FormatBalance(Tx[1], TokenData.Denomination)}
+                                           - {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
@@ -806,7 +831,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 navigator.clipboard.writeText(Tx[0])
                                             }}
                                         >
-                                            {formatHash(Tx[0], 8)}
+                                            {formatHash(Tx[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -835,7 +860,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textAlign: 'right'
                                             }}
                                         >
-                                            + {FormatBalance(Tx[1], TokenData.Denomination)}
+                                            + {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>

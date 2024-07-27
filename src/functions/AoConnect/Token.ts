@@ -692,9 +692,35 @@ export const AoTokenInBoxDryRun = async (TargetTxId: string) => {
 
 export const GetTokenAvatar = (Logo: string) => {
     if(Logo && Logo.length == 43)  {
+
         return authConfig.backEndApi + "/" + Logo
     }
     else {
+        
         return ''
     }
+}
+
+export const GetAppAvatar = (logo: string) => {
+    if(logo && logo.length == 43) {
+
+        return authConfig.backEndApi + "/" + logo
+    }
+    else {
+
+        return "/images/chatroom/2.png"
+    }
+
+}
+
+export const GetAppAvatarModId = (logo: string) => {
+    if(logo) {
+
+        return "/images/chatroom/" + (logo[0].charCodeAt(0)%8 + 1) + ".png"
+    }
+    else {
+
+        return "/images/chatroom/2.png"
+    }
+
 }

@@ -345,6 +345,12 @@ export const generateRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export const FormatBalanceString = (Balance: number, Denomination: number, Precision: number) => {
+    const FormatBalanceData = FormatBalance(Balance, Denomination)
+
+    return String(Number(FormatBalanceData).toFixed(Precision)).replace(/\.?0+$/, '')
+}
+
 export const FormatBalance = (Balance: number, Denomination: number) => {
     const DenominationNew = Denomination > 0 ? Denomination : 12
     const DivValue = Math.pow(10, DenominationNew)

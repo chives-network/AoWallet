@@ -133,8 +133,18 @@ const MyWallet = () => {
   }, []);
 
   useEffect(() => {
-    setGetAllWalletsData(getAllWallets())
-    setGetWalletNicknamesData(getWalletNicknames())
+    const getAllWalletsData = getAllWallets()
+    if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
+      
+      //No wallet, and create one
+      handleWalletCreate()
+    }
+    else {
+
+      //Have wallets, and list them
+      setGetAllWalletsData(getAllWallets())
+      setGetWalletNicknamesData(getWalletNicknames())
+    }
   }, [refreshWalletData])
 
   useEffect(() => {

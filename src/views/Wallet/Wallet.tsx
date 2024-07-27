@@ -32,9 +32,8 @@ import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAd
 import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
-import { GetAppAvatar } from 'src/functions/AoConnect/MsgReminder'
 
-import { AoTokenBalanceDryRun, AoTokenTransfer } from 'src/functions/AoConnect/Token'
+import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar } from 'src/functions/AoConnect/Token'
 
 import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
@@ -760,22 +759,37 @@ const Wallet = () => {
                           <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton onClick={()=>handleClickAllTxsButton()}>
+                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=>handleClickAllTxsButton()}>
                             <History />
                           </IconButton>
-                          <Typography onClick={()=>handleClickAllTxsButton()}>{t('Txs') as string}</Typography>
+                          <Typography sx={{ 
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                                      }}
+                                      onClick={()=>Number(currentBalance) > 0 && handleClickAllTxsButton()}>
+                            {t('Txs') as string}
+                          </Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton>
+                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} >
                             <Casino />
                           </IconButton>
-                          <Typography>{t('Lottery') as string}</Typography>
+                          <Typography sx={{ 
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                                      }}
+                                      >
+                            {t('Lottery') as string}
+                          </Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
+                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
                             <Send />
                           </IconButton>
-                          <Typography onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>{t('Send') as string}</Typography>
+                          <Typography sx={{ 
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                                      }}
+                                      onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>
+                            {t('Send') as string}
+                          </Typography>
                         </Grid>
                       </Grid>
 
