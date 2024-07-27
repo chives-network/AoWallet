@@ -699,7 +699,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 navigator.clipboard.writeText(Tx[0])
                                             }}
                                         >
-                                            {t('From') as string}: {formatHash(Tx[0], 5)}
+                                            {Tx[2] === "Received" ? `${t('From') as string}: ${formatHash(Tx[0], 5)}` : `${t('To') as string}: ${formatHash(Tx[0], 5)}`}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 

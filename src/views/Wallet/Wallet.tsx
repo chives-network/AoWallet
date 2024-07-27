@@ -1404,15 +1404,7 @@ const Wallet = () => {
                 <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
                     <Grid item xs={12} sx={{ py: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
-                          <CustomAvatar
-                            skin='light'
-                            color={'primary'}
-                            sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
-                          >
-                            {getInitials(sendMoneyAddress.address).toUpperCase()}
-                          </CustomAvatar>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-                            >
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
                             <Typography sx={{ 
                               color: 'text.primary',
                               overflow: 'hidden',
@@ -1420,7 +1412,7 @@ const Wallet = () => {
                               whiteSpace: 'nowrap',
                             }}
                             >
-                              {sendMoneyAddress.name}
+                              {t('Send to')}
                             </Typography>
                             <Box sx={{ display: 'flex'}}>
                               <Typography variant='body2' sx={{ 
@@ -1428,9 +1420,10 @@ const Wallet = () => {
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',
-                                flex: 1
+                                flex: 1,
+                                fontSize: '12px'
                               }}>
-                                {formatHash(sendMoneyAddress.address, 10)}
+                                {sendMoneyAddress.address}
                               </Typography>
                               
                             </Box>
@@ -1480,10 +1473,19 @@ const Wallet = () => {
                                 />
                         </Box>
                       </ThemeProvider>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3, fontSize: 14 }}>
+                        {t('AoToken Name')}: {chooseToken.Name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3, fontSize: 14 }}>
+                        {t('AoToken Ticker')}: {chooseToken.Ticker}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3, fontSize: 12 }}>
+                        {t('AoToken Id')}: {chooseToken.TokenId}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3, fontSize: 16 }}>
                         {t('Max')}: {chooseTokenBalance} {chooseToken.Ticker}
                       </Typography>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3, fontSize: 16 }}>
                         {t('Fee')}: {currentFeeAO}
                       </Typography>
                   </Grid>
