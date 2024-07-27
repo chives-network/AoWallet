@@ -207,7 +207,7 @@ const Wallet = () => {
   };
   
   const RightButtonOnClick = () => {
-    console.log("RightButtonIcon", RightButtonIcon)
+    console.log("chooseToken", chooseToken)
 
     if(RightButtonIcon == 'mdi:qrcode')  {
       startQrCodeScanning()
@@ -499,7 +499,7 @@ const Wallet = () => {
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
-    setRightButtonIcon('')
+    setRightButtonIcon('mdi:qrcode')
     let TokenData: any = {}
     try {
         TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
@@ -1213,8 +1213,8 @@ const Wallet = () => {
 
             {(pageModel == 'ScanQRCode') && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
-                <Grid item>
-                  <video ref={videoQrCodeRef} width="350px" height="350px" autoPlay />
+                <Grid item container justifyContent="center" alignItems="center">
+                  <video ref={videoQrCodeRef} width="80%" height="350px" autoPlay />
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
@@ -1298,15 +1298,8 @@ const Wallet = () => {
             {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
-                    <Grid item xs={12} sx={{ py: 1 }}>
+                    <Grid item xs={12} sx={{ pb: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
-                          <CustomAvatar
-                            skin='light'
-                            color={'primary'}
-                            sx={{ mr: 2, width: 38, height: 38, fontSize: '1.5rem' }}
-                          >
-                            {getInitials(sendMoneyAddress.address).toUpperCase()}
-                          </CustomAvatar>
                           <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                             >
                             <Typography sx={{ 
@@ -1316,19 +1309,19 @@ const Wallet = () => {
                               whiteSpace: 'nowrap',
                             }}
                             >
-                              {sendMoneyAddress.name}
+                             {t('Send to')}
                             </Typography>
-                            <Box sx={{ display: 'flex'}}>
+                            <Box sx={{ display: 'flex', mt: 1}}>
                               <Typography variant='body2' sx={{ 
                                 color: `primary.dark`, 
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',
-                                flex: 1
+                                flex: 1,
+                                fontSize: '12px'
                               }}>
-                                {formatHash(sendMoneyAddress.address, 10)}
+                                {sendMoneyAddress.address}
                               </Typography>
-                              
                             </Box>
                           </Box>
                         </Box>
