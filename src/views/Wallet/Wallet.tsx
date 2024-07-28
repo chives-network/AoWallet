@@ -1,6 +1,8 @@
 // ** React Imports
 import { useState, useEffect, Fragment, useRef } from 'react'
 
+import { Clipboard } from '@capacitor/clipboard';
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -414,8 +416,10 @@ const Wallet = ({ setCurrentTab }: any) => {
     }
   }, [pageModel])
 
-  const handleWalletCopyAddress = () => {
-    navigator.clipboard.writeText(chooseWallet.data.arweave.key);
+  const handleWalletCopyAddress = async () => {
+    await Clipboard.write({
+      string: chooseWallet.data.arweave.key
+    });
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
 
@@ -1088,8 +1092,10 @@ const Wallet = ({ setCurrentTab }: any) => {
                               src={'/images/logo/XWE.png'}
                             >
                             </CustomAvatar>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={()=>{
-                              navigator.clipboard.writeText(Tx.owner.address == currentAddress ? Tx.recipient : Tx.owner.address)
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={ async ()=>{
+                              await Clipboard.write({
+                                string: Tx.owner.address == currentAddress ? Tx.recipient : Tx.owner.address
+                              });
                               toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
                             }}>
                                 <Typography 

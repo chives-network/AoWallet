@@ -1,5 +1,6 @@
-
 import { useState, useEffect } from 'react'
+
+import { Clipboard } from '@capacitor/clipboard';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -514,8 +515,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 textAlign: 'right',
                                                 mr: 1
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(TokenId)
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: TokenId
+                                                });
                                             }}
                                         >
                                             {(index+1)}
@@ -581,8 +584,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 textAlign: 'right',
                                                 mr: 1
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(TokenId)
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: TokenId
+                                                });
                                             }}
                                         >
                                             {(index+1)}
@@ -626,8 +631,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'left'
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(Tx[0])
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: Tx[0]
+                                                });
                                             }}
                                         >
                                             {t('From') as string}: {formatHash(Tx[0], 5)}
@@ -643,8 +650,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                     flex: 1,
                                                     textAlign: 'left'
                                                 }}
-                                                onClick={()=>{
-                                                    navigator.clipboard.writeText(Tx[1])
+                                                onClick={async ()=>{
+                                                    await Clipboard.write({
+                                                        string: Tx[1]
+                                                    });
                                                 }}
                                             >
                                             {t('To') as string}: {formatHash(Tx[1], 5)}
@@ -695,8 +704,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'left'
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(Tx[0])
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: Tx[0]
+                                                });
                                             }}
                                         >
                                             {Tx[2] === "Received" ? `${t('From') as string}: ${formatHash(Tx[0], 5)}` : `${t('To') as string}: ${formatHash(Tx[0], 5)}`}
@@ -761,8 +772,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'left'
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(Tx[0])
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: Tx[0]
+                                                });
                                             }}
                                         >
                                             {formatHash(Tx[0], 5)}
@@ -827,8 +840,10 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'left'
                                             }}
-                                            onClick={()=>{
-                                                navigator.clipboard.writeText(Tx[0])
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                    string: Tx[0]
+                                                });
                                             }}
                                         >
                                             {formatHash(Tx[0], 5)}

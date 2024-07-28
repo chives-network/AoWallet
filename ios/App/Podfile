@@ -17,6 +17,7 @@ def capacitor_pods
   pod 'CapacitorClipboard', :path => '../../node_modules/@capacitor/clipboard'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
+  pod 'CapacitorLocalNotifications', :path => '../../node_modules/@capacitor/local-notifications'
   pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
 end

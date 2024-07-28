@@ -1,3 +1,4 @@
+import { Clipboard } from '@capacitor/clipboard';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -138,8 +139,10 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                                     whiteSpace: 'nowrap',
                                     textAlign: 'right'
                                     }}
-                                    onClick={()=>{
-                                        navigator.clipboard.writeText(RightOneFullText)
+                                    onClick={async ()=>{
+                                        await Clipboard.write({
+                                            string: RightOneFullText
+                                        });
                                     }}
                                 >
                                     {RightOne}
