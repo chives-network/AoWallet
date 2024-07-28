@@ -212,24 +212,14 @@ const Faucet = () => {
                 backgroundColor: 'background.paper',
                 borderRadius: 1,
                 boxShadow: 1, 
-              }} dangerouslySetInnerHTML={{ __html: `While from a user perspective, there will be a smooth experience and seem like one contest, there’ll actually be two draws: one for the lottery and one for the jackpot. Both will run simultaneously. Note that wagering puts you in for a chance of winning both, however, there are some key differences between the lottery and the jackpot:
+              }} dangerouslySetInnerHTML={{ __html: `To provide a series of TOKEN faucet functionalities for a wide range of users.
+                
+                Each user is allowed to claim only once. 
 
-Faucet winners will always be paid out every 20 hours, with 100 prizes, or the total amount of players if less than 100, paid out regularly and the chance of winning depending on the amount of TokenA user wagers.
+                The project team can set the amount that can be claimed each time from the faucet. 
 
-There’s a 2% chance that the jackpot will be won every 20 hours and a 0.1% chance that the entire Jackpot prize pool is won. If the jackpot is not won, it is rolled over to the next round and the prize pool increases until it is won.
+                Additionally, a passphrase can be established, accompanied by a text explanation to inform users on how to claim this passphrase.
 
-1st: 20% of the lottery prize pool
-2nd: 15% of the lottery prize pool
-3rd: 10% of the lottery prize pool
-4th: 8% of the lottery prize pool
-5th: 7% of the lottery prize pool
-6th: 6% of the lottery prize pool
-7th: 5% of the lottery prize pool
-8th: 4% of the lottery prize pool
-9th: 3% of the lottery prize pool
-10th: 2% of the lottery prize pool
-11th to 100th: 0.333% to 0.111% 
-(in increments of 0.00247%) of the lottery prize pool.
               ` }} />
 
         </ContentWrapper>

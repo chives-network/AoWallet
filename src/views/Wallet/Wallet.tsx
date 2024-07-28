@@ -423,8 +423,18 @@ const Wallet = ({ setCurrentTab }: any) => {
   }, [getWalletNicknamesData, currentAddress]);
 
   useEffect(() => {
-    setGetAllWalletsData(getAllWallets())
-    setGetWalletNicknamesData(getWalletNicknames())
+    const getAllWalletsData = getAllWallets()
+    if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
+      
+      //No wallet, and switch to MyWallet
+      setCurrentTab('MyWallet')
+    }
+    else {
+
+      //Have wallets, and list them
+      setGetAllWalletsData(getAllWallets())
+      setGetWalletNicknamesData(getWalletNicknames())
+    }
   }, [refreshWalletData])
 
   useEffect(() => {

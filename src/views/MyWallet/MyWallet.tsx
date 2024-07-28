@@ -545,10 +545,10 @@ const MyWallet = ({ setCurrentTab } : any) => {
                 <CardContent>
                     <Grid container spacing={5}>
                         <Grid item xs={12}>
-                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
-                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                            </Box>
+                          <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+                            <CircularProgress sx={{ mx: 5, mb: 4 }} />
+                            <Typography sx={{ mx: 5 }}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                          </Box>
                         </Grid>
                     </Grid>
                 </CardContent>
