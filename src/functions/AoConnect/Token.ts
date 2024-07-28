@@ -35,6 +35,9 @@ export const AoLoadBlueprintToken = async (currentWalletJwk: any, processTxId: s
         if(tokenInfo && tokenInfo.Logo) {
             Data = Data.replace("dFJzkXIQf0JNmJIcHB-aOYaDNuKymIveD2K60jUnTfQ", tokenInfo.Logo)
         }
+        if(tokenInfo && tokenInfo.Denomination) {
+            Data = Data.replace("12", tokenInfo.Denomination)
+        }
         const address = await jwkToAddress(currentWalletJwk)
         if(address && address.length == 43) {
             Data = Data.replaceAll("AoConnectOwner", address)

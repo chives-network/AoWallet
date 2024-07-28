@@ -17,9 +17,13 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
+import toast from 'react-hot-toast'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
-import { setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
+import { AoCreateProcessAuto, FormatBalance, sleep } from 'src/functions/AoConnect/AoConnect'
+import { AoLoadBlueprintToken, AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -47,6 +51,9 @@ const Setting = () => {
 
   const contentHeightFixed = {}
 
+  const [currentAddress, setCurrentAddress] = useState<string>("")
+  const [chooseWallet, setChooseWallet] = useState<any>(null)
+
   const [pageModel, setPageModel] = useState<string>('MainSetting')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('')
@@ -64,6 +71,16 @@ const Setting = () => {
   const [currencyValue, setCurrencyValue] = useState<string>('us')
   const [networkValue, setNetworkValue] = useState<string>('mainnet')
 
+
+  const [tokenName, setTokenName] = useState<string>('AOTEST01')
+  const [tokenTicker, setTokenTicker] = useState<string>('AOT01')
+  const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('123456')
+  const [tokenLogo, setTokenLogo] = useState<string>('dFJzkXIQf0JNmJIcHB-aOYaDNuKymIveD2K60jUnTfQ')
+  const [tokenDenomination, setTokenDenomination] = useState<string>('3')
+
+  const [uploadingButton, setUploadingButton] = useState<string>(`${t('Submit')}`)
+  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+  
   const LanguageArray = [
         {name:'English', value:'en'},
         {name:'Chinese', value:'zh-CN'},
@@ -104,6 +121,12 @@ const Setting = () => {
   useEffect(() => {
 
     i18n.changeLanguage(getChivesLanguage())
+
+    const currentAddressTemp = getCurrentWalletAddress()
+    setCurrentAddress(String(currentAddressTemp))
+
+    const getCurrentWalletTemp = getCurrentWallet()
+    setChooseWallet(getCurrentWalletTemp)
     
     disableScroll();
 
@@ -153,6 +176,9 @@ const Setting = () => {
         handleClickGeneralButton()
         break
       case 'Network':
+        handleClickGeneralButton()
+        break
+      case 'CreateToken':
         handleClickGeneralButton()
         break
     }
@@ -241,6 +267,100 @@ const Setting = () => {
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
   }
+
+  const handleClickCreateTokenButton = () => {
+    setCounter(counter + 1)
+    setPageModel('CreateToken')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Create Token') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+  }
+
+  const handleCreateTokenButton = async () => {
+    const validateInputs = () => {
+      if (tokenName == '') {
+        toast.error(t('Token name must input') as string, { duration: 1000, position: 'top-center' });
+
+        return false;
+      }
+      if (tokenTicker == '') {
+        toast.error(t('Token ticker must input') as string, { duration: 1000, position: 'top-center' });
+
+        return false;
+      }
+      if (tokenTotalBalance == '' || Number(tokenTotalBalance) <= 0) {
+        toast.error(t('Token total issue amount must input and more than zero') as string, { duration: 1000, position: 'top-center' });
+
+        return false;
+      }
+      if (tokenLogo.length != 43) {
+        toast.error(t('Token logo must a ar tx id that storage a image') as string, { duration: 1000, position: 'top-center' });
+
+        return false;
+      }
+      if (Number(tokenDenomination) <= 0 || Number(tokenDenomination) > 12) {
+        toast.error(t('Token denomination must be a integer between 1 and 12') as string, { duration: 1000, position: 'top-center' });
+
+        return false;
+      }
+
+      return true;
+    };
+  
+    if (!validateInputs()) {
+      
+      return;
+    }
+  
+    setIsDisabledButton(true);
+    setUploadingButton(t('Summitting...') as string);
+  
+    try {
+      let TokenProcessTxId: any = null;
+      do {
+        TokenProcessTxId = await AoCreateProcessAuto(chooseWallet.jwk);
+        console.log("TokenProcessTxId", TokenProcessTxId);
+      } while (TokenProcessTxId && TokenProcessTxId.length != 43);
+  
+      const tokenInfo = {
+        Name: tokenName,
+        Ticker: tokenTicker,
+        Balance: Number(tokenTotalBalance).toFixed(0),
+        Logo: tokenLogo,
+        Denomination: tokenDenomination
+      };
+  
+      const createToken = async () => {
+        let LoadBlueprintToken: any = await AoLoadBlueprintToken(chooseWallet.jwk, TokenProcessTxId, tokenInfo);
+        console.log("handleTokenCreate LoadBlueprintToken:", LoadBlueprintToken);
+        while (LoadBlueprintToken && LoadBlueprintToken.status == 'error') {
+          await sleep(6000);
+          LoadBlueprintToken = await AoLoadBlueprintToken(chooseWallet.jwk, TokenProcessTxId, tokenInfo);
+        }
+  
+        const AoDryRunBalance = await AoTokenBalanceDryRun(TokenProcessTxId, currentAddress);
+        if (AoDryRunBalance) {
+          setCounter(counter + 1);
+
+          return { Token: TokenProcessTxId, Balance: FormatBalance(AoDryRunBalance, Number(tokenDenomination)) };
+        }
+
+      };
+  
+      const result = await createToken();
+      console.log("CreateTokenButton", result);
+  
+      setUploadingButton(t('Submit') as string);
+      setIsDisabledButton(false);
+    } 
+    catch (error) {
+      console.error("handleTokenCreate Error:", error);
+      setUploadingButton(t('Submit') as string);
+      setIsDisabledButton(false);
+    }
+  };
+
 
   const handleClickNewContactButton = () => {
     setPageModel('NewContact')
@@ -613,6 +733,38 @@ const Setting = () => {
                             </Box>
                           </Card>
                         </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCreateTokenButton()}>
+                                <Icon icon='material-symbols:token-outline' fontSize={34} />
+                              </IconButton>
+                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
+                                >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {t('Create Token') as string}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `secondary.primary`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {t('Create Token') as string}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
                     </Grid>
                 </Grid>
               </Grid>
@@ -834,6 +986,69 @@ const Setting = () => {
 
                         })}
                     </RadioGroup>
+
+                </Grid>
+            )}
+
+            {pageModel == 'CreateToken' && (
+                <Grid container spacing={2}>
+
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={tokenName}
+                        placeholder={t('Token Name, eg. AOTest') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setTokenName(e.target.value)
+                        }}
+                      />
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={tokenTicker}
+                        placeholder={t('Token Ticker, eg. AOT') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setTokenTicker(e.target.value)
+                        }}
+                      />
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={tokenTotalBalance}
+                        placeholder={t('Total Balance, eg. 10000') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setTokenTotalBalance(String(Number(e.target.value)))
+                        }}
+                      />
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={tokenLogo}
+                        placeholder={t('Token Logo Hash, length 32 tx id on AR') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        onChange={(e: any)=>{
+                          setTokenLogo(e.target.value)
+                        }}
+                      />
+                      <TextField
+                        fullWidth
+                        size='small'
+                        value={tokenDenomination}
+                        placeholder={t('Token Denomination, eg. 12') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 0 }}
+                        onChange={(e: any)=>{
+                          setTokenDenomination(e.target.value)
+                        }}
+                      />
+
+                      <Box sx={{width: '100%', mx: 2, display: 'flex', justifyContent: 'center'}}>
+                        <Button sx={{mt: 8}}  disabled={isDisabledButton} variant='contained' onClick={()=>handleCreateTokenButton()}>
+                          {uploadingButton}
+                        </Button>
+                      </Box>
 
                 </Grid>
             )}
