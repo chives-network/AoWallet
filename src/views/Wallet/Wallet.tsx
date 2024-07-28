@@ -2,6 +2,7 @@
 import { useState, useEffect, Fragment, useRef } from 'react'
 
 import { Clipboard } from '@capacitor/clipboard';
+import { Capacitor } from '@capacitor/core';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -56,6 +57,8 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 
 import { BrowserMultiFormatReader } from '@zxing/library';
+
+import { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } from '@capacitor/barcode-scanner';
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -183,33 +186,56 @@ const Wallet = ({ setCurrentTab }: any) => {
     };
   }, [codeReader]);
 
-  const startQrCodeScanning = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoQrCodeRef.current) {
-        videoQrCodeRef.current.srcObject = stream;
-        videoQrCodeRef.current.play();
-        codeReader.decodeFromVideoDevice(null, videoQrCodeRef.current, (resultTemp: any) => {
-          if (resultTemp && resultTemp.getText() && ( resultTemp.getText().length == 43 || resultTemp.getText().slice(0, 10) == 'AoToken://') ) {
-            setQrCodeResult(resultTemp.getText());
-            codeReader.reset();
-            stream.getTracks().forEach(track => track.stop());
-            if(resultTemp.getText().length == 43) {
-              handleSelectAddress({name: 'WalletFromQrCode', address: resultTemp.getText()})
+  const startScan = async () => {
+    const platform = Capacitor.getPlatform();
+    switch(platform) {
+      case 'ios':
+      case 'android':
+      case 'web':
+          try {
+            const result = await CapacitorBarcodeScanner.scanBarcode({
+              hint: CapacitorBarcodeScannerTypeHint.ALL
+            });
+            if (result && result.ScanResult) {
+              if(result.ScanResult.length == 43) {
+                handleSelectAddress({name: 'WalletFromQrCode', address: result.ScanResult})
+              }
+              console.log('result.ScanResult:', result.ScanResult);
             }
+          } catch (err) {
+            console.error('Capacitor.getPlatform Error accessing camera:', err);
           }
-        });
-      }
-    } catch (err) {
-      console.error('Error accessing camera:', err);
+          break;
+      case 'web1':
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          if (videoQrCodeRef.current) {
+            videoQrCodeRef.current.srcObject = stream;
+            videoQrCodeRef.current.play();
+            codeReader.decodeFromVideoDevice(null, videoQrCodeRef.current, (resultTemp: any) => {
+              if (resultTemp && resultTemp.getText() && ( resultTemp.getText().length == 43 || resultTemp.getText().slice(0, 10) == 'AoToken://') ) {
+                setQrCodeResult(resultTemp.getText());
+                codeReader.reset();
+                stream.getTracks().forEach(track => track.stop());
+                if(resultTemp.getText().length == 43) {
+                  handleSelectAddress({name: 'WalletFromQrCode', address: resultTemp.getText()})
+                }
+              }
+            });
+          }
+        } catch (err) {
+          console.error('Error accessing camera:', err);
+        }
+        break;
     }
+    
   };
   
   const RightButtonOnClick = () => {
     console.log("chooseToken", chooseToken)
 
     if(RightButtonIcon == 'mdi:qrcode')  {
-      startQrCodeScanning()
+      startScan()
       setPageModel('ScanQRCode')
       setLeftIcon('mdi:arrow-left-thin')
       setTitle(t('Scan QRCode') as string)
