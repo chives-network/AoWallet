@@ -3,6 +3,7 @@ import { useState, useEffect, Fragment, useRef } from 'react'
 
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
+import { Share } from '@capacitor/share';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -188,6 +189,7 @@ const Wallet = ({ setCurrentTab }: any) => {
 
   const startScan = async () => {
     const platform = Capacitor.getPlatform();
+    console.log("platform", platform)
     switch(platform) {
       case 'ios':
       case 'android':
@@ -449,20 +451,10 @@ const Wallet = ({ setCurrentTab }: any) => {
     toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
   }
 
-  const handleAddressShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: t('Share Wallet Address') as string,
-        text: `${t('Here is my wallet address') as string}: ${currentAddress}`,
-        url: window.location.href,
-      }).then(() => {
-        console.log('Successful share');
-      }).catch((error) => {
-        console.log('Error sharing', error);
-      });
-    } else {
-      console.log('Share not supported on this browser');
-    }
+  const handleAddressShare = async () => {
+    await Share.share({
+      text: currentAddress,
+    });
   }
 
   const handleClickReceiveButton = () => {
