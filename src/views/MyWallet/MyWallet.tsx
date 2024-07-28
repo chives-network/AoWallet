@@ -311,7 +311,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     multiple: false,
     accept: {
-      'image/*': ['.json']
+      'application/json': ['.json']
     },
     onDrop: (acceptedFiles: File[]) => {
         acceptedFiles.map((file: File) => {
@@ -650,28 +650,28 @@ const MyWallet = ({ setCurrentTab } : any) => {
               </Fragment>
               :
               <Fragment>
-                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                <Grid item xs={12} sx={{ height: 'calc(100%)' }}>
                   <Grid container spacing={2}>
-                    <Box sx={{width: '100%', mr: 2}}>
+                    <Box sx={{ width: '100%', mr: 2 }}>
                       <CardContent>
                         <Box {...getRootProps({ className: 'dropzone' })} sx={acceptedFiles.length ? {} : {}}>
-                            <input {...getInputProps()} />
+                          <label>
+                            <input {...getInputProps()} style={{ display: 'none' }} accept=".json" />
                             <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
-                                <Img alt='Upload img' src='/images/misc/upload.png' />
-                                <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
-                                    <HeadingTypography variant='h5'>{`${t(`Click to choose your json file`)}`}</HeadingTypography>
-                                </Box>
+                              <Img alt='Upload img' src='/images/misc/upload.png' />
+                              <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+                                <HeadingTypography variant='h5'>{`${t(`Click to choose your json file`)}`}</HeadingTypography>
+                              </Box>
                             </Box>
+                          </label>
                         </Box>
                       </CardContent>
                     </Box>
                   </Grid>
                 </Grid>
-                      
               </Fragment>
               }
-              
-              
+
             </Grid>
           )}
 

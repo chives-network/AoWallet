@@ -79,6 +79,7 @@ const Wallet = ({ setCurrentTab }: any) => {
 
   const contentHeightFixed = {}
 
+  const [platform, setPlatform] = useState<string>('')
   const [pageModel, setPageModel] = useState<string>('MainWallet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
@@ -134,6 +135,9 @@ const Wallet = ({ setCurrentTab }: any) => {
   useEffect(() => {
 
     i18n.changeLanguage(getChivesLanguage())
+
+    const platform = Capacitor.getPlatform();
+    setPlatform(platform)
     
     disableScroll();
 
@@ -188,12 +192,9 @@ const Wallet = ({ setCurrentTab }: any) => {
   }, [codeReader]);
 
   const startScan = async () => {
-    const platform = Capacitor.getPlatform();
-    console.log("platform", platform)
     switch(platform) {
       case 'ios':
       case 'android':
-      case 'web':
           try {
             const result = await CapacitorBarcodeScanner.scanBarcode({
               hint: CapacitorBarcodeScannerTypeHint.ALL
@@ -208,7 +209,7 @@ const Wallet = ({ setCurrentTab }: any) => {
             console.error('Capacitor.getPlatform Error accessing camera:', err);
           }
           break;
-      case 'web1':
+      case 'web':
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
           if (videoQrCodeRef.current) {
@@ -1234,7 +1235,7 @@ const Wallet = ({ setCurrentTab }: any) => {
             {(pageModel == 'ScanQRCode') && ( 
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item container justifyContent="center" alignItems="center">
-                  <video ref={videoQrCodeRef} width="80%" height="350px" autoPlay />
+                  {platform && platform == "web" && (<video ref={videoQrCodeRef} width="80%" height="350px" autoPlay />)}                  
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
