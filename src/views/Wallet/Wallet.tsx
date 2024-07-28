@@ -343,7 +343,7 @@ const Wallet = ({ setCurrentTab }: any) => {
         if(authConfig.tokenType == "XWE")  {
           const currentBalanceTemp = await getWalletBalance(currentAddress);
           if(currentBalanceTemp) {
-            setCurrentBalance(Number(currentBalanceTemp).toFixed(4))
+            setCurrentBalance(Number(currentBalanceTemp).toFixed(4).replace(/\.?0*$/, ''))
           }
 
           const getTxsInMemoryData = await getTxsInMemory()
@@ -355,7 +355,7 @@ const Wallet = ({ setCurrentTab }: any) => {
 
           if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
             const MinusBalance = BalanceMinus(Number(currentBalanceTemp) , Number(currentTxsInMemory['send'][currentAddress]))
-            setCurrentBalance(Number(MinusBalance).toFixed(4))
+            setCurrentBalance(Number(MinusBalance).toFixed(4).replace(/\.?0*$/, ''))
           }
 
         }
@@ -366,7 +366,7 @@ const Wallet = ({ setCurrentTab }: any) => {
 
           const currentBalanceTemp = await getWalletBalance(currentAddress);
           if(currentBalanceTemp) {
-            setCurrentBalance(Number(currentBalanceTemp).toFixed(4))
+            setCurrentBalance(Number(currentBalanceTemp).toFixed(4).replace(/\.?0*$/, ''))
           }
 
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
@@ -693,8 +693,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                 if (!myAoTokensBalanceTemp[currentAddress]) {
                   myAoTokensBalanceTemp[currentAddress] = {};
                 }
-                myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4) : 0;
-                console.log("myAoTokensBalanceTemp", myAoTokensBalanceTemp);
+                myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
                 setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
 
                 return myAoTokensBalanceTemp;
@@ -859,7 +858,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                         <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='hugeicons:mining-02' />
-                            {Number(currentBalanceReservedRewards).toFixed(4)} {authConfig.tokenName}
+                            {Number(currentBalanceReservedRewards).toFixed(4).replace(/\.?0*$/, '')} {authConfig.tokenName}
                           </Box>
                         </Typography>
                       )}
@@ -965,7 +964,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                     mr: 2,
                                     ml: 2
                                   }}>
-                                    {Number(currentBalance) > 0 ? Number(currentBalance).toFixed(4) : '0'}
+                                    {Number(currentBalance) > 0 ? Number(currentBalance).toFixed(4).replace(/\.?0*$/, '') : '0'}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1020,7 +1019,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                       mr: 2,
                                       ml: 2
                                     }}>
-                                      {Number(currentAoBalance) > 0 ? Number(currentAoBalance).toFixed(4) : '0'}
+                                      {Number(currentAoBalance) > 0 ? Number(currentAoBalance).toFixed(4).replace(/\.?0*$/, '') : '0'}
                                     </Typography>
                                   </Box>
                                 </Box>
@@ -1029,7 +1028,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                           )}
 
                           {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
-
+                            
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                                 <Card>
@@ -1527,7 +1526,6 @@ const Wallet = ({ setCurrentTab }: any) => {
                                   const result = BalanceTimes(Number(TotalLeft), MultiValue)
                                   if(newValue == 100) {
                                     setSendMoneyAmount( String(Number(result)) )
-
                                   }
                                   else {
                                     setSendMoneyAmount( String(Number(result).toFixed(4)) )

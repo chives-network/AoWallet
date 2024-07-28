@@ -20,11 +20,14 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
+import authConfig from 'src/configs/auth'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
-import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken } from 'src/functions/ChivesWallets'
 import { AoCreateProcessAuto, FormatBalance, sleep } from 'src/functions/AoConnect/AoConnect'
 import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
+import { MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
+
 
 
 // ** Third Party Import
@@ -74,10 +77,10 @@ const Setting = () => {
   const [networkValue, setNetworkValue] = useState<string>('mainnet')
 
 
-  const [tokenName, setTokenName] = useState<string>('AOTEST')
-  const [tokenTicker, setTokenTicker] = useState<string>('AOT')
+  const [tokenName, setTokenName] = useState<string>('TokenName')
+  const [tokenTicker, setTokenTicker] = useState<string>('AOTN')
   const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('1000000')
-  const [tokenLogo, setTokenLogo] = useState<string>('dFJzkXIQf0JNmJIcHB-aOYaDNuKymIveD2K60jUnTfQ')
+  const [tokenLogo, setTokenLogo] = useState<string>('_A-OtzzfCZGUkVdf_Ajs6WLYIJySKI6SBmTzGKXsFG4')
   const [tokenDenomination, setTokenDenomination] = useState<string>('12')
   const [createTokenData, setCreateTokenData] = useState<any>(null)
 
@@ -355,6 +358,7 @@ const Setting = () => {
       const TokenGetMap: any = await AoTokenInfoDryRun(result.Token)
       if(TokenGetMap) {
         setCreateTokenData({TokenId: result.Token, TokenName: TokenGetMap.Name, TokenData: TokenGetMap})
+        handleSelectTokenAndSave({TokenId: result.Token}, TokenGetMap)
       }
       console.log("createTokenData", createTokenData);
   
@@ -415,7 +419,17 @@ const Setting = () => {
     setTitle(Network)
   }
 
-  
+  const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
+    setIsDisabledButton(true)
+    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '200', TokenData.Name, JSON.stringify(TokenData) )
+    console.log("WantToSaveTokenProcessTxIdData TokenData", TokenData, Token)
+    setIsDisabledButton(false)
+    if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+      toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
+      addMyAoToken(currentAddress, {TokenId: Token.TokenId, TokenSort: '200', TokenName: TokenData.Name, TokenData: TokenData})
+    }
+    console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
+  }
 
 
   return (
@@ -737,6 +751,11 @@ const Setting = () => {
                                   </Typography>
                                 </Box>
                               </Box>
+                              <Box textAlign="right">
+                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
+                                      <Icon icon='mdi:chevron-right' fontSize={30} />
+                                  </IconButton>
+                              </Box>
                             </Box>
                           </Card>
                         </Grid>
@@ -768,6 +787,11 @@ const Setting = () => {
                                     {t('Create Token') as string}
                                   </Typography>
                                 </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
+                                      <Icon icon='mdi:chevron-right' fontSize={30} />
+                                  </IconButton>
                               </Box>
                             </Box>
                           </Card>

@@ -235,7 +235,7 @@ const TokenCreate = (props: any) => {
                             label={`${t('Logo')}`}
                             placeholder={`${t('Logo')}`}
                             disabled={tokenCreate.isDisabledButton}
-                            value={tokenCreate?.Logo ?? 'dFJzkXIQf0JNmJIcHB-aOYaDNuKymIveD2K60jUnTfQ'}
+                            value={tokenCreate?.Logo ?? '_A-OtzzfCZGUkVdf_Ajs6WLYIJySKI6SBmTzGKXsFG4'}
                             onChange={(e: any)=>{
                                 setTokenCreate( (prevState: any) => ({ ...prevState, Logo: e.target.value }) )
                             }}
