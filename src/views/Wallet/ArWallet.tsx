@@ -79,14 +79,14 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                     LeftTwo = "AO "  + TagsMap['Type']
                     RightOne = TagsMap['From-Process'] ? formatHash(TagsMap['From-Process'], 6) : formatHash(Tx.node.recipient, 6)
                     RightOneFullText = TagsMap['From-Process'] ? TagsMap['From-Process'] : Tx.node.recipient
-                    RightTwo = formatTimestamp(Tx.node.block.timestamp)
+                    RightTwo = formatTimestamp(Tx.node?.block?.timestamp)
                     Logo = '/images/logo/AO.png'
                 }
                 if(Tx.node.quantity.winston > 0) {
                     LeftOne = String(Number(Tx.node.quantity.ar))
                     LeftTwo = TagsMap['App-Name'] ?? TagsMap['Content-Type'] ?? 'Payment | Data'
                     RightOne = currentAddress == Tx.node.recipient ? formatHash(Tx.node.owner.address, 6) : formatHash(Tx.node.recipient, 6)
-                    RightTwo = formatTimestamp(Tx.node.block.timestamp)
+                    RightTwo = formatTimestamp(Tx.node?.block?.timestamp)
                     Logo = '/images/logo/AR.png'
                 }
                 
