@@ -12,7 +12,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
 import IconButton from '@mui/material/IconButton'
-import { CallReceived, History, Casino, Send } from '@mui/icons-material';
+import { CallReceived, History, Casino, Send } from '@mui/icons-material'
 
 // ** MUI Imports
 import authConfig from 'src/configs/auth'
@@ -21,19 +21,18 @@ import authConfig from 'src/configs/auth'
 import { useTranslation } from 'react-i18next'
 import { formatHash } from 'src/configs/functions'
 
-import Tabs from '@mui/material/Tabs';
-import { GetAppAvatar } from 'src/functions/AoConnect/Token'
+import Tabs from '@mui/material/Tabs'
 
 import { BigNumber } from 'bignumber.js'
 
-import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions } from 'src/functions/AoConnect/Token'
+import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetAppAvatar } from 'src/functions/AoConnect/Token'
 import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
 import { FormatBalance, FormatBalanceString } from 'src/functions/AoConnect/AoConnect'
 
 const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 
     const { t } = useTranslation()
-    
+
     const TokenData = {...chooseToken.TokenData, TokenId: chooseToken.TokenId}
     const TokenId = chooseToken.TokenId
     

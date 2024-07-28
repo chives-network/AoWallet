@@ -37,7 +37,7 @@ import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConne
 
 import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
 
-import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar } from 'src/functions/AoConnect/Token'
+import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
 
 import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
@@ -93,6 +93,7 @@ const Wallet = ({ setCurrentTab }: any) => {
   const [isTokenModel, setIsTokenModel] = useState<boolean>(false)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
   const [searchAssetkeyWord, setSearchAssetkeyWord] = useState<string>('')
+  const [searchAssetOnChain, setSearchAssetOnChain] = useState<any[]>([])
   const [contactsAll, setContactsAll] = useState<any>({})
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
   const [currentWalletTxsCursor, setCurrentWalletTxsCursor] = useState<any>({})
@@ -160,6 +161,7 @@ const Wallet = ({ setCurrentTab }: any) => {
     setChooseTokenBalance(null)
     setIsTokenModel(false)
     setSearchAssetkeyWord('')
+    setSearchAssetOnChain([])
   }
   
   const LeftIconOnClick = () => {
@@ -606,9 +608,10 @@ const Wallet = ({ setCurrentTab }: any) => {
 
   const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
     setIsDisabledButton(true)
-    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', Token.Name, JSON.stringify(TokenData) )
+    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', TokenData.Name, JSON.stringify(TokenData) )
+    console.log("WantToSaveTokenProcessTxIdData TokenData", TokenData, Token)
     setIsDisabledButton(false)
-    if(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+    if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
       addMyAoToken(currentAddress, Token)
       const getMyAoTokensData = getMyAoTokens(currentAddress)
@@ -766,6 +769,24 @@ const Wallet = ({ setCurrentTab }: any) => {
       return result
     }
   }
+
+  const handleSearchAoAssetOnChain = async () => {
+    setIsDisabledButton(true)
+    const TokenGetMap: any = await AoTokenInfoDryRun(searchAssetkeyWord)
+    if(TokenGetMap) {
+      setSearchAssetOnChain([{TokenId: searchAssetkeyWord, TokenName: TokenGetMap.Name, TokenData: TokenGetMap}])
+      console.log("handleTokenSearch TokenGetMap", TokenGetMap)
+      setSearchAssetkeyWord('')
+    }
+    setIsDisabledButton(false)
+  }
+
+  useEffect(() => {
+    if(searchAssetkeyWord.length == 43)  {
+      handleSearchAoAssetOnChain()
+    }
+  }, [searchAssetkeyWord]);
+  
   
 
   const themeSlider = createTheme({
@@ -1686,6 +1707,58 @@ const Wallet = ({ setCurrentTab }: any) => {
 
                     })}
                     </Grid>
+                    <Grid container spacing={2}>
+                    {handleGetLeftAllTokens(searchAssetOnChain, allTokensData).map((Token: any, index: number) => {
+
+                      return (
+                        <Grid item xs={12} sx={{ py: 1 }} key={index}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <CustomAvatar
+                                skin='light'
+                                color={'primary'}
+                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                src={GetAppAvatar(Token.TokenData.Logo)}
+                              >
+                              </CustomAvatar>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
+                                <Typography sx={{ 
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {Token.TokenData.Name}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{ 
+                                    color: `primary.dark`, 
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {formatHash(Token.TokenId, 6)}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <Typography variant="body1" component="div" sx={{ color: 'primary.main', wordWrap: 'noWrap' }}>
+                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
+                                    <Icon icon='tdesign:plus' />
+                                    {t('Add') as string}
+                                  </Box>
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                      )
+
+                    })}
+                    </Grid>
+
                     {mySavingTokensData && mySavingTokensData.length > 0 && handleGetLeftAllTokens(allTokensData, mySavingTokensData).length == 0 && (
                       <Grid item xs={12} sx={{ py: 0 }}>
                         <Box sx={{ 
@@ -1702,7 +1775,6 @@ const Wallet = ({ setCurrentTab }: any) => {
                       </Grid>
                     )}
                     
-
                 </Grid>
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
