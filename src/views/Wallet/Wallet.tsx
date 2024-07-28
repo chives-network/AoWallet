@@ -524,7 +524,7 @@ const Wallet = ({ setCurrentTab }: any) => {
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Manage Assets') as string)
     setRightButtonText(t('') as string)
-    setRightButtonIcon('mdi:add')
+    setRightButtonIcon('')
   }
 
   const handleClickViewTokenButton = (Token: any) => {

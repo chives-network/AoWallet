@@ -1,6 +1,8 @@
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react'
 
+import { Clipboard } from '@capacitor/clipboard';
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -22,7 +24,7 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 
 import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
 import { AoCreateProcessAuto, FormatBalance, sleep } from 'src/functions/AoConnect/AoConnect'
-import { AoLoadBlueprintToken, AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
 
 
 // ** Third Party Import
@@ -72,11 +74,12 @@ const Setting = () => {
   const [networkValue, setNetworkValue] = useState<string>('mainnet')
 
 
-  const [tokenName, setTokenName] = useState<string>('AOTEST01')
-  const [tokenTicker, setTokenTicker] = useState<string>('AOT01')
-  const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('123456')
+  const [tokenName, setTokenName] = useState<string>('AOTEST')
+  const [tokenTicker, setTokenTicker] = useState<string>('AOT')
+  const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('1000000')
   const [tokenLogo, setTokenLogo] = useState<string>('dFJzkXIQf0JNmJIcHB-aOYaDNuKymIveD2K60jUnTfQ')
-  const [tokenDenomination, setTokenDenomination] = useState<string>('3')
+  const [tokenDenomination, setTokenDenomination] = useState<string>('12')
+  const [createTokenData, setCreateTokenData] = useState<any>(null)
 
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Submit')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
@@ -348,8 +351,12 @@ const Setting = () => {
 
       };
   
-      const result = await createToken();
-      console.log("CreateTokenButton", result);
+      const result: any = await createToken();
+      const TokenGetMap: any = await AoTokenInfoDryRun(result.Token)
+      if(TokenGetMap) {
+        setCreateTokenData({TokenId: result.Token, TokenName: TokenGetMap.Name, TokenData: TokenGetMap})
+      }
+      console.log("createTokenData", createTokenData);
   
       setUploadingButton(t('Submit') as string);
       setIsDisabledButton(false);
@@ -1049,6 +1056,87 @@ const Setting = () => {
                           {uploadingButton}
                         </Button>
                       </Box>
+
+                      {createTokenData && createTokenData && (
+                        <>
+                        <Typography sx={{ 
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      mt: 5
+                                    }}
+                                    onClick={async ()=>{
+                                      await Clipboard.write({
+                                        string: createTokenData.TokenId
+                                      });
+                                      toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                                    }}
+                        >
+                        TokenId: {formatHash(createTokenData.TokenId, 10)}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        Name: {createTokenData.TokenData.Name}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        Ticker: {createTokenData.TokenData.Ticker}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        TotalSupply: {createTokenData.TokenData.TotalSupply}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        Version: {createTokenData.TokenData.Version}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        Denomination: {createTokenData.TokenData.Denomination}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: 'text.primary',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}
+                        >
+                        Release: {createTokenData.TokenData.Release}
+                        </Typography>
+                        </>
+                      )}
 
                 </Grid>
             )}
