@@ -33,7 +33,8 @@ import { FormatBalance, FormatBalanceString } from 'src/functions/AoConnect/AoCo
 const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 
     const { t } = useTranslation()
-    const TokenData = chooseToken
+    
+    const TokenData = {...chooseToken.TokenData, TokenId: chooseToken.TokenId}
     const TokenId = chooseToken.TokenId
     
     const [tokenListAction, setTokenListAction] = useState<string>(TokenData.Release == "ChivesToken" ? "MyTxs" : "Holders")

@@ -159,6 +159,7 @@ const Wallet = ({ setCurrentTab }: any) => {
     setChooseToken(null)
     setChooseTokenBalance(null)
     setIsTokenModel(false)
+    setSearchAssetkeyWord('')
   }
   
   const LeftIconOnClick = () => {
@@ -530,12 +531,9 @@ const Wallet = ({ setCurrentTab }: any) => {
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:qrcode')
-    let TokenData: any = {}
     try {
-        TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
-        TokenData = {...TokenData, TokenId: Token.TokenId}
-        setChooseToken(TokenData)
-        setChooseTokenBalance(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenData.TokenId])
+        setChooseToken(Token)
+        setChooseTokenBalance(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId])
         setIsTokenModel(true)
         setPage(0)
     }
@@ -606,9 +604,9 @@ const Wallet = ({ setCurrentTab }: any) => {
     console.log("uploadProgress", uploadProgress)
   }
 
-  const handleSelectTokenAndSave = async (Token: any) => {
+  const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
     setIsDisabledButton(true)
-    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', Token.Name, JSON.stringify(Token) )
+    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', Token.Name, JSON.stringify(TokenData) )
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
@@ -653,7 +651,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                   return a.TokenGroup.localeCompare(b.TokenGroup);
               }
           });
-          const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: Token.TokenData.replace(/\\"/g, '"')}))
+          const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: JSON.parse(Token.TokenData.replace(/\\"/g, '"'))}))
           setMyAoTokens(currentAddress, dataArrayFilter)
           setMySavingTokensData(dataArrayFilter)
           console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
@@ -688,8 +686,7 @@ const Wallet = ({ setCurrentTab }: any) => {
             try {
               const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
               if (AoDryRunBalance) {
-                const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'));
-                const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenData.Denomination ? TokenData.Denomination : '12');
+                const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Token.TokenData.Denomination ? Token.TokenData.Denomination : '12');
                 if (!myAoTokensBalanceTemp[currentAddress]) {
                   myAoTokensBalanceTemp[currentAddress] = {};
                 }
@@ -1020,7 +1017,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                       skin='light'
                                       color={'primary'}
                                       sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                      src={GetAppAvatar(Token.Logo)}
+                                      src={GetAppAvatar(Token.TokenData.Logo)}
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1033,7 +1030,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                           textAlign: 'left'
                                         }}
                                       >
-                                        {Token.Name}
+                                        {Token.TokenData.Name}
                                       </Typography>
                                       <Box sx={{ display: 'flex' }}>
                                         <Typography 
@@ -1584,14 +1581,6 @@ const Wallet = ({ setCurrentTab }: any) => {
                     <Grid container spacing={2}>
                     {handleSearchAssets(mySavingTokensData).map((Token: any, index: number) => {
 
-                      let TokenData: any = {}
-                      try {
-                        TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
-                      }
-                      catch(e: any) {
-                        console.log("allTokensData Error", e)
-                      }
-
                       return (
                         <Grid item xs={12} sx={{ py: 1 }} key={index}>
                           <Card>
@@ -1600,7 +1589,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                 skin='light'
                                 color={'primary'}
                                 sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                src={GetAppAvatar(TokenData.Logo)}
+                                src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
@@ -1611,7 +1600,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                   whiteSpace: 'nowrap',
                                 }}
                                 >
-                                  {TokenData.Name}
+                                  {Token.TokenData.Name}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
                                   <Typography variant='body2' sx={{ 
@@ -1657,7 +1646,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                 skin='light'
                                 color={'primary'}
                                 sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                src={GetAppAvatar(Token.Logo)}
+                                src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
@@ -1668,7 +1657,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                                   whiteSpace: 'nowrap',
                                 }}
                                 >
-                                  {Token.Name}
+                                  {Token.TokenData.Name}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
                                   <Typography variant='body2' sx={{ 
@@ -1684,7 +1673,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                               </Box>
                               <Box textAlign="right">
                                 <Typography variant="body1" component="div" sx={{ color: 'primary.main', wordWrap: 'noWrap' }}>
-                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token)} >
+                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
                                     <Icon icon='tdesign:plus' />
                                     {t('Add') as string}
                                   </Box>
