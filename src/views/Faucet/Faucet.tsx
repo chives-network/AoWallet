@@ -14,7 +14,7 @@ import Divider from '@mui/material/Divider'
 import Backdrop from '@mui/material/Backdrop'
 import CardContent from '@mui/material/CardContent'
 import CircularProgress from '@mui/material/CircularProgress'
-
+import toast from 'react-hot-toast'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -25,8 +25,8 @@ import { formatHash } from 'src/configs/functions'
 import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
 import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets } from 'src/functions/ChivesWallets'
-import { GetAppAvatar } from 'src/functions/AoConnect/Token'
-import { AoFaucetGetFaucet } from 'src/functions/AoConnect/ChivesFaucet'
+import { GetAppAvatar, AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
+import { AoFaucetGetFaucet, AoFaucetInfo } from 'src/functions/AoConnect/ChivesFaucet'
 
 import { ChivesServerDataGetFaucets } from 'src/functions/AoConnect/ChivesServerData'
 
@@ -56,6 +56,8 @@ const Faucet = () => {
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseFaucet, setChooseFaucet] = useState<any>(null)
+  const [faucetBalance, setFaucetBalance] = useState<any>({})
+  const [myTokenBalance, setMyTokenBalance] = useState<any>({})
 
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
@@ -136,12 +138,33 @@ const Faucet = () => {
   }
 
   const handelGetAmountFromFaucet = async (Faucet: any) => {
-    if( chooseWallet && chooseWallet.jwk && Faucet )   {
+    if( chooseWallet && chooseWallet.jwk && Faucet && Faucet.FaucetId && currentAddress.length == 43 )   {
+      setIsDisabledButton(true)
       const GetFaucetFromFaucetTokenId: any = await AoFaucetGetFaucet(chooseWallet.jwk, Faucet.FaucetId)
       if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data) {
-        console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId, Faucet)
-        
+        console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data)
+        toast.success(GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data, {
+          duration: 2000
+        })
+
+        const AoFaucetInfoData = await AoFaucetInfo(Faucet.FaucetId)
+        console.log("AoFaucetInfoData AoFaucetInfo", AoFaucetInfoData)
+        if(AoFaucetInfoData) {
+          setFaucetBalance((prevState: any)=>({
+              ...prevState,
+              [Faucet.FaucetId]: FormatBalance(AoFaucetInfoData.FaucetBalance, AoFaucetInfoData.Denomination)
+          }))
+        }
+        const AoDryRunBalance = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, currentAddress);
+        if(AoDryRunBalance && AoFaucetInfoData) {
+          console.log("AoDryRunBalance", AoDryRunBalance)
+          setMyTokenBalance((prevState: any)=>({
+              ...prevState,
+              [Faucet.FaucetId]: FormatBalance(AoDryRunBalance, AoFaucetInfoData.Denomination)
+          }))
+        }
       }
+      setIsDisabledButton(false)
     }
     else {
       console.log("GetFaucetFromFaucetTokenId chooseWallet", chooseWallet)
@@ -208,7 +231,10 @@ const Faucet = () => {
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                   <Typography sx={{ fontWeight: 600 }}>{Faucet.FaucetData.Name}</Typography>
                                   <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
-                                    {formatHash(Faucet.FaucetId, 12)}
+                                    {formatHash(Faucet.FaucetData.FaucetTokenId, 12)}
+                                  </Typography>
+                                  <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
+                                    {t('Balance')}: {myTokenBalance[Faucet.FaucetId] ?? ''}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -235,7 +261,7 @@ const Faucet = () => {
                               <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                 <Icon icon='streamline:bag-dollar-solid' />
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Balance') as string}: {FormatBalance(Faucet.FaucetData.FaucetBalance, Faucet.FaucetData.Denomination)}</Typography>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? FormatBalance(Faucet.FaucetData.FaucetBalance, Faucet.FaucetData.Denomination)}</Typography>
                                 </Box>
                               </Box>
 
@@ -248,7 +274,7 @@ const Faucet = () => {
 
                               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Button disabled={false} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
+                                    <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
                                         {t('Get Faucet') as string}
                                     </Button>
                                 </Box>
