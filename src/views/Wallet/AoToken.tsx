@@ -265,7 +265,6 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     setHoldersNumber(TokenHolders)
                     setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSortedResult)
                     setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSortedResult, TokenHolders, CirculatingSupply})
-                    //console.log("handleAoTokenBalancesDryRunOfficialToken", AoDryRunBalancesJsonSortedResult, "TokenHolders", TokenHolders)
                     !getTokenAllHolderTxsData && setIsLoading(false)
                 }
                 catch(Error: any) {

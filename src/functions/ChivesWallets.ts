@@ -398,7 +398,7 @@ export function getAllAoFaucets(Address: string) {
     if(typeof window !== 'undefined')  {
         const chivesAllAoFaucetsData = window.localStorage.getItem("chivesAllAoFaucets")
         const chivesAllAoFaucetsObject = chivesAllAoFaucetsData ? JSON.parse(chivesAllAoFaucetsData) : {}
-        console.log("chivesAllAoFaucetsObject", chivesAllAoFaucetsObject, Address)
+        
         return chivesAllAoFaucetsObject[Address] ?? []
     }
 }
