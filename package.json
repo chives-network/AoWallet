@@ -13,7 +13,6 @@
     "build:icons": "tsc -b src/iconify-bundle && node src/iconify-bundle/bundle-icons-react.js"
   },
   "dependencies": {
-    "glob": "^10.2.3",
     "@capacitor/android": "^6.1.1",
     "@capacitor/app": "^6.0.0",
     "@capacitor/barcode-scanner": "^1.0.1",
@@ -28,6 +27,7 @@
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
     "@iconify/react": "4.1.0",
+    "@ionic/pwa-elements": "^3.3.0",
     "@mui/icons-material": "^5.16.4",
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.19",
@@ -54,6 +54,7 @@
     "crypto": "^1.0.1",
     "draft-js": "^0.11.7",
     "file-saver": "^2.0.5",
+    "glob": "^10.2.3",
     "human-crypto-keys": "^0.1.4",
     "i18next": "22.4.15",
     "i18next-browser-languagedetector": "7.0.1",
