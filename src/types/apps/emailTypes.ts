@@ -1,7 +1,7 @@
 // ** Types
 import { Dispatch } from 'redux'
 import { ReactElement, SyntheticEvent } from 'react'
-import { TxRecordType } from 'src/types/apps/Chivesweave'
+import { TxRecordType } from '../../types/apps/Chivesweave'
 
 export type LabelType = 'personal' | 'company' | 'important' | 'private'
 

@@ -1,12 +1,12 @@
 
 //Due need to use the node esm mode, so have change the package.json and move the repo to this location. Version: 0.0.53
-import { connect, createDataItemSigner }  from "scripts/@permaweb/aoconnect"
-import authConfig from 'src/configs/auth'
+import { connect, createDataItemSigner }  from "../../../scripts/@permaweb/aoconnect"
+import authConfig from '../../configs/auth'
 
 import axios from 'axios'
 
-import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord, BalanceTimes10 } from 'src/functions/AoConnect/AoConnect'
-import { jwkToAddress } from 'src/functions/ChivesWallets'
+import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord, BalanceTimes10 } from '../../functions/AoConnect/AoConnect'
+import { jwkToAddress } from '../../functions/ChivesWallets'
 
 
 export const AoLoadBlueprintToken = async (currentWalletJwk: any, processTxId: string, tokenInfo: any) => {

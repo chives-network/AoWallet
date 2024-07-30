@@ -3,10 +3,10 @@ import { useTheme } from '@mui/material/styles'
 import MuiTimelineDot from '@mui/lab/TimelineDot'
 
 // ** Hooks Imports
-import useBgColor, { UseBgColorType } from 'src/@core/hooks/useBgColor'
+import useBgColor, { UseBgColorType } from '../../../../@core/hooks/useBgColor'
 
 // ** Util Import
-import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import { hexToRGBA } from '../../../../@core/utils/hex-to-rgba'
 
 // ** Types
 import { CustomTimelineDotProps, ColorsType } from './types'

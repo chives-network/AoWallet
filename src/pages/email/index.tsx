@@ -1,5 +1,5 @@
 // ** Demo Components Imports
-import Email from 'src/views/Email/Email'
+import Email from '../../views/Email/Email'
 
 const EmailApp = () => <Email />
 

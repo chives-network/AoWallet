@@ -2,12 +2,12 @@
 import Box from '@mui/material/Box'
 
 // ** Type Import
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from '../../../@core/context/settingsContext'
 
 // ** Components
-import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
-import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
-import LanguageDropdown from 'src/@core/layouts/components/shared-components/LanguageDropdown'
+import ModeToggler from '../../../@core/layouts/components/shared-components/ModeToggler'
+import UserDropdown from '../../../@core/layouts/components/shared-components/UserDropdown'
+import LanguageDropdown from '../../../@core/layouts/components/shared-components/LanguageDropdown'
 
 interface Props {
   hidden: boolean

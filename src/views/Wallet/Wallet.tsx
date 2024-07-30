@@ -10,10 +10,10 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
-import { getInitials } from 'src/@core/utils/get-initials'
+import { getInitials } from '../../@core/utils/get-initials'
 import Slider from '@mui/material/Slider'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -27,25 +27,25 @@ import ShareIcon from '@mui/icons-material/Share';
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 import toast from 'react-hot-toast'
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from 'src/functions/ChivesWallets'
-import { BalanceMinus, BalanceTimes, FormatBalance } from 'src/functions/AoConnect/AoConnect'
+import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
+import { BalanceMinus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
-import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
+import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
 
-import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
+import { AoTokenBalanceDryRun, AoTokenTransfer, GetAppAvatar, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
 
-import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
+import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from '../../functions/AoConnect/MyProcessTxIds'
 
-import { GetArWalletAllTxs } from 'src/functions/Arweave'
+import { GetArWalletAllTxs } from '../../functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp, ansiRegex } from 'src/configs/functions'
+import { formatHash, formatTimestamp, ansiRegex } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'

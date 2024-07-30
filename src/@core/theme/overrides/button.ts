@@ -2,7 +2,7 @@
 import { OwnerStateThemeType } from './'
 
 // ** Theme Config Imports
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '../../../configs/themeConfig'
 
 const Button = () => {
   return {

@@ -17,16 +17,16 @@ import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'react-perfect-scrollbar'
 
 // ** Type Imports
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from '../../../../@core/context/settingsContext'
 
 // ** Custom Components Imports
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../../../@core/components/mui/avatar'
 
 export type ShortcutsType = {
   url: string

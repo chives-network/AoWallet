@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
 interface DataParams {
   pageId: number

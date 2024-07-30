@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
@@ -15,19 +15,19 @@ import IconButton from '@mui/material/IconButton'
 import { CallReceived, History, Casino, Send } from '@mui/icons-material'
 
 // ** MUI Imports
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from 'src/configs/functions'
+import { formatHash } from '../../configs/functions'
 
 import Tabs from '@mui/material/Tabs'
 
 import { BigNumber } from 'bignumber.js'
 
-import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetAppAvatar } from 'src/functions/AoConnect/Token'
-import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
-import { FormatBalance, FormatBalanceString } from 'src/functions/AoConnect/AoConnect'
+import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetAppAvatar } from '../../functions/AoConnect/Token'
+import {setTokenAllHolderTxs, getTokenAllHolderTxs } from '../../functions/ChivesWallets'
+import { FormatBalance, FormatBalanceString } from '../../functions/AoConnect/AoConnect'
 
 const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 

@@ -5,15 +5,15 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 import MuiAvatar from '@mui/material/Avatar'
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 import IconButton from '@mui/material/IconButton'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
-import { GetTokenAvatar } from 'src/functions/AoConnect/Token'
+import { GetTokenAvatar } from '../../functions/AoConnect/Token'
 
 const TokenSummary = (prop: any) => {
   // ** Hook

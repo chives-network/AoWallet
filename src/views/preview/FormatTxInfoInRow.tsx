@@ -5,14 +5,14 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 // ** Axios Imports
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
 // ** MUI Imports
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 
-import { formatHash, formatXWE, getContentTypeAbbreviation } from 'src/configs/functions';
+import { formatHash, formatXWE, getContentTypeAbbreviation } from '../../configs/functions';
 
 const Img = styled('img')(({ theme }) => ({
   width: 34,

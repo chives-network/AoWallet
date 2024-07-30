@@ -1,7 +1,7 @@
 // ** Toolkit imports
 import { configureStore } from '@reduxjs/toolkit'
-import knowledge from 'src/store/apps/knowledge'
-import email from 'src/store/apps/email'
+import knowledge from '../store/apps/knowledge'
+import email from '../store/apps/email'
 
 export const store = configureStore({
   reducer: {

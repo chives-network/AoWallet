@@ -1,7 +1,7 @@
 
 // ** Third Party Imports
 import axios from 'axios'
-import authConfig from 'src/configs/auth'
+import authConfig from '../configs/auth'
 
 export async function GetArWalletAllTxs(Address: string, Type: string, After: any) {
     console.log("After", After)

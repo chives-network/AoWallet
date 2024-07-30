@@ -7,7 +7,7 @@
 
 // ** MUI Imports
 import { Direction } from '@mui/material'
-import authConfig from 'src/configs/auth'
+import authConfig from '../configs/auth'
 
 
 // ** Types
@@ -19,7 +19,7 @@ import {
   ContentWidth,
   VerticalNavToggle,
   HorizontalMenuToggle
-} from 'src/@core/layouts/types'
+} from '../@core/layouts/types'
 
 type ThemeConfig = {
   skin: Skin

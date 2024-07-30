@@ -8,31 +8,31 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
-import { getInitials } from 'src/@core/utils/get-initials'
+import { getInitials } from '../../@core/utils/get-initials'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 import toast from 'react-hot-toast'
-import authConfig from 'src/configs/auth'
-import { useSettings } from 'src/@core/hooks/useSettings'
+import authConfig from '../../configs/auth'
+import { useSettings } from '../../@core/hooks/useSettings'
 
-import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken } from 'src/functions/ChivesWallets'
-import { AoCreateProcessAuto, FormatBalance, sleep } from 'src/functions/AoConnect/AoConnect'
-import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
-import { MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
+import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken } from '../../functions/ChivesWallets'
+import { AoCreateProcessAuto, FormatBalance, sleep } from '../../functions/AoConnect/AoConnect'
+import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
+import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
 
 
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from 'src/configs/functions'
+import { formatHash } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'

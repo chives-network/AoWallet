@@ -2,20 +2,20 @@
 import { useEffect } from 'react'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
 // ** Custom Components Imports
-import OptionsMenu from 'src/@core/components/option-menu'
+import OptionsMenu from '../../../../@core/components/option-menu'
 
 // ** Type Import
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from '../../../../@core/context/settingsContext'
 
-import { getChivesLanguage, setChivesLanguage } from 'src/functions/ChivesWallets'
+import { getChivesLanguage, setChivesLanguage } from '../../../../functions/ChivesWallets'
 
-import { useAuth } from 'src/hooks/useAuth'
+import { useAuth } from '../../../../hooks/useAuth'
 
 /*
 import toast from 'react-hot-toast'
@@ -24,7 +24,7 @@ import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 */
-//import { ReminderMsgAndStoreToLocal, GetAoConnectReminderProcessTxId } from 'src/functions/AoConnect/MsgReminder'
+//import { ReminderMsgAndStoreToLocal, GetAoConnectReminderProcessTxId } from '../../../../functions/AoConnect/MsgReminder'
 
 
 interface Props {

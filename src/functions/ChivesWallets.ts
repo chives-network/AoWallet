@@ -5,9 +5,9 @@ import { PromisePool } from '@supercharge/promise-pool'
 
 import type { JWKInterface } from 'arweave/web/lib/wallet'
 
-import { TxRecordType } from 'src/types/apps/Chivesweave'
+import { TxRecordType } from '../types/apps/Chivesweave'
 
-import { BalancePlus } from 'src/functions/AoConnect/AoConnect'
+import { BalancePlus } from '../functions/AoConnect/AoConnect'
 
 // @ts-ignore
 import { v4 } from 'uuid'
@@ -17,7 +17,7 @@ import Arweave from 'arweave'
 
 // ** Third Party Imports
 import axios from 'axios'
-import authConfig from 'src/configs/auth'
+import authConfig from '../configs/auth'
 
 const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
 
@@ -718,7 +718,8 @@ export function decode (buffer: BufferSource) {
 export async function getHash (data: string | Uint8Array) {
 	const content = typeof data === 'string' ? encode(data) : data
 	const buffer = await window.crypto.subtle.digest('SHA-256', content)
-	
+    
+    //@ts-ignore
     return [...new Uint8Array(buffer)].map(x => x.toString(16).padStart(2, '0')).join('')
 }
 

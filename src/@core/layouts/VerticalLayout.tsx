@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from '../../@core/layouts/types'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',

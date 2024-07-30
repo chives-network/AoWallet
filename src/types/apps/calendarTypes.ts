@@ -2,7 +2,7 @@
 import { Dispatch } from 'redux'
 
 // ** Theme Type Import
-import { ThemeColor } from 'src/@core/layouts/types'
+import { ThemeColor } from '../../@core/layouts/types'
 
 export type CalendarFiltersType = 'Social' | 'Updates' | 'Forums' | 'Promotions'
 

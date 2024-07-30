@@ -1,8 +1,8 @@
 // ** MUI Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from '../../../../@core/layouts/types'
 
 import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
 

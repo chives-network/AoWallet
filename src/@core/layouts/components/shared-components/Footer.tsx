@@ -4,9 +4,9 @@ import { useState } from 'react';
 import Box from '@mui/material/Box'
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from '../../../../@core/layouts/types'
 
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';

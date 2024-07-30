@@ -12,13 +12,13 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../@core/components/icon'
 
 // ** Type Imports
 import { OptionType, OptionsMenuType, OptionMenuItemType } from './types'
 
 // ** Hook Import
-import { useSettings } from 'src/@core/hooks/useSettings'
+import { useSettings } from '../../../@core/hooks/useSettings'
 
 const MenuItemWrapper = ({ children, option }: { children: ReactNode; option: OptionMenuItemType }) => {
   if (option.href) {

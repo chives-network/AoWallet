@@ -18,13 +18,13 @@ import InputAdornment from '@mui/material/InputAdornment'
 import CircularProgress from '@mui/material/CircularProgress'
 import ListItem, { ListItemProps } from '@mui/material/ListItem'
 
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 // ** Third Party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // ** Custom Components Imports
-import OptionsMenu from 'src/@core/components/option-menu'
+import OptionsMenu from '../../@core/components/option-menu'
 
 // ** Email App Component Imports
 import { setTimeout } from 'timers'
@@ -33,23 +33,23 @@ import EmailDetail from './EmailDetail'
 import Pagination from '@mui/material/Pagination'
 
 // ** Types
-import { EmailListType } from 'src/types/apps/emailTypes'
+import { EmailListType } from '../../types/apps/emailTypes'
 
-import { OptionType } from 'src/@core/components/option-menu/types'
+import { OptionType } from '../../@core/components/option-menu/types'
 
-import { formatTimestampLocalTime} from 'src/configs/functions';
+import { formatTimestampLocalTime} from '../../configs/functions';
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
-import { GetAppAvatarModId } from 'src/functions/AoConnect/Token'
+import { GetAppAvatarModId } from '../../functions/AoConnect/Token'
 
-import { GetFileCacheStatus } from 'src/functions/ChivesWallets'
-import { ChivesEmailReadEmailContent } from 'src/functions/AoConnect/ChivesEmail'
+import { GetFileCacheStatus } from '../../functions/ChivesWallets'
+import { ChivesEmailReadEmailContent } from '../../functions/AoConnect/ChivesEmail'
 
-import { DecryptEmailAES256GCMV1 } from 'src/functions/ChivesEncrypt'
-import { ChivesEmailMoveToFolder } from 'src/functions/AoConnect/ChivesEmail'
-import authConfig from 'src/configs/auth'
+import { DecryptEmailAES256GCMV1 } from '../../functions/ChivesEncrypt'
+import { ChivesEmailMoveToFolder } from '../../functions/AoConnect/ChivesEmail'
+import authConfig from '../../configs/auth'
 import toast from 'react-hot-toast'
 
 

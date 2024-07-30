@@ -12,9 +12,9 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import { useTranslation } from 'react-i18next'
 import IconButton from '@mui/material/IconButton'
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 import CircularProgress from '@mui/material/CircularProgress'
-import { formatHash, formatToken } from 'src/configs/functions';
+import { formatHash, formatToken } from '../../configs/functions';
 
 import Grid from '@mui/material/Grid'
 

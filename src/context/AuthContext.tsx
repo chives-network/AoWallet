@@ -4,7 +4,7 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 // ** Types
 import { AuthValuesType, UserDataType } from './types'
 
-import { getCurrentWalletAddress, getCurrentWallet } from 'src/functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet } from '../functions/ChivesWallets'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {

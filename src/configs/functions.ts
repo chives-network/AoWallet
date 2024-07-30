@@ -1,5 +1,5 @@
-import { TxRecordType } from 'src/types/apps/Chivesweave'
-import authConfig from 'src/configs/auth'
+import { TxRecordType } from '../types/apps/Chivesweave'
+import authConfig from '../configs/auth'
 
 export function formatHash(inputString: string, spliceSize: number): string {
   if(inputString == undefined) {

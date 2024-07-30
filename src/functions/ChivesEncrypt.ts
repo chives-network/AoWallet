@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import authConfig from 'src/configs/auth'
+import authConfig from '../configs/auth'
 
 
 // @ts-ignore

@@ -1,9 +1,9 @@
 
 //Due need to use the node esm mode, so have change the package.json and move the repo to this location. Version: 0.0.53
-import { connect, createDataItemSigner }  from "scripts/@permaweb/aoconnect"
+import { connect, createDataItemSigner }  from "../../../scripts/@permaweb/aoconnect"
 
 import { ConvertInboxMessageFormatAndStorage } from './MsgReminder'
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 import BigNumber from 'bignumber.js'
 import axios from 'axios'
 
@@ -12,7 +12,7 @@ export const MU_URL = "https://mu.ao-testnet.xyz"
 export const CU_URL = "https://cu.ao-testnet.xyz"
 export const GATEWAY_URL = "https://arweave.net"
 
-import { ansiRegex } from 'src/configs/functions'
+import { ansiRegex } from '../../configs/functions'
 
 
 export const AoSendMsg = async (currentWalletJwk: any, processTxId: string, Msg: string, Tags: any[]) => {

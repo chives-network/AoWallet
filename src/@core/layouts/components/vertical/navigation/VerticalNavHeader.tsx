@@ -8,13 +8,13 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from '../../../../../@core/layouts/types'
 
 // ** Custom Icon Import
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../../@core/components/icon'
 
 // ** Configs
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '../../../../../configs/themeConfig'
 
 interface Props {
   navHover: boolean

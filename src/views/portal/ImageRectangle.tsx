@@ -11,19 +11,19 @@ import CardContent from '@mui/material/CardContent'
 import Link from 'next/link'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 // ** Custom Components Imports
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 import ReactAudioPlayer from 'react-audio-player';
 
-import { formatHash, formatTimestampAge } from 'src/configs/functions';
+import { formatHash, formatTimestampAge } from '../../configs/functions';
 import { Fragment } from 'react'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
 const ImageRectangle = ( {item, backEndApi, FileType} : any) => {
   // ** Hook

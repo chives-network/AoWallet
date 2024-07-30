@@ -14,18 +14,18 @@ import Typography from '@mui/material/Typography'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 
 // ** Next Import
-import { useAuth } from 'src/hooks/useAuth'
+import { useAuth } from '../../hooks/useAuth'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { isMobile } from 'src/configs/functions'
+import { isMobile } from '../../configs/functions'
 
-import { formatHash, formatTimestampDateTime } from 'src/configs/functions'
-import { GetMyInboxMsg } from 'src/functions/AoConnect/AoConnect'
-import { GetChatRecordsFromLocalStorage, GetAoConnectReminderProcessTxId } from 'src/functions/AoConnect/MsgReminder'
+import { formatHash, formatTimestampDateTime } from '../../configs/functions'
+import { GetMyInboxMsg } from '../../functions/AoConnect/AoConnect'
+import { GetChatRecordsFromLocalStorage, GetAoConnectReminderProcessTxId } from '../../functions/AoConnect/MsgReminder'
 
 import ViewMessage from './ViewMessage'
 

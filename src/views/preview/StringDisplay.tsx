@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import ToggleButton from '@mui/material/ToggleButton'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 import Link from 'next/link'
 import { styled } from '@mui/material/styles'

@@ -1,11 +1,11 @@
 
 //Due need to use the node esm mode, so have change the package.json and move the repo to this location. Version: 0.0.53
-import { connect, createDataItemSigner }  from "scripts/@permaweb/aoconnect"
+import { connect, createDataItemSigner }  from "../../../scripts/@permaweb/aoconnect"
 
 import axios from 'axios'
 
-import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord } from 'src/functions/AoConnect/AoConnect'
-import { AoTokenTransfer, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
+import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord } from '../../functions/AoConnect/AoConnect'
+import { AoTokenTransfer, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
 
 
 export const AoLoadBlueprintFaucet = async (currentWalletJwk: any, processTxId: string, TokenIdInFaucet: string, FAUCET_SEND_AMOUNT: string, FAUCET_SEND_RULE: string) => {

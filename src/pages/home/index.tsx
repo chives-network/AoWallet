@@ -1,4 +1,4 @@
-import HomeModel from 'src/views/Home/Home';
+import HomeModel from '../../views/Home/Home';
 
 const HomeModelApp = () => {
 

@@ -5,7 +5,7 @@ import { useState, useEffect, Fragment } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
-import { getCurrentWallet } from 'src/functions/ChivesWallets'
+import { getCurrentWallet } from '../../functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

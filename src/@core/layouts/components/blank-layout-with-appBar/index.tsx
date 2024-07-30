@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 
 // ** Configs
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '../../../../configs/themeConfig'
 
 // ** Hook
-import { useSettings } from 'src/@core/hooks/useSettings'
+import { useSettings } from '../../../../@core/hooks/useSettings'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   display: 'flex',

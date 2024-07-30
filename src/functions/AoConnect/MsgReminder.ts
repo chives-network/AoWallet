@@ -1,5 +1,5 @@
 import { AoGetPageRecords } from './AoConnect'
-import { ansiRegex } from 'src/configs/functions'
+import { ansiRegex } from '../../configs/functions'
 
 const AoConnectLocalStorage = 'AoConnectDb'
 const AoConnectLastCursor = 'AoConnectLastCursor'

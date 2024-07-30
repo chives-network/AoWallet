@@ -1,5 +1,5 @@
 // ** MUI Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/material';
 

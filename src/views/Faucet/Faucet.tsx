@@ -7,9 +7,9 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import authConfig from 'src/configs/auth'
-import CustomAvatar from 'src/@core/components/mui/avatar'
-import Icon from 'src/@core/components/icon'
+import authConfig from '../../configs/auth'
+import CustomAvatar from '../../@core/components/mui/avatar'
+import Icon from '../../@core/components/icon'
 import Divider from '@mui/material/Divider'
 import Backdrop from '@mui/material/Backdrop'
 import CardContent from '@mui/material/CardContent'
@@ -21,14 +21,14 @@ import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
-import { formatHash } from 'src/configs/functions'
-import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
+import { formatHash } from '../../configs/functions'
+import { FormatBalance } from '../../functions/AoConnect/AoConnect'
 
-import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets } from 'src/functions/ChivesWallets'
-import { GetAppAvatar, AoTokenBalanceDryRun } from 'src/functions/AoConnect/Token'
-import { AoFaucetGetFaucet, AoFaucetInfo } from 'src/functions/AoConnect/ChivesFaucet'
+import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets } from '../../functions/ChivesWallets'
+import { GetAppAvatar, AoTokenBalanceDryRun } from '../../functions/AoConnect/Token'
+import { AoFaucetGetFaucet, AoFaucetInfo } from '../../functions/AoConnect/ChivesFaucet'
 
-import { ChivesServerDataGetFaucets } from 'src/functions/AoConnect/ChivesServerData'
+import { ChivesServerDataGetFaucets } from '../../functions/AoConnect/ChivesServerData'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,

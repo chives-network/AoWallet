@@ -15,19 +15,19 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 // ** Type Imports
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from '../../../../@core/context/settingsContext'
 
 // ** Hooks
-import { useAuth } from 'src/hooks/useAuth'
+import { useAuth } from '../../../../hooks/useAuth'
 import toast from 'react-hot-toast'
 
-import { getAllWallets, getCurrentWalletAddress, setCurrentWallet, getWalletNicknames, generateNewMnemonicAndGetWalletData } from 'src/functions/ChivesWallets'
-import { formatHash} from 'src/configs/functions';
-import { AoCreateProcessAuto } from 'src/functions/AoConnect/AoConnect'
-import { SetAoConnectMyAoConnectTxId } from 'src/functions/AoConnect/MsgReminder'
+import { getAllWallets, getCurrentWalletAddress, setCurrentWallet, getWalletNicknames, generateNewMnemonicAndGetWalletData } from '../../../../functions/ChivesWallets'
+import { formatHash} from '../../../../configs/functions';
+import { AoCreateProcessAuto } from '../../../../functions/AoConnect/AoConnect'
+import { SetAoConnectMyAoConnectTxId } from '../../../../functions/AoConnect/MsgReminder'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

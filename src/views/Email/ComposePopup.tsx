@@ -16,30 +16,30 @@ import InputLabel from '@mui/material/InputLabel'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 
-import { EncryptEmailAES256GCMV1 } from 'src/functions/ChivesEncrypt'
+import { EncryptEmailAES256GCMV1 } from '../../functions/ChivesEncrypt'
 
-import { ChivesEmailSendEmail } from 'src/functions/AoConnect/ChivesEmail'
+import { ChivesEmailSendEmail } from '../../functions/AoConnect/ChivesEmail'
 
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 // ** Third Party Components
 import { EditorState, ContentState } from 'draft-js'
 
 // ** Custom Components Imports
-import CustomAvatar from 'src/@core/components/mui/avatar'
-import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
+import CustomAvatar from '../../@core/components/mui/avatar'
+import ReactDraftWysiwyg from '../../@core/components/react-draft-wysiwyg'
 
 // ** Styled Component Imports
-import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
+import { EditorWrapper } from '../../@core/styles/libs/react-draft-wysiwyg'
 
 // ** Types
-import { MailComposeType, FieldMenuItems } from 'src/types/apps/emailTypes'
+import { MailComposeType, FieldMenuItems } from '../../types/apps/emailTypes'
 
 // ** Utils Import
-import { getInitials } from 'src/@core/utils/get-initials'
+import { getInitials } from '../../@core/utils/get-initials'
 
 
 // ** Styles

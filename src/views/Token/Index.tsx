@@ -7,24 +7,24 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import toast from 'react-hot-toast'
 
 // ** Hooks
-import { useSettings } from 'src/@core/hooks/useSettings'
+import { useSettings } from '../../@core/hooks/useSettings'
 
 // ** Third Party Import
 import Box from '@mui/material/Box'
 
 // ** Axios Imports
-import { useAuth } from 'src/hooks/useAuth'
-import authConfig from 'src/configs/auth'
+import { useAuth } from '../../hooks/useAuth'
+import authConfig from '../../configs/auth'
 
-import { GetMyLastMsg } from 'src/functions/AoConnect/AoConnect'
-import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
+import { GetMyLastMsg } from '../../functions/AoConnect/AoConnect'
+import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from '../../functions/AoConnect/MyProcessTxIds'
 
-import TokenLeft from 'src/views/Token/TokenLeft'
-import TokenIndex from 'src/views/Token/TokenIndex'
+import TokenLeft from '../../views/Token/TokenLeft'
+import TokenIndex from '../../views/Token/TokenIndex'
 
-import { ansiRegex } from 'src/configs/functions'
-import { AoCreateProcessAuto } from 'src/functions/AoConnect/AoConnect'
-import { GetAoConnectMyAoConnectTxId, SetAoConnectMyAoConnectTxId } from 'src/functions/AoConnect/MsgReminder'
+import { ansiRegex } from '../../configs/functions'
+import { AoCreateProcessAuto } from '../../functions/AoConnect/AoConnect'
+import { GetAoConnectMyAoConnectTxId, SetAoConnectMyAoConnectTxId } from '../../functions/AoConnect/MsgReminder'
 
 const TokenModel = () => {
   // ** Hook

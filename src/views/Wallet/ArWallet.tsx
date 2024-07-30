@@ -5,18 +5,18 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
 
 // ** MUI Imports
-import Icon from 'src/@core/components/icon'
-import authConfig from 'src/configs/auth'
+import Icon from '../../@core/components/icon'
+import authConfig from '../../configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp } from 'src/configs/functions'
+import { formatHash, formatTimestamp } from '../../configs/functions'
 
 import Tabs from '@mui/material/Tabs';
 
@@ -87,7 +87,7 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                     LeftTwo = TagsMap['App-Name'] ?? TagsMap['Content-Type'] ?? 'Payment | Data'
                     RightOne = currentAddress == Tx.node.recipient ? formatHash(Tx.node.owner.address, 6) : formatHash(Tx.node.recipient, 6)
                     RightTwo = formatTimestamp(Tx.node?.block?.timestamp)
-                    Logo = '/images/logo/AR.png'
+                    Logo = '../../../public/images/logo/AR.png'
                 }
                 
                 return (

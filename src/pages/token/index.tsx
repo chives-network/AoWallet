@@ -1,4 +1,4 @@
-import TokenModel from 'src/views/Token/Index';
+import TokenModel from '../../views/Token/Index';
 
 const Token = () => {
 

@@ -11,12 +11,12 @@ import CardContent from '@mui/material/CardContent'
 import Link from 'next/link'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 
 // ** Custom Components Imports
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomAvatar from '../../@core/components/mui/avatar'
 
-import { formatHash } from 'src/configs/functions';
+import { formatHash } from '../../configs/functions';
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

@@ -1,4 +1,4 @@
-import FaucetModel from 'src/views/Faucet/Faucet';
+import FaucetModel from '../../views/Faucet/Faucet';
 
 const FaucetModelApp = () => {
 

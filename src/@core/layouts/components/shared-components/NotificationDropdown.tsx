@@ -13,22 +13,22 @@ import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '../../../../@core/components/icon'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'react-perfect-scrollbar'
 
 // ** Type Imports
-import { ThemeColor } from 'src/@core/layouts/types'
-import { Settings } from 'src/@core/context/settingsContext'
-import { CustomAvatarProps } from 'src/@core/components/mui/avatar/types'
+import { ThemeColor } from '../../../../@core/layouts/types'
+import { Settings } from '../../../../@core/context/settingsContext'
+import { CustomAvatarProps } from '../../../../@core/components/mui/avatar/types'
 
 // ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomChip from '../../../../@core/components/mui/chip'
+import CustomAvatar from '../../../../@core/components/mui/avatar'
 
 // ** Util Import
-import { getInitials } from 'src/@core/utils/get-initials'
+import { getInitials } from '../../../../@core/utils/get-initials'
 
 export type NotificationsType = {
   meta: string

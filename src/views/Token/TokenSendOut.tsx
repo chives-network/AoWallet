@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 
 import { useRouter } from 'next/router'
-import { useAuth } from 'src/hooks/useAuth'
+import { useAuth } from '../../hooks/useAuth'
 import { useTranslation } from 'react-i18next'
 
 // ** MUI Imports
@@ -21,10 +21,10 @@ import InputAdornment from '@mui/material/InputAdornment'
 import toast from 'react-hot-toast'
 
 import Box from '@mui/material/Box'
-import Icon from 'src/@core/components/icon'
+import Icon from '../../@core/components/icon'
 import IconButton from '@mui/material/IconButton'
 
-import { BalanceCompare } from 'src/functions/AoConnect/AoConnect'
+import { BalanceCompare } from '../../functions/AoConnect/AoConnect'
 
 const TokenSendOut = (props: any) => {
     // ** Props

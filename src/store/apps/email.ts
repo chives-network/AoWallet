@@ -1,9 +1,9 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import authConfig from 'src/configs/auth'
+import authConfig from '../../configs/auth'
 
-import { ChivesEmailGetMyEmailRecords } from 'src/functions/AoConnect/ChivesEmail'
+import { ChivesEmailGetMyEmailRecords } from '../../functions/AoConnect/ChivesEmail'
 
 interface DataParams {
     address: string

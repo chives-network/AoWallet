@@ -1,4 +1,4 @@
-import LotteryModel from 'src/views/Lottery/Lottery';
+import LotteryModel from '../../views/Lottery/Lottery';
 
 const LotteryModelApp = () => {
 

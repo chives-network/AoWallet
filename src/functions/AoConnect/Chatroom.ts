@@ -1,8 +1,8 @@
 
 //Due need to use the node esm mode, so have change the package.json and move the repo to this location. Version: 0.0.53
-import { connect, createDataItemSigner }  from "scripts/@permaweb/aoconnect"
+import { connect, createDataItemSigner }  from "../../../scripts/@permaweb/aoconnect"
 
-import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord, AoLoadBlueprintModule } from 'src/functions/AoConnect/AoConnect'
+import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord, AoLoadBlueprintModule } from '../../functions/AoConnect/AoConnect'
 
 export const AoLoadBlueprintChatroom = async (currentWalletJwk: any, processTxId: string) => {
     return await AoLoadBlueprintModule (currentWalletJwk, processTxId, 'chatroom')
