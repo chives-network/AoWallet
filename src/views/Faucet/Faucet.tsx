@@ -24,7 +24,7 @@ import Header from '../Layout/Header'
 import { formatHash } from '../../configs/functions'
 import { FormatBalance } from '../../functions/AoConnect/AoConnect'
 
-import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets } from '../../functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets, getMyAoFaucetTokenBalance, setMyAoFaucetTokenBalance } from '../../functions/ChivesWallets'
 import { GetAppAvatar, AoTokenBalanceDryRun } from '../../functions/AoConnect/Token'
 import { AoFaucetGetFaucet, AoFaucetInfo } from '../../functions/AoConnect/ChivesFaucet'
 
@@ -50,16 +50,17 @@ const Faucet = () => {
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [pageModel, setPageModel] = useState<string>('MainFaucet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
-  const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
+  const [LeftIcon, setLeftIcon] = useState<string>('')
   const [Title, setTitle] = useState<string>('Faucet')
-  const [RightButtonText, setRightButtonText] = useState<string>('Edit')
-  const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
+  const [RightButtonText, setRightButtonText] = useState<string>('')
+  const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseFaucet, setChooseFaucet] = useState<any>(null)
   const [faucetBalance, setFaucetBalance] = useState<any>({})
   const [myTokenBalance, setMyTokenBalance] = useState<any>({})
 
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
+  const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
 
 
@@ -140,6 +141,7 @@ const Faucet = () => {
   const handelGetAmountFromFaucet = async (Faucet: any) => {
     if( chooseWallet && chooseWallet.jwk && Faucet && Faucet.FaucetId && currentAddress.length == 43 )   {
       setIsDisabledButton(true)
+
       const GetFaucetFromFaucetTokenId: any = await AoFaucetGetFaucet(chooseWallet.jwk, Faucet.FaucetId)
       if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data) {
         console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data)
@@ -149,20 +151,25 @@ const Faucet = () => {
 
         const AoFaucetInfoData = await AoFaucetInfo(Faucet.FaucetId)
         console.log("AoFaucetInfoData AoFaucetInfo", AoFaucetInfoData)
-        if(AoFaucetInfoData) {
-          setFaucetBalance((prevState: any)=>({
-              ...prevState,
-              [Faucet.FaucetId]: FormatBalance(AoFaucetInfoData.FaucetBalance, AoFaucetInfoData.Denomination)
-          }))
-        }
+
         const AoDryRunBalance = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, currentAddress);
         if(AoDryRunBalance && AoFaucetInfoData) {
           console.log("AoDryRunBalance", AoDryRunBalance)
           setMyTokenBalance((prevState: any)=>({
               ...prevState,
-              [Faucet.FaucetId]: FormatBalance(AoDryRunBalance, AoFaucetInfoData.Denomination)
+              [AoFaucetInfoData.FaucetTokenId]: FormatBalance(AoDryRunBalance, AoFaucetInfoData.Denomination)
           }))
         }
+
+        const AoDryRunBalanceFaucet = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, Faucet.FaucetId);
+        if(AoDryRunBalanceFaucet && AoFaucetInfoData) {
+          console.log("AoDryRunBalanceFaucet", AoDryRunBalanceFaucet)
+          setFaucetBalance((prevState: any)=>({
+              ...prevState,
+              [Faucet.FaucetId]: FormatBalance(AoDryRunBalanceFaucet, AoFaucetInfoData.Denomination)
+          }))
+        }
+
       }
       setIsDisabledButton(false)
     }
@@ -171,11 +178,64 @@ const Faucet = () => {
     }
   }
 
+  const handleGetMyFaucetTokenBalance = async () => {
+
+    const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress);
+    if(getMyAoFaucetTokenBalanceData) {   
+      setMyFaucetTokenBalanceData(getMyAoFaucetTokenBalanceData)
+    }
+    try {
+      if (allFaucetsData) {
+        Promise.any(
+          allFaucetsData.map(async (Faucet: any) => {
+            try {
+
+              //Get my wallet address balance
+              const AoDryRunBalance = await AoTokenBalanceDryRun(Faucet.FaucetData.FaucetTokenId, currentAddress);
+              if (AoDryRunBalance && Faucet) {
+                const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Faucet.FaucetData.Denomination ? Faucet.FaucetData.Denomination : '12');
+                const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
+                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat}); // Immediately update the local storage balance
+                console.log("AoDryRunBalanceCoinFormat1", AoDryRunBalanceCoinFormat)
+                setMyFaucetTokenBalanceData((prevState: any)=>({
+                  ...prevState, 
+                  [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat
+                }))
+              }
+
+              //Get faucet address balance
+              const AoDryRunFaucetBalance = await AoTokenBalanceDryRun(Faucet.FaucetData.FaucetTokenId, Faucet.FaucetId);
+              if (AoDryRunFaucetBalance && Faucet) {
+                const AoDryRunBalanceCoin = FormatBalance(AoDryRunFaucetBalance, Faucet.FaucetData.Denomination ? Faucet.FaucetData.Denomination : '12');
+                const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
+                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}); // Immediately update the local storage balance
+                console.log("AoDryRunBalanceCoinFormat2", AoDryRunBalanceCoinFormat)
+                setMyFaucetTokenBalanceData((prevState: any)=>({
+                  ...prevState, 
+                  [Faucet.FaucetId]: AoDryRunBalanceCoinFormat
+                }))
+              }
+
+            } catch (error) {
+              console.error(`Error processing Faucet.FaucetId ${Faucet.FaucetId}:`, error);
+            }
+          })
+        ).catch((error) => {
+          console.error("All promises failed:", error);
+        });
+      }
+    } 
+    catch (e: any) {
+      console.log("handleGetMySavingTokensBalance Error", e);
+    }
+
+  }
+
 
   useEffect(() => {    
 
     setHeaderHidden(false)
-    setRightButtonIcon('mdi:qrcode')
+    setRightButtonIcon('')
 
     const currentAddressTemp = getCurrentWalletAddress()
     setCurrentAddress(String(currentAddressTemp))
@@ -188,6 +248,14 @@ const Faucet = () => {
     }
 
   }, [currentAddress]);
+
+  useEffect(() => {   
+    if(allFaucetsData && allFaucetsData.length > 0) {
+      handleGetMyFaucetTokenBalance()
+    }
+  }, [allFaucetsData]);
+
+  
 
   return (
     <Fragment>
@@ -234,7 +302,7 @@ const Faucet = () => {
                                     {formatHash(Faucet.FaucetData.FaucetTokenId, 12)}
                                   </Typography>
                                   <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
-                                    {t('Balance')}: {myTokenBalance[Faucet.FaucetId] ?? ''}
+                                    {t('Balance')}: {myTokenBalance[Faucet.FaucetData.FaucetTokenId] ?? myFaucetTokenBalanceData[Faucet.FaucetData.FaucetTokenId] ?? ''}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -261,7 +329,7 @@ const Faucet = () => {
                               <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                 <Icon icon='streamline:bag-dollar-solid' />
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? FormatBalance(Faucet.FaucetData.FaucetBalance, Faucet.FaucetData.Denomination)}</Typography>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Faucet Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? myFaucetTokenBalanceData[Faucet.FaucetId] ?? ''}</Typography>
                                 </Box>
                               </Box>
 

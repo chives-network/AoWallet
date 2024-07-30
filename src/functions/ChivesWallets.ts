@@ -403,6 +403,27 @@ export function getAllAoFaucets(Address: string) {
     }
 }
 
+export function setMyAoFaucetTokenBalance(Address: string, MyAoFaucetTokenBalance: any) {
+    if (Address && Address.length === 43) {
+        const chivesMyAoFaucetTokenBalanceData = window.localStorage.getItem("chivesMyAoFaucetTokenBalance")
+        const chivesMyAoFaucetTokenBalanceObject = chivesMyAoFaucetTokenBalanceData ? JSON.parse(chivesMyAoFaucetTokenBalanceData) : {}
+        chivesMyAoFaucetTokenBalanceObject[Address] = MyAoFaucetTokenBalance
+        window.localStorage.setItem("chivesMyAoFaucetTokenBalance", JSON.stringify(chivesMyAoFaucetTokenBalanceObject))
+    }
+    
+    return true
+}
+
+export function getMyAoFaucetTokenBalance(Address: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesMyAoFaucetTokenBalanceData = window.localStorage.getItem("chivesMyAoFaucetTokenBalance")
+        const chivesMyAoFaucetTokenBalanceObject = chivesMyAoFaucetTokenBalanceData ? JSON.parse(chivesMyAoFaucetTokenBalanceData) : {}
+        
+        return chivesMyAoFaucetTokenBalanceObject[Address] ?? []
+    }
+}
+
+
 export function setTokenAllHolderTxs(Address: string, AllHolderTxs: any) {
     if (Address && Address.length === 43 && AllHolderTxs) {
         window.localStorage.setItem("chivesAllHolderTxs____" + Address, JSON.stringify(AllHolderTxs))
