@@ -263,9 +263,9 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     })
                     setCirculatingSupply(String(CirculatingSupply.toFixed(0)))
                     setHoldersNumber(TokenHolders)
-                    setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSorted)
-                    setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSorted, TokenHolders, CirculatingSupply})
-                    console.log("handleAoTokenBalancesDryRunOfficialToken", AoDryRunBalancesJsonSortedResult, "TokenHolders", TokenHolders)
+                    setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSortedResult)
+                    setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSortedResult, TokenHolders, CirculatingSupply})
+                    //console.log("handleAoTokenBalancesDryRunOfficialToken", AoDryRunBalancesJsonSortedResult, "TokenHolders", TokenHolders)
                     !getTokenAllHolderTxsData && setIsLoading(false)
                 }
                 catch(Error: any) {
