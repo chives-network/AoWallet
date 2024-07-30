@@ -3,15 +3,32 @@ import { useState, useEffect, Fragment } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import authConfig from 'src/configs/auth'
+import CustomAvatar from 'src/@core/components/mui/avatar'
+import Icon from 'src/@core/components/icon'
+import Divider from '@mui/material/Divider'
+import Backdrop from '@mui/material/Backdrop'
+import CardContent from '@mui/material/CardContent'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { getCurrentWallet } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
+import { formatHash } from 'src/configs/functions'
+import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
+
+import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets } from 'src/functions/ChivesWallets'
+import { GetAppAvatar } from 'src/functions/AoConnect/Token'
+import { AoFaucetGetFaucet } from 'src/functions/AoConnect/ChivesFaucet'
+
+import { ChivesServerDataGetFaucets } from 'src/functions/AoConnect/ChivesServerData'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -30,47 +47,19 @@ const Faucet = () => {
 
   const contentHeightFixed = {}
 
-  const [pageModel, setPageModel] = useState<string>('MainLottery')
+  const [currentAddress, setCurrentAddress] = useState<string>("")
+  const [pageModel, setPageModel] = useState<string>('MainFaucet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
   const [Title, setTitle] = useState<string>('Faucet')
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
-  const [chooseToken, setChooseToken] = useState<any>(null)
-  const [chooseTokenBalance, setChooseTokenBalance] = useState<string | null>(null)
-  const [isTokenModel, setIsTokenModel] = useState<boolean>(false)
+  const [chooseFaucet, setChooseFaucet] = useState<any>(null)
 
-  const preventDefault = (e: any) => {
-    e.preventDefault();
-  };
+  const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
+  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
 
-  const disableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = 'hidden';
-    //document.addEventListener('touchmove', preventDefault, { passive: false });
-  };
-
-  const enableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = '';
-    //document.removeEventListener('touchmove', preventDefault);
-  };
-
-  useEffect(() => {
-    
-    disableScroll();
-
-    return () => {
-      
-      enableScroll();
-    };
-
-  }, []);
 
   const handleWalletGoHome = () => {
     setRefreshWalletData(refreshWalletData+1)
@@ -79,33 +68,21 @@ const Faucet = () => {
     setTitle(t('Faucet') as string)
     setRightButtonText(t('QR') as string)
     setRightButtonIcon('mdi:qrcode')
-    setChooseToken(null)
-    setChooseTokenBalance(null)
-    setIsTokenModel(false)
-    console.log("isTokenModel", isTokenModel, chooseTokenBalance, chooseWallet)
+    setChooseFaucet(null)
+    console.log("chooseWallet", chooseWallet)
   }
   
   const LeftIconOnClick = () => {
     switch(pageModel) {
-      case 'ReceiveMoney':
-      case 'AllTxs':
-      case 'SendMoneySelectContact':
-      case 'SendMoneyInputAmount':
-      case 'ManageAssets':
-      case 'ViewToken':
-      case 'ScanQRCode':
+      case 'FaucetFaucet':
         handleWalletGoHome()
-        break
-      case 'ReceiveMoneyAO':
-      case 'SendMoneyInputAmountAO':
-        break;
         break
     }
   }
 
   
   const RightButtonOnClick = () => {
-    console.log("chooseToken", chooseToken)
+    console.log("chooseFaucet", chooseFaucet)
 
     if(RightButtonIcon == 'mdi:qrcode')  {
       setPageModel('ScanQRCode')
@@ -113,7 +90,6 @@ const Faucet = () => {
       setTitle(t('Scan QRCode') as string)
       setRightButtonText(t('') as string)
       setRightButtonIcon('')
-      setPage(0)
     }
 
     //handleWalletGoHome()
@@ -122,61 +98,73 @@ const Faucet = () => {
 
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
+  const handleGetAllFaucetsData = async () => {
+
+    const getAllAoFaucetsData = getAllAoFaucets(currentAddress)
+    if(getAllAoFaucetsData) {   
+      setAllFaucetsData(getAllAoFaucetsData)
+    }
+    if(getAllAoFaucetsData.length == 0) {
+      setIsDisabledButton(true)
+    }
+    console.log("getAllAoFaucetsData", getAllAoFaucetsData, currentAddress)
+    
+    try {
+      const ChivesServerDataGetFaucetsData1 = await ChivesServerDataGetFaucets(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
+      if(ChivesServerDataGetFaucetsData1) {
+          const dataArray = Object.values(ChivesServerDataGetFaucetsData1);
+          console.log("handleGetAllFaucetsData dataArray", dataArray)
+          dataArray.sort((a: any, b: any) => {
+              if (a.FaucetGroup == b.FaucetGroup) {
+                  return Number(a.FaucetSort) - Number(b.FaucetSort);
+              } else {
+                  return a.FaucetGroup.localeCompare(b.FaucetGroup);
+              }
+          });
+          const dataArrayFilter = dataArray.map((Faucet: any)=>({...Faucet, FaucetData: JSON.parse(Faucet.FaucetData.replace(/\\"/g, '"'))}))
+          setAllAoFaucets(currentAddress, dataArrayFilter)
+          setAllFaucetsData(dataArrayFilter)
+          console.log("handleGetAllFaucetsData dataArrayFilter", dataArrayFilter)
+      }
+    }
+    catch(e: any) {
+      console.log("handleGetAllFaucetsData Error", e)      
+    }
+
+    setIsDisabledButton(false)
+
+  }
+
+  const handelGetAmountFromFaucet = async (Faucet: any) => {
+    if( chooseWallet && chooseWallet.jwk && Faucet )   {
+      const GetFaucetFromFaucetTokenId: any = await AoFaucetGetFaucet(chooseWallet.jwk, Faucet.FaucetId)
+      if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data) {
+        console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId, Faucet)
+        
+      }
+    }
+    else {
+      console.log("GetFaucetFromFaucetTokenId chooseWallet", chooseWallet)
+    }
+  }
+
 
   useEffect(() => {    
 
     setHeaderHidden(false)
     setRightButtonIcon('mdi:qrcode')
 
+    const currentAddressTemp = getCurrentWalletAddress()
+    setCurrentAddress(String(currentAddressTemp))
+
     const getCurrentWalletTemp = getCurrentWallet()
     setChooseWallet(getCurrentWalletTemp)
 
-    const myTask = () => {
-      setRefreshWalletData(refreshWalletData+1);
-    };
-    const intervalId = setInterval(myTask, 2 * 60 * 1000);
-    
-    return () => clearInterval(intervalId);
+    if(currentAddress && currentAddress.length == 43) {
+      handleGetAllFaucetsData()
+    }
 
-  }, []);
-
-  const [page, setPage] = useState<number>(0)
-  const [innerHeight, setInnerHeight] = useState<number | string>(0)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setInnerHeight(window.innerHeight);
-    };
-
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.body.scrollHeight;
-
-      console.log("documentHeight", documentHeight);
-      console.log("innerHeight", innerHeight);
-      console.log("scrollY", scrollY);
-      console.log("page", page);
-
-      if (scrollY + windowHeight >= documentHeight) {
-        setPage(prevPage => {
-
-          return prevPage + 1;
-        });
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
-
-    // 初始设置 innerHeight
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [innerHeight, page]);
+  }, [currentAddress]);
 
   return (
     <Fragment>
@@ -200,27 +188,87 @@ const Faucet = () => {
                 })
             }}
             >
-              <Typography variant="body1" sx={{
-                color: 'text.primary',
-                fontSize: { xs: '0.875rem', sm: '1rem' },
-                lineHeight: 1.6,
-                marginBottom: 2, 
-                whiteSpace: 'pre-line', 
-                maxWidth: '800px', 
-                margin: 'auto', 
-                padding: { xs: 2, sm: 3 }, 
-                backgroundColor: 'background.paper',
-                borderRadius: 1,
-                boxShadow: 1, 
-              }} dangerouslySetInnerHTML={{ __html: `To provide a series of TOKEN faucet functionalities for a wide range of users.
-                
-                Each user is allowed to claim only once. 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: '100%'}}>
+                  <Grid container spacing={2}>
+                    {allFaucetsData && allFaucetsData.map((Faucet: any, Index: number) => {
+                          
+                      return (
+                        <Grid item xs={12} sx={{ py: 2 }} key={Index}>
+                          <Card>     
+                            <CardContent>
+                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                  src={GetAppAvatar(Faucet.FaucetData.Logo)}
+                                >
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                  <Typography sx={{ fontWeight: 600 }}>{Faucet.FaucetData.Name}</Typography>
+                                  <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
+                                    {formatHash(Faucet.FaucetId, 12)}
+                                  </Typography>
+                                </Box>
+                              </Box>
 
-                The project team can set the amount that can be claimed each time from the faucet. 
+                              <Divider
+                                sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
+                              />
 
-                Additionally, a passphrase can be established, accompanied by a text explanation to inform users on how to claim this passphrase.
+                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                <Icon icon='mdi:clock-time-three-outline' />
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.FaucetData.FaucetRule}</Typography>
+                                </Box>
+                              </Box>
 
-              ` }} />
+                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                <Icon icon='mdi:dollar' />
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.FaucetData.FaucetAmount
+                                  }</Typography>
+                                </Box>
+                              </Box>
+
+                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                <Icon icon='streamline:bag-dollar-solid' />
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Balance') as string}: {FormatBalance(Faucet.FaucetData.FaucetBalance, Faucet.FaucetData.Denomination)}</Typography>
+                                </Box>
+                              </Box>
+
+                              <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                <Icon icon='material-symbols:info-outline' />
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Version') as string}: {Faucet.FaucetData.Version}</Typography>
+                                </Box>
+                              </Box>
+
+                              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Button disabled={false} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
+                                        {t('Get Faucet') as string}
+                                    </Button>
+                                </Box>
+                              </Box>
+
+                            </CardContent>
+                          </Card> 
+                        </Grid>
+                      )
+
+                    })}
+                  </Grid>
+                  <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={isDisabledButton}
+                  >
+                    <CircularProgress color="inherit" size={45}/>
+                  </Backdrop>
+                </Grid>
+              </Grid>
 
         </ContentWrapper>
       </Box>

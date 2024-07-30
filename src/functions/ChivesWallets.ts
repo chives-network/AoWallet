@@ -382,6 +382,27 @@ export function getAllAoTokens(Address: string) {
     }
 }
 
+
+export function setAllAoFaucets(Address: string, AllAoFaucets: any) {
+    if (Address && Address.length === 43) {
+        const chivesAllAoFaucetsData = window.localStorage.getItem("chivesAllAoFaucets")
+        const chivesAllAoFaucetsObject = chivesAllAoFaucetsData ? JSON.parse(chivesAllAoFaucetsData) : {}
+        chivesAllAoFaucetsObject[Address] = AllAoFaucets
+        window.localStorage.setItem("chivesAllAoFaucets", JSON.stringify(chivesAllAoFaucetsObject))
+    }
+    
+    return true
+}
+
+export function getAllAoFaucets(Address: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesAllAoFaucetsData = window.localStorage.getItem("chivesAllAoFaucets")
+        const chivesAllAoFaucetsObject = chivesAllAoFaucetsData ? JSON.parse(chivesAllAoFaucetsData) : {}
+        console.log("chivesAllAoFaucetsObject", chivesAllAoFaucetsObject, Address)
+        return chivesAllAoFaucetsObject[Address] ?? []
+    }
+}
+
 export function setTokenAllHolderTxs(Address: string, AllHolderTxs: any) {
     if (Address && Address.length === 43 && AllHolderTxs) {
         window.localStorage.setItem("chivesAllHolderTxs____" + Address, JSON.stringify(AllHolderTxs))
