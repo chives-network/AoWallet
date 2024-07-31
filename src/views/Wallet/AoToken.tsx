@@ -344,7 +344,11 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     {myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId] } {TokenData.Ticker}
                 </Typography>
 
-                <Typography variant="h6" mt={2}>
+                <Typography variant="h6" mt={2} onClick={async ()=>{
+                                                    await Clipboard.write({
+                                                    string: TokenId
+                                                    });
+                                                }} >
                     {formatHash(TokenId, 5)}
                 </Typography>
             </Box>
@@ -483,6 +487,11 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
                                             textAlign: 'left'
+                                            }}
+                                            onClick={async ()=>{
+                                                await Clipboard.write({
+                                                string: TokenIdValue
+                                                });
                                             }}
                                         >
                                                 {formatHash(TokenIdValue, 5)}

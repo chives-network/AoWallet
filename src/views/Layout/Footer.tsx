@@ -8,7 +8,6 @@ import Icon from '../../@core/components/icon'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useTranslation } from 'react-i18next'
-import { Casino } from '@mui/icons-material';
 
 
 const Footer = (props: any) => {
@@ -49,7 +48,7 @@ const Footer = (props: any) => {
                 setCurrentTab('Faucet')
                 break;
               case 2:
-                setCurrentTab('Lottery')
+                setCurrentTab('Apps')
                 break;
               case 3:
                 setCurrentTab('Setting')
@@ -60,7 +59,7 @@ const Footer = (props: any) => {
         >
           <BottomNavigationAction label={t("Wallet")} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
           <BottomNavigationAction label={t("Faucet")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label={t("Lottery")} icon={<Casino />} />
+          <BottomNavigationAction label={t("Apps")} icon={<Icon icon='icon-park-outline:all-application' />} />
           <BottomNavigationAction label={t("Setting")} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>

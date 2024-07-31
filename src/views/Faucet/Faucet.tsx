@@ -116,7 +116,6 @@ const Faucet = () => {
       const ChivesServerDataGetFaucetsData1 = await ChivesServerDataGetFaucets(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
       if(ChivesServerDataGetFaucetsData1) {
           const dataArray = Object.values(ChivesServerDataGetFaucetsData1);
-          console.log("handleGetAllFaucetsData dataArray", dataArray)
           dataArray.sort((a: any, b: any) => {
               if (a.FaucetGroup == b.FaucetGroup) {
                   return Number(a.FaucetSort) - Number(b.FaucetSort);
