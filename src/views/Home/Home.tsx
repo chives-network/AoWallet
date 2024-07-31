@@ -18,7 +18,7 @@ const HomeModel = () => {
     <Fragment>
       {currentTab == "MyWallet" && (<MyWallet setCurrentTab={setCurrentTab} />)}
       {currentTab == "Wallet" && (<Wallet setCurrentTab={setCurrentTab} />)}
-      {currentTab == "Faucet" && (<Faucet />)}
+      {currentTab == "Faucet" && (<Faucet setCurrentTab={setCurrentTab} />)}
       {currentTab == "Apps" && (<Lottery />)}
       {currentTab == "Setting" && (<Setting />)}
       <Footer Hidden={false} setCurrentTab={setCurrentTab} currentTab={currentTab} />

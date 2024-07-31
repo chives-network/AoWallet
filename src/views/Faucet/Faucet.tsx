@@ -41,7 +41,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Faucet = () => {
+const Faucet = ({ setCurrentTab }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -62,6 +62,7 @@ const Faucet = () => {
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
   const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+  const [isRechargeMode, setIsRechargeMode] = useState<boolean>(false)
 
 
   const handleWalletGoHome = () => {
@@ -70,7 +71,7 @@ const Faucet = () => {
     setLeftIcon('material-symbols:menu-rounded')
     setTitle(t('Faucet') as string)
     setRightButtonText(t('QR') as string)
-    setRightButtonIcon('mdi:qrcode')
+    setRightButtonIcon('solar:dollar-linear')
     setChooseFaucet(null)
     console.log("chooseWallet", chooseWallet)
   }
@@ -85,14 +86,17 @@ const Faucet = () => {
 
   
   const RightButtonOnClick = () => {
+
     console.log("chooseFaucet", chooseFaucet)
 
-    if(RightButtonIcon == 'mdi:qrcode')  {
-      setPageModel('ScanQRCode')
-      setLeftIcon('mdi:arrow-left-thin')
-      setTitle(t('Scan QRCode') as string)
-      setRightButtonText(t('') as string)
-      setRightButtonIcon('')
+    if(RightButtonIcon == 'solar:dollar-linear')  {
+      setRightButtonIcon('solar:dollar-bold')
+      setIsRechargeMode(true)
+    }
+
+    if(RightButtonIcon == 'solar:dollar-bold')  {
+      setRightButtonIcon('solar:dollar-linear')
+      setIsRechargeMode(false)
     }
 
     //handleWalletGoHome()
@@ -142,6 +146,14 @@ const Faucet = () => {
       setIsDisabledButton(true)
 
       const GetFaucetFromFaucetTokenId: any = await AoFaucetGetFaucet(chooseWallet.jwk, Faucet.FaucetId)
+      if(GetFaucetFromFaucetTokenId && GetFaucetFromFaucetTokenId.msg && GetFaucetFromFaucetTokenId.msg.Error) {
+        toast.error(GetFaucetFromFaucetTokenId.msg.Error, {
+          duration: 2500
+        })
+        setIsDisabledButton(false)
+
+        return
+      }
       if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data) {
         console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data)
         toast.success(GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data, {
@@ -175,6 +187,11 @@ const Faucet = () => {
     else {
       console.log("GetFaucetFromFaucetTokenId chooseWallet", chooseWallet)
     }
+  }
+
+  const handelSendAmountToFaucet = async (Faucet: any) => {
+    const TokenId = Faucet.FaucetData.FaucetTokenId
+    setCurrentTab('Wallet')
   }
 
   const handleGetMyFaucetTokenBalance = async () => {
@@ -234,7 +251,7 @@ const Faucet = () => {
   useEffect(() => {    
 
     setHeaderHidden(false)
-    setRightButtonIcon('')
+    setRightButtonIcon('solar:dollar-linear')
 
     const currentAddressTemp = getCurrentWalletAddress()
     setCurrentAddress(String(currentAddressTemp))
@@ -282,74 +299,93 @@ const Faucet = () => {
                 <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
                     {allFaucetsData && allFaucetsData.map((Faucet: any, Index: number) => {
-                          
+
+                      let isShow = false
+                      if(isRechargeMode == false && Number(myFaucetTokenBalanceData[Faucet.FaucetId]) >= Number(Faucet.FaucetData.FaucetAmount)) {
+                        isShow = true
+                      }
+                      if(isRechargeMode == true) {
+                        isShow = true
+                      }
+
                       return (
-                        <Grid item xs={12} sx={{ py: 2 }} key={Index}>
-                          <Card>     
-                            <CardContent>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <CustomAvatar
-                                  skin='light'
-                                  color={'primary'}
-                                  sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                  src={GetAppAvatar(Faucet.FaucetData.Logo)}
-                                >
-                                </CustomAvatar>
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontWeight: 600 }}>{Faucet.FaucetData.Name}</Typography>
-                                  <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
-                                    {formatHash(Faucet.FaucetData.FaucetTokenId, 12)}
-                                  </Typography>
-                                  <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
-                                    {t('Balance')}: {myTokenBalance[Faucet.FaucetData.FaucetTokenId] ?? myFaucetTokenBalanceData[Faucet.FaucetData.FaucetTokenId] ?? ''}
-                                  </Typography>
-                                </Box>
-                              </Box>
+                        <>
+                          { isShow && (
+                            <Grid item xs={12} sx={{ py: 2 }} key={Index}>
+                              <Card>     
+                                <CardContent>
+                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <CustomAvatar
+                                      skin='light'
+                                      color={'primary'}
+                                      sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                      src={GetAppAvatar(Faucet.FaucetData.Logo)}
+                                    >
+                                    </CustomAvatar>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontWeight: 600 }}>{Faucet.FaucetData.Name}</Typography>
+                                      <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
+                                        {formatHash(Faucet.FaucetData.FaucetTokenId, 12)}
+                                      </Typography>
+                                      <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
+                                        {t('Balance')}: {myTokenBalance[Faucet.FaucetData.FaucetTokenId] ?? myFaucetTokenBalanceData[Faucet.FaucetData.FaucetTokenId] ?? ''}
+                                      </Typography>
+                                    </Box>
+                                  </Box>
 
-                              <Divider
-                                sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
-                              />
+                                  <Divider
+                                    sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
+                                  />
 
-                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                <Icon icon='mdi:clock-time-three-outline' />
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.FaucetData.FaucetRule}</Typography>
-                                </Box>
-                              </Box>
+                                  <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='mdi:clock-time-three-outline' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.FaucetData.FaucetRule}</Typography>
+                                    </Box>
+                                  </Box>
 
-                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                <Icon icon='mdi:dollar' />
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.FaucetData.FaucetAmount
-                                  }</Typography>
-                                </Box>
-                              </Box>
+                                  <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='mdi:dollar' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.FaucetData.FaucetAmount
+                                      }</Typography>
+                                    </Box>
+                                  </Box>
 
-                              <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                <Icon icon='streamline:bag-dollar-solid' />
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Faucet Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? myFaucetTokenBalanceData[Faucet.FaucetId] ?? ''}</Typography>
-                                </Box>
-                              </Box>
+                                  <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='streamline:bag-dollar-solid' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Faucet Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? myFaucetTokenBalanceData[Faucet.FaucetId] ?? ''}</Typography>
+                                    </Box>
+                                  </Box>
 
-                              <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                <Icon icon='material-symbols:info-outline' />
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                  <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Version') as string}: {Faucet.FaucetData.Version}</Typography>
-                                </Box>
-                              </Box>
+                                  <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='material-symbols:info-outline' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Version') as string}: {Faucet.FaucetData.Version}</Typography>
+                                    </Box>
+                                  </Box>
 
-                              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
-                                        {t('Get Faucet') as string}
-                                    </Button>
-                                </Box>
-                              </Box>
+                                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                        {isRechargeMode == false && (
+                                          <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
+                                              {t('Get Faucet') as string}
+                                          </Button>
+                                        )}
+                                        {isRechargeMode == true && (
+                                          <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='contained' onClick={() => handelSendAmountToFaucet(Faucet)}>
+                                              {t('Send amount to faucet') as string}
+                                          </Button>
+                                        )}
+                                    </Box>
+                                  </Box>
 
-                            </CardContent>
-                          </Card> 
-                        </Grid>
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                          )} 
+                        </>
                       )
 
                     })}
