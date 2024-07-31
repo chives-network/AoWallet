@@ -19,8 +19,7 @@
   ],
   "background": {
       "service_worker": "service-worker.js",
-      "type": "module",
-      "persistent": true
+      "type": "module"
   },
   "host_permissions": ["<all_urls>"],
   "action": {
