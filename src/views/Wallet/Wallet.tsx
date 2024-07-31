@@ -571,7 +571,7 @@ const Wallet = ({ setCurrentTab }: any) => {
     setUploadingButton(`${t('Submitting...')}`)
     const TxResult: any = await AoTokenTransfer(chooseWallet.jwk, chooseToken.TokenId, sendMoneyAddress.address, Number(sendMoneyAmount), chooseToken.Denomination);
     console.log("TxResult TxResult", TxResult)
-    if(TxResult?.msg?.Messages[0]?.Data)  {
+    if(TxResult?.msg?.Messages && TxResult?.msg?.Messages[0]?.Data)  {
       toast.success(t(TxResult?.msg?.Messages[0]?.Data.replace(ansiRegex, '')) as string, { duration: 2500, position: 'top-center' })
       const getMyAoTokensData = getMyAoTokens(currentAddress)
       if(getMyAoTokensData) {      
@@ -605,7 +605,7 @@ const Wallet = ({ setCurrentTab }: any) => {
     setIsDisabledButton(true)
     const WantToDeleteTokenProcessTxIdData = await MyProcessTxIdsDelToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, TokenId)
     setIsDisabledButton(false)
-    if(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+    if(WantToDeleteTokenProcessTxIdData?.msg?.Messages && WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
       deleteMyAoToken(currentAddress, TokenId)
       const getMyAoTokensData = getMyAoTokens(currentAddress)
@@ -1011,7 +1011,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                                 <Card>
-                                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>handleClickViewTokenButton(Token)}>
+                                  <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>handleClickViewTokenButton(Token)}>
                                     <CustomAvatar
                                       skin='light'
                                       color={'primary'}
@@ -1301,7 +1301,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                               >
                                 {getInitials(Address).toUpperCase()}
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress({name: contactsAll[Address], address: Address})}
+                              <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress({name: contactsAll[Address], address: Address})}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -1614,7 +1614,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                               </Box>
                               <Box textAlign="right">
                                 <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
-                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectDeleteMyToken(Token.TokenId)} >
+                                  <Box sx={{ cursor: 'pointer', mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectDeleteMyToken(Token.TokenId)} >
                                     <Icon icon='mdi:delete-outline' />
                                     {t('Delete') as string}
                                   </Box>
@@ -1671,7 +1671,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                               </Box>
                               <Box textAlign="right">
                                 <Typography variant="body1" component="div" sx={{ color: 'primary.main', wordWrap: 'noWrap' }}>
-                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
+                                  <Box sx={{ cursor: 'pointer', mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
                                     <Icon icon='tdesign:plus' />
                                     {t('Add') as string}
                                   </Box>
@@ -1722,7 +1722,7 @@ const Wallet = ({ setCurrentTab }: any) => {
                               </Box>
                               <Box textAlign="right">
                                 <Typography variant="body1" component="div" sx={{ color: 'primary.main', wordWrap: 'noWrap' }}>
-                                  <Box sx={{ mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
+                                  <Box sx={{ cursor: 'pointer', mr: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={()=>handleSelectTokenAndSave(Token, Token.TokenData)} >
                                     <Icon icon='tdesign:plus' />
                                     {t('Add') as string}
                                   </Box>
