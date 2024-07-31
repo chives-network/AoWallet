@@ -183,7 +183,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
               console.log('result.ScanResult:', result.ScanResult);
             }
           } catch (err) {
-            console.error('Capacitor.getPlatform Error accessing camera:', err);
+            console.log('Capacitor.getPlatform Error accessing camera:', err);
           }
           break;
       case 'web':
@@ -204,7 +204,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
             });
           }
         } catch (err) {
-          console.error('Error accessing camera:', err);
+          console.log('Error accessing camera:', err);
         }
         break;
     }
@@ -452,7 +452,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
           const getPriceData = await getPrice(50)
           setCurrentFee(Number(getPriceData))
         } catch (error) {
-          console.error('SendMoneyInputAmount Error:', error);
+          console.log('SendMoneyInputAmount Error:', error);
         }
       }
       getPriceDataFunction()
@@ -705,11 +705,11 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                 throw new Error('AoDryRunBalance is null or undefined');
               }
             } catch (error) {
-              console.error(`Error processing token ${Token.TokenId}:`, error);
+              console.log(`Error processing token ${Token.TokenId}:`, error);
             }
           })
         ).catch((error) => {
-          console.error("All promises failed:", error);
+          console.log("All promises failed:", error);
         });
       }
     } 
