@@ -836,7 +836,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                         skin='light'
                         color='primary'
                         sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
-                        src={'/images/logo/' + authConfig.tokenName + '.png'}
+                        src={'https://ao-wallet.vercel.app/images/logo/' + authConfig.tokenName + '.png'}
                       >
                       </CustomAvatar>
                       <Typography variant="h5" mt={6}>
@@ -928,7 +928,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'/images/logo/' + authConfig.tokenName + '.png'}
+                                  src={'https://ao-wallet.vercel.app/images/logo/' + authConfig.tokenName + '.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -983,7 +983,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                                     skin='light'
                                     color={'primary'}
                                     sx={{ mr: 0, width: 43, height: 43 }}
-                                    src={'/images/logo/AO.png'}
+                                    src={'https://ao-wallet.vercel.app/images/logo/AO.png'}
                                   >
                                   </CustomAvatar>
                                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1154,7 +1154,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                               skin='light'
                               color={'primary'}
                               sx={{ mr: 0, width: 38, height: 38 }}
-                              src={'/images/logo/XWE.png'}
+                              src={'https://ao-wallet.vercel.app/images/logo/XWE.png'}
                             >
                             </CustomAvatar>
                             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={ async ()=>{

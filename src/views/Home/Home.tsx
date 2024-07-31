@@ -14,7 +14,9 @@ import MyWallet from '../MyWallet/MyWallet'
 const HomeModel = () => {
 
   const [currentTab, setCurrentTab] = useState<string>('Wallet')
-  const [specifyTokenSend, setSpecifyTokenSend] = useState<any>({TokenId: 'gU_KGcU3pEKuYSBv3EYJwCkcOIHkQGs8P17NQQTd0N0', Name: 'Send Token Test', Address: 't5SrAnDXhQnpzNMBSZB7tU8k3BX7YkGnJFS2O9UgEc4'})
+  const [specifyTokenSend, setSpecifyTokenSend] = useState<any>(null)
+
+  //{TokenId: 'gU_KGcU3pEKuYSBv3EYJwCkcOIHkQGs8P17NQQTd0N0', Name: 'Send Token Test', Address: 't5SrAnDXhQnpzNMBSZB7tU8k3BX7YkGnJFS2O9UgEc4'}
 
   return (
     <Fragment>
