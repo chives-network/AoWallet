@@ -76,7 +76,6 @@ const Setting = () => {
   const [currencyValue, setCurrencyValue] = useState<string>('us')
   const [networkValue, setNetworkValue] = useState<string>('mainnet')
 
-
   const [tokenName, setTokenName] = useState<string>('TokenName')
   const [tokenTicker, setTokenTicker] = useState<string>('AOTN')
   const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('1000000')
@@ -104,26 +103,6 @@ const Setting = () => {
     {name:'Main Network', value:'mainnet'}
   ]
 
-  const preventDefault = (e: any) => {
-    e.preventDefault();
-  };
-
-  const disableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = 'hidden';
-    //document.addEventListener('touchmove', preventDefault, { passive: false });
-  };
-
-  const enableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = '';
-    //document.removeEventListener('touchmove', preventDefault);
-  };
-
   useEffect(() => {
 
     i18n.changeLanguage(getChivesLanguage())
@@ -134,13 +113,6 @@ const Setting = () => {
     const getCurrentWalletTemp = getCurrentWallet()
     setChooseWallet(getCurrentWalletTemp)
     
-    disableScroll();
-
-    return () => {
-      
-      enableScroll();
-    };
-
   }, []);
 
   useEffect(() => {

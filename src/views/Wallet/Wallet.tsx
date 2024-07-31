@@ -113,26 +113,6 @@ const Wallet = ({ setCurrentTab }: any) => {
     setActiveTab(value)
     console.log("handleChangeActiveTab", event)
   }
-  
-  const preventDefault = (e: any) => {
-    e.preventDefault();
-  };
-
-  const disableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = 'hidden';
-    //document.addEventListener('touchmove', preventDefault, { passive: false });
-  };
-
-  const enableScroll = () => {
-
-    console.log("preventDefault", preventDefault)
-
-    //document.body.style.overflow = '';
-    //document.removeEventListener('touchmove', preventDefault);
-  };
 
   useEffect(() => {
 
@@ -141,13 +121,6 @@ const Wallet = ({ setCurrentTab }: any) => {
     const platform = Capacitor.getPlatform();
     setPlatform(platform)
     
-    disableScroll();
-
-    return () => {
-      
-      enableScroll();
-    };
-
   }, []);
 
   const handleWalletGoHome = () => {
@@ -271,6 +244,7 @@ const Wallet = ({ setCurrentTab }: any) => {
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+  const [isDisabledManageAssets, setIsDisabledManageAssets] = useState<boolean>(true)
 
   
   useEffect(() => {    
@@ -291,6 +265,11 @@ const Wallet = ({ setCurrentTab }: any) => {
     
     return () => clearInterval(intervalId);
 
+  }, []);
+
+  useEffect(() => {
+    const contactsAll = getChivesContacts()
+    setContactsAll(contactsAll)
   }, []);
 
   useEffect(() => {
@@ -634,7 +613,6 @@ const Wallet = ({ setCurrentTab }: any) => {
         setMySavingTokensData(getMyAoTokensData)
       }
     }
-    console.log("WantToDeleteTokenProcessTxIdData", WantToDeleteTokenProcessTxIdData)
   }
 
   const handleGetMySavingTokensData = async () => {
@@ -720,8 +698,9 @@ const Wallet = ({ setCurrentTab }: any) => {
   const handleGetAllTokensData = async () => {
 
     const getAllAoTokensData = getAllAoTokens(currentAddress)
-    if(getAllAoTokensData) {   
+    if(getAllAoTokensData && getAllAoTokensData.length > 0) {   
       setAllTokensData(getAllAoTokensData)
+      setIsDisabledManageAssets(false)
     }
     
     try {
@@ -738,6 +717,7 @@ const Wallet = ({ setCurrentTab }: any) => {
           const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: JSON.parse(Token.TokenData.replace(/\\"/g, '"'))}))
           setAllAoTokens(currentAddress, dataArrayFilter)
           setAllTokensData(dataArrayFilter)
+          setIsDisabledManageAssets(false)
           console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
       }
     }
@@ -775,7 +755,6 @@ const Wallet = ({ setCurrentTab }: any) => {
     if(TokenGetMap) {
       setSearchAssetOnChain([{TokenId: searchAssetkeyWord, TokenName: TokenGetMap.Name, TokenData: TokenGetMap}])
       console.log("handleTokenSearch TokenGetMap", TokenGetMap)
-      setSearchAssetkeyWord('')
     }
     setIsDisabledButton(false)
   }
@@ -1089,7 +1068,7 @@ const Wallet = ({ setCurrentTab }: any) => {
 
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                              <Button sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
+                              <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
                                 {t('Manage Assets') as string}
                               </Button>
                             </Box>
