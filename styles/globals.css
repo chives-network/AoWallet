@@ -1,6 +1,7 @@
 html,
 body {
   min-height: 100%;
+  min-width: 390px;
 }
 
 #__next {
