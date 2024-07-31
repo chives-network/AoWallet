@@ -192,6 +192,7 @@ const Faucet = ({ setCurrentTab }: any) => {
   const handelSendAmountToFaucet = async (Faucet: any) => {
     const TokenId = Faucet.FaucetData.FaucetTokenId
     setCurrentTab('Wallet')
+    console.log("TokenId", TokenId)
   }
 
   const handleGetMyFaucetTokenBalance = async () => {

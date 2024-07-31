@@ -72,7 +72,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = ({ setCurrentTab }: any) => {
+const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -272,11 +272,6 @@ const Wallet = ({ setCurrentTab }: any) => {
     setContactsAll(contactsAll)
   }, []);
 
-  useEffect(() => {
-    const contactsAll = getChivesContacts()
-    setContactsAll(contactsAll)
-  }, []);
-
   const [page, setPage] = useState<number>(0)
   const [innerHeight, setInnerHeight] = useState<number | string>(0)
 
@@ -404,6 +399,36 @@ const Wallet = ({ setCurrentTab }: any) => {
   useEffect(() => {
     setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
   }, [getWalletNicknamesData, currentAddress]);
+
+  useEffect(() => {
+    if(currentAddress && currentAddress.length == 43 && specifyTokenSend && specifyTokenSend.Name && specifyTokenSend.Address && specifyTokenSend.TokenId)  {
+      handleDirectSendTokenOut()
+    }
+  }, [currentAddress, specifyTokenSend]);
+
+  const handleDirectSendTokenOut = async () => {
+    setIsTokenModel(true)
+    const TokenGetMap: any = await AoTokenInfoDryRun(specifyTokenSend.TokenId)
+    if(TokenGetMap) {
+      setChooseToken(TokenGetMap)
+      console.log("TokenGetMap", TokenGetMap)
+      const AoDryRunBalance = await AoTokenBalanceDryRun(specifyTokenSend.TokenId, currentAddress);
+      if (AoDryRunBalance) {
+        const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenGetMap.Denomination ? TokenGetMap.Denomination : '12');
+        setChooseTokenBalance(AoDryRunBalanceCoin)
+      }
+      setSendMoneyAddress({name: specifyTokenSend.Name, address: specifyTokenSend.Address})
+      setPageModel('SendMoneyInputAmountAO')
+      setTitle(t('Token Amount') as string)
+      setLeftIcon('mdi:arrow-left-thin')
+      setRightButtonText(t('') as string)
+      setRightButtonIcon('')
+      setSendMoneyAmount('')
+    }
+    else {
+      console.log("handleDirectSendTokenOut TokenGetMap", TokenGetMap)
+    }
+  }
 
   useEffect(() => {
     const getAllWalletsData = getAllWallets()
