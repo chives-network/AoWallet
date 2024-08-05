@@ -394,13 +394,11 @@ const Setting = () => {
   const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
     setIsDisabledButton(true)
     const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '200', TokenData.Name, JSON.stringify(TokenData) )
-    console.log("WantToSaveTokenProcessTxIdData TokenData", TokenData, Token)
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
       addMyAoToken(currentAddress, {TokenId: Token.TokenId, TokenSort: '200', TokenName: TokenData.Name, TokenData: TokenData})
     }
-    console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
   }
 
 

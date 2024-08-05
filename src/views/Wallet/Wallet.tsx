@@ -613,7 +613,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
     setIsDisabledButton(true)
     const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', TokenData.Name, JSON.stringify(TokenData) )
-    console.log("WantToSaveTokenProcessTxIdData TokenData", TokenData, Token)
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
@@ -623,7 +622,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
         setMySavingTokensData(getMyAoTokensData)
       }
     }
-    console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
   }
 
   const handleSelectDeleteMyToken = async (TokenId: string) => {
@@ -743,7 +741,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
           setAllAoTokens(currentAddress, dataArrayFilter)
           setAllTokensData(dataArrayFilter)
           setIsDisabledManageAssets(false)
-          console.log("handleGetAllTokensData dataArrayFilter", dataArrayFilter)
       }
     }
     catch(e: any) {

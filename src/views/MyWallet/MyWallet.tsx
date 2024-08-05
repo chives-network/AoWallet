@@ -240,7 +240,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
       }
     }
     catch(e: any) {
-      console.log("handleWalletImportKeyData Error:", e)
+      toast.error(t('Import key failed') as string, { duration: 2500, position: 'top-center' })
     }
   }
 

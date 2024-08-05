@@ -27,6 +27,7 @@ const config = {
   chivesContacts: 'chivesContacts',
   chivesMyAoTokens: 'chivesMyAoTokens',
   chivesAllAoTokens: 'chivesAllAoTokens',
+  EncryptGrade: 'PIN',
   'App-Name': 'AoWallet',
   'App-Version': '0.1',
   'App-Instance': '',
@@ -35,5 +36,6 @@ const config = {
 
 config.backEndApi = config.tokenType === 'AR' ? 'https://arweave.net' : 'https://api.chivesweave.org:1986';
 config.tokenName = config.tokenType === 'AR' ? 'AR' : 'XWE';
+config.EncryptGrade = "PIN";
 
 export default config;

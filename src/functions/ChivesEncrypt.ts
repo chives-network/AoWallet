@@ -127,7 +127,7 @@ export function DecryptEmailAES256GCMV1(encrypted: string, key: string) {
     }
 }
 
-export function EncryptEmailAddressAES256CBC(text: string, key: string) {
+export function EncryptEmailAddressAES256CBC_NOTUSE(text: string, key: string) {
     const iv = Buffer.from(key.slice(0, 16), 'utf8');
     const cipher = crypto.createCipheriv('aes-256-cbc', key.slice(0, 32), iv);
     let encrypted = cipher.update(text, 'utf-8', 'hex');
@@ -137,7 +137,7 @@ export function EncryptEmailAddressAES256CBC(text: string, key: string) {
     return encrypted;
 }
 
-export function DecryptEmailAddressAES256CBC(encrypted: string, key: string) {
+export function DecryptEmailAddressAES256CBC_NOTUSE(encrypted: string, key: string) {
     try {
         const iv = Buffer.from(encrypted.slice(0, 32), 'hex');
         const tag = encrypted.slice(-64);

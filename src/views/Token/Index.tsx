@@ -133,7 +133,6 @@ const TokenModel = () => {
       const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(currentWallet.jwk, authConfig.AoConnectMyProcessTxIds, WantToSaveTokenProcessTxId, tokenGetInfor?.Sort ?? '10', 'My Tokens', JSON.stringify(tokenInfo).replace(/"/g, '\\"') )
       if(WantToSaveTokenProcessTxIdData) {
         setAddTokenButtonText('Have add')
-        console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
         if(WantToSaveTokenProcessTxIdData?.msg?.Output?.data?.output)  {
           setCounter(counter + 1)
           const formatText = WantToSaveTokenProcessTxIdData?.msg?.Output?.data?.output.replace(ansiRegex, '');
@@ -160,7 +159,6 @@ const TokenModel = () => {
     setCancelTokenButtonText('waiting')
     const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsDelToken(currentWallet.jwk, authConfig.AoConnectMyProcessTxIds, WantToSaveTokenProcessTxId)
     if(WantToSaveTokenProcessTxIdData) {
-      console.log("WantToSaveTokenProcessTxIdData", WantToSaveTokenProcessTxIdData)
       if(WantToSaveTokenProcessTxIdData?.msg?.Output?.data?.output)  {
         setCounter(counter + 1)
         setCancelTokenButtonText('Have cancel')
