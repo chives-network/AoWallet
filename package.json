@@ -53,6 +53,7 @@
     "i18next": "22.4.15",
     "i18next-browser-languagedetector": "7.0.1",
     "i18next-http-backend": "2.2.0",
+    "immutable": "^4.3.7",
     "install": "^0.13.0",
     "next": "14.2.5",
     "npm": "^10.2.3",
