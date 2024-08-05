@@ -1,6 +1,3 @@
-import { generateMnemonic, validateMnemonic } from 'bip39-web-crypto';
-import { getKeyPairFromMnemonic } from 'human-crypto-keys'
-
 import { PromisePool } from '@supercharge/promise-pool'
 
 import type { JWKInterface } from 'arweave/web/lib/wallet'
@@ -92,61 +89,6 @@ export async function generateArWalletJsonData () {
     }
 }
 
-export async function generateNewMnemonicAndGetWalletData (mnemonic: string) {
-    try {
-        let newMnemonic = mnemonic
-        if(newMnemonic == undefined || newMnemonic == "")  {
-            newMnemonic = await generateMnemonic();
-        }
-        const isValidMnemonic = await validateMnemonic(newMnemonic);
-        if(isValidMnemonic) {
-
-            const mnemonicToJwkValue = await mnemonicToJwk(newMnemonic)
-            
-            //console.log("mnemonicToJwkValue:", mnemonicToJwkValue)
-            
-            //Get Wallet Data From LocalStorage
-            const chivesWalletsList = window.localStorage.getItem(chivesWallets)  
-            const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, EncryptWalletDataKey)   
-            const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
-            
-            //Get Wallet Max Id
-            let walletId = 0
-            while (walletExists.find((w: any) => +w.id === walletId)) { walletId++ }
-            
-            //Make walletData
-            const walletData: any = {...mnemonicToJwkValue}
-            walletData.id ??= walletId
-            walletData.uuid ??= v4() as string
-            walletData.settings ??= {}
-            walletData.state ??= {"hot": true}
-            
-            //Make Addresss From Jwk
-            const key = await arweave.wallets.jwkToAddress(walletData.jwk as any)
-            const publicKey = walletData.jwk.n
-            walletData.data ??= {}
-            walletData.data.arweave = { key, publicKey }            
-            
-            //Write New Wallet Data to LocalStorage
-            walletExists.push(walletData)
-            const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), EncryptWalletDataKey)
-            window.localStorage.setItem(chivesWallets, EncryptWalletData)
-
-            //const addFileToJwkValue = await addFileToJwk('')
-            //console.log("addImportDataValue:", addImportDataValue)
-
-            return walletData
-        }
-        else {
-            
-            //Error Mnemonic
-            return null;
-        }
-    } catch (error) {
-        console.log('Error generateNewMnemonicAndGetJwk:', error);
-    }
-};
-
 export async function jwkToAddress (jwk: any) {
 
     return await arweave.wallets.jwkToAddress(jwk as any)
@@ -201,33 +143,6 @@ export async function importWalletJsonFile (wallet: any) {
 
 };
 
-export async function checkMnemonicValidity (newMnemonic: string) {
-    try {
-        return await validateMnemonic(newMnemonic);
-    } catch (error) {
-      console.error('Error checkMnemonicValidity:', error);
-    }
-};
-
-export async function mnemonicToJwk (mnemonic: string) {
-    try {
-      
-      //console.log('make keyPair waiting ......................', mnemonic);
-      
-      const keyPair = await getKeyPairFromMnemonic(mnemonic, { id: 'rsa', modulusLength: 4096 }, { privateKeyFormat: 'pkcs8-der' })
-      
-      //console.log("keyPair.privateKey", keyPair.privateKey)
-      
-      const jwk = await pkcs8ToJwk(keyPair.privateKey) as JWKInterface
-      
-      //console.log("jwk...............", jwk)
-      
-      return { jwk }
-    } catch (error) {
-      console.log('Error mnemonicToJwk:', error);
-    }
-};
-
 export async function addFileToJwk (keyfile: string) {
     try {
         const data = keyfile != null && keyfile != '' && JSON.parse(keyfile) as JWKInterface
@@ -235,7 +150,7 @@ export async function addFileToJwk (keyfile: string) {
 		
         return { jwk }
     } catch (error) {
-      console.log('Error mnemonicToJwk:', error);
+      console.log('Error addFileToJwk:', error);
     }
 };
 
