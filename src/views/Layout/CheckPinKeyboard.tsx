@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Grid, Container, Box, styled } from '@mui/material';
+import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 
 import { checkPasswordForWallet } from '../../functions/ChivesWallets'
 
@@ -25,7 +27,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
   };
 
   return (
-    <Grid container spacing={2} justifyContent="center" mt={20}>
+    <Grid container spacing={2} justifyContent="center" mt={10}>
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
             {numbers.map((num) => (
                 <Grid item key={num}>
@@ -49,7 +51,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
 // 输入指示器组件
 const InputIndicator = ({ length }: { length: number }) => {
   return (
-    <Box display="flex" justifyContent="center" mt={20}>
+    <Box display="flex" justifyContent="center" mt={10}>
       {[...Array(6)].map((_, index) => (
         <Box
           key={index}
@@ -66,21 +68,23 @@ const InputIndicator = ({ length }: { length: number }) => {
 
 // 钱包解锁组件
 const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any) => {
+  const { t } = useTranslation()
+
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
+  const [headerTitle, setHeaderTitle] = useState<string>('Input Pin Code');
 
   const handleInput = (num: number | 'backspace') => {
     if (num === 'backspace') {
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
+      setHeaderTitle('Input Pin Code')
     } 
     else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
         setInputLength(inputLength + 1);
-      }
-      else {
-        
+        setHeaderTitle('Input Pin Code')
       }
     }
   };
@@ -93,11 +97,21 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
           setEncryptWalletDataKey(inputValue)
           handleWalletGoHome()
         }
+        else {
+          setInputValue('')
+          setInputLength(0)
+          setHeaderTitle('Pin Code Error')
+        }
     }
   }, [inputValue, inputLength]);
 
   return (
     <Container>
+      <Box display="flex" justifyContent="center" mt={2}>
+          <Typography variant="h5" mt={2}>
+              {t(headerTitle) as string}
+          </Typography>
+      </Box>
       <InputIndicator length={inputLength} />
       <NumberPad onInput={handleInput} />
     </Container>

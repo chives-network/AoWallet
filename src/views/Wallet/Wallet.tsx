@@ -148,7 +148,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       }
     }
 
-  }, []);
+  }, [encryptWalletDataKey]);
 
   const handleWalletGoHome = () => {
     setRefreshWalletData(refreshWalletData+1)
@@ -292,12 +292,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     
     return () => clearInterval(intervalId);
 
-  }, []);
+  }, [encryptWalletDataKey]);
 
   useEffect(() => {
     const contactsAll = getChivesContacts(encryptWalletDataKey)
     setContactsAll(contactsAll)
-  }, []);
+  }, [encryptWalletDataKey]);
 
   const [page, setPage] = useState<number>(0)
   const [innerHeight, setInnerHeight] = useState<number | string>(0)
@@ -429,13 +429,13 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     if(isSetPasswordForWalletData && checkPasswordForWalletData)   {
       setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
     }
-  }, [getWalletNicknamesData, currentAddress]);
+  }, [getWalletNicknamesData, currentAddress, encryptWalletDataKey]);
 
   useEffect(() => {
-    if(currentAddress && currentAddress.length == 43 && specifyTokenSend && specifyTokenSend.Name && specifyTokenSend.Address && specifyTokenSend.TokenId)  {
+    if(currentAddress && currentAddress.length == 43 && specifyTokenSend && specifyTokenSend.Name && specifyTokenSend.Address && specifyTokenSend.TokenId && encryptWalletDataKey)  {
       handleDirectSendTokenOut()
     }
-  }, [currentAddress, specifyTokenSend]);
+  }, [currentAddress, specifyTokenSend, encryptWalletDataKey]);
 
   const handleDirectSendTokenOut = async () => {
     setIsDisabledButton(true)
@@ -480,7 +480,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         setGetWalletNicknamesData(getWalletNicknames(encryptWalletDataKey))
       }
     }
-  }, [refreshWalletData])
+  }, [refreshWalletData, encryptWalletDataKey])
 
   useEffect(() => {
     if(pageModel == "SendMoneyInputAmount") {
