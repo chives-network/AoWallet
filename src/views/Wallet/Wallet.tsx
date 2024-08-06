@@ -123,8 +123,13 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     setPlatform(platform)
 
     const isSetPasswordForWalletData = isSetPasswordForWallet()
-    if(isSetPasswordForWalletData == false)   {
+    if(isSetPasswordForWalletData == true)   {
       setPageModel('SetPinCode')
+      setTitle(t('Set Password') as string)
+      setLeftIcon('')
+      setRightButtonText('')
+      setRightButtonIcon('')
+      setLeftIcon('')
     }
     
   }, []);
@@ -256,7 +261,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   useEffect(() => {    
 
     setHeaderHidden(false)
-    setRightButtonIcon('mdi:qrcode')
 
     const currentAddressTemp = getCurrentWalletAddress()
     setCurrentAddress(String(currentAddressTemp))
@@ -403,7 +407,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   }, [currentAddress, pageModel, activeTab, page])
 
   useEffect(() => {
-    setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
+    const isSetPasswordForWalletData = isSetPasswordForWallet()
+    if(isSetPasswordForWalletData)   {
+      setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
+    }
   }, [getWalletNicknamesData, currentAddress]);
 
   useEffect(() => {

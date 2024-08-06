@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
+
 import { Button, Grid, Container, Box, styled } from '@mui/material';
 
 // 圆形按钮样式
@@ -22,7 +25,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
   };
 
   return (
-    <Grid container spacing={2} justifyContent="center" mt={20}>
+    <Grid container spacing={2} justifyContent="center" mt={10}>
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
             {numbers.map((num) => (
                 <Grid item key={num}>
@@ -44,7 +47,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
 // 输入指示器组件
 const InputIndicator = ({ length }: { length: number }) => {
   return (
-    <Box display="flex" justifyContent="center" mt={20}>
+    <Box display="flex" justifyContent="center" mt={10}>
       {[...Array(6)].map((_, index) => (
         <Box
           key={index}
@@ -61,6 +64,8 @@ const InputIndicator = ({ length }: { length: number }) => {
 
 // 钱包解锁组件
 const SetPinKeyboard = () => {
+  const { t, i18n } = useTranslation()
+
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
 
@@ -78,8 +83,13 @@ const SetPinKeyboard = () => {
 
   return (
     <Container>
-      <InputIndicator length={inputLength} />
-      <NumberPad onInput={handleInput} />
+        <Box display="flex" justifyContent="center" mt={2}>
+            <Typography variant="h5" mt={2}>
+                {t('ass') as string}
+            </Typography>
+        </Box>
+        <InputIndicator length={inputLength} />
+        <NumberPad onInput={handleInput} />
     </Container>
   );
 };
