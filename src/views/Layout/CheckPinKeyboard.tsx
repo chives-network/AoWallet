@@ -7,9 +7,9 @@ import { checkPasswordForWallet } from '../../functions/ChivesWallets'
 // 圆形按钮样式
 const RoundButton = styled(Button)(() => ({
   borderRadius: '50%',
-  minWidth: '60px',
-  minHeight: '60px',
-  fontSize: '1.2rem',
+  minWidth: '75px',
+  minHeight: '75px',
+  fontSize: '1.5rem',
 }));
 
 // 数字键盘组件
@@ -37,7 +37,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
                 </Grid>
             ))}
             <Grid item mt={3}>
-                <Button size="small" sx={{m: 0, p: 1}} variant="outlined" onClick={handleBackspace}>
+                <Button size="small" sx={{mt: 1.5, p: 1}} variant="outlined" onClick={handleBackspace}>
                 ←
                 </Button>
             </Grid>

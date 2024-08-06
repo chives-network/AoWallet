@@ -125,7 +125,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     const isSetPasswordForWalletData = isSetPasswordForWallet()
     if(isSetPasswordForWalletData == false)   {
       setPageModel('SetPinCode')
-      setTitle(t('Set Password') as string)
+      setTitle(t('Set Pin Code') as string)
       setLeftIcon('')
       setRightButtonText('')
       setRightButtonIcon('')
@@ -136,7 +136,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       const checkPasswordForWalletData = checkPasswordForWallet(encryptWalletDataKey)
       if(checkPasswordForWalletData == false)  {
         setPageModel('CheckPinCode')
-        setTitle(t('Check Password') as string)
+        setTitle(t('Check Pin Code') as string)
         setLeftIcon('')
         setRightButtonText('')
         setRightButtonIcon('')
