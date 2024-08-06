@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 
 import { Button, Grid, Container, Box, styled } from '@mui/material';
+
+import { setPasswordForWallet } from '../../functions/ChivesWallets'
 
 // 圆形按钮样式
 const RoundButton = styled(Button)(() => ({
@@ -63,29 +65,68 @@ const InputIndicator = ({ length }: { length: number }) => {
 };
 
 // 钱包解锁组件
-const SetPinKeyboard = () => {
-  const { t, i18n } = useTranslation()
+const SetPinKeyboard = ({ setCurrentTab, setEncryptWalletDataKey }: any) => {
+  const { t } = useTranslation()
 
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
+  const [headerTitle, setHeaderTitle] = useState<string>('First Time Input');
+  const [firstTimeInput, setFirstTimeInput] = useState<string>('');
 
   const handleInput = (num: number | 'backspace') => {
     if (num === 'backspace') {
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
+      if(firstTimeInput == '')  {
+        setHeaderTitle('First Time Input')
+      }
+      if(firstTimeInput.length == 6)  {
+        setHeaderTitle('Repeat Pin Code')
+      }
     } else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
         setInputLength(inputLength + 1);
+        if(firstTimeInput == '')  {
+            setHeaderTitle('First Time Input')
+        }
+        if(firstTimeInput.length == 6)  {
+            setHeaderTitle('Repeat Pin Code')
+        }
       }
     }
   };
+
+  useEffect(() =>   {
+    if(inputLength == 6 && firstTimeInput == '')  {
+        setHeaderTitle('Repeat Pin Code')
+        setInputLength(0)
+        setInputValue('')
+        setFirstTimeInput(inputValue)
+    }
+    if(inputLength == 6 && inputValue.length == 6 && firstTimeInput.length == 6)  {
+        if(firstTimeInput == inputValue)    {
+            setHeaderTitle('Input Match')
+            setPasswordForWallet(inputValue) //Make a test encrypted data
+            setEncryptWalletDataKey(inputValue) // storage the key temporary
+            setCurrentTab('MyWallet') //switch to mywallet
+        }
+        else {
+            setHeaderTitle('Not match, please input again')
+            setInputLength(0)
+            setInputValue('')
+            setFirstTimeInput('')
+        }
+    }
+    
+  }, [inputValue, inputLength]);
+
 
   return (
     <Container>
         <Box display="flex" justifyContent="center" mt={2}>
             <Typography variant="h5" mt={2}>
-                {t('ass') as string}
+                {t(headerTitle) as string}
             </Typography>
         </Box>
         <InputIndicator length={inputLength} />

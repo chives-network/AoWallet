@@ -26,8 +26,7 @@ import { useTranslation } from 'react-i18next'
 // ** Actions
 import { fetchData } from '../../store/apps/email'
 
-// ** Context
-import { useAuth } from '../../hooks/useAuth'
+import { getCurrentWalletAddress, getCurrentWallet } from '../../functions/ChivesWallets'
 
 // ** Variables
 const EmailCategoriesColors: any = {
@@ -38,7 +37,7 @@ const EmailCategoriesColors: any = {
   Promotions: 'warning'
 }
 
-const EmailAppLayout = () => {
+const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -74,9 +73,8 @@ const EmailAppLayout = () => {
   const leftSidebarWidth = 260
   const { skin, direction } = settings
 
-  const auth = useAuth()
-  const currentWallet = auth.currentWallet
-  const currentAddress = auth.currentAddress
+  const currentWallet = getCurrentWallet(encryptWalletDataKey)
+  const currentAddress = getCurrentWalletAddress(encryptWalletDataKey) as string
 
   const [currentAoAddress, setMyAoConnectTxId] = useState<string>('')
   useEffect(() => {

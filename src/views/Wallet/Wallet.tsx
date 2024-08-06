@@ -32,7 +32,7 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { isSetPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
+import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
@@ -73,7 +73,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
+const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -123,15 +123,31 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     setPlatform(platform)
 
     const isSetPasswordForWalletData = isSetPasswordForWallet()
-    if(isSetPasswordForWalletData == true)   {
+    if(isSetPasswordForWalletData == false)   {
       setPageModel('SetPinCode')
       setTitle(t('Set Password') as string)
       setLeftIcon('')
       setRightButtonText('')
       setRightButtonIcon('')
       setLeftIcon('')
+      setDisabledFooter(true)
     }
-    
+    else {
+      const checkPasswordForWalletData = checkPasswordForWallet(encryptWalletDataKey)
+      if(checkPasswordForWalletData == false)  {
+        setPageModel('CheckPinCode')
+        setTitle(t('Check Password') as string)
+        setLeftIcon('')
+        setRightButtonText('')
+        setRightButtonIcon('')
+        setLeftIcon('')
+        setDisabledFooter(true)
+      }
+      else {
+        setDisabledFooter(false)
+      }
+    }
+
   }, []);
 
   const handleWalletGoHome = () => {
@@ -146,6 +162,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     setIsTokenModel(false)
     setSearchAssetkeyWord('')
     setSearchAssetOnChain([])
+    setDisabledFooter(false)
   }
   
   const LeftIconOnClick = () => {
@@ -262,10 +279,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
 
     setHeaderHidden(false)
 
-    const currentAddressTemp = getCurrentWalletAddress()
+    const currentAddressTemp = getCurrentWalletAddress(encryptWalletDataKey)
     setCurrentAddress(String(currentAddressTemp))
 
-    const getCurrentWalletTemp = getCurrentWallet()
+    const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
 
     const myTask = () => {
@@ -278,7 +295,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   }, []);
 
   useEffect(() => {
-    const contactsAll = getChivesContacts()
+    const contactsAll = getChivesContacts(encryptWalletDataKey)
     setContactsAll(contactsAll)
   }, []);
 
@@ -408,7 +425,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
 
   useEffect(() => {
     const isSetPasswordForWalletData = isSetPasswordForWallet()
-    if(isSetPasswordForWalletData)   {
+    const checkPasswordForWalletData = checkPasswordForWallet(encryptWalletDataKey)
+    if(isSetPasswordForWalletData && checkPasswordForWalletData)   {
       setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
     }
   }, [getWalletNicknamesData, currentAddress]);
@@ -444,17 +462,21 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   }
 
   useEffect(() => {
-    const getAllWalletsData = getAllWallets()
-    if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
-      
-      //No wallet, and switch to MyWallet
-      setCurrentTab('MyWallet')
-    }
-    else {
+    const isSetPasswordForWalletData = isSetPasswordForWallet()
+    const checkPasswordForWalletData = checkPasswordForWallet(encryptWalletDataKey)
+    if(isSetPasswordForWalletData && checkPasswordForWalletData)   {
+      const getAllWalletsData = getAllWallets(encryptWalletDataKey)
+      if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
+        
+        //No wallet, and switch to MyWallet
+        setCurrentTab('MyWallet')
+      }
+      else {
 
-      //Have wallets, and list them
-      setGetAllWalletsData(getAllWallets())
-      setGetWalletNicknamesData(getWalletNicknames())
+        //Have wallets, and list them
+        setGetAllWalletsData(getAllWallets(encryptWalletDataKey))
+        setGetWalletNicknamesData(getWalletNicknames(encryptWalletDataKey))
+      }
     }
   }, [refreshWalletData])
 
@@ -611,7 +633,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     console.log("TxResult TxResult", TxResult)
     if(TxResult?.msg?.Messages && TxResult?.msg?.Messages[0]?.Data)  {
       toast.success(t(TxResult?.msg?.Messages[0]?.Data.replace(ansiRegex, '')) as string, { duration: 2500, position: 'top-center' })
-      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
       if(getMyAoTokensData) {      
         setMySavingTokensData(getMyAoTokensData)
       }
@@ -629,8 +651,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
-      addMyAoToken(currentAddress, Token)
-      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      addMyAoToken(currentAddress, Token, encryptWalletDataKey)
+      const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
       if(getMyAoTokensData) {      
         setMySavingTokensData(getMyAoTokensData)
       }
@@ -643,8 +665,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     setIsDisabledButton(false)
     if(WantToDeleteTokenProcessTxIdData?.msg?.Messages && WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
-      deleteMyAoToken(currentAddress, TokenId)
-      const getMyAoTokensData = getMyAoTokens(currentAddress)
+      deleteMyAoToken(currentAddress, TokenId, encryptWalletDataKey)
+      const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
       if(getMyAoTokensData) {      
         setMySavingTokensData(getMyAoTokensData)
       }
@@ -652,7 +674,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   }
 
   const handleGetMySavingTokensData = async () => {
-    const getMyAoTokensData = getMyAoTokens(currentAddress)
+    const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
     if(getMyAoTokensData) {      
       setMySavingTokensData(getMyAoTokensData)
     }
@@ -669,7 +691,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
               }
           });
           const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: JSON.parse(Token.TokenData.replace(/\\"/g, '"'))}))
-          setMyAoTokens(currentAddress, dataArrayFilter)
+          setMyAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setMySavingTokensData(dataArrayFilter)
           console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
       }
@@ -693,7 +715,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
 
   const handleGetMySavingTokensBalance = async () => {
 
-    const getMyAoTokensData = getMyAoTokens(currentAddress);
+    const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey);
     const myAoTokensBalanceTemp: any = {};
 
     try {
@@ -733,7 +755,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   
   const handleGetAllTokensData = async () => {
 
-    const getAllAoTokensData = getAllAoTokens(currentAddress)
+    const getAllAoTokensData = getAllAoTokens(currentAddress, encryptWalletDataKey)
     if(getAllAoTokensData && getAllAoTokensData.length > 0) {   
       setAllTokensData(getAllAoTokensData)
       setIsDisabledManageAssets(false)
@@ -751,7 +773,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
               }
           });
           const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: JSON.parse(Token.TokenData.replace(/\\"/g, '"'))}))
-          setAllAoTokens(currentAddress, dataArrayFilter)
+          setAllAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setAllTokensData(dataArrayFilter)
           setIsDisabledManageAssets(false)
       }
@@ -759,7 +781,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
     catch(e: any) {
       console.log("handleGetAllTokensData Error", e)      
     }
-
 
   }
 
@@ -801,7 +822,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
   }, [searchAssetkeyWord]);
   
   
-
   const themeSlider = createTheme({
     components: {
       MuiSlider: {
@@ -1255,6 +1275,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
 
             {pageModel == 'ViewToken' && authConfig.tokenName == "AR" && ( 
               <AoToken 
+                encryptWalletDataKey={encryptWalletDataKey}
                 currentAddress={currentAddress} 
                 chooseToken={chooseToken}
                 myAoTokensBalance={myAoTokensBalance}
@@ -1316,7 +1337,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
                         sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
                         onChange={(e: any)=>{
                           setSearchContactkeyWord(e.target.value)
-                          const searchChivesContactsData = searchChivesContacts(e.target.value)
+                          const searchChivesContactsData = searchChivesContacts(e.target.value, encryptWalletDataKey)
                           setContactsAll(searchChivesContactsData)
                           console.log("e.target.value", e.target.value)
                         }}
@@ -1800,7 +1821,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
             {pageModel == 'SetPinCode' && ( 
               <Grid container spacing={6}>
                 <Grid item xs={12}>
-                  <SetPinKeyboard />
+                  <SetPinKeyboard setCurrentTab={setCurrentTab} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}
@@ -1808,7 +1829,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
             {pageModel == 'CheckPinCode' && ( 
               <Grid container spacing={6}>
                 <Grid item xs={12}>
-                  <CheckPinKeyboard />
+                  <CheckPinKeyboard handleWalletGoHome={handleWalletGoHome} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}

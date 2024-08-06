@@ -49,7 +49,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Setting = () => {
+const Setting = ({ encryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const { settings, saveSettings } = useSettings()
@@ -107,16 +107,16 @@ const Setting = () => {
 
     i18n.changeLanguage(getChivesLanguage())
 
-    const currentAddressTemp = getCurrentWalletAddress()
+    const currentAddressTemp = getCurrentWalletAddress(encryptWalletDataKey)
     setCurrentAddress(String(currentAddressTemp))
 
-    const getCurrentWalletTemp = getCurrentWallet()
+    const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
     
   }, []);
 
   useEffect(() => {
-    const contactsAll = getChivesContacts()
+    const contactsAll = getChivesContacts(encryptWalletDataKey)
     setContactsAll(contactsAll)
   }, [counter]);
 
@@ -179,13 +179,13 @@ const Setting = () => {
   
   const handleContactSave = () => {
     if(contactAddress && contactAddress.length == 43) {
-        setChivesContacts(contactAddress, contactName)
+        setChivesContacts(contactAddress, contactName, encryptWalletDataKey)
         handleClickContactsButton()
     }
   }
   
   const handleContactDelete = (Address: string) => {
-    deleteChivesContacts(Address)
+    deleteChivesContacts(Address, encryptWalletDataKey)
     handleClickContactsButton()
   }
 
@@ -397,7 +397,7 @@ const Setting = () => {
     setIsDisabledButton(false)
     if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
-      addMyAoToken(currentAddress, {TokenId: Token.TokenId, TokenSort: '200', TokenName: TokenData.Name, TokenData: TokenData})
+      addMyAoToken(currentAddress, {TokenId: Token.TokenId, TokenSort: '200', TokenName: TokenData.Name, TokenData: TokenData}, encryptWalletDataKey)
     }
   }
 
@@ -783,7 +783,7 @@ const Setting = () => {
                         sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3 }}
                         onChange={(e: any)=>{
                             setSearchContactkeyWord(e.target.value)
-                            const searchChivesContactsData = searchChivesContacts(e.target.value)
+                            const searchChivesContactsData = searchChivesContacts(e.target.value, encryptWalletDataKey)
                             setContactsAll(searchChivesContactsData)
                             console.log("e.target.value", e.target.value)
                         }}

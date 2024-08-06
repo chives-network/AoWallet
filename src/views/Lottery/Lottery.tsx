@@ -24,7 +24,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Lottery = () => {
+const Lottery = ({ encryptWalletDataKey }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -127,7 +127,7 @@ const Lottery = () => {
     setHeaderHidden(false)
     setRightButtonIcon('mdi:qrcode')
 
-    const getCurrentWalletTemp = getCurrentWallet()
+    const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
 
     const myTask = () => {

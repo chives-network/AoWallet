@@ -29,7 +29,7 @@ import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions
 import {setTokenAllHolderTxs, getTokenAllHolderTxs } from '../../functions/ChivesWallets'
 import { FormatBalance, FormatBalanceString } from '../../functions/AoConnect/AoConnect'
 
-const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
+const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 
     const { t } = useTranslation()
 
@@ -237,7 +237,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
 
             return 
         }
-        const getTokenAllHolderTxsData = getTokenAllHolderTxs(CurrentToken);
+        const getTokenAllHolderTxsData = getTokenAllHolderTxs(CurrentToken, encryptWalletDataKey);
         if (getTokenAllHolderTxsData) {
             const { AoDryRunBalancesJsonSorted, TokenHolders, CirculatingSupply } = getTokenAllHolderTxsData;
             CirculatingSupply && setCirculatingSupply(String(Number(CirculatingSupply).toFixed(0)))
@@ -264,7 +264,7 @@ const AoToken = ({ currentAddress, chooseToken, myAoTokensBalance, page, setPage
                     setCirculatingSupply(String(CirculatingSupply.toFixed(0)))
                     setHoldersNumber(TokenHolders)
                     setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSortedResult)
-                    setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSortedResult, TokenHolders, CirculatingSupply})
+                    setTokenAllHolderTxs(CurrentToken, {AoDryRunBalancesJsonSortedResult, TokenHolders, CirculatingSupply}, encryptWalletDataKey)
                     !getTokenAllHolderTxsData && setIsLoading(false)
                 }
                 catch(Error: any) {

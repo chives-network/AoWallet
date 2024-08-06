@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Grid, Container, Box, styled } from '@mui/material';
+
+import { checkPasswordForWallet } from '../../functions/ChivesWallets'
+
 
 // 圆形按钮样式
 const RoundButton = styled(Button)(() => ({
@@ -60,7 +63,7 @@ const InputIndicator = ({ length }: { length: number }) => {
 };
 
 // 钱包解锁组件
-const CheckPinKeyboard = () => {
+const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any) => {
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
 
@@ -68,13 +71,28 @@ const CheckPinKeyboard = () => {
     if (num === 'backspace') {
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
-    } else {
+    } 
+    else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
         setInputLength(inputLength + 1);
       }
+      else {
+        
+      }
     }
   };
+
+  useEffect(() =>   {
+    if(inputLength == 6)  {
+        const checkPasswordForWalletData = checkPasswordForWallet(inputValue)
+        console.log("checkPasswordForWalletData", checkPasswordForWalletData, inputValue)
+        if(checkPasswordForWalletData)   {
+          setEncryptWalletDataKey(inputValue)
+          handleWalletGoHome()
+        }
+    }
+  }, [inputValue, inputLength]);
 
   return (
     <Container>

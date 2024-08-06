@@ -103,6 +103,7 @@
     "@types/react-dom": "^18",
     "@types/react-draft-wysiwyg": "1.13.4",
     "@types/react-redux": "7.1.25",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "eslint": "^8",

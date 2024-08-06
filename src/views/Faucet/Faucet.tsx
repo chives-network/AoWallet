@@ -41,7 +41,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Faucet = ({ setCurrentTab }: any) => {
+const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -107,7 +107,7 @@ const Faucet = ({ setCurrentTab }: any) => {
 
   const handleGetAllFaucetsData = async () => {
 
-    const getAllAoFaucetsData = getAllAoFaucets(currentAddress)
+    const getAllAoFaucetsData = getAllAoFaucets(currentAddress, encryptWalletDataKey)
     if(getAllAoFaucetsData) {   
       setAllFaucetsData(getAllAoFaucetsData)
     }
@@ -128,7 +128,7 @@ const Faucet = ({ setCurrentTab }: any) => {
               }
           });
           const dataArrayFilter = dataArray.map((Faucet: any)=>({...Faucet, FaucetData: JSON.parse(Faucet.FaucetData.replace(/\\"/g, '"'))}))
-          setAllAoFaucets(currentAddress, dataArrayFilter)
+          setAllAoFaucets(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setAllFaucetsData(dataArrayFilter)
           console.log("handleGetAllFaucetsData dataArrayFilter", dataArrayFilter)
       }
@@ -197,7 +197,7 @@ const Faucet = ({ setCurrentTab }: any) => {
 
   const handleGetMyFaucetTokenBalance = async () => {
 
-    const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress);
+    const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress, encryptWalletDataKey);
     if(getMyAoFaucetTokenBalanceData) {   
       setMyFaucetTokenBalanceData(getMyAoFaucetTokenBalanceData)
     }
@@ -212,7 +212,7 @@ const Faucet = ({ setCurrentTab }: any) => {
               if (AoDryRunBalance && Faucet) {
                 const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Faucet.FaucetData.Denomination ? Faucet.FaucetData.Denomination : '12');
                 const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
-                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat}); // Immediately update the local storage balance
+                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
                 console.log("AoDryRunBalanceCoinFormat1", AoDryRunBalanceCoinFormat)
                 setMyFaucetTokenBalanceData((prevState: any)=>({
                   ...prevState, 
@@ -225,7 +225,7 @@ const Faucet = ({ setCurrentTab }: any) => {
               if (AoDryRunFaucetBalance && Faucet) {
                 const AoDryRunBalanceCoin = FormatBalance(AoDryRunFaucetBalance, Faucet.FaucetData.Denomination ? Faucet.FaucetData.Denomination : '12');
                 const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
-                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}); // Immediately update the local storage balance
+                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
                 console.log("AoDryRunBalanceCoinFormat2", AoDryRunBalanceCoinFormat)
                 setMyFaucetTokenBalanceData((prevState: any)=>({
                   ...prevState, 
@@ -254,10 +254,10 @@ const Faucet = ({ setCurrentTab }: any) => {
     setHeaderHidden(false)
     setRightButtonIcon('solar:dollar-linear')
 
-    const currentAddressTemp = getCurrentWalletAddress()
+    const currentAddressTemp = getCurrentWalletAddress(encryptWalletDataKey)
     setCurrentAddress(String(currentAddressTemp))
 
-    const getCurrentWalletTemp = getCurrentWallet()
+    const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
 
     if(currentAddress && currentAddress.length == 43) {

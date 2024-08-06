@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 const Footer = (props: any) => {
   // ** Props
-  const { footer, setCurrentTab } = props
+  const { footer, setCurrentTab, disabledFooter } = props
   const { t } = useTranslation()
 
   const [value, setValue] = useState(0);
@@ -57,10 +57,10 @@ const Footer = (props: any) => {
           }}
           sx={{width: '100%'}}
         >
-          <BottomNavigationAction label={t("Wallet")} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
-          <BottomNavigationAction label={t("Faucet")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label={t("Apps")} icon={<Icon icon='icon-park-outline:all-application' />} />
-          <BottomNavigationAction label={t("Setting")} icon={<Icon icon='material-symbols:settings-outline' />} />
+          <BottomNavigationAction label={t("Wallet")} disabled={disabledFooter} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
+          <BottomNavigationAction label={t("Faucet")} disabled={disabledFooter} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
+          <BottomNavigationAction label={t("Apps")} disabled={disabledFooter} icon={<Icon icon='icon-park-outline:all-application' />} />
+          <BottomNavigationAction label={t("Setting")} disabled={disabledFooter} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>
   )

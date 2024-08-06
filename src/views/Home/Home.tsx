@@ -15,17 +15,20 @@ const HomeModel = () => {
 
   const [currentTab, setCurrentTab] = useState<string>('Wallet')
   const [specifyTokenSend, setSpecifyTokenSend] = useState<any>(null)
+  const [disabledFooter, setDisabledFooter] = useState<boolean>(true)
+
+  const [encryptWalletDataKey, setEncryptWalletDataKey] = useState<string>('')
 
   //{TokenId: 'gU_KGcU3pEKuYSBv3EYJwCkcOIHkQGs8P17NQQTd0N0', Name: 'Send Token Test', Address: 't5SrAnDXhQnpzNMBSZB7tU8k3BX7YkGnJFS2O9UgEc4'}
 
   return (
     <Fragment>
-      {currentTab == "MyWallet" && (<MyWallet setCurrentTab={setCurrentTab} />)}
-      {currentTab == "Wallet" && (<Wallet setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} />)}
-      {currentTab == "Faucet" && (<Faucet setCurrentTab={setCurrentTab} />)}
-      {currentTab == "Apps" && (<Lottery />)}
-      {currentTab == "Setting" && (<Setting />)}
-      <Footer Hidden={false} setCurrentTab={setCurrentTab} currentTab={currentTab} />
+      {currentTab == "MyWallet" && (<MyWallet setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} setDisabledFooter={setDisabledFooter}/>)}
+      {currentTab == "Wallet" && (<Wallet setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} setDisabledFooter={setDisabledFooter} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey}/>)}
+      {currentTab == "Faucet" && (<Faucet setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Apps" && (<Lottery encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Setting" && (<Setting encryptWalletDataKey={encryptWalletDataKey} />)}
+      <Footer Hidden={false} setCurrentTab={setCurrentTab} currentTab={currentTab} disabledFooter={disabledFooter}/>
     </Fragment>
   )
 }

@@ -41,7 +41,7 @@ import { formatHash } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
-import PinKeyboard from '../Layout/CheckPinKeyboard'
+import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -54,7 +54,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const MyWallet = ({ setCurrentTab } : any) => {
+const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
 
@@ -128,17 +128,18 @@ const MyWallet = ({ setCurrentTab } : any) => {
   }, []);
 
   useEffect(() => {
-    const getAllWalletsData = getAllWallets()
+    const getAllWalletsData = getAllWallets(encryptWalletDataKey)
     if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
       
       //No wallet, and create one
       handleWalletCreate()
     }
     else {
+      setDisabledFooter(false)
 
       //Have wallets, and list them
-      setGetAllWalletsData(getAllWallets())
-      setGetWalletNicknamesData(getWalletNicknames())
+      setGetAllWalletsData(getAllWallets(encryptWalletDataKey))
+      setGetWalletNicknamesData(getWalletNicknames(encryptWalletDataKey))
     }
   }, [refreshWalletData])
 
@@ -175,7 +176,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
   }
 
   const handleSetCurrentWallet = (wallet: any) => {
-    setCurrentWallet(wallet.data.arweave.key)
+    setCurrentWallet(wallet.data.arweave.key, encryptWalletDataKey)
     setCurrentTab('Wallet')
   }
 
@@ -209,9 +210,9 @@ const MyWallet = ({ setCurrentTab } : any) => {
 
   const handleWalletCreateWalletData = async () => {
     setIsLoading(true)
-    const ImportJsonFileWalletAddress: any = await generateArWalletJsonData()
+    const ImportJsonFileWalletAddress: any = await generateArWalletJsonData(encryptWalletDataKey)
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
-        setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName)
+        setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
         setChooseWalletName('')
         setImportKeyValue('')
         handleWalletGoHome()
@@ -230,9 +231,9 @@ const MyWallet = ({ setCurrentTab } : any) => {
         toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
       }
       else {
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey)
         if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
-            setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName)
+            setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
             setChooseWalletName('')
             setImportKeyValue('')
             handleWalletGoHome()
@@ -260,7 +261,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
   }
 
   const handleWalletRenameSave = () => {
-    setWalletNickname(chooseWallet.data.arweave.key, chooseWalletName);
+    setWalletNickname(chooseWallet.data.arweave.key, chooseWalletName, encryptWalletDataKey);
     console.log("chooseWalletName", chooseWalletName);
     setRefreshWalletData(refreshWalletData+1)
     handleWalletGoHome()
@@ -302,7 +303,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
 
   const handleYesClose = () => {
     setOpen(false)
-    deleteWalletByWallet(chooseWallet.jwk)
+    deleteWalletByWallet(chooseWallet.jwk, encryptWalletDataKey)
     setRefreshWalletData(refreshWalletData+1)
     setPageModel('ListWallet')
   }
@@ -321,10 +322,10 @@ const MyWallet = ({ setCurrentTab } : any) => {
   
   const handleImportWalletJsonFile = async (file: File) => {
     const jsonFileContent: string = await readFileText(file)
-    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent))
+    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey)
     
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
-        setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6))
+        setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6), encryptWalletDataKey)
         handleWalletGoHome()
         toast.success(t('Import Json Files Success') as string, { duration: 1000, position: 'top-center' })
     }
@@ -623,10 +624,8 @@ const MyWallet = ({ setCurrentTab } : any) => {
                   </Grid>
                 </Grid>
                       
-                
               </Fragment>
               }
-              
               
             </Grid>
           )}
@@ -806,7 +805,7 @@ const MyWallet = ({ setCurrentTab } : any) => {
           {pageModel == 'PinCode' && ( 
             <Grid container spacing={6}>
               <Grid item xs={12}>
-                <PinKeyboard />
+                <CheckPinKeyboard />
               </Grid>
             </Grid>
           )}
