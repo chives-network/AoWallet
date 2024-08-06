@@ -28,15 +28,16 @@ import { AoCreateProcessAuto, FormatBalance, sleep } from '../../functions/AoCon
 import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
 import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
 
-
-
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import { formatHash } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
-import PinKeyboard from '../Layout/CheckPinKeyboard'
+import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
+import TermsofUse from './TermsofUse'
+import PrivacyPolicy from './PrivacyPolicy'
+import Link from 'next/link'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -50,6 +51,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 }))
 
 const Setting = ({ encryptWalletDataKey }: any) => {
+
   // ** Hook
   const { t, i18n } = useTranslation()
   const { settings, saveSettings } = useSettings()
@@ -137,8 +139,8 @@ const Setting = ({ encryptWalletDataKey }: any) => {
         break
       case 'General':
       case 'Contacts':
-      case 'Security':
       case 'Support':
+      case 'SecurityPrivacy':
         handleWalletGoHome()
         break
       case 'NewContact':
@@ -158,6 +160,10 @@ const Setting = ({ encryptWalletDataKey }: any) => {
         break
       case 'CreateToken':
         handleClickGeneralButton()
+        break
+      case 'PrivacyPolicy':
+      case 'TermsOfUse':
+        handleClickSecurityPrivacyButton()
         break
     }
   }
@@ -196,6 +202,18 @@ const Setting = ({ encryptWalletDataKey }: any) => {
     setTitle(t('Contacts') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:add')
+    setContactAddress('')
+    setContactName('')
+    setSearchContactkeyWord('')
+  }
+
+  const handleClickSecurityPrivacyButton = () => {
+    setCounter(counter + 1)
+    setPageModel('SecurityPrivacy')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Security & Privacy') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
     setContactAddress('')
     setContactName('')
     setSearchContactkeyWord('')
@@ -401,6 +419,22 @@ const Setting = ({ encryptWalletDataKey }: any) => {
     }
   }
 
+  const handleClickTermsOfUseButton = () => {
+    setPageModel('TermsOfUse')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Terms of Use') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+
+  const handleClickPrivacyPolicyButton = () => {
+    setPageModel('PrivacyPolicy')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Privacy Policy') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+
 
   return (
     <Fragment>
@@ -435,7 +469,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <IconButton sx={{ p: 0 }} onClick={()=>handleClickGeneralButton()}>
                                     <Icon icon='oui:integration-general' fontSize={38} />
                                 </IconButton>
-                                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickGeneralButton()}
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickGeneralButton()}
                                     >
                                     <Typography sx={{ 
                                       color: 'text.primary',
@@ -472,7 +506,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickContactsButton()}>
                                 <Icon icon='mdi:contact-mail-outline' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickContactsButton()}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickContactsButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -506,10 +540,10 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                         <Grid item xs={12} sx={{ py: 1 }}>
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>null}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickSecurityPrivacyButton()}>
                                 <Icon icon='mdi:security-lock-outline' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickSecurityPrivacyButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -533,7 +567,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 </Box>
                               </Box>
                               <Box textAlign="right">
-                                <IconButton sx={{ p: 0 }} onClick={()=>null}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickSecurityPrivacyButton()}>
                                     <Icon icon='mdi:chevron-right' fontSize={30} />
                                 </IconButton>
                               </Box>
@@ -567,6 +601,17 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                   }}>
                                     {t('Contact our customer support') as string}
                                   </Typography>
+                                  <Link href={`https://chat.deepseek.com/coder`} target='_blank'>
+                                    <Typography variant='body2' sx={{ 
+                                      color: `secondary.primary`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1
+                                    }}>
+                                      {t('Discord') as string}
+                                    </Typography>
+                                  </Link>
                                 </Box>
                               </Box>
                             </Box>
@@ -587,7 +632,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
                                     <Icon icon='clarity:language-line' fontSize={38} />
                                 </IconButton>
-                                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickLanguageButton()}
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickLanguageButton()}
                                     >
                                     <Typography sx={{ 
                                     color: 'text.primary',
@@ -624,7 +669,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickThemeButton()}>
                                 <Icon icon='line-md:light-dark' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickThemeButton()}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickThemeButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -661,7 +706,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCurrencyButton()}>
                                 <Icon icon='mdi:dollar' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCurrencyButton()}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCurrencyButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -698,7 +743,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickNetworkButton()}>
                                 <Icon icon='tabler:world-dollar' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickNetworkButton()}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickNetworkButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -735,7 +780,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCreateTokenButton()}>
                                 <Icon icon='material-symbols:token-outline' fontSize={34} />
                               </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
+                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -803,7 +848,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                               >
                                 {getInitials(Address).toUpperCase()}
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectContact(Address, contactsAll[Address])}
+                              <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectContact(Address, contactsAll[Address])}
                                 >
                                 <Typography sx={{ 
                                   color: 'text.primary',
@@ -875,6 +920,89 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                 </Grid>
             )}
 
+            {pageModel == 'SecurityPrivacy' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickTermsOfUseButton()}>
+                                    <Icon icon='clarity:language-line' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickTermsOfUseButton()}
+                                    >
+                                    <Typography sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Terms of Use') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{ 
+                                        color: `secondary.primary`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Terms of Use') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickTermsOfUseButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                    <Icon icon='clarity:language-line' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickPrivacyPolicyButton()}
+                                    >
+                                    <Typography sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Privacy Policy') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{ 
+                                        color: `secondary.primary`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Privacy Policy') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                    </Grid>
+                </Grid>
+              </Grid>
+            )}
+
             {pageModel == 'Language' && (
                 <Grid container spacing={2}>
 
@@ -885,7 +1013,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <Grid item xs={12} sx={{ py: 1 }} key={index}>
                                     <Card sx={{ml: 2}}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectLanguage(Language.value)}>
+                                            <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectLanguage(Language.value)}>
                                                 <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
                                                     {Language.name}
                                                 </Typography>
@@ -914,7 +1042,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <Grid item xs={12} sx={{ py: 1 }} key={index}>
                                     <Card sx={{ml: 2}}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }}  onClick={()=>handleSelectTheme(Theme.value)}>
+                                            <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }}  onClick={()=>handleSelectTheme(Theme.value)}>
                                                 <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
                                                     {Theme.name}
                                                 </Typography>
@@ -943,7 +1071,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <Grid item xs={12} sx={{ py: 1 }} key={index}>
                                     <Card sx={{ml: 2}}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectCurrency(Currency.value)} >
+                                            <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectCurrency(Currency.value)} >
                                                 <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
                                                     {Currency.name}
                                                 </Typography>
@@ -972,7 +1100,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 <Grid item xs={12} sx={{ py: 1 }} key={index}>
                                     <Card sx={{ml: 2}}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectNetwork(Network.value)} >
+                                            <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%', ml: 2 }} onClick={()=>handleSelectNetwork(Network.value)} >
                                                 <Typography sx={{ color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', }} >
                                                     {Network.name}
                                                 </Typography>
@@ -1138,7 +1266,23 @@ const Setting = ({ encryptWalletDataKey }: any) => {
             {pageModel == 'PinCode' && ( 
               <Grid container spacing={6}>
                 <Grid item xs={12}>
-                  <PinKeyboard />
+                  <CheckPinKeyboard />
+                </Grid>
+              </Grid>
+            )}
+
+            {pageModel == 'PrivacyPolicy' && ( 
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <PrivacyPolicy />
+                </Grid>
+              </Grid>
+            )}
+
+            {pageModel == 'TermsOfUse' && ( 
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <TermsofUse />
                 </Grid>
               </Grid>
             )}
