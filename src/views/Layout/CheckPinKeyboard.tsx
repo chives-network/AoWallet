@@ -14,7 +14,7 @@ const RoundButton = styled(Button)(() => ({
 
 // 数字键盘组件
 const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }) => {
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, -1, 0];
 
   const handleClick = (num: number) => {
     onInput(num);
@@ -29,13 +29,15 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
             {numbers.map((num) => (
                 <Grid item key={num}>
+                  {num >= 0 && (
                     <RoundButton variant="outlined" onClick={() => handleClick(num)}>
                         {num}
                     </RoundButton>
+                  )}
                 </Grid>
             ))}
             <Grid item mt={3}>
-                <Button sx={{m: 0, p: 1}} variant="outlined" onClick={handleBackspace}>
+                <Button size="small" sx={{m: 0, p: 1}} variant="outlined" onClick={handleBackspace}>
                 ←
                 </Button>
             </Grid>

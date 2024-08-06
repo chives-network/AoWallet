@@ -310,9 +310,9 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
                       }
 
                       return (
-                        <>
+                        <Fragment key={Index}>
                           { isShow && (
-                            <Grid item xs={12} sx={{ py: 2 }} key={Index}>
+                            <Grid item xs={12} sx={{ py: 2 }}>
                               <Card>     
                                 <CardContent>
                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -386,7 +386,7 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
                               </Card>
                             </Grid>
                           )} 
-                        </>
+                        </Fragment>
                       )
 
                     })}

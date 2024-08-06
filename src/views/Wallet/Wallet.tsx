@@ -1327,7 +1327,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
 
             {pageModel == 'SendMoneySelectContact' && ( 
               <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                     <Grid container spacing={2}>
                       <TextField
                         fullWidth
@@ -1611,7 +1611,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
 
             {pageModel == 'ManageAssets' && ( 
               <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                     <Grid container spacing={2}>
                       <TextField
                         fullWidth
@@ -1819,16 +1819,16 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
             )}
 
             {pageModel == 'SetPinCode' && ( 
-              <Grid container spacing={6}>
-                <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                   <SetPinKeyboard setCurrentTab={setCurrentTab} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}
 
             {pageModel == 'CheckPinCode' && ( 
-              <Grid container spacing={6}>
-                <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                   <CheckPinKeyboard handleWalletGoHome={handleWalletGoHome} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>

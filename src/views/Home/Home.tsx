@@ -19,8 +19,6 @@ const HomeModel = () => {
 
   const [encryptWalletDataKey, setEncryptWalletDataKey] = useState<string>('')
 
-  //{TokenId: 'gU_KGcU3pEKuYSBv3EYJwCkcOIHkQGs8P17NQQTd0N0', Name: 'Send Token Test', Address: 't5SrAnDXhQnpzNMBSZB7tU8k3BX7YkGnJFS2O9UgEc4'}
-
   return (
     <Fragment>
       {currentTab == "MyWallet" && (<MyWallet setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} setDisabledFooter={setDisabledFooter}/>)}
