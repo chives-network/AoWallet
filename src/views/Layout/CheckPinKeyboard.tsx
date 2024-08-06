@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Grid, Container, Box, styled } from '@mui/material';
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 
 import { checkPasswordForWallet } from '../../functions/ChivesWallets'
 
@@ -72,19 +73,19 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
 
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
-  const [headerTitle, setHeaderTitle] = useState<string>('Input Pin Code');
+  const [headerTitle, setHeaderTitle] = useState<string>(t('Input Pin Code') as string);
 
   const handleInput = (num: number | 'backspace') => {
     if (num === 'backspace') {
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
-      setHeaderTitle('Input Pin Code')
+      setHeaderTitle(t('Input Pin Code') as string)
     } 
     else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
         setInputLength(inputLength + 1);
-        setHeaderTitle('Input Pin Code')
+        setHeaderTitle(t('Input Pin Code') as string)
       }
     }
   };
@@ -100,7 +101,8 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
         else {
           setInputValue('')
           setInputLength(0)
-          setHeaderTitle('Pin Code Error')
+          setHeaderTitle(t('Pin Code Error') as string)
+          toast.error(t('Pin Code Error') as string, { duration: 2500, position: 'top-center' })
         }
     }
   }, [inputValue, inputLength]);

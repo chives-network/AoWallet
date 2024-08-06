@@ -181,9 +181,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         handleClickViewTokenButtonAO()
         break;
       case 'MainWallet':
-        setCurrentTab('MyWallet')
         break
     }
+  }
+
+  const setPinKeySuccess = () => {
+    setCurrentTab('MyWallet')
   }
 
   const videoQrCodeRef = useRef<HTMLVideoElement>(null);
@@ -1826,7 +1829,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
             {pageModel == 'SetPinCode' && ( 
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
-                  <SetPinKeyboard setCurrentTab={setCurrentTab} setEncryptWalletDataKey={setEncryptWalletDataKey} />
+                  <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}

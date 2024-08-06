@@ -67,12 +67,12 @@ const InputIndicator = ({ length }: { length: number }) => {
 };
 
 // 钱包解锁组件
-const SetPinKeyboard = ({ setCurrentTab, setEncryptWalletDataKey }: any) => {
+const SetPinKeyboard = ({ setPinKeySuccess, setEncryptWalletDataKey }: any) => {
   const { t } = useTranslation()
 
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
-  const [headerTitle, setHeaderTitle] = useState<string>('First Time Input');
+  const [headerTitle, setHeaderTitle] = useState<string>(t('First Time Input') as string);
   const [firstTimeInput, setFirstTimeInput] = useState<string>('');
 
   const handleInput = (num: number | 'backspace') => {
@@ -80,20 +80,20 @@ const SetPinKeyboard = ({ setCurrentTab, setEncryptWalletDataKey }: any) => {
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
       if(firstTimeInput == '')  {
-        setHeaderTitle('First Time Input')
+        setHeaderTitle(t('First Time Input') as string)
       }
       if(firstTimeInput.length == 6)  {
-        setHeaderTitle('Repeat Pin Code')
+        setHeaderTitle(t('Repeat Pin Code') as string)
       }
     } else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
         setInputLength(inputLength + 1);
         if(firstTimeInput == '')  {
-            setHeaderTitle('First Time Input')
+          setHeaderTitle(t('First Time Input') as string)
         }
         if(firstTimeInput.length == 6)  {
-            setHeaderTitle('Repeat Pin Code')
+            setHeaderTitle(t('Repeat Pin Code') as string)
         }
       }
     }
@@ -101,20 +101,20 @@ const SetPinKeyboard = ({ setCurrentTab, setEncryptWalletDataKey }: any) => {
 
   useEffect(() =>   {
     if(inputLength == 6 && firstTimeInput == '')  {
-        setHeaderTitle('Repeat Pin Code')
+        setHeaderTitle(t('Repeat Pin Code') as string)
         setInputLength(0)
         setInputValue('')
         setFirstTimeInput(inputValue)
     }
     if(inputLength == 6 && inputValue.length == 6 && firstTimeInput.length == 6)  {
         if(firstTimeInput == inputValue)    {
-            setHeaderTitle('Input Match')
+            setHeaderTitle(t('Input Match') as string)
             setPasswordForWallet(inputValue) //Make a test encrypted data
             setEncryptWalletDataKey(inputValue) // storage the key temporary
-            setCurrentTab('MyWallet') //switch to mywallet
+            setPinKeySuccess('MyWallet') //switch to mywallet
         }
         else {
-            setHeaderTitle('Not match, please input again')
+            setHeaderTitle(t('Not match, please input again') as string)
             setInputLength(0)
             setInputValue('')
             setFirstTimeInput('')

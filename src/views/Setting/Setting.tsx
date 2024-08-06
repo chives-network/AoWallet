@@ -34,6 +34,7 @@ import { formatHash } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
+import SetPinKeyboard from '../Layout/SetPinKeyboard'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 import TermsofUse from './TermsofUse'
 import PrivacyPolicy from './PrivacyPolicy'
@@ -50,7 +51,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Setting = ({ encryptWalletDataKey }: any) => {
+const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
   // ** Hook
   const { t, i18n } = useTranslation()
@@ -433,6 +434,29 @@ const Setting = ({ encryptWalletDataKey }: any) => {
     setTitle(t('Privacy Policy') as string)
     setRightButtonText('')
     setRightButtonIcon('')
+  }
+
+  const handleClickCheckPinCodeButton = () => {
+    setPageModel('CheckPinCode')
+    setTitle(t('Check Pin Code') as string)
+    setLeftIcon('')
+    setRightButtonText('')
+    setRightButtonIcon('')
+    setLeftIcon('')
+  }
+
+  const handleClickSetPinCodeButton = () => {
+    setPageModel('SetPinCode')
+    setTitle(t('Set Pin Code') as string)
+    setLeftIcon('')
+    setRightButtonText('')
+    setRightButtonIcon('')
+    setLeftIcon('')
+  }
+
+  const setPinKeySuccess = () => {
+    handleWalletGoHome()
+    toast.success(t('Change pin code success') as string, { duration: 2500, position: 'top-center' })
   }
 
 
@@ -928,7 +952,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
                                 <IconButton sx={{ p: 0 }} onClick={()=>handleClickTermsOfUseButton()}>
-                                    <Icon icon='clarity:language-line' fontSize={38} />
+                                    <Icon icon='mdi:text-box-outline' fontSize={38} />
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickTermsOfUseButton()}
                                     >
@@ -965,7 +989,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
                                 <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
-                                    <Icon icon='clarity:language-line' fontSize={38} />
+                                    <Icon icon='iconoir:privacy-policy' fontSize={38} />
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickPrivacyPolicyButton()}
                                     >
@@ -992,6 +1016,43 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                 </Box>
                                 <Box textAlign="right">
                                     <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickCheckPinCodeButton()}>
+                                    <Icon icon='dashicons:privacy' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCheckPinCodeButton()}
+                                    >
+                                    <Typography sx={{ 
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Change Pin Code') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{ 
+                                        color: `secondary.primary`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Change Pin Code') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickCheckPinCodeButton()}>
                                         <Icon icon='mdi:chevron-right' fontSize={30} />
                                     </IconButton>
                                 </Box>
@@ -1263,10 +1324,18 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                 </Grid>
             )}
 
-            {pageModel == 'PinCode' && ( 
-              <Grid container spacing={6}>
-                <Grid item xs={12}>
-                  <CheckPinKeyboard />
+            {pageModel == 'CheckPinCode' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
+                  <CheckPinKeyboard handleWalletGoHome={handleClickSetPinCodeButton} setEncryptWalletDataKey={setEncryptWalletDataKey} />
+                </Grid>
+              </Grid>
+            )}
+
+            {pageModel == 'SetPinCode' && ( 
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
+                  <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}
