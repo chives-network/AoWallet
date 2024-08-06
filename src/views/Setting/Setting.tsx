@@ -601,7 +601,7 @@ const Setting = ({ encryptWalletDataKey }: any) => {
                                   }}>
                                     {t('Contact our customer support') as string}
                                   </Typography>
-                                  <Link href={`https://chat.deepseek.com/coder`} target='_blank'>
+                                  <Link href={`https://discord.com/invite/aAkMH9Q3AY`} target='_blank'>
                                     <Typography variant='body2' sx={{ 
                                       color: `secondary.primary`, 
                                       overflow: 'hidden',
