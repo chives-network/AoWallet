@@ -41,7 +41,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
+const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -56,9 +56,7 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseFaucet, setChooseFaucet] = useState<any>(null)
-  const [faucetBalance, setFaucetBalance] = useState<any>({})
-  const [myTokenBalance, setMyTokenBalance] = useState<any>({})
-
+  
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
   const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
@@ -163,21 +161,31 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
         const AoFaucetInfoData = await AoFaucetInfo(Faucet.FaucetId)
         console.log("AoFaucetInfoData AoFaucetInfo", AoFaucetInfoData)
 
-        const AoDryRunBalance = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, currentAddress);
-        if(AoDryRunBalance && AoFaucetInfoData) {
-          console.log("AoDryRunBalance", AoDryRunBalance)
-          setMyTokenBalance((prevState: any)=>({
-              ...prevState,
-              [AoFaucetInfoData.FaucetTokenId]: FormatBalance(AoDryRunBalance, AoFaucetInfoData.Denomination)
+        //Get my wallet address balance
+        const AoDryRunBalance: any = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, currentAddress);
+        if (AoDryRunBalance && AoFaucetInfoData) {
+          const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress, encryptWalletDataKey);
+          const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, AoFaucetInfoData.Denomination ? AoFaucetInfoData.Denomination : '12');
+          const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
+          setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [AoFaucetInfoData.FaucetTokenId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
+          console.log("AoDryRunBalanceCoinFormat1-1", AoFaucetInfoData.FaucetTokenId, AoDryRunBalanceCoinFormat)
+          setMyFaucetTokenBalanceData((prevState: any)=>({
+            ...prevState, 
+            [AoFaucetInfoData.FaucetTokenId]: AoDryRunBalanceCoinFormat
           }))
         }
 
-        const AoDryRunBalanceFaucet = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, Faucet.FaucetId);
-        if(AoDryRunBalanceFaucet && AoFaucetInfoData) {
-          console.log("AoDryRunBalanceFaucet", AoDryRunBalanceFaucet)
-          setFaucetBalance((prevState: any)=>({
-              ...prevState,
-              [Faucet.FaucetId]: FormatBalance(AoDryRunBalanceFaucet, AoFaucetInfoData.Denomination)
+        //Get faucet address balance
+        const AoDryRunFaucetBalance: any = await AoTokenBalanceDryRun(AoFaucetInfoData.FaucetTokenId, Faucet.FaucetId);
+        if (AoDryRunFaucetBalance && Faucet) {
+          const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress, encryptWalletDataKey);
+          const AoDryRunBalanceCoin = FormatBalance(AoDryRunFaucetBalance, AoFaucetInfoData.Denomination ? AoFaucetInfoData.Denomination : '12');
+          const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
+          setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
+          console.log("AoDryRunBalanceCoinFormat2-2", Faucet.FaucetId, AoDryRunBalanceCoinFormat)
+          setMyFaucetTokenBalanceData((prevState: any)=>({
+            ...prevState, 
+            [Faucet.FaucetId]: AoDryRunBalanceCoinFormat
           }))
         }
 
@@ -192,7 +200,7 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
   const handelSendAmountToFaucet = async (Faucet: any) => {
     const TokenId = Faucet.FaucetData.FaucetTokenId
     setCurrentTab('Wallet')
-    console.log("TokenId", TokenId)
+    setSpecifyTokenSend({Name: 'Add Token To Faucet', TokenId: TokenId, Address: Faucet.FaucetId})
   }
 
   const handleGetMyFaucetTokenBalance = async () => {
@@ -212,12 +220,13 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
               if (AoDryRunBalance && Faucet) {
                 const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Faucet.FaucetData.Denomination ? Faucet.FaucetData.Denomination : '12');
                 const AoDryRunBalanceCoinFormat = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
-                setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
                 console.log("AoDryRunBalanceCoinFormat1", AoDryRunBalanceCoinFormat)
-                setMyFaucetTokenBalanceData((prevState: any)=>({
-                  ...prevState, 
-                  [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat
-                }))
+                setMyFaucetTokenBalanceData((prevState: any)=>{
+                  const TempData = { ...prevState, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat }
+                  setMyAoFaucetTokenBalance(currentAddress, TempData, encryptWalletDataKey); // Immediately update the local storage balance
+                  
+                  return TempData
+                })
               }
 
               //Get faucet address balance
@@ -231,6 +240,12 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
                   ...prevState, 
                   [Faucet.FaucetId]: AoDryRunBalanceCoinFormat
                 }))
+                setMyFaucetTokenBalanceData((prevState: any)=>{
+                  const TempData = { ...prevState, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat }
+                  setMyAoFaucetTokenBalance(currentAddress, TempData, encryptWalletDataKey); // Immediately update the local storage balance
+                  
+                  return TempData
+                })
               }
 
             } catch (error) {
@@ -329,7 +344,7 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
                                         {formatHash(Faucet.FaucetData.FaucetTokenId, 12)}
                                       </Typography>
                                       <Typography variant='caption' sx={{ letterSpacing: '0.4px' }}>
-                                        {t('Balance')}: {myTokenBalance[Faucet.FaucetData.FaucetTokenId] ?? myFaucetTokenBalanceData[Faucet.FaucetData.FaucetTokenId] ?? ''}
+                                        {t('My Balance')}: {myFaucetTokenBalanceData[Faucet.FaucetData.FaucetTokenId] ?? ''}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -356,7 +371,10 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
                                   <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                     <Icon icon='streamline:bag-dollar-solid' />
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Faucet Balance') as string}: {faucetBalance[Faucet.FaucetId] ?? myFaucetTokenBalanceData[Faucet.FaucetId] ?? ''}</Typography>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Faucet Balance') as string}: {myFaucetTokenBalanceData[Faucet.FaucetId] ?? ''}</Typography>
+                                      {Number(myFaucetTokenBalanceData[Faucet.FaucetId]) < Number(Faucet.FaucetData.FaucetAmount) && (
+                                        <Typography sx={{ fontSize: '0.875rem', py: 0.8, color: 'error.main' }}>{t('Insufficient balance') as string}, {t('At least') as string}: {Faucet.FaucetData.FaucetAmount}</Typography>
+                                      )}
                                     </Box>
                                   </Box>
 
@@ -369,7 +387,7 @@ const Faucet = ({ setCurrentTab, encryptWalletDataKey }: any) => {
 
                                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                        {isRechargeMode == false && (
+                                        {isRechargeMode == false && Number(myFaucetTokenBalanceData[Faucet.FaucetId]) >= Number(Faucet.FaucetData.FaucetAmount) && (
                                           <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromFaucet(Faucet)}>
                                               {t('Get Faucet') as string}
                                           </Button>

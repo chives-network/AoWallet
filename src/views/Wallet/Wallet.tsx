@@ -73,7 +73,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
+const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -438,20 +438,21 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
   }, [currentAddress, specifyTokenSend]);
 
   const handleDirectSendTokenOut = async () => {
+    setIsDisabledButton(true)
     setIsTokenModel(true)
     const TokenGetMap: any = await AoTokenInfoDryRun(specifyTokenSend.TokenId)
     if(TokenGetMap) {
-      setChooseToken(TokenGetMap)
-      console.log("TokenGetMap", TokenGetMap)
+      setChooseToken({...TokenGetMap, TokenId: specifyTokenSend.TokenId})
+      console.log("TokenGetMap0000", TokenGetMap)
       const AoDryRunBalance = await AoTokenBalanceDryRun(specifyTokenSend.TokenId, currentAddress);
       if (AoDryRunBalance) {
         const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenGetMap.Denomination ? TokenGetMap.Denomination : '12');
         setChooseTokenBalance(AoDryRunBalanceCoin)
       }
       setSendMoneyAddress({name: specifyTokenSend.Name, address: specifyTokenSend.Address})
-      setPageModel('SendMoneyInputAmountAO')
+      setPageModel('SendMoneyInputAmountAOFaucet')
       setTitle(t('Token Amount') as string)
-      setLeftIcon('mdi:arrow-left-thin')
+      setLeftIcon('')
       setRightButtonText(t('') as string)
       setRightButtonIcon('')
       setSendMoneyAmount('')
@@ -459,6 +460,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
     else {
       console.log("handleDirectSendTokenOut TokenGetMap", TokenGetMap)
     }
+    setIsDisabledButton(false)
   }
 
   useEffect(() => {
@@ -641,8 +643,13 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
     setIsDisabledButton(false)
     setUploadingButton(`${t('Send')}`)
     setSendMoneyAmount('')
-    handleClickViewTokenButtonAO()
-    console.log("uploadProgress", uploadProgress)
+    if(pageModel == "SendMoneyInputAmountAOFaucet")  {
+      setSpecifyTokenSend(null)
+      setCurrentTab('Faucet')
+    }
+    else {
+      handleClickViewTokenButtonAO()
+    }
   }
 
   const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
@@ -717,37 +724,29 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
 
     const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey);
     const myAoTokensBalanceTemp: any = {};
-
     try {
       if (getMyAoTokensData) {
-        Promise.any(
-          getMyAoTokensData.map(async (Token: any) => {
-            try {
-              const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
-              if (AoDryRunBalance) {
-                const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Token.TokenData.Denomination ? Token.TokenData.Denomination : '12');
-                if (!myAoTokensBalanceTemp[currentAddress]) {
-                  myAoTokensBalanceTemp[currentAddress] = {};
-                }
-                myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
-                setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
-
-                return myAoTokensBalanceTemp;
-              } 
-              else {
-                throw new Error('AoDryRunBalance is null or undefined');
+        for (const Token of getMyAoTokensData) {
+          try {
+            const AoDryRunBalance = await AoTokenBalanceDryRun(Token.TokenId, currentAddress);
+            if (AoDryRunBalance) {
+              const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, Token.TokenData.Denomination ? Token.TokenData.Denomination : '12');
+              if (!myAoTokensBalanceTemp[currentAddress]) {
+                myAoTokensBalanceTemp[currentAddress] = {};
               }
-            } catch (error) {
-              console.log(`Error processing token ${Token.TokenId}:`, error);
+              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
+              setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
+            } else {
+              console.error('AoDryRunBalance is null or undefined');
             }
-          })
-        ).catch((error) => {
-          console.log("All promises failed:", error);
-        });
+          } catch (error) {
+            console.error(`Error processing token ${Token.TokenId}:`, error);
+          }
+        }
       }
     } 
     catch (e: any) {
-      console.log("handleGetMySavingTokensBalance Error", e);
+      console.error("handleGetMySavingTokensBalance Error", e);
     }
 
   }
@@ -1136,7 +1135,13 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
                     </Box>
                   </Grid>
                 </Grid>
-
+                      
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={isDisabledButton}
+                >
+                  <CircularProgress color="inherit" size={45}/>
+                </Backdrop>
               </Grid>
             :
               <Fragment></Fragment>
@@ -1497,7 +1502,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setDisabledFooter, encryptWal
               </Grid>
             )}
 
-            {pageModel == 'SendMoneyInputAmountAO' && sendMoneyAddress && ( 
+            {(pageModel == 'SendMoneyInputAmountAO' || pageModel == 'SendMoneyInputAmountAOFaucet') && sendMoneyAddress && ( 
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
                     <Grid item xs={12} sx={{ py: 1 }}>

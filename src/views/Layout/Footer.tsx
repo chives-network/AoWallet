@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 const Footer = (props: any) => {
   // ** Props
-  const { footer, setCurrentTab, disabledFooter } = props
+  const { footer, setCurrentTab, setSpecifyTokenSend, disabledFooter } = props
   const { t } = useTranslation()
 
   const [value, setValue] = useState(0);
@@ -42,15 +42,19 @@ const Footer = (props: any) => {
             console.log("FooterContent event", newValue)
             switch(newValue) {
               case 0:
+                setSpecifyTokenSend(null)
                 setCurrentTab('Wallet')
                 break;
               case 1:
+                setSpecifyTokenSend(null)
                 setCurrentTab('Faucet')
                 break;
               case 2:
+                setSpecifyTokenSend(null)
                 setCurrentTab('Apps')
                 break;
               case 3:
+                setSpecifyTokenSend(null)
                 setCurrentTab('Setting')
                 break;
             }
