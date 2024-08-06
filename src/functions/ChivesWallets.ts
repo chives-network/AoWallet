@@ -74,6 +74,22 @@ export function DecryptWalletDataAES256GCMV1(encrypted: string, key: string) {
     }
 }
 
+export function isSetPasswordForWallet() {
+    if(typeof window !== 'undefined')  {
+        const chivesIsSetPasswordData = window.localStorage.getItem("chivesIsSetPassword")
+        if(chivesIsSetPasswordData == null || chivesIsSetPasswordData == '')  {
+
+            return false
+        }
+        else {
+
+            return true
+        }
+    }
+    
+    return true
+}
+
 export async function generateArWalletJsonData () {
     
     try {

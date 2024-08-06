@@ -60,7 +60,7 @@ const InputIndicator = ({ length }: { length: number }) => {
 };
 
 // 钱包解锁组件
-const WalletUnlock = () => {
+const CheckPinKeyboard = () => {
   const [inputLength, setInputLength] = useState(0);
   const [inputValue, setInputValue] = useState('');
 
@@ -84,4 +84,4 @@ const WalletUnlock = () => {
   );
 };
 
-export default WalletUnlock;
+export default CheckPinKeyboard;

@@ -41,7 +41,7 @@ import { formatHash } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
-import PinKeyboard from '../Layout/PinKeyboard'
+import PinKeyboard from '../Layout/CheckPinKeyboard'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,

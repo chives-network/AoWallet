@@ -32,7 +32,7 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
+import { isSetPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
@@ -49,7 +49,8 @@ import { formatHash, formatTimestamp, ansiRegex } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
-import PinKeyboard from '../Layout/PinKeyboard'
+import SetPinKeyboard from '../Layout/SetPinKeyboard'
+import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 import ArWallet from './ArWallet'
 import AoToken from './AoToken'
 
@@ -120,6 +121,11 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
 
     const platform = Capacitor.getPlatform();
     setPlatform(platform)
+
+    const isSetPasswordForWalletData = isSetPasswordForWallet()
+    if(isSetPasswordForWalletData == false)   {
+      setPageModel('SetPinCode')
+    }
     
   }, []);
 
@@ -1784,10 +1790,18 @@ const Wallet = ({ setCurrentTab, specifyTokenSend }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'PinCode' && ( 
+            {pageModel == 'SetPinCode' && ( 
               <Grid container spacing={6}>
                 <Grid item xs={12}>
-                  <PinKeyboard />
+                  <SetPinKeyboard />
+                </Grid>
+              </Grid>
+            )}
+
+            {pageModel == 'CheckPinCode' && ( 
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <CheckPinKeyboard />
                 </Grid>
               </Grid>
             )}
