@@ -152,6 +152,17 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
 
         return
       }
+      if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages.length == 1) {
+        const Messages = GetFaucetFromFaucetTokenId?.msg?.Messages
+        if(Messages[0].Tags && Messages[0].Tags[6] && Messages[0].Tags[6].name == 'Error')  {
+          toast.error(Messages[0].Tags[6].value, {
+            duration: 2500
+          })
+          setIsDisabledButton(false)
+
+          return
+        }
+      }
       if(GetFaucetFromFaucetTokenId?.msg?.Messages && GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data) {
         console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data)
         toast.success(GetFaucetFromFaucetTokenId?.msg?.Messages[4]?.Data, {
