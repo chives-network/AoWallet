@@ -67,7 +67,7 @@ const InputIndicator = ({ length }: { length: number }) => {
 };
 
 // 钱包解锁组件
-const SetPinKeyboard = ({ setPinKeySuccess, setEncryptWalletDataKey }: any) => {
+const SetPinKeyboard = ({ setPinKeySuccess, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const { t } = useTranslation()
 
   const [inputLength, setInputLength] = useState(0);
@@ -110,8 +110,8 @@ const SetPinKeyboard = ({ setPinKeySuccess, setEncryptWalletDataKey }: any) => {
         if(firstTimeInput == inputValue)    {
             setHeaderTitle(t('Input Match') as string)
             setPasswordForWallet(inputValue) //Make a test encrypted data
+            setPinKeySuccess(encryptWalletDataKey, inputValue) //change key, if need, will encrypted data again
             setEncryptWalletDataKey(inputValue) // storage the key temporary
-            setPinKeySuccess('MyWallet') //switch to mywallet
         }
         else {
             setHeaderTitle(t('Not match, please input again') as string)

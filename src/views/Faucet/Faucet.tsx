@@ -128,14 +128,14 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           const dataArrayFilter = dataArray.map((Faucet: any)=>({...Faucet, FaucetData: JSON.parse(Faucet.FaucetData.replace(/\\"/g, '"'))}))
           setAllAoFaucets(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setAllFaucetsData(dataArrayFilter)
+          setIsDisabledButton(false)
           console.log("handleGetAllFaucetsData dataArrayFilter", dataArrayFilter)
       }
     }
     catch(e: any) {
-      console.log("handleGetAllFaucetsData Error", e)      
+      console.log("handleGetAllFaucetsData Error", e)  
+      setIsDisabledButton(false)    
     }
-
-    setIsDisabledButton(false)
 
   }
 

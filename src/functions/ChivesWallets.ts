@@ -111,6 +111,97 @@ export function checkPasswordForWallet(encryptWalletDataKey: string) {
     return false
 }
 
+export function resetPasswordForWallet(oldKey: string, newKey: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesIsSetPasswordData = window.localStorage.getItem("chivesIsSetPassword")  
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, oldKey)  
+        if(DecryptWalletData && DecryptWalletData.length == 32)  {
+            
+            const EncryptWalletData = EncryptWalletDataAES256GCMV1(DecryptWalletData as string, newKey)  
+            window.localStorage.setItem("chivesIsSetPassword", EncryptWalletData)
+
+            return true
+        }
+        else {
+            
+            return false
+        }
+    }
+    else {
+
+        return false
+    }
+}
+
+export function resetChivesWalletsEncryptedKey(oldKey: string, newKey: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesWalletsList = window.localStorage.getItem(chivesWallets)  
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
+        if(walletExists && walletExists.length > 0)  {
+
+            const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
+            window.localStorage.setItem(chivesWallets, EncryptWalletData)
+
+            return true
+        }
+        else {
+            
+            return false
+        }
+    }
+    else {
+
+        return false
+    }
+}
+
+export function resetChivesWalletNickNameEncryptedKey(oldKey: string, newKey: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesWalletsList = window.localStorage.getItem(chivesWalletNickname)  
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
+        if(walletExists && walletExists.length > 0)  {
+
+            const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
+            window.localStorage.setItem(chivesWalletNickname, EncryptWalletData)
+
+            return true
+        }
+        else {
+            
+            return false
+        }
+    }
+    else {
+
+        return false
+    }
+}
+
+export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) {
+    if(typeof window !== 'undefined')  {
+        const chivesWalletsList = window.localStorage.getItem(chivesContacts)  
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
+        if(walletExists)  {
+
+            const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
+            window.localStorage.setItem(chivesContacts, EncryptWalletData)
+
+            return true
+        }
+        else {
+            
+            return false
+        }
+    }
+    else {
+
+        return false
+    }
+}
+
 export async function generateArWalletJsonData (encryptWalletDataKey: string) {
     
     try {

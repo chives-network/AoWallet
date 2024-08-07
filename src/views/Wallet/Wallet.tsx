@@ -1125,9 +1125,16 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                              <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
-                                {t('Manage Assets') as string}
-                              </Button>
+                              {isDisabledManageAssets == false && (
+                                <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
+                                  {t('Manage Assets') as string}
+                                </Button>
+                              )}
+                              {isDisabledManageAssets == true && (
+                                <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text'>
+                                  {t('Loading') as string} ...
+                                </Button>
+                              )}
                             </Box>
                           </Grid>
 

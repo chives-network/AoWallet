@@ -23,7 +23,7 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useSettings } from '../../@core/hooks/useSettings'
 
-import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken } from '../../functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken, resetPasswordForWallet, resetChivesWalletsEncryptedKey, resetChivesWalletNickNameEncryptedKey, resetChivesContactsEncryptedKey  } from '../../functions/ChivesWallets'
 import { AoCreateProcessAuto, FormatBalance, sleep } from '../../functions/AoConnect/AoConnect'
 import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
 import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
@@ -454,9 +454,13 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     setLeftIcon('')
   }
 
-  const setPinKeySuccess = () => {
-    handleWalletGoHome()
+  const setPinKeySuccess = (OldKay: string, NewKey: string) => {
+    resetPasswordForWallet(OldKay, NewKey)
+    resetChivesWalletNickNameEncryptedKey(OldKay, NewKey)
+    resetChivesWalletsEncryptedKey(OldKay, NewKey)
+    resetChivesContactsEncryptedKey(OldKay, NewKey)
     toast.success(t('Change pin code success') as string, { duration: 2500, position: 'top-center' })
+    handleWalletGoHome()
   }
 
 
@@ -1335,7 +1339,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             {pageModel == 'SetPinCode' && ( 
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
-                  <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} setEncryptWalletDataKey={setEncryptWalletDataKey} />
+                  <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />
                 </Grid>
               </Grid>
             )}
