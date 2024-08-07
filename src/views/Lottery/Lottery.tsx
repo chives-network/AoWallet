@@ -33,7 +33,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
   const [pageModel, setPageModel] = useState<string>('MainLottery')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
-  const [Title, setTitle] = useState<string>('Lottery')
+  const [Title, setTitle] = useState<string>(t('Lottery') as string)
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)

@@ -84,7 +84,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [pageModel, setPageModel] = useState<string>('MainWallet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-rounded')
-  const [Title, setTitle] = useState<string>('Wallet')
+  const [Title, setTitle] = useState<string>(t('Wallet') as string)
   const [RightButtonText, setRightButtonText] = useState<string>('Edit')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('mdi:qrcode')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
@@ -181,6 +181,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         handleClickViewTokenButtonAO()
         break;
       case 'MainWallet':
+        setCurrentTab('MyWallet')
         break
     }
   }
@@ -430,7 +431,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     const isSetPasswordForWalletData = isSetPasswordForWallet()
     const checkPasswordForWalletData = checkPasswordForWallet(encryptWalletDataKey)
     if(isSetPasswordForWalletData && checkPasswordForWalletData)   {
-      setTitle(getWalletNicknamesData[currentAddress] ?? 'Wallet')
+      setTitle(getWalletNicknamesData[currentAddress] ?? t('Wallet') as string)
     }
   }, [getWalletNicknamesData, currentAddress, encryptWalletDataKey]);
 

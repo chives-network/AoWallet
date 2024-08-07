@@ -68,8 +68,6 @@
   "Import Json Files Failed": "Import Json Files Failed",
   "Here is my wallet address": "Here is my wallet address",
   "Share Wallet Address": "Share Wallet Address",
-
-
   "Has add Token": "Has add Token",
   "Has delete Token": "Has delete Token",
   "Create a new wallet, please wait": "Create a new wallet, please wait",
@@ -111,6 +109,7 @@
   "Privacy Policy": "Privacy Policy",
   "Check Pin Code": "Check Pin Code",
   "Set Pin Code": "Set Pin Code",
-  "Change pin code success": "Change pin code success"
+  "Change pin code success": "Change pin code success",
+  "Change Pin Code": "Change Pin Code"
   
 }

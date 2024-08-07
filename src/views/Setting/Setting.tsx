@@ -65,7 +65,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const [pageModel, setPageModel] = useState<string>('MainSetting')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('')
-  const [Title, setTitle] = useState<string>('Wallet')
+  const [Title, setTitle] = useState<string>(t('Setting') as string)
   const [RightButtonText, setRightButtonText] = useState<string>('')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
 
