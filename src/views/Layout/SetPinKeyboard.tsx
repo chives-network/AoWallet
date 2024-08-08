@@ -30,7 +30,7 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
     <Grid container spacing={2} justifyContent="center" mt={10}>
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3} mt={3}>
             {numbers.map((num) => (
-                <Grid item key={num}>
+                <Grid item key={num} m={1.5}>
                     {num >= 0 && (
                       <RoundButton variant="outlined" onClick={() => handleClick(num)}>
                           {num}
@@ -38,8 +38,8 @@ const NumberPad = ({ onInput }: { onInput: (num: number | 'backspace') => void }
                     )}
                 </Grid>
             ))}
-            <Grid item mt={3}>
-                <Button sx={{mt: 1.5, p: 1}} variant="outlined" onClick={handleBackspace}>
+            <Grid item mt={3} m={1.5}>
+                <Button sx={{mt: 4, p: 1}} variant="outlined" onClick={handleBackspace}>
                 ←
                 </Button>
             </Grid>
