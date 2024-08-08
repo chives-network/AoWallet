@@ -1,67 +1,62 @@
 # **AoWallet**
 
 ## 简介
-AoWallet是基于AO Open Network的应用程序，旨在成为AO网络上的图形操作系统，为开发人员提供快速构建和迭代AO应用程序的能力。AoWallet的设计目标是降低AO网络应用程序的开发复杂性，并为开发人员提供一些经典的应用场景以供学习和参考。
+AoWallet是基于AO和Arweave的钱包应用程序，主要功能有: Wallet， Token， Faucet， Lottery， Apps等功能。
 
-## **邮件**
+## **安全性**
+1. 使用AES-256-GCM对用户私钥进行加密，并且只把密文存储在用户本地。 
+2. 用户每次打开应用的时候，需要较验密码是否正确。 如果用户忘记密码，则无法恢复出私钥，只能通过备份的私钥来导入系统进行恢复。 
+3. 没有使用私有服务器提供后端API，所有业务数据均存储在AO链上。 
 
-邮件是基于AO开发的管理电子邮件的工具，具有以下关键功能：
+## **代码审计**
+1. 本项目开放源代码，授权协议为: GPL-2.0。 
+2. 会定期请第三方机构做代码安全审计。 
 
-1. 发送邮件：支持向任何AO地址发送加密邮件。
-   
-2. 邮件列表：支持对邮件进行分页显示，移动到其他文件夹，标记为已读，加星标等。
-   
-3. 阅读邮件：标记邮件为已读，回复和转发邮件，移动到其他文件夹，标记为已读，加星标等。
-   
-4. 回复和转发：支持回复或转发邮件。
-   
-5. 文件夹支持：星标、垃圾邮件、回收站以及目录重要、社交、更新、论坛、促销。
+## **支持平台**
+1. IOS (Waiting for prepare account)
+2. Android (Waiting for prepare account)
+3. Chrome Extension
+4. Web
 
-<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Email/Email-List-1.png" width="600" />
+## **Wallet**
+
+提供Arweave & Ao基础的钱包功能：
+
+1. 钱包管理: 生成新的钱包，导入钱包，导出钱包，设置密码等。    
+2. 钱包使用: 发送，接收，查询余额等。 
+3. 资产管理: 在线添加Token，删除Token，查询Token余额等。    
+4. 联系人管理: 支持添加常用联系人。 
 
 ## **Token**
 
 Token是基于AO开发的管理TOKEN的工具，具有以下主要功能：
 
-1. 发行TOKEN：支持设置TOKEN的标志、名称、总量等信息。
-   
-2. 铸造TOKEN：为现有TOKEN铸造一定数量的TOKEN。
-   
-3. 空投TOKEN：支持一次性向多个地址和金额发送TOKEN。
-   
-4. 所有TOKEN交易记录：查看整个TOKEN的所有发送和接收记录。
-   
-5. 我的交易记录：当前用户的所有交易记录。
-   
-6. 发送记录。
-   
-7. 接收记录。
-   
-8. 所有持有者：列出所有持有当前TOKEN的地址和金额。
-   
+1. 发行TOKEN：支持设置TOKEN的标志、名称、总量等信息。   
+2. 铸造TOKEN：为现有TOKEN铸造一定数量的TOKEN。   
+3. 空投TOKEN：支持一次性向多个地址和金额发送TOKEN。   
+4. 所有TOKEN交易记录：查看整个TOKEN的所有发送和接收记录。   
+5. 我的交易记录：当前用户的所有交易记录。   
+6. 发送记录。   
+7. 接收记录。   
+8. 所有持有者：列出所有持有当前TOKEN的地址和金额。   
 9. 发送TOKEN：将TOKEN发送到外部。
-   
-10. 支持在AO链上添加所有TOKEN。
-   
-11. 支持将外部TOKEN加入书签。
 
-<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Token/TokenSummary.png" width="600" />
+## **Faucet**
 
-<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Token/AllHolders.png" width="600" />
+Faucet是针对Token开发的Faucet聚合功能，可以让用户在这个地方找到所有想给用户分发奖励的Token列表：
 
-## **聊天**
+1. 用户只需要点击某一个Token，就可以获取到一定数量的Token。 
+2. 用户可以一次性或是每天获得到一定数量的Token。 
+3. 用户在领取Token的时候，可能会要求用户的账户里面，必须有一定量的AR或是AO，用于避免恶意脚本的大量领取。 
+4. 如果你是项目方，你还可以对某一个Token进行充值，用于延长Faucet的使用时间。 如果Faucet余额不足，Faucet则会自动隐藏。 
 
-Chat是基于AO构建的聊天工具，具有以下主要功能：
+## **Lottery**
 
-1. 创建聊天服务器
-2. 管理频道，包括添加频道、编辑频道、删除频道。
-3. 管理用户，包括邀请、批准。
-4. 参与聊天
-5. 设置管理员，包括添加管理员、删除管理员。
+Lottery是仿照Solana中Lottery项目的规则， 基于AO的， 目前还在开发中的一款Lottery产品
 
-<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Chat/ChatList.png" width="600" />
+## **Apps**
 
-<img src="https://raw.githubusercontent.com/chives-network/AoWallet/main/public/screen/Chat/ChatSummary.png" width="600" />
+Apps用于集成其它第三方的AO应用程序.
 
 ## 要求
 - [NodeJS](https://nodejs.org) 版本 18.17+
@@ -77,14 +72,8 @@ npm run dev
 npm run build
 ```
 
-## 部署到Vercel
-
-[![][vercel-deploy-shield]][vercel-deploy-link]
-
 ## 联系方式
 
 Discord：https://discord.gg/aAkMH9Q3AY
-
-<!-- LINK GROUP -->
-[vercel-deploy-link]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchives-network/%2FAoWallet&project-name=AoWallet&repository-name=AoWallet
-[vercel-deploy-shield]: https://vercel.com/button
+Email: chivescoin@gmail.com
+Twitter: http://twitter.com/chivesweave
