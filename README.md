@@ -15,8 +15,8 @@ AoWallet is a wallet application based on AO and Arweave, featuring functionalit
 ## **Supported Platforms**
 1. IOS (Waiting for account preparation)
 2. Android (Waiting for account preparation)
-3. Chrome Extension
-4. Web
+3. [Chrome Extension](https://chromewebstore.google.com/detail/aowallet-arweave-wallet/dcgmbfihnfgaaokeogiadpgllidjnkgm?hl=en-US)
+4. [Web](https://web.aowallet.org) 
 
 ## **Wallet**
 

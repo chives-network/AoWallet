@@ -15,8 +15,8 @@ AoWallet是基于AO和Arweave的钱包应用程序，主要功能有: Wallet， 
 ## **支持平台**
 1. IOS (Waiting for prepare account)
 2. Android (Waiting for prepare account)
-3. Chrome Extension
-4. Web
+3. [Chrome Extension](https://chromewebstore.google.com/detail/aowallet-arweave-wallet/dcgmbfihnfgaaokeogiadpgllidjnkgm?hl=en-US)
+4. [Web](https://web.aowallet.org)
 
 ## **Wallet**
 
