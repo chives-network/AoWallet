@@ -239,10 +239,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
         }
         const getTokenAllHolderTxsData = getTokenAllHolderTxs(CurrentToken, encryptWalletDataKey);
         if (getTokenAllHolderTxsData) {
-            const { AoDryRunBalancesJsonSorted, TokenHolders, CirculatingSupply } = getTokenAllHolderTxsData;
+            const { AoDryRunBalancesJsonSortedResult, TokenHolders, CirculatingSupply } = getTokenAllHolderTxsData;
             CirculatingSupply && setCirculatingSupply(String(Number(CirculatingSupply).toFixed(0)))
             TokenHolders && setHoldersNumber(TokenHolders)
-            AoDryRunBalancesJsonSorted && setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSorted)
+            AoDryRunBalancesJsonSortedResult && setTokenHoldersTxsOfficialToken(AoDryRunBalancesJsonSortedResult)
         }
         if(CurrentToken)   {
             if(Denomination) {
