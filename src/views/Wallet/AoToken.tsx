@@ -91,6 +91,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                         break;
                     }
                     handleAoTokenMyAllTransactions(TokenData.TokenId)
+                    handleTokenBalancesPagination()
                     console.log("handleAoTokenMyAllTransactions", page, TokenData)
                     break;
                 case 'Sent':

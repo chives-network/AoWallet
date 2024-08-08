@@ -555,6 +555,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   }
 
   const handleClickSendButtonAO = () => {
+    console.log("chooseToken", chooseToken)
     setPageModel('SendMoneySelectContact')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Select Contact') as string)
@@ -579,7 +580,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:qrcode')
     try {
-        setChooseToken(Token)
+        if(Token && Token.TokenData) {
+          setChooseToken({...Token, ...Token.TokenData})
+        }
         setChooseTokenBalance(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId])
         setIsTokenModel(true)
         setPage(0)
