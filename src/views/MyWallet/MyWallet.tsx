@@ -66,7 +66,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('material-symbols:menu-open')
   const [Title, setTitle] = useState<string>('My Wallet')
-  const [RightButtonText, setRightButtonText] = useState<string>('Edit')
+  const [RightButtonText, setRightButtonText] = useState<string>(t('Edit') as string)
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false)
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
@@ -542,16 +542,20 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
 
               {isLoading ? 
               <Fragment>
-                <CardContent>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12}>
-                          <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
-                            <CircularProgress sx={{ mx: 5, mb: 4 }} />
-                            <Typography sx={{ mx: 5 }}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                          </Box>
-                        </Grid>
-                    </Grid>
-                </CardContent>
+                <Grid container spacing={5}>
+                  <Grid item xs={12}>
+                    <Box sx={{ 
+                      mt: 12, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center'
+                    }}>
+                      <CircularProgress sx={{ mb: 4 }} />
+                      <Typography>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Fragment>
               :
               <Fragment>
@@ -635,16 +639,20 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
 
               {isLoading ? 
               <Fragment>
-                <CardContent>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12}>
-                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
-                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </CardContent>
+                <Grid container spacing={5}>
+                  <Grid item xs={12}>
+                    <Box sx={{ 
+                      mt: 12, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center'
+                    }}>
+                      <CircularProgress sx={{ mb: 4 }} />
+                      <Typography>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Fragment>
               :
               <Fragment>

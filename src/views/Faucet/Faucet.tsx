@@ -392,7 +392,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                                   <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                     <Icon icon='material-symbols:info-outline' />
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Version') as string}: {Faucet.FaucetData.Version}</Typography>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement AR') as string}: {Faucet.FaucetData.RequirementAR}</Typography>
                                     </Box>
                                   </Box>
 
