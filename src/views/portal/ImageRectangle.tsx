@@ -65,42 +65,42 @@ const ImageRectangle = ( {item, backEndApi, FileType} : any) => {
         :
         <Fragment></Fragment>
       }
-      {FileType && FileType=="video" && authConfig.productName != "ArDrive" ?
+      {FileType && FileType=="video" && authConfig.AppName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
       }      
-      {FileType && FileType=="video" && authConfig.productName == "ArDrive" ?
+      {FileType && FileType=="video" && authConfig.AppName == "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <CardMedia image={`/images/icons/video.jpg`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
       }
-      {FileType && FileType=="audio" && authConfig.productName != "ArDrive" ?
+      {FileType && FileType=="audio" && authConfig.AppName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <ReactAudioPlayer src={`${backEndApi}/${ImageUrl}`} controls style={{width: '100%'}}/>
         </Link>
         :
         <Fragment></Fragment>
       }
-      {FileType && FileType=="audio" && authConfig.productName == "ArDrive" ?
+      {FileType && FileType=="audio" && authConfig.AppName == "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <ReactAudioPlayer src={`${backEndApi}/${ImageUrl}`} controls style={{width: '100%'}}/>
         </Link>
         :
         <Fragment></Fragment>
       }
-      {FileType && FileType=="pdf" && authConfig.productName != "ArDrive" ?
+      {FileType && FileType=="pdf" && authConfig.AppName != "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <CardMedia image={`${backEndApi}/${ImageUrl}/thumbnail`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
         :
         <Fragment></Fragment>
       }
-      {FileType && FileType=="pdf" && authConfig.productName == "ArDrive" ?
+      {FileType && FileType=="pdf" && authConfig.AppName == "ArDrive" ?
         <Link href={`/txs/view/${ImageUrl}`}>
           <CardMedia image={`/images/icons/pdf.png`} sx={{ height: '11.25rem', objectFit: 'contain' }}/>
         </Link>
@@ -115,7 +115,7 @@ const ImageRectangle = ( {item, backEndApi, FileType} : any) => {
         <Fragment></Fragment>
       }
       <CardContent>
-        {authConfig.productName != "ArDrive" ?
+        {authConfig.AppName != "ArDrive" ?
         <Fragment>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' variant='rounded' sx={{ mr: 3, width: '3rem', height: '3.375rem' }}>
@@ -193,7 +193,7 @@ const ImageRectangle = ( {item, backEndApi, FileType} : any) => {
           :
           <Fragment></Fragment>
         }
-        {authConfig.productName == "ArDrive" ?
+        {authConfig.AppName == "ArDrive" ?
           <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
             <Icon icon='mdi:user' />
             <Box sx={{ display: 'flex', flexDirection: 'row', mt:'4px' }}>

@@ -1,8 +1,9 @@
 const config = {
-  productName: 'AoWallet',
+  AppName: 'AoWallet',
+  AppVersion: '0.0.3',
   tokenType: 'AR', // AR or XWE
-  tokenName: '',
-  backEndApi: '',
+  tokenName: 'AR',
+  backEndApi: 'https://arweave.net',
   backEndApiChatBook: '',
   AoConnectWebSite: "https://www.ao.link",
   AoConnectAoLink: "https://www.ao.link/#",
@@ -28,14 +29,7 @@ const config = {
   chivesMyAoTokens: 'chivesMyAoTokens',
   chivesAllAoTokens: 'chivesAllAoTokens',
   EncryptGrade: 'PIN',
-  'App-Name': 'AoWallet',
-  'App-Version': '0.1',
-  'App-Instance': '',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E']
 }
-
-config.backEndApi = config.tokenType === 'AR' ? 'https://arweave.net' : 'https://api.chivesweave.org:1986';
-config.tokenName = config.tokenType === 'AR' ? 'AR' : 'XWE';
-config.EncryptGrade = "PIN";
 
 export default config;
