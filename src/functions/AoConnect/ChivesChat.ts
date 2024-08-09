@@ -4,7 +4,7 @@ import { connect, createDataItemSigner }  from "../../../scripts/@permaweb/aocon
 
 import { MU_URL, CU_URL, GATEWAY_URL, AoGetRecord, AoLoadBlueprintModule } from '../../functions/AoConnect/AoConnect'
 
-import { getNanoid } from '../../functions/string.tools'
+import { getNanoid } from '../../functions/ChivesWallets'
 import authConfig from '../../configs/auth'
 import axios from 'axios'
 

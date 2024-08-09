@@ -4,7 +4,7 @@ import type { JWKInterface } from 'arweave/web/lib/wallet'
 
 import { BalancePlus } from '../functions/AoConnect/AoConnect'
 
-import { getNanoid } from './string.tools'
+import { customAlphabet } from 'nanoid';
 
 // @ts-ignore
 import { v4 } from 'uuid'
@@ -1272,4 +1272,8 @@ export function setChivesLanguage(Language: string) {
     window.localStorage.setItem(chivesLanguage, Language)
 
     return true
+};
+
+export const getNanoid = (size = 12) => {
+    return customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', size)();
 };
