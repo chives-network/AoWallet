@@ -1,0 +1,37 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Chrome Extension Installation</title>
+</head>
+<body>
+    <h1>Check Chrome Extension Installation</h1>
+    <button id="checkExtension">Check Extension</button>
+    <script>
+        document.getElementById('checkExtension').addEventListener('click', function() {
+            // 发送消息给内容脚本，请求检查扩展是否已安装
+            window.postMessage({ type: 'Chrome_Check_Extension_Installation_defmalnpgnhpcoaadaohehpdaodpfjla' }, '*');
+        });
+
+        // 监听来自内容脚本的消息
+        window.addEventListener('message', function(event) {
+            if (event.source !== window) return; // 确保消息来自当前页面
+
+            if (event.data.type && (event.data.type === 'Chrome_Extension_Installation_Status_defmalnpgnhpcoaadaohehpdaodpfjla')) {
+                if (event.data.installed) {
+                    console.log('Extension is installed');
+					window.postMessage({ type: 'Chrome_Open_Extension_defmalnpgnhpcoaadaohehpdaodpfjla' }, '*');
+                } 
+				else {
+                    console.log('Extension is not installed');
+                    // 扩展未安装，引导用户安装
+                    const extensionId = 'your-extension-id';
+                    window.open('https://chrome.google.com/webstore/detail/' + extensionId);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
