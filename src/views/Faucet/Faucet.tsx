@@ -24,11 +24,12 @@ import Header from '../Layout/Header'
 import { formatHash } from '../../configs/functions'
 import { FormatBalance } from '../../functions/AoConnect/AoConnect'
 
-import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets, getMyAoFaucetTokenBalance, setMyAoFaucetTokenBalance } from '../../functions/ChivesWallets'
-import { GetAppAvatar, AoTokenBalanceDryRun } from '../../functions/AoConnect/Token'
+import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets, getMyAoFaucetTokenBalance, setMyAoFaucetTokenBalance, addMyAoToken } from '../../functions/ChivesWallets'
+import { GetAppAvatar, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
 import { AoFaucetGetFaucet, AoFaucetInfo } from '../../functions/AoConnect/ChivesFaucet'
 
 import { ChivesServerDataGetFaucets } from '../../functions/AoConnect/ChivesServerData'
+import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -199,8 +200,16 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           }))
         }
 
+        //Add faucet token to my favorite
+        const Token: any = await AoTokenInfoDryRun(AoFaucetInfoData.FaucetTokenId)
+        if(Token) {
+          handleSelectTokenAndSave({TokenId: AoFaucetInfoData.FaucetTokenId, ...Token, TokenData: Token}, Token)
+          console.log("TokenId", {TokenId: AoFaucetInfoData.FaucetTokenId, ...Token, TokenData: Token})
+        }
+
       }
       setIsDisabledButton(false)
+
     }
     else {
       console.log("GetFaucetFromFaucetTokenId chooseWallet", chooseWallet)
@@ -272,6 +281,14 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
       console.log("handleGetMySavingTokensBalance Error", e);
     }
 
+  }
+
+  const handleSelectTokenAndSave = async (Token: any, TokenData: any) => {
+    const WantToSaveTokenProcessTxIdData = await MyProcessTxIdsAddToken(chooseWallet.jwk, authConfig.AoConnectMyProcessTxIds, Token.TokenId, '100', TokenData.Name, JSON.stringify(TokenData) )
+    if(WantToSaveTokenProcessTxIdData?.msg?.Messages && WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data)  {
+      toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
+      addMyAoToken(currentAddress, Token, encryptWalletDataKey)
+    }
   }
 
 
