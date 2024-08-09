@@ -61,7 +61,6 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
   const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
   const [isRechargeMode, setIsRechargeMode] = useState<boolean>(false)
-  const [firstFaucetBalance, setFirstFaucetBalance] = useState<boolean>(false)
 
 
   const handleWalletGoHome = () => {
@@ -129,7 +128,6 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           const dataArrayFilter = dataArray.map((Faucet: any)=>({...Faucet, FaucetData: JSON.parse(Faucet.FaucetData.replace(/\\"/g, '"'))}))
           setAllAoFaucets(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setAllFaucetsData(dataArrayFilter)
-          setIsDisabledButton(false)
           console.log("handleGetAllFaucetsData dataArrayFilter", dataArrayFilter)
       }
     }
@@ -236,7 +234,6 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                 setMyFaucetTokenBalanceData((prevState: any)=>{
                   const TempData = { ...prevState, [Faucet.FaucetData.FaucetTokenId]: AoDryRunBalanceCoinFormat }
                   setMyAoFaucetTokenBalance(currentAddress, TempData, encryptWalletDataKey); // Immediately update the local storage balance
-                  setFirstFaucetBalance(true)
 
                   return TempData
                 })
@@ -256,11 +253,11 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                 setMyFaucetTokenBalanceData((prevState: any)=>{
                   const TempData = { ...prevState, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat }
                   setMyAoFaucetTokenBalance(currentAddress, TempData, encryptWalletDataKey); // Immediately update the local storage balance
-                  setFirstFaucetBalance(true)
-                  
+
                   return TempData
                 })
               }
+              setIsDisabledButton(false)
 
             } catch (error) {
               console.error(`Error processing Faucet.FaucetId ${Faucet.FaucetId}:`, error);
@@ -301,6 +298,8 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
     }
   }, [allFaucetsData]);
 
+  
+
   return (
     <Fragment>
       <Header Hidden={HeaderHidden} LeftIcon={LeftIcon} LeftIconOnClick={LeftIconOnClick} Title={Title} RightButtonText={RightButtonText} RightButtonOnClick={RightButtonOnClick} RightButtonIcon={RightButtonIcon}/>
@@ -326,17 +325,6 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
-                    {allFaucetsData.length > 0 && firstFaucetBalance == true && (
-                      <Grid item xs={12} sx={{ py: 2 }}>
-                        <Card>     
-                          <CardContent>
-
-                            <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Loading') as string}</Typography>
-
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    )}
                     {allFaucetsData && allFaucetsData.map((Faucet: any, Index: number) => {
 
                       let isShow = false
