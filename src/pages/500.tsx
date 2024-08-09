@@ -13,9 +13,6 @@ import Box, { BoxProps } from '@mui/material/Box'
 // ** Layout Import
 import BlankLayout from '../@core/layouts/BlankLayout'
 
-// ** Demo Imports
-import FooterIllustrations from '../views/pages/misc/FooterIllustrations'
-
 // ** Styled Components
 const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -37,15 +34,6 @@ const Img = styled('img')(({ theme }) => ({
   }
 }))
 
-const TreeIllustration = styled('img')(({ theme }) => ({
-  left: 0,
-  bottom: '5rem',
-  position: 'absolute',
-  [theme.breakpoints.down('lg')]: {
-    bottom: 0
-  }
-}))
-
 const Error500 = () => {
   return (
     <Box className='content-center'>
@@ -62,7 +50,6 @@ const Error500 = () => {
           Back to Home
         </Button>
       </Box>
-      <FooterIllustrations image={<TreeIllustration alt='tree' src='/images/pages/tree-3.png' />} />
     </Box>
   )
 }

@@ -13,9 +13,6 @@ import Box, { BoxProps } from '@mui/material/Box'
 // ** Layout Import
 import BlankLayout from '../@core/layouts/BlankLayout'
 
-// ** Demo Imports
-import FooterIllustrations from '../views/pages/misc/FooterIllustrations'
-
 // ** Styled Components
 const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -53,7 +50,6 @@ const Error401 = () => {
           Back to Home
         </Button>
       </Box>
-      <FooterIllustrations />
     </Box>
   )
 }
