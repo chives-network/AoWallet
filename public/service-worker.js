@@ -1,10 +1,17 @@
+// Open the extension popup
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === 'Open_Popup') {
+      console.log('Background script received message to open popup');
 
-  chrome.storage.onChanged.addListener((changes, namespace) => {
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-      console.log(
-        `Storage key "${key}" in namespace "${namespace}" changed.`,
-        `Old value was "${oldValue}", new value is "${newValue}".`
-      );
-    }
-  });
+      chrome.action.openPopup();
+  }
+});
+
+// Check installation
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === 'Check_Installation') {
+      sendResponse({ installed: true });
+  }
+});
+
 
