@@ -649,7 +649,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>null}>
-                                <Icon icon='material-symbols:support-agent' fontSize={34} />
+                                <Icon icon='material-symbols:help-outline' fontSize={34} />
                               </IconButton>
                               <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
                                 >
