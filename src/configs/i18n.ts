@@ -17,7 +17,7 @@ i18n
     lng: 'en',
     backend: {
       /* translation file path */
-      loadPath: 'https://ao-wallet.vercel.app/locales/{{lng}}.json'
+      loadPath: 'https://web.aowallet.org/locales/{{lng}}.json'
     },
     fallbackLng: 'en',
     debug: false,

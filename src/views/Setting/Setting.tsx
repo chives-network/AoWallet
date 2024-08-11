@@ -640,6 +640,18 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                       {t('Discord') as string}
                                     </Typography>
                                   </Link>
+                                  <Link href={`https://twitter.com/aowallet`} target='_blank'>
+                                    <Typography variant='body2' sx={{ 
+                                      color: `secondary.primary`, 
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      ml: 2,
+                                      flex: 1
+                                    }}>
+                                      {t('Twitter') as string}
+                                    </Typography>
+                                  </Link>
                                 </Box>
                               </Box>
                             </Box>

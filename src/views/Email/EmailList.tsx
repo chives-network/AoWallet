@@ -261,7 +261,7 @@ const EmailList = (props: EmailListType) => {
                 size="small"
                 disabled
                 value={query}
-                placeholder={`${t(`Search Not Finished`)}`}
+                placeholder={`${t(`Search`)}`}
                 onChange={e => setQuery(e.target.value)}
                 sx={{ width: '200px', '&:before, &:after': { display: 'none' } }}
                 startAdornment={

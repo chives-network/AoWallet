@@ -3,7 +3,7 @@ import { useState, Fragment } from 'react'
 
 import Footer from '../Layout/Footer'
 
-import Lottery from '../Lottery/Lottery'
+import Email from '../Email/Email'
 import Faucet from '../Faucet/Faucet'
 import Setting from '../Setting/Setting'
 import Wallet from '../Wallet/Wallet'
@@ -23,7 +23,7 @@ const HomeModel = () => {
       {currentTab == "MyWallet" && (<MyWallet setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} setDisabledFooter={setDisabledFooter}/>)}
       {currentTab == "Wallet" && (<Wallet setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} setDisabledFooter={setDisabledFooter} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey}/>)}
       {currentTab == "Faucet" && (<Faucet setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend} encryptWalletDataKey={encryptWalletDataKey} />)}
-      {currentTab == "Apps" && (<Lottery encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Email" && (<Email encryptWalletDataKey={encryptWalletDataKey} />)}
       {currentTab == "Setting" && (<Setting encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />)}
       <Footer Hidden={false} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend}  currentTab={currentTab} disabledFooter={disabledFooter}/>
     </Fragment>

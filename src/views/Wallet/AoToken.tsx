@@ -390,7 +390,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     }}
                                 ml={-1}
                                 >
-                        {t('Lottery') as string}
+                        {t('Swap') as string}
                     </Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>

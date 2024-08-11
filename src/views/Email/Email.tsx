@@ -120,6 +120,7 @@ const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
     <Box
       sx={{
         width: '100%',
+        height: '100%',
         display: 'flex',
         borderRadius: 1,
         overflow: 'hidden',
@@ -181,5 +182,6 @@ const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
     </Box>
   )
 }
+
 
 export default EmailAppLayout

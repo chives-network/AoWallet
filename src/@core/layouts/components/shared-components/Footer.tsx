@@ -58,7 +58,7 @@ const Footer = (props: Props) => {
         >
           <BottomNavigationAction label={t("Wallet")} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
           <BottomNavigationAction label={t("Swap")} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label={t("Apps")} icon={<Icon icon='tdesign:app' />} />
+          <BottomNavigationAction label={t("Email")} icon={<Icon icon='tdesign:app' />} />
           <BottomNavigationAction label={t("Setting")} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>
