@@ -27,6 +27,9 @@ const chivesLanguage: string = authConfig.chivesLanguage
 const chivesContacts: string = authConfig.chivesContacts
 const chivesMyAoTokens: string = authConfig.chivesMyAoTokens
 const chivesAllAoTokens: string = authConfig.chivesAllAoTokens
+const chivesIsSetPassword: string = authConfig.chivesIsSetPassword
+const chivesAllAoFaucets: string = authConfig.chivesAllAoFaucets
+
 
 
 export function calculateSHA256(input: string) {
@@ -72,7 +75,7 @@ export function DecryptWalletDataAES256GCMV1(encrypted: string, key: string) {
 
 export function isSetPasswordForWallet() {
     if(typeof window !== 'undefined')  {
-        const chivesIsSetPasswordData = window.localStorage.getItem("chivesIsSetPassword")
+        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)
         if(chivesIsSetPasswordData == null || chivesIsSetPasswordData == '')  {
 
             return false
@@ -90,13 +93,18 @@ export function setPasswordForWallet(encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
         const NanoId = getNanoid(32)
         const DecryptWalletData = EncryptWalletDataAES256GCMV1(NanoId as string, encryptWalletDataKey)  
-        window.localStorage.setItem("chivesIsSetPassword", DecryptWalletData)
+        window.localStorage.setItem(chivesIsSetPassword, DecryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesIsSetPassword]: DecryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', DecryptWalletData);
+            });
+        }
     }
 }
 
 export function checkPasswordForWallet(encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesIsSetPasswordData = window.localStorage.getItem("chivesIsSetPassword")  
+        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)  
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, encryptWalletDataKey)  
         if(DecryptWalletData && DecryptWalletData.length == 32)  {
 
@@ -113,12 +121,17 @@ export function checkPasswordForWallet(encryptWalletDataKey: string) {
 
 export function resetPasswordForWallet(oldKey: string, newKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesIsSetPasswordData = window.localStorage.getItem("chivesIsSetPassword")  
+        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)  
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, oldKey)  
         if(DecryptWalletData && DecryptWalletData.length == 32)  {
             
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(DecryptWalletData as string, newKey)  
-            window.localStorage.setItem("chivesIsSetPassword", EncryptWalletData)
+            window.localStorage.setItem(chivesIsSetPassword, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesIsSetPassword]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
 
             return true
         }
@@ -142,6 +155,11 @@ export function resetChivesWalletsEncryptedKey(oldKey: string, newKey: string) {
 
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
             window.localStorage.setItem(chivesWallets, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesWallets]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
 
             return true
         }
@@ -165,6 +183,11 @@ export function resetChivesWalletNickNameEncryptedKey(oldKey: string, newKey: st
 
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
             window.localStorage.setItem(chivesWalletNickname, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesWalletNickname]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
 
             return true
         }
@@ -188,6 +211,11 @@ export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) 
 
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), newKey)
             window.localStorage.setItem(chivesContacts, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesContacts]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
 
             return true
         }
@@ -258,6 +286,11 @@ export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: s
         walletExists.push(walletData)
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), encryptWalletDataKey)
         window.localStorage.setItem(chivesWallets, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesWallets]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     
         //const addFileToJwkValue = await addFileToJwk('')
         //console.log("addImportDataValue:", addImportDataValue)
@@ -313,6 +346,11 @@ export function getCurrentWalletAddress(encryptWalletDataKey: string) {
             if(walletExists && walletExists[0] && walletExists[0].data && walletExists[0].data.arweave && walletExists[0].data.arweave.key) {
                 const EncryptWalletData = EncryptWalletDataAES256GCMV1(walletExists[0].data.arweave.key, encryptWalletDataKey)
                 window.localStorage.setItem(chivesCurrentWallet, EncryptWalletData)
+                if(chrome && chrome.storage && chrome.storage.sync)   {
+                    chrome.storage.sync.set({ [chivesCurrentWallet]: EncryptWalletData }, () => {
+                        console.log('Data saved to chrome.storage:', EncryptWalletData);
+                    });
+                }
                 CurrentWalletAddress = walletExists[0].data.arweave.key
             }
         }    
@@ -335,6 +373,11 @@ export function getCurrentWallet(encryptWalletDataKey: string) {
             foundWallet = walletExists[0]
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(walletExists[0].data.arweave.key, encryptWalletDataKey)
             window.localStorage.setItem(chivesCurrentWallet, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesCurrentWallet]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
         }
 
         return foundWallet
@@ -351,6 +394,11 @@ export function setCurrentWallet(Address: string, encryptWalletDataKey: string) 
         if(foundWallet && foundWallet.data && foundWallet.data.arweave && foundWallet.data.arweave.key) {
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(Address, encryptWalletDataKey)
             window.localStorage.setItem(chivesCurrentWallet, EncryptWalletData)
+            if(chrome && chrome.storage && chrome.storage.sync)   {
+                chrome.storage.sync.set({ [chivesCurrentWallet]: EncryptWalletData }, () => {
+                    console.log('Data saved to chrome.storage:', EncryptWalletData);
+                });
+            }
         }
 
         return true
@@ -365,6 +413,11 @@ export function setWalletNickname(Address: string, Nickname: string, encryptWall
         chivesWalletNicknameObject[Address] = Nickname
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesWalletNicknameObject), encryptWalletDataKey)
         window.localStorage.setItem(chivesWalletNickname, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesWalletNickname]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -421,6 +474,11 @@ export function deleteWalletById(WalletId: number, encryptWalletDataKey: string)
         const leftWallets = walletExists.filter((wallet: any) => Number(wallet.id) !== WalletId);
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(leftWallets), encryptWalletDataKey)
         window.localStorage.setItem(chivesWallets, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesWallets]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
         
         return true
     }
@@ -434,6 +492,11 @@ export function deleteWalletByWallet(WalletJwk: any, encryptWalletDataKey: strin
         const leftWallets = walletExists.filter((wallet: any) => wallet.jwk.n !== WalletJwk.n);
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(leftWallets), encryptWalletDataKey)
         window.localStorage.setItem(chivesWallets, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesWallets]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
         
         return true
     }
@@ -447,6 +510,11 @@ export function setMyAoTokens(Address: string, MyAoTokens: any, encryptWalletDat
         chivesMyAoTokensObject[Address] = MyAoTokens
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesMyAoTokensObject), encryptWalletDataKey)
         window.localStorage.setItem(chivesMyAoTokens, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesMyAoTokens]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -465,6 +533,11 @@ export function addMyAoToken(Address: string, TokenInfor: any, encryptWalletData
         }
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesTokenInforObject), encryptWalletDataKey)
         window.localStorage.setItem(chivesMyAoTokens, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesMyAoTokens]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -480,6 +553,11 @@ export function deleteMyAoToken(Address: string, TokenId: string, encryptWalletD
         chivesMyAoTokensObject[Address] = MyAoTokensFilter
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesMyAoTokensObject), encryptWalletDataKey)
         window.localStorage.setItem(chivesMyAoTokens, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesMyAoTokens]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -503,6 +581,11 @@ export function setAllAoTokens(Address: string, AllAoTokens: any, encryptWalletD
         chivesAllAoTokensObject[Address] = AllAoTokens
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesAllAoTokensObject), encryptWalletDataKey)
         window.localStorage.setItem(chivesAllAoTokens, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesAllAoTokens]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -521,12 +604,17 @@ export function getAllAoTokens(Address: string, encryptWalletDataKey: string) {
 
 export function setAllAoFaucets(Address: string, AllAoFaucets: any, encryptWalletDataKey: string) {
     if (Address && Address.length === 43 && typeof window !== 'undefined') {
-        const chivesAllAoFaucetsData = window.localStorage.getItem("chivesAllAoFaucets")
+        const chivesAllAoFaucetsData = window.localStorage.getItem(chivesAllAoFaucets)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllAoFaucetsData as string, encryptWalletDataKey)
         const chivesAllAoFaucetsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
         chivesAllAoFaucetsObject[Address] = AllAoFaucets
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesAllAoFaucetsObject), encryptWalletDataKey)
-        window.localStorage.setItem("chivesAllAoFaucets", EncryptWalletData)
+        window.localStorage.setItem(chivesAllAoFaucets, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesAllAoFaucets]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -534,7 +622,7 @@ export function setAllAoFaucets(Address: string, AllAoFaucets: any, encryptWalle
 
 export function getAllAoFaucets(Address: string, encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesAllAoFaucetsData = window.localStorage.getItem("chivesAllAoFaucets")
+        const chivesAllAoFaucetsData = window.localStorage.getItem(chivesAllAoFaucets)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllAoFaucetsData as string, encryptWalletDataKey)
         const chivesAllAoFaucetsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
         
@@ -550,6 +638,11 @@ export function setMyAoFaucetTokenBalance(Address: string, MyAoFaucetTokenBalanc
         chivesMyAoFaucetTokenBalanceObject[Address] = MyAoFaucetTokenBalance
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesMyAoFaucetTokenBalanceObject), encryptWalletDataKey)
         window.localStorage.setItem("chivesMyAoFaucetTokenBalance", EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ chivesMyAoFaucetTokenBalance: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
     }
     
     return true
@@ -1136,6 +1229,11 @@ export function setChivesContacts(Address: string, Name: string, encryptWalletDa
         chivesContactsList[Address] = Name
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesContactsList), encryptWalletDataKey)
         window.localStorage.setItem(chivesContacts, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesContacts]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
 
         return chivesContactsList
     }
@@ -1154,6 +1252,11 @@ export function deleteChivesContacts(Address: string, encryptWalletDataKey: stri
         }
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesContactsList), encryptWalletDataKey)
         window.localStorage.setItem(chivesContacts, EncryptWalletData)
+        if(chrome && chrome.storage && chrome.storage.sync)   {
+            chrome.storage.sync.set({ [chivesContacts]: EncryptWalletData }, () => {
+                console.log('Data saved to chrome.storage:', EncryptWalletData);
+            });
+        }
 
         return chivesContactsList
     }
@@ -1270,6 +1373,11 @@ export function getChivesLanguage() {
 
 export function setChivesLanguage(Language: string) {
     window.localStorage.setItem(chivesLanguage, Language)
+    if(chrome && chrome.storage && chrome.storage.sync)   {
+        chrome.storage.sync.set({ [chivesLanguage]: Language }, () => {
+            console.log('Data saved to chrome.storage:', Language);
+        });
+    }
 
     return true
 };

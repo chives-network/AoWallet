@@ -25,9 +25,11 @@ const config = {
   chivesLanguage: 'ChivesLanguage',
   chivesProfile: 'ChivesProfile',
   chivesReferee: 'ChivesReferee',
-  chivesContacts: 'chivesContacts',
-  chivesMyAoTokens: 'chivesMyAoTokens',
-  chivesAllAoTokens: 'chivesAllAoTokens',
+  chivesContacts: 'ChivesContacts',
+  chivesMyAoTokens: 'ChivesMyAoTokens',
+  chivesAllAoTokens: 'ChivesAllAoTokens',
+  chivesIsSetPassword: 'ChivesIsSetPassword',
+  chivesAllAoFaucets: 'ChivesAllAoFaucets',
   EncryptGrade: 'PIN',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E']
 }
