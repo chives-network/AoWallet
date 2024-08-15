@@ -30,7 +30,8 @@ const config = {
   chivesAllAoFaucets: 'ChivesAllAoFaucets',
   AoConnectChatRoom: 'AoConnectChatRoom',
   EncryptGrade: 'PIN',
-  AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E']
+  AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
+  isChromeExtension: false
 }
 
 export default config;
