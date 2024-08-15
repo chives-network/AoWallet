@@ -704,7 +704,13 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                   return a.TokenGroup.localeCompare(b.TokenGroup);
               }
           });
-          const dataArrayFilter = dataArray.map((Token: any)=>({...Token, TokenData: JSON.parse(Token.TokenData.replace(/\\"/g, '"'))}))
+          const dataArrayFilter = dataArray.map((Token: any)=>{
+            console.log("handleGetMySavingTokensData Token.TokenData", Token.TokenData)
+            const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
+            console.log("handleGetMySavingTokensData TokenData", TokenData)
+
+            return {...Token, TokenData: TokenData}
+          })
           setMyAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setMySavingTokensData(dataArrayFilter)
           console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
