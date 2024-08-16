@@ -32,7 +32,7 @@ const config = {
   AoConnectChatRoom: 'AoConnectChatRoom',
   EncryptGrade: 'PIN',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
-  isChromeExtension: true
+  isChromeExtension: false
 }
 
 export default config;
