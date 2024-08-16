@@ -106,8 +106,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
   
-  const [aoWalletToken, setAoWalletToken] = useState<any>(null)
-
   const [activeTab, setActiveTab] = useState<string>('Sent')
 
   const currentFeeAO = 0
@@ -273,8 +271,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
-  const [currentAoWalletBalance, setCurrentAoWalletBalance] = useState<string>("")
-  
   
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
@@ -380,14 +376,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
 
-        }
-
-        //AoWallet Token
-        const AoWalletBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoWalletProcessTxId, String(currentAddress))
-        setCurrentAoWalletBalance(FormatBalance(AoWalletBalanceDryRunData, 3))
-        const TokenGetMap: any = await AoTokenInfoDryRun(authConfig.AoWalletProcessTxId)
-        if(TokenGetMap) {
-          setAoWalletToken({TokenId: authConfig.AoWalletProcessTxId, TokenName: TokenGetMap.Name, TokenData: TokenGetMap})
         }
 
       }
@@ -1090,60 +1078,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                             </Grid>
                           )}
 
-                          <Grid item xs={12} sx={{ py: 0 }}>
-                            <Card>
-                              <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>aoWalletToken && handleClickViewTokenButton(aoWalletToken)}>
-                                <CustomAvatar
-                                  skin='light'
-                                  color={'primary'}
-                                  sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={authConfig.backEndApiImage + '/WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630'}
-                                >
-                                </CustomAvatar>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                  <Typography 
-                                    sx={{ 
-                                      color: 'text.primary',
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      textAlign: 'left'
-                                    }}
-                                  >
-                                    {aoWalletToken?.TokenName}
-                                  </Typography>
-                                  <Box sx={{ display: 'flex' }}>
-                                    <Typography 
-                                      variant='body2' 
-                                      sx={{ 
-                                        color: `primary.dark`, 
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        flex: 1,
-                                        textAlign: 'left'
-                                      }}
-                                    >
-                                      {formatHash(authConfig.AoWalletProcessTxId, 6)}
-                                    </Typography>
-                                  </Box>
-                                </Box>
-                                <Box textAlign="right">
-                                  <Typography variant='h6' sx={{ 
-                                    color: `info.dark`,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    mr: 2,
-                                    ml: 2
-                                  }}>
-                                    {Number(currentAoWalletBalance) > 0 ? Number(currentAoWalletBalance).toFixed(3).replace(/\.?0*$/, '') : '0'}
-                                  </Typography>
-                                </Box>
-                              </Box>
-                            </Card>
-                          </Grid>
-
                           {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
                             
                             return (
@@ -1153,7 +1087,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                     <CustomAvatar
                                       skin='light'
                                       color={'primary'}
-                                      sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                      sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
                                       src={GetAppAvatar(Token.TokenData.Logo)}
                                     >
                                     </CustomAvatar>
@@ -1280,7 +1214,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               skin='light'
                               color={'primary'}
                               sx={{ mr: 0, width: 38, height: 38 }}
-                              src={'https://web.aowallet.org/images/logo/XWE.png'}
+                              src={'https://web.aowallet.org/images/logo/Chives.png'}
                             >
                             </CustomAvatar>
                             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={ async ()=>{
@@ -1449,7 +1383,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               <CustomAvatar
                                 skin='light'
                                 color={'primary'}
-                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
                               >
                                 {getInitials(Address).toUpperCase()}
                               </CustomAvatar>
@@ -1738,7 +1672,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               <CustomAvatar
                                 skin='light'
                                 color={'primary'}
-                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
@@ -1795,7 +1729,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               <CustomAvatar
                                 skin='light'
                                 color={'primary'}
-                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
@@ -1846,7 +1780,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               <CustomAvatar
                                 skin='light'
                                 color={'primary'}
-                                sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
