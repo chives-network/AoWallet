@@ -28,7 +28,7 @@ export const AoLoadBlueprintFaucet = async (currentWalletJwk: any, processTxId: 
             return  //Not a token
         }
 
-        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/chivesfaucet.lua', { timeout: 20000 }).then(res => res.data)
+        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoWalletWebsite/main/blueprints/chivesfaucet.lua', { timeout: 20000 }).then(res => res.data)
 
         if(Data == undefined) {
             console.log("AoLoadBlueprintModule chivesfaucet.lua", module)

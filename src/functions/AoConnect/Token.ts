@@ -20,7 +20,7 @@ export const AoLoadBlueprintToken = async (currentWalletJwk: any, processTxId: s
             return 
         }
 
-        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoConnect/main/blueprints/chivestoken.lua', { timeout: 10000 }).then(res => res.data)
+        let Data = await axios.get('https://raw.githubusercontent.com/chives-network/AoWalletWebsite/main/blueprints/chivestoken.lua', { timeout: 10000 }).then(res => res.data)
         
         //Filter Token Infor
         if(tokenInfo && tokenInfo.Name) {
