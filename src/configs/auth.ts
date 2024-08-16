@@ -1,13 +1,14 @@
 const config = {
   AppName: 'AoWallet',
-  AppVersion: '0.0.3',
+  AppVersion: '0.0.4',
   tokenType: 'AR', // AR or XWE
   tokenName: 'AR',
   backEndApi: 'https://arweave.net',
-  backEndApiChatBook: '',
+  backEndApiImage: 'https://arweave.net',
   AoConnectWebSite: "https://www.ao.link",
   AoConnectAoLink: "https://www.ao.link/#",
   AoTokenProcessTxId: "Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk",
+  AoWalletProcessTxId: "Dkey3Xt4z_dvZ6WDSAW7YdIz29y0QwNXUMEaNYuSG00",
   AoConnectModule: 'JdN3ffZQaFE33-s20LSp2uLhm9Z94wnG59aLRnBAecU',
   AoConnectScheduler: 'fcoN_xJeisVsPXA-trzVAuIiqO3ydLQxM-L4XbrQKzY',
   AoConnectMyProcessTxIds: 'w6HQkGKz9VKszy1pT9JcqWUlElv5smxDI_Inv1OOeqc',

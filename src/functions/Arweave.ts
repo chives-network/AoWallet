@@ -72,7 +72,7 @@ export async function GetArWalletAllTxs(Address: string, Type: string, After: an
 
     try {
         if(Type == "Sent")  {
-            const res = await axios.post(authConfig.backEndApi + '/graphql', { query, operationName: "getTransactions", variables: {
+            const res = await axios.post(authConfig.backEndApiImage + '/graphql', { query, operationName: "getTransactions", variables: {
                 owners: [Address], after: After['Sent'] ?? ''
             } }).then(res=>res.data);
             if(res && res.data && res.data.transactions) {
@@ -82,7 +82,7 @@ export async function GetArWalletAllTxs(Address: string, Type: string, After: an
             }
         }
         if(Type == "Received")  {
-            const res = await axios.post(authConfig.backEndApi + '/graphql', { query, operationName: "getTransactions", variables: {
+            const res = await axios.post(authConfig.backEndApiImage + '/graphql', { query, operationName: "getTransactions", variables: {
                 recipients: [Address], after: After['Received'] ?? ''
             } }).then(res=>res.data);
             if(res && res.data && res.data.transactions) {

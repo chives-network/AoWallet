@@ -268,6 +268,21 @@ export const AoTokenBalanceDryRun = async (TargetTxId: string, currentAddress: s
 
             return result.Messages[0].Data
         }
+        else if(result && result.Messages && result.Messages[0] && result.Messages[0].Tags) {
+            const Tags: any[] = result.Messages[0].Tags
+            const TagsMap: any = {}
+            Tags && Tags.map((Tag: any)=>{
+                TagsMap[Tag.name] = Tag.value
+            })
+            if(TagsMap && TagsMap['Balance']) {
+                
+                return TagsMap['Balance']
+            }
+            else {
+
+                return 
+            }
+        }
         else {
 
             return 
@@ -696,7 +711,7 @@ export const AoTokenInBoxDryRun = async (TargetTxId: string) => {
 export const GetTokenAvatar = (Logo: string) => {
     if(Logo && Logo.length == 43)  {
 
-        return authConfig.backEndApi + "/" + Logo
+        return authConfig.backEndApiImage + "/" + Logo
     }
     else {
 
@@ -707,7 +722,7 @@ export const GetTokenAvatar = (Logo: string) => {
 export const GetAppAvatar = (logo: string) => {
     if(logo && logo.length == 43) {
 
-        return authConfig.backEndApi + "/" + logo
+        return authConfig.backEndApiImage + "/" + logo
     }
     else {
 

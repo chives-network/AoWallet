@@ -105,6 +105,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
+  
+  const [aoWalletToken, setAoWalletToken] = useState<any>(null)
 
   const [activeTab, setActiveTab] = useState<string>('Sent')
 
@@ -271,6 +273,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
+  const [currentAoWalletBalance, setCurrentAoWalletBalance] = useState<string>("")
   
   
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
@@ -376,7 +379,15 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
-          
+
+        }
+
+        //AoWallet Token
+        const AoWalletBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoWalletProcessTxId, String(currentAddress))
+        setCurrentAoWalletBalance(FormatBalance(AoWalletBalanceDryRunData, 3))
+        const TokenGetMap: any = await AoTokenInfoDryRun(authConfig.AoWalletProcessTxId)
+        if(TokenGetMap) {
+          setAoWalletToken({TokenId: authConfig.AoWalletProcessTxId, TokenName: TokenGetMap.Name, TokenData: TokenGetMap})
         }
 
       }
@@ -621,7 +632,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const handleWalletSendMoney = async () => {
     setIsDisabledButton(true)
     setUploadingButton(`${t('Submitting...')}`)
-    const TxResult: any = await sendAmount(chooseWallet, sendMoneyAddress.address, String(sendMoneyAmount), [], 'inputData', "SubmitStatus", setUploadProgress);
+    const TxResult: any = await sendAmount(chooseWallet, sendMoneyAddress.address, String(sendMoneyAmount), [], '', "SubmitStatus", setUploadProgress);
     if(TxResult && TxResult.status == 800) {
       toast.error(TxResult.statusText, { duration: 2500 })
     }
@@ -705,9 +716,14 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               }
           });
           const dataArrayFilter = dataArray.map((Token: any)=>{
-            console.log("handleGetMySavingTokensData Token.TokenData", Token.TokenData)
-            const TokenData = JSON.parse(Token.TokenData.replace(/\\"/g, '"'))
-            console.log("handleGetMySavingTokensData TokenData", TokenData)
+            
+            //console.log("handleGetMySavingTokensData TokenData 1", Token.TokenData)
+            const TokenDataTemp = Token.TokenData.replace(/\\"/g, '"').replace(':"{', ':{').replace('}"', '}').replace('/\"', '"')
+            
+            //console.log("handleGetMySavingTokensData TokenData 2", TokenDataTemp)
+            const TokenData = JSON.parse(TokenDataTemp)
+            
+            //console.log("handleGetMySavingTokensData TokenData 3", TokenData)
 
             return {...Token, TokenData: TokenData}
           })
@@ -749,8 +765,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               }
               myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
               setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
-            } else {
-              console.error('AoDryRunBalance is null or undefined');
+            } 
+            else {
+              console.error('AoDryRunBalance is null or undefined', Token, currentAddress, AoDryRunBalance);
             }
           } catch (error) {
             console.error(`Error processing token ${Token.TokenId}:`, error);
@@ -1038,7 +1055,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                         textAlign: 'left'
                                       }}
                                     >
-                                      {formatHash(currentAddress, 8)}
+                                      AO
                                     </Typography>
                                     <Box sx={{ display: 'flex' }}>
                                       <Typography 
@@ -1052,7 +1069,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                           textAlign: 'left'
                                         }}
                                       >
-                                        {Number(currentAoBalance)}
+                                        {formatHash(authConfig.AoTokenProcessTxId, 6)}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -1072,6 +1089,60 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               </Card>
                             </Grid>
                           )}
+
+                          <Grid item xs={12} sx={{ py: 0 }}>
+                            <Card>
+                              <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>aoWalletToken && handleClickViewTokenButton(aoWalletToken)}>
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 0, width: 43, height: 43 }}
+                                  src={authConfig.backEndApiImage + '/WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630'}
+                                >
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                  <Typography 
+                                    sx={{ 
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {aoWalletToken?.TokenName}
+                                  </Typography>
+                                  <Box sx={{ display: 'flex' }}>
+                                    <Typography 
+                                      variant='body2' 
+                                      sx={{ 
+                                        color: `primary.dark`, 
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1,
+                                        textAlign: 'left'
+                                      }}
+                                    >
+                                      {formatHash(authConfig.AoWalletProcessTxId, 6)}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                  <Typography variant='h6' sx={{ 
+                                    color: `info.dark`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    mr: 2,
+                                    ml: 2
+                                  }}>
+                                    {Number(currentAoWalletBalance) > 0 ? Number(currentAoWalletBalance).toFixed(3).replace(/\.?0*$/, '') : '0'}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
 
                           {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
                             
@@ -1123,7 +1194,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                         mr: 2,
                                         ml: 2
                                       }}>
-                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : '0'}
+                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : ''}
                                       </Typography>
                                     </Box>
                                   </Box>
@@ -1135,12 +1206,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                              {isDisabledManageAssets == false && (
+                              {isDisabledManageAssets == false && authConfig.tokenName == "AR" && (
                                 <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
                                   {t('Manage Assets') as string}
                                 </Button>
                               )}
-                              {isDisabledManageAssets == true && (
+                              {isDisabledManageAssets == true && authConfig.tokenName == "AR" && (
                                 <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text'>
                                   {t('Loading') as string} ...
                                 </Button>
@@ -1298,7 +1369,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                 />
             )}
 
-            {pageModel == 'ViewToken' && authConfig.tokenName == "AR" && ( 
+            {pageModel == 'ViewToken' && ( 
               <AoToken 
                 encryptWalletDataKey={encryptWalletDataKey}
                 currentAddress={currentAddress} 
