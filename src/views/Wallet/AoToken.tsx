@@ -19,7 +19,7 @@ import authConfig from '../../configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from '../../configs/functions'
+import { formatHash, formatTimestamp } from '../../configs/functions'
 
 import Tabs from '@mui/material/Tabs'
 
@@ -733,7 +733,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     textAlign: 'left'
                                                 }}
                                             >
-                                            {Tx[3]}
+                                            {Tx[3]} {formatTimestamp(Tx[4])}
                                             </Typography>
                                         </Box>
                                     </Box>
