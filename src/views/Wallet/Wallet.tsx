@@ -1676,7 +1676,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
                                 <Typography sx={{ 
                                   color: 'text.primary',
                                   overflow: 'hidden',
@@ -1733,7 +1733,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
                                 <Typography sx={{ 
                                   color: 'text.primary',
                                   overflow: 'hidden',
@@ -1784,7 +1784,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                 src={GetAppAvatar(Token.TokenData.Logo)}
                               >
                               </CustomAvatar>
-                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%' }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
                                 <Typography sx={{ 
                                   color: 'text.primary',
                                   overflow: 'hidden',
