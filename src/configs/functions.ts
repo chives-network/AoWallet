@@ -13,6 +13,12 @@ export function formatHash(inputString: string, spliceSize: number): string {
 
     return inputString; 
   }
+
+  if (inputString.length <= 8) {
+
+    return inputString; 
+  }
+
   const firstPart = inputString.substring(0, spliceSize);
   const lastPart = inputString.substring(inputString.length - spliceSize);
   

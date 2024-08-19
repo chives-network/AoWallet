@@ -646,7 +646,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {t('From') as string}: {formatHash(Tx[0], 5)}
+                                            {t('From') as string}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -719,7 +719,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {Tx[2] === "Received" ? `${t('From') as string}: ${formatHash(Tx[0], 5)}` : `${t('To') as string}: ${formatHash(Tx[0], 5)}`}
+                                            {Tx[3] === "Received" ? `${t('From') as string}: ${formatHash(Tx[1], 5)}` : `${t('To') as string}: ${formatHash(Tx[1], 5)}`}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -733,7 +733,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     textAlign: 'left'
                                                 }}
                                             >
-                                            {Tx[2]}
+                                            {Tx[3]}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -741,14 +741,14 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     <Box textAlign="right">
                                         <Typography 
                                             sx={{ 
-                                            color: Tx[2] === "Received" ? "primary.main" : "info.main",
+                                            color: Tx[3] === "Received" ? "primary.main" : "info.main",
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
                                             textAlign: 'right'
                                             }}
                                         >
-                                            {Tx[2]=="Received" ? "+" : "-"} {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
+                                            {Tx[3] === "Received" ? "+" : "-"} {FormatBalanceString(Tx[2], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
@@ -787,7 +787,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {formatHash(Tx[0], 5)}
+                                            {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -816,7 +816,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             textAlign: 'right'
                                             }}
                                         >
-                                           - {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
+                                           - {FormatBalanceString(Tx[2], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
@@ -855,7 +855,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {formatHash(Tx[0], 5)}
+                                            {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -884,7 +884,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             textAlign: 'right'
                                             }}
                                         >
-                                            + {FormatBalanceString(Tx[1], TokenData.Denomination, 4)}
+                                            + {FormatBalanceString(Tx[2], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>
