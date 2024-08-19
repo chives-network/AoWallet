@@ -642,7 +642,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             }}
                                             onClick={async ()=>{
                                                 await Clipboard.write({
-                                                    string: Tx[0]
+                                                    string: Tx[1]
                                                 });
                                             }}
                                         >
@@ -661,11 +661,11 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 }}
                                                 onClick={async ()=>{
                                                     await Clipboard.write({
-                                                        string: Tx[1]
+                                                        string: Tx[2]
                                                     });
                                                 }}
                                             >
-                                            {t('To') as string}: {formatHash(Tx[1], 5)}
+                                            {t('To') as string}: {formatHash(Tx[2], 5)}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -680,7 +680,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             textAlign: 'right'
                                             }}
                                         >
-                                            {FormatBalanceString(Tx[2], TokenData.Denomination, 4)}
+                                            {FormatBalanceString(Tx[3], TokenData.Denomination, 4)}
                                         </Typography>
 
                                     </Box>

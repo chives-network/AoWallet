@@ -362,7 +362,7 @@ export const BalanceTimes10 = (Balance: number, Denomination: number) => {
     const DenominationNew = Denomination > 0 ? Denomination : 12
     const DivValue = Math.pow(10, DenominationNew)
 
-    return (new BigNumber(Number(Balance))).times(DivValue).toString()
+    return (new BigNumber(Number(Balance))).times(DivValue).toFixed(0).toString()
 }
 
 export const BalanceTimes = (Balance1: number, Balance2: number) => {
