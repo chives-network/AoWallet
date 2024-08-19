@@ -665,7 +665,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     });
                                                 }}
                                             >
-                                            {t('To') as string}: {formatHash(Tx[2], 5)}
+                                            {t('To') as string}: {formatHash(Tx[2], 5)} {formatTimestamp(Tx[4])}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -733,7 +733,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     textAlign: 'left'
                                                 }}
                                             >
-                                            {Tx[3]} {formatTimestamp(Tx[4])}
+                                            {formatTimestamp(Tx[4])}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -801,7 +801,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     textAlign: 'left'
                                                 }}
                                             >
-                                            {t('To') as string}
+                                            {formatTimestamp(Tx[3])}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -869,7 +869,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     textAlign: 'left'
                                                 }}
                                             >
-                                                {t('From') as string}
+                                                {formatTimestamp(Tx[3])}
                                             </Typography>
                                         </Box>
                                     </Box>
