@@ -8,7 +8,7 @@ window.addEventListener('message', function(event) {
   const isTrusted = event.data.isTrusted
   const permissions = (event.data.data && event.data.data.params && event.data.data.params[0]) ?? [];
   const name = (event.data.data && event.data.data.params && event.data.data.params[1]) ?? 'AoWalletExample';
-  console.log("type", type, permissions, ext)
+  //console.log("type", type, permissions, ext)
 
   if (type && (type === 'api_connect')) {
     chrome.runtime.sendMessage({ action: "openPopup" }, (response) => {
@@ -55,9 +55,6 @@ window.addEventListener('message', function(event) {
       console.log('arconnect_event');
   }
 });
-
-
-
 
 
 // Page request to open popup

@@ -93,7 +93,9 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
   useEffect(() =>   {
     if(inputLength == 6)  {
         const checkPasswordForWalletData = checkPasswordForWallet(inputValue)
-        console.log("checkPasswordForWalletData", checkPasswordForWalletData, inputValue)
+
+        //console.log("checkPasswordForWalletData", checkPasswordForWalletData, inputValue)
+        
         if(checkPasswordForWalletData)   {
           setEncryptWalletDataKey(inputValue)
           handleWalletGoHome()

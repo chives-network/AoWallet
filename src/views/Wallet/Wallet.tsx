@@ -315,10 +315,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
 
-      console.log("documentHeight", documentHeight);
-      console.log("innerHeight", innerHeight);
-      console.log("scrollY", scrollY);
-      console.log("page", page);
+      //console.log("documentHeight", documentHeight);
+      //console.log("innerHeight", innerHeight);
+      //console.log("scrollY", scrollY);
+      //console.log("page", page);
 
       if (scrollY + windowHeight >= documentHeight) {
         setPage(prevPage => {
@@ -717,7 +717,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
           })
           setMyAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setMySavingTokensData(dataArrayFilter)
-          console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
+          
+          //console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
       }
     }
     catch(e: any) {
@@ -1128,7 +1129,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                         mr: 2,
                                         ml: 2
                                       }}>
-                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId]) ? myAoTokensBalance[currentAddress][Token.TokenId] : ''}
+                                        {(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId] !== undefined) ? myAoTokensBalance[currentAddress][Token.TokenId] : ''}
                                       </Typography>
                                     </Box>
                                   </Box>

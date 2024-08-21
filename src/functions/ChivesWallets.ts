@@ -672,7 +672,7 @@ export function getTokenAllHolderTxs(Address: string, encryptWalletDataKey: stri
     if(typeof window !== 'undefined')  {
         const chivesAllHolderTxsData = window.localStorage.getItem("chivesAllHolderTxs____" + calculateSHA256(Address))
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllHolderTxsData as string, encryptWalletDataKey)
-        const chivesAllHolderTxsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
+        const chivesAllHolderTxsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : undefined
         
         return chivesAllHolderTxsObject
     }

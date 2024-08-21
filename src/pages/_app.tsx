@@ -117,13 +117,16 @@ const App = (props: ExtendedAppProps) => {
     <Provider store={store}>
       <CacheProvider value={emotionCache}>
         <Head>
-          <title>{`${themeConfig.templateName} - By Chives Network`}</title>
+          <title>{`${themeConfig.templateName} - By AoWallet`}</title>
           <meta
             name='description'
-            content={`${themeConfig.templateName} – By Chives Network`}
+            content={`${themeConfig.templateName} – By AoWallet`}
           />
-          <meta name='keywords' content='Chives & AoConnect' />
+          <meta name='keywords' content='AoWallet & Arweave Wallet & Chives Network' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
+          <link rel="icon" type="image/png" href="/icons/icon16.png" sizes="16x16" />
+          <link rel="icon" type="image/png" href="/icons/icon32.png" sizes="32x32" />
+          <link rel="icon" type="image/png" href="/icons/icon48.png" sizes="48x48" />
         </Head>
 
         <AuthProvider>

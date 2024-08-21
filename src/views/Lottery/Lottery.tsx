@@ -152,10 +152,10 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
 
-      console.log("documentHeight", documentHeight);
-      console.log("innerHeight", innerHeight);
-      console.log("scrollY", scrollY);
-      console.log("page", page);
+      //console.log("documentHeight", documentHeight);
+      //console.log("innerHeight", innerHeight);
+      //console.log("scrollY", scrollY);
+      //console.log("page", page);
 
       if (scrollY + windowHeight >= documentHeight) {
         setPage(prevPage => {
