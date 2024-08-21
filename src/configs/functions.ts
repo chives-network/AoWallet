@@ -179,6 +179,19 @@ export function formatTimestamp(timestamp: number): string {
   return formattedDate;
 }
 
+export function formatTimestamp2(timestamp: number): string {
+  if(timestamp == undefined) return ""
+  const date = String(timestamp).length == 10 ? new Date(timestamp * 1000) : new Date(timestamp)
+  const month = date.getMonth();
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+  return formattedDate;
+}
+
 export function formatTimestampLocalTime(timestamp: number): string {
   if(timestamp == undefined) return ""
   

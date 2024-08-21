@@ -19,7 +19,7 @@ import authConfig from '../../configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp } from '../../configs/functions'
+import { formatHash, formatTimestamp, formatTimestamp2 } from '../../configs/functions'
 
 import Tabs from '@mui/material/Tabs'
 
@@ -359,7 +359,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                     <IconButton onClick={()=>handleClickReceiveButtonAO()}>
                         <CallReceived />
                     </IconButton>
-                    <Typography onClick={()=>handleClickReceiveButtonAO()} ml={-2}>{t('Receive') as string}</Typography>
+                    <Typography onClick={()=>handleClickReceiveButtonAO()}>{t('Receive') as string}</Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
                     <IconButton onClick={()=>{
@@ -377,7 +377,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                             setPage(0)
                             setTokenHoldersTxsChivesToken({})
                         }
-                    }} ml={-2}>{t('Holders') as string}</Typography>
+                    }}>{t('Holders') as string}</Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
                     <IconButton
@@ -387,8 +387,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                     </IconButton>
                     <Typography sx={{
                                         color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`, 
+                                        ml: 0.5
                                     }}
-                                ml={-1}
                                 >
                         {t('Swap') as string}
                     </Typography>
@@ -665,7 +665,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                     });
                                                 }}
                                             >
-                                            {t('To') as string}: {formatHash(Tx[2], 5)} {formatTimestamp(Tx[4])}
+                                            {t('To') as string}: {formatHash(Tx[2], 5)} {formatTimestamp2(Tx[4])}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -682,7 +682,6 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                         >
                                             {FormatBalanceString(Tx[3], TokenData.Denomination, 4)}
                                         </Typography>
-
                                     </Box>
 
                                 </Box>
@@ -787,7 +786,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {formatHash(Tx[1], 5)}
+                                            {t('To')}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 
@@ -855,7 +854,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 });
                                             }}
                                         >
-                                            {formatHash(Tx[1], 5)}
+                                            {t('From')}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
                                             <Typography 

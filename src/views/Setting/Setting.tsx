@@ -83,7 +83,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const [tokenTicker, setTokenTicker] = useState<string>('AOTN')
   const [tokenTotalBalance, setTokenTotalBalance] = useState<string>('1000000')
   const [tokenLogo, setTokenLogo] = useState<string>('_A-OtzzfCZGUkVdf_Ajs6WLYIJySKI6SBmTzGKXsFG4')
-  const [tokenDenomination, setTokenDenomination] = useState<string>('12')
+  const [tokenDenomination, setTokenDenomination] = useState<string>('3')
   const [createTokenData, setCreateTokenData] = useState<any>(null)
 
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Submit')}`)
