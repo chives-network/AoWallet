@@ -115,6 +115,17 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     console.log("handleChangeActiveTab", event)
   }
 
+  const [stream, setStream] = useState<any>(null);
+
+  const closeVideoStream = (stream: MediaStream) => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    if (videoQrCodeRef.current) {
+      videoQrCodeRef.current.srcObject = null;
+    }
+  };
+
   useEffect(() => {
 
     i18n.changeLanguage(getChivesLanguage())
@@ -174,6 +185,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       case 'ManageAssets':
       case 'ViewToken':
       case 'ScanQRCode':
+        if (stream) {
+          closeVideoStream(stream);
+        }
         handleWalletGoHome()
         break
       case 'ReceiveMoneyAO':
@@ -191,7 +205,6 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   }
 
   const videoQrCodeRef = useRef<HTMLVideoElement>(null);
-  const [qrCodeResult, setQrCodeResult] = useState<string | null>(null);
   const codeReader = new BrowserMultiFormatReader();
 
   useEffect(() =>   {
@@ -221,12 +234,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       case 'web':
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          setStream(stream)
           if (videoQrCodeRef.current) {
             videoQrCodeRef.current.srcObject = stream;
             videoQrCodeRef.current.play();
             codeReader.decodeFromVideoDevice(null, videoQrCodeRef.current, (resultTemp: any) => {
               if (resultTemp && resultTemp.getText() && ( resultTemp.getText().length == 43 || resultTemp.getText().slice(0, 10) == 'AoToken://') ) {
-                setQrCodeResult(resultTemp.getText());
                 codeReader.reset();
                 stream.getTracks().forEach(track => track.stop());
                 if(resultTemp.getText().length == 43) {
@@ -1351,7 +1364,14 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                   </Typography>
                 </Grid>
                 <Grid item>
-                  {qrCodeResult}
+                  <Button variant='contained' sx={{mt: 4}}
+                    onClick={()=>{
+                      if (stream) {
+                        closeVideoStream(stream);
+                      }
+                    }}>
+                        Close Video
+                      </Button>
                 </Grid>
               </Grid>
             )}
