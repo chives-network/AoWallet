@@ -459,7 +459,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     const TokenGetMap: any = await AoTokenInfoDryRun(specifyTokenSend.TokenId)
     if(TokenGetMap) {
       setChooseToken({...TokenGetMap, TokenId: specifyTokenSend.TokenId})
-      console.log("TokenGetMap0000", TokenGetMap)
+      console.log("TokenGetMap", TokenGetMap)
       const AoDryRunBalance = await AoTokenBalanceDryRun(specifyTokenSend.TokenId, currentAddress);
       if (AoDryRunBalance) {
         const AoDryRunBalanceCoin = FormatBalance(AoDryRunBalance, TokenGetMap.Denomination ? TokenGetMap.Denomination : '12');
