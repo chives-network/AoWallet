@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AoWallet & Arweave Wallet",
   "short_name": "AoWallet",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Supply AO & AR wallet function, token, faucet etc.",
   "icons": {
     "16": "/icons/icon16.png",
