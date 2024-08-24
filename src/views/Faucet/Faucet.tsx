@@ -145,7 +145,16 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
       setIsDisabledButton(true)
 
       const GetFaucetFromFaucetTokenId: any = await AoFaucetGetFaucet(chooseWallet.jwk, Faucet.FaucetId)
-      if(GetFaucetFromFaucetTokenId && GetFaucetFromFaucetTokenId.msg && GetFaucetFromFaucetTokenId.msg.Error) {
+      console.log("GetFaucetFromFaucetTokenId", GetFaucetFromFaucetTokenId)
+      if(GetFaucetFromFaucetTokenId && GetFaucetFromFaucetTokenId.status == 'ok' && GetFaucetFromFaucetTokenId.msg && GetFaucetFromFaucetTokenId.msg.Error) {
+        toast.error(GetFaucetFromFaucetTokenId.msg.Error, {
+          duration: 2500
+        })
+        setIsDisabledButton(false)
+
+        return
+      }
+      if(GetFaucetFromFaucetTokenId && GetFaucetFromFaucetTokenId.status == 'error') {
         toast.error(GetFaucetFromFaucetTokenId.msg.Error, {
           duration: 2500
         })

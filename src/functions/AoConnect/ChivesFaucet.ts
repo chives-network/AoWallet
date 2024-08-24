@@ -120,12 +120,14 @@ export const AoFaucetGetFaucet = async (currentWalletJwk: any, FaucetTxId: strin
         }
         else {
 
-            return { status: 'ok', id: SendTokenResult };
+            return { status: 'error', id: SendTokenResult, msg: 'AoFaucetGetFaucet No Message' };
         }
 
     }
     catch(Error: any) {
         console.error("AoFaucetGetFaucet Error:", Error)
+
+        return { status: 'error', msg: 'Network Error' };
     }
 
 }
