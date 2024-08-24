@@ -155,7 +155,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
         return
       }
       if(GetFaucetFromFaucetTokenId && GetFaucetFromFaucetTokenId.status == 'error') {
-        toast.error(GetFaucetFromFaucetTokenId.msg.Error, {
+        toast.error(GetFaucetFromFaucetTokenId.msg, {
           duration: 2500
         })
         setIsDisabledButton(false)
