@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "org.aowallet"
+    namespace "com.aowallet"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "org.aowallet"
+        applicationId "com.aowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
