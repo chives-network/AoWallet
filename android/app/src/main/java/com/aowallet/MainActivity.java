@@ -1,4 +1,4 @@
-package org.aowallet;
+package com.aowallet;
 
 import com.getcapacitor.BridgeActivity;
 
