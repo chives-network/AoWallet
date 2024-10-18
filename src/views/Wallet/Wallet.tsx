@@ -770,7 +770,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
             }
             else {
-              console.error('AoDryRunBalance is null or undefined', Token, currentAddress, AoDryRunBalance);
+              console.error('AoDryRunBalance is null or undefined', Token, "currentAddress", currentAddress, "AoDryRunBalance", AoDryRunBalance);
+              myAoTokensBalanceTemp[currentAddress][Token.TokenId] = 'Error';
+              setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
             }
           } catch (error) {
             console.error(`Error processing token ${Token.TokenId}:`, error);
@@ -1099,7 +1101,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                                 <Card>
-                                  <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>handleClickViewTokenButton(Token)}>
+                                  <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=> (myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId] !== undefined && myAoTokensBalance[currentAddress][Token.TokenId] !== 'Error') && handleClickViewTokenButton(Token)}>
                                     <CustomAvatar
                                       skin='light'
                                       color={'primary'}
@@ -1137,7 +1139,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                     </Box>
                                     <Box textAlign="right">
                                       <Typography variant='h6' sx={{
-                                        color: `info.dark`,
+                                        color: (myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][Token.TokenId] !== undefined && myAoTokensBalance[currentAddress][Token.TokenId] !== 'Error') ? 'info.dark' : 'error.dark',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
