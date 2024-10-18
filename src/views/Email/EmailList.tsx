@@ -4,7 +4,6 @@ import { Fragment, useState, SyntheticEvent, ReactNode, useEffect } from 'react'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
-import Input from '@mui/material/Input'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
@@ -14,7 +13,6 @@ import { styled } from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import InputAdornment from '@mui/material/InputAdornment'
 import CircularProgress from '@mui/material/CircularProgress'
 import ListItem, { ListItemProps } from '@mui/material/ListItem'
 
@@ -96,9 +94,7 @@ const EmailList = (props: EmailListType) => {
   // ** Props
   const {
     store,
-    query,
     hidden,
-    setQuery,
     direction,
     EmailCategoriesColors,
     folder,
