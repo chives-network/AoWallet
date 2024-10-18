@@ -62,11 +62,11 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
   };
 
   useEffect(() => {
-    
+
     disableScroll();
 
     return () => {
-      
+
       enableScroll();
     };
 
@@ -84,7 +84,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
     setIsTokenModel(false)
     console.log("isTokenModel", isTokenModel, chooseTokenBalance, chooseWallet)
   }
-  
+
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'ReceiveMoney':
@@ -102,7 +102,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
     }
   }
 
-  
+
   const RightButtonOnClick = () => {
     console.log("chooseToken", chooseToken)
 
@@ -116,13 +116,13 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
     }
 
     //handleWalletGoHome()
-    
+
   }
 
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
 
-  useEffect(() => {    
+  useEffect(() => {
 
     setHeaderHidden(false)
     setRightButtonIcon('mdi:qrcode')
@@ -134,7 +134,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
       setRefreshWalletData(refreshWalletData+1);
     };
     const intervalId = setInterval(myTask, 2 * 60 * 1000);
-    
+
     return () => clearInterval(intervalId);
 
   }, []);
@@ -186,6 +186,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
         sx={{
           flex: 1,
           overflowY: 'auto',
+          overflowX: 'hidden',
           marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}
@@ -203,14 +204,14 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
                 color: 'text.primary',
                 fontSize: { xs: '0.875rem', sm: '1rem' },
                 lineHeight: 1.6,
-                marginBottom: 2, 
-                whiteSpace: 'pre-line', 
-                maxWidth: '800px', 
-                margin: 'auto', 
-                padding: { xs: 2, sm: 3 }, 
+                marginBottom: 2,
+                whiteSpace: 'pre-line',
+                maxWidth: '800px',
+                margin: 'auto',
+                padding: { xs: 2, sm: 3 },
                 backgroundColor: 'background.paper',
                 borderRadius: 1,
-                boxShadow: 1, 
+                boxShadow: 1,
               }} dangerouslySetInnerHTML={{ __html: `While from a user perspective, there will be a smooth experience and seem like one contest, there’ll actually be two draws: one for the lottery and one for the jackpot. Both will run simultaneously. Note that wagering puts you in for a chance of winning both, however, there are some key differences between the lottery and the jackpot:
 
 Lottery winners will always be paid out every 20 hours, with 100 prizes, or the total amount of players if less than 100, paid out regularly and the chance of winning depending on the amount of TokenA user wagers.
@@ -227,7 +228,7 @@ There’s a 2% chance that the jackpot will be won every 20 hours and a 0.1% cha
 8th: 4% of the lottery prize pool
 9th: 3% of the lottery prize pool
 10th: 2% of the lottery prize pool
-11th to 100th: 0.333% to 0.111% 
+11th to 100th: 0.333% to 0.111%
 (in increments of 0.00247%) of the lottery prize pool.
               ` }} />
 

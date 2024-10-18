@@ -90,7 +90,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseToken, setChooseToken] = useState<any>(null)
   const [chooseTokenBalance, setChooseTokenBalance] = useState<string | null>(null)
-  
+
   const [isTokenModel, setIsTokenModel] = useState<boolean>(false)
   const [searchContactkeyWord, setSearchContactkeyWord] = useState<string>('')
   const [searchAssetkeyWord, setSearchAssetkeyWord] = useState<string>('')
@@ -105,7 +105,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
-  
+
   const [activeTab, setActiveTab] = useState<string>('Sent')
 
   const currentFeeAO = 0
@@ -175,7 +175,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     setSearchAssetOnChain([])
     setDisabledFooter(false)
   }
-  
+
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'ReceiveMoney':
@@ -253,9 +253,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         }
         break;
     }
-    
+
   };
-  
+
   const RightButtonOnClick = () => {
     console.log("chooseToken", chooseToken)
 
@@ -270,9 +270,9 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     }
 
     //handleWalletGoHome()
-    
+
   }
-    
+
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
   const [getWalletNicknamesData, setGetWalletNicknamesData] = useState<any>({})
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
@@ -284,14 +284,14 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
-  
+
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Send')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
   const [isDisabledManageAssets, setIsDisabledManageAssets] = useState<boolean>(true)
 
-  
-  useEffect(() => {    
+
+  useEffect(() => {
 
     setHeaderHidden(false)
 
@@ -305,7 +305,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       setRefreshWalletData(refreshWalletData+1);
     };
     const intervalId = setInterval(myTask, 2 * 60 * 1000);
-    
+
     return () => clearInterval(intervalId);
 
   }, [encryptWalletDataKey]);
@@ -328,10 +328,11 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
 
-      //console.log("documentHeight", documentHeight);
-      //console.log("innerHeight", innerHeight);
-      //console.log("scrollY", scrollY);
-      //console.log("page", page);
+      console.log("windowHeight", windowHeight);
+      console.log("documentHeight", documentHeight);
+      console.log("innerHeight", innerHeight);
+      console.log("scrollY", scrollY);
+      console.log("page", page);
 
       if (scrollY + windowHeight >= documentHeight) {
         setPage(prevPage => {
@@ -356,7 +357,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   useEffect(() => {
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
-        
+
         if(authConfig.tokenType == "XWE")  {
           const currentBalanceTemp = await getWalletBalance(currentAddress);
           if(currentBalanceTemp) {
@@ -392,7 +393,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         }
 
       }
-      
+
       if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs' && currentWalletTxsHasNextPage[activeTab] == true)  {
         if(authConfig.tokenType == "AR")  {
           setIsDisabledButton(true)
@@ -485,7 +486,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     if(isSetPasswordForWalletData && checkPasswordForWalletData)   {
       const getAllWalletsData = getAllWallets(encryptWalletDataKey)
       if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
-        
+
         //No wallet, and switch to MyWallet
         setCurrentTab('MyWallet')
       }
@@ -511,7 +512,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       getPriceDataFunction()
     }
     if(pageModel == "ManageAssets") {
-      
+
       //handleGetServerData()
     }
   }, [pageModel])
@@ -655,7 +656,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     if(TxResult?.msg?.Messages && TxResult?.msg?.Messages[0]?.Data)  {
       toast.success(t(TxResult?.msg?.Messages[0]?.Data.replace(ansiRegex, '')) as string, { duration: 2500, position: 'top-center' })
       const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
-      if(getMyAoTokensData) {      
+      if(getMyAoTokensData) {
         setMySavingTokensData(getMyAoTokensData)
       }
     }
@@ -679,7 +680,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       toast.success(t(WantToSaveTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
       addMyAoToken(currentAddress, Token, encryptWalletDataKey)
       const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
-      if(getMyAoTokensData) {      
+      if(getMyAoTokensData) {
         setMySavingTokensData(getMyAoTokensData)
       }
     }
@@ -693,7 +694,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       toast.success(t(WantToDeleteTokenProcessTxIdData?.msg?.Messages[0]?.Data) as string, { duration: 2500, position: 'top-center' })
       deleteMyAoToken(currentAddress, TokenId, encryptWalletDataKey)
       const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
-      if(getMyAoTokensData) {      
+      if(getMyAoTokensData) {
         setMySavingTokensData(getMyAoTokensData)
       }
     }
@@ -701,7 +702,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
   const handleGetMySavingTokensData = async () => {
     const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
-    if(getMyAoTokensData) {      
+    if(getMyAoTokensData) {
       setMySavingTokensData(getMyAoTokensData)
     }
 
@@ -717,25 +718,25 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               }
           });
           const dataArrayFilter = dataArray.map((Token: any)=>{
-            
+
             //console.log("handleGetMySavingTokensData TokenData 1", Token.TokenData)
             const TokenDataTemp = Token.TokenData.replace(/\\"/g, '"').replace(':"{', ':{').replace('}"', '}').replace('/\"', '"')
-            
+
             //console.log("handleGetMySavingTokensData TokenData 2", TokenDataTemp)
             const TokenData = JSON.parse(TokenDataTemp)
-            
+
             //console.log("handleGetMySavingTokensData TokenData 3", TokenData)
 
             return {...Token, TokenData: TokenData}
           })
           setMyAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
           setMySavingTokensData(dataArrayFilter)
-          
+
           //console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
       }
     }
     catch(e: any) {
-      console.log("handleGetMySavingTokensData Error", e)      
+      console.log("handleGetMySavingTokensData Error", e)
     }
 
     handleGetMySavingTokensBalance()
@@ -767,7 +768,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               }
               myAoTokensBalanceTemp[currentAddress][Token.TokenId] = Number(AoDryRunBalanceCoin) > 0 ? Number(AoDryRunBalanceCoin).toFixed(4).replace(/\.?0*$/, '') : 0;
               setMyAoTokensBalance({ ...myAoTokensBalanceTemp }); // Immediately update the balance
-            } 
+            }
             else {
               console.error('AoDryRunBalance is null or undefined', Token, currentAddress, AoDryRunBalance);
             }
@@ -776,22 +777,22 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
           }
         }
       }
-    } 
+    }
     catch (e: any) {
       console.error("handleGetMySavingTokensBalance Error", e);
     }
 
   }
 
-  
+
   const handleGetAllTokensData = async () => {
 
     const getAllAoTokensData = getAllAoTokens(currentAddress, encryptWalletDataKey)
-    if(getAllAoTokensData && getAllAoTokensData.length > 0) {   
+    if(getAllAoTokensData && getAllAoTokensData.length > 0) {
       setAllTokensData(getAllAoTokensData)
       setIsDisabledManageAssets(false)
     }
-    
+
     try {
       const ChivesServerDataGetTokensData1 = await ChivesServerDataGetTokens(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
       if(ChivesServerDataGetTokensData1) {
@@ -810,7 +811,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       }
     }
     catch(e: any) {
-      console.log("handleGetAllTokensData Error", e)      
+      console.log("handleGetAllTokensData Error", e)
     }
 
   }
@@ -831,7 +832,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         }
       })
       console.log("AllAssets", result)
-  
+
       return result
     }
   }
@@ -851,8 +852,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
       handleSearchAoAssetOnChain()
     }
   }, [searchAssetkeyWord]);
-  
-  
+
+
   const themeSlider = createTheme({
     components: {
       MuiSlider: {
@@ -874,6 +875,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
         sx={{
           flex: 1,
           overflowY: 'auto',
+          overflowX: 'hidden',
           marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}
@@ -887,8 +889,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                 })
             }}
             >
-            
-            {getAllWalletsData && pageModel == 'MainWallet' ?  
+
+            {getAllWalletsData && pageModel == 'MainWallet' ?
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
@@ -942,8 +944,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                           <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=>handleClickAllTxsButton()}>
                             <History />
                           </IconButton>
-                          <Typography sx={{ 
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                          <Typography sx={{
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
                                       }}
                                       onClick={()=>Number(currentBalance) > 0 && handleClickAllTxsButton()}>
                             {t('Txs') as string}
@@ -953,8 +955,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                           <IconButton disabled={Number(currentBalance) > 0 ? false : true} >
                             <Casino />
                           </IconButton>
-                          <Typography sx={{ 
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                          <Typography sx={{
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
                                       }}
                                       >
                             {t('Swap') as string}
@@ -964,8 +966,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                           <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
                             <Send />
                           </IconButton>
-                          <Typography sx={{ 
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`, 
+                          <Typography sx={{
+                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
                                       }}
                                       onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>
                             {t('Send') as string}
@@ -993,8 +995,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                  <Typography 
-                                    sx={{ 
+                                  <Typography
+                                    sx={{
                                       color: 'text.primary',
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
@@ -1005,10 +1007,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                     {formatHash(currentAddress, 8)}
                                   </Typography>
                                   <Box sx={{ display: 'flex' }}>
-                                    <Typography 
-                                      variant='body2' 
-                                      sx={{ 
-                                        color: `primary.dark`, 
+                                    <Typography
+                                      variant='body2'
+                                      sx={{
+                                        color: `primary.dark`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -1021,7 +1023,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   </Box>
                                 </Box>
                                 <Box textAlign="right">
-                                  <Typography variant='h6' sx={{ 
+                                  <Typography variant='h6' sx={{
                                     color: `info.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1035,7 +1037,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               </Box>
                             </Card>
                           </Grid>
-                          
+
                           {authConfig.tokenName && authConfig.tokenName == "AR" && (
                             <Grid item xs={12} sx={{ py: 0 }}>
                               <Card>
@@ -1048,8 +1050,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   >
                                   </CustomAvatar>
                                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                    <Typography 
-                                      sx={{ 
+                                    <Typography
+                                      sx={{
                                         color: 'text.primary',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -1060,10 +1062,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                       AO
                                     </Typography>
                                     <Box sx={{ display: 'flex' }}>
-                                      <Typography 
-                                        variant='body2' 
-                                        sx={{ 
-                                          color: `primary.dark`, 
+                                      <Typography
+                                        variant='body2'
+                                        sx={{
+                                          color: `primary.dark`,
                                           overflow: 'hidden',
                                           textOverflow: 'ellipsis',
                                           whiteSpace: 'nowrap',
@@ -1076,7 +1078,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                     </Box>
                                   </Box>
                                   <Box textAlign="right">
-                                    <Typography variant='h6' sx={{ 
+                                    <Typography variant='h6' sx={{
                                       color: `info.dark`,
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
@@ -1093,7 +1095,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                           )}
 
                           {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
-                            
+
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                                 <Card>
@@ -1106,8 +1108,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                      <Typography 
-                                        sx={{ 
+                                      <Typography
+                                        sx={{
                                           color: 'text.primary',
                                           overflow: 'hidden',
                                           textOverflow: 'ellipsis',
@@ -1118,10 +1120,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                         {Token.TokenData.Name}
                                       </Typography>
                                       <Box sx={{ display: 'flex' }}>
-                                        <Typography 
-                                          variant='body2' 
-                                          sx={{ 
-                                            color: `primary.dark`, 
+                                        <Typography
+                                          variant='body2'
+                                          sx={{
+                                            color: `primary.dark`,
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
@@ -1134,7 +1136,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                       </Box>
                                     </Box>
                                     <Box textAlign="right">
-                                      <Typography variant='h6' sx={{ 
+                                      <Typography variant='h6' sx={{
                                         color: `info.dark`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -1174,7 +1176,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                     </Box>
                   </Grid>
                 </Grid>
-                      
+
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={isDisabledButton}
@@ -1186,7 +1188,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               <Fragment></Fragment>
             }
 
-            {pageModel == 'AllTxs' && authConfig.tokenName == "XWE" && ( 
+            {pageModel == 'AllTxs' && authConfig.tokenName == "XWE" && (
               <Grid container spacing={0}>
                 <Box
                   component='header'
@@ -1214,7 +1216,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                     <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
                   </Tabs>
                 </Box>
-                
+
                 <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
                     <Grid container spacing={2}>
 
@@ -1237,8 +1239,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               });
                               toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
                             }}>
-                                <Typography 
-                                  sx={{ 
+                                <Typography
+                                  sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1249,10 +1251,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   {Tx.owner.address == currentAddress ? formatHash(Tx.recipient, 8) : formatHash(Tx.owner.address, 8)}
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
-                                  <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                      color: `primary.dark`, 
+                                  <Typography
+                                    variant='body2'
+                                    sx={{
+                                      color: `primary.dark`,
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
@@ -1266,7 +1268,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               </Box>
 
                               <Box textAlign="right">
-                                <Typography variant='h6' sx={{ 
+                                <Typography variant='h6' sx={{
                                   color: `info.dark`,
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1291,11 +1293,11 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         </Box>
                       </Grid>
                     )}
-                    
+
                     </Grid>
 
                 </Grid>
-                      
+
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={isDisabledButton}
@@ -1306,21 +1308,21 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && ( 
-              <ArWallet 
-                currentWalletTxs={currentWalletTxs} 
-                isDisabledButton={isDisabledButton} 
-                currentAddress={currentAddress} 
-                handleChangeActiveTab={handleChangeActiveTab} 
-                activeTab={activeTab} 
+            {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && (
+              <ArWallet
+                currentWalletTxs={currentWalletTxs}
+                isDisabledButton={isDisabledButton}
+                currentAddress={currentAddress}
+                handleChangeActiveTab={handleChangeActiveTab}
+                activeTab={activeTab}
                 currentWalletTxsHasNextPage={currentWalletTxsHasNextPage}
                 />
             )}
 
-            {pageModel == 'ViewToken' && ( 
-              <AoToken 
+            {pageModel == 'ViewToken' && (
+              <AoToken
                 encryptWalletDataKey={encryptWalletDataKey}
-                currentAddress={currentAddress} 
+                currentAddress={currentAddress}
                 chooseToken={chooseToken}
                 myAoTokensBalance={myAoTokensBalance}
                 page={page}
@@ -1330,7 +1332,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                 />
             )}
 
-            {(pageModel == 'ReceiveMoney' || pageModel == 'ReceiveMoneyAO') && ( 
+            {(pageModel == 'ReceiveMoney' || pageModel == 'ReceiveMoneyAO') && (
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item>
                   <QRCode value={currentAddress} size={180} />
@@ -1353,10 +1355,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {(pageModel == 'ScanQRCode') && ( 
+            {(pageModel == 'ScanQRCode') && (
               <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
                 <Grid item container justifyContent="center" alignItems="center">
-                  {platform && platform == "web" && (<video ref={videoQrCodeRef} width="80%" height="350px" autoPlay />)}                  
+                  {platform && platform == "web" && (<video ref={videoQrCodeRef} width="80%" height="350px" autoPlay />)}
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
@@ -1376,7 +1378,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {pageModel == 'SendMoneySelectContact' && ( 
+            {pageModel == 'SendMoneySelectContact' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                     <Grid container spacing={2}>
@@ -1410,7 +1412,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               </CustomAvatar>
                               <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress({name: contactsAll[Address], address: Address})}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1420,8 +1422,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   {contactsAll[Address]}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -1429,7 +1431,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   }}>
                                     {formatHash(Address, 10)}
                                   </Typography>
-                                  
+
                                 </Box>
                               </Box>
                             </Box>
@@ -1444,14 +1446,14 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && ( 
+            {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
                     <Grid item xs={12} sx={{ pb: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
                           <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                             >
-                            <Typography sx={{ 
+                            <Typography sx={{
                               color: 'text.primary',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
@@ -1461,8 +1463,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                              {t('Send to')}
                             </Typography>
                             <Box sx={{ display: 'flex', mt: 1}}>
-                              <Typography variant='body2' sx={{ 
-                                color: `primary.dark`, 
+                              <Typography variant='body2' sx={{
+                                color: `primary.dark`,
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',
@@ -1493,10 +1495,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                       />
                       <ThemeProvider theme={themeSlider}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
-                          <Slider size="small" 
+                          <Slider size="small"
                                 disabled={isDisabledButton}
-                                defaultValue={0} 
-                                aria-labelledby="small-slider" 
+                                defaultValue={0}
+                                aria-labelledby="small-slider"
                                 min={0}
                                 max={100}
                                 onChange={( _ , newValue: number | number[])=>{
@@ -1513,7 +1515,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   else {
                                     setSendMoneyAmount( String(Number(result).toFixed(4)) )
                                   }
-                                }} 
+                                }}
                                 sx={{m: 0, p: 0, width: '90%' }}
                                 />
                         </Box>
@@ -1530,31 +1532,31 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                       <Button sx={{mt: 8}} fullWidth disabled={
                         (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
                         ||
-                        (isDisabledButton)                  
+                        (isDisabledButton)
                         } variant='contained' onClick={()=>handleWalletSendMoney()}>
                         {uploadingButton}
                       </Button>
                     </Box>
                   </Grid>
                 </Grid>
-                      
+
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={isDisabledButton}
                 >
                   <CircularProgress color="inherit" size={45}/>
                 </Backdrop>
-                
+
               </Grid>
             )}
 
-            {(pageModel == 'SendMoneyInputAmountAO' || pageModel == 'SendMoneyInputAmountAOFaucet') && sendMoneyAddress && ( 
+            {(pageModel == 'SendMoneyInputAmountAO' || pageModel == 'SendMoneyInputAmountAOFaucet') && sendMoneyAddress && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
                     <Grid item xs={12} sx={{ py: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', px: 0}}>
                           <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} >
-                            <Typography sx={{ 
+                            <Typography sx={{
                               color: 'text.primary',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
@@ -1564,8 +1566,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               {t('Send to')}
                             </Typography>
                             <Box sx={{ display: 'flex'}}>
-                              <Typography variant='body2' sx={{ 
-                                color: `primary.dark`, 
+                              <Typography variant='body2' sx={{
+                                color: `primary.dark`,
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',
@@ -1574,7 +1576,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               }}>
                                 {sendMoneyAddress.address}
                               </Typography>
-                              
+
                             </Box>
                           </Box>
                         </Box>
@@ -1597,10 +1599,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                       />
                       <ThemeProvider theme={themeSlider}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
-                          <Slider size="small" 
+                          <Slider size="small"
                                 disabled={isDisabledButton}
-                                defaultValue={0} 
-                                aria-labelledby="small-slider" 
+                                defaultValue={0}
+                                aria-labelledby="small-slider"
                                 min={0}
                                 max={100}
                                 onChange={( _ , newValue: number | number[])=>{
@@ -1616,7 +1618,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   else {
                                     setSendMoneyAmount( String(Number(result).toFixed(4)) )
                                   }
-                                }} 
+                                }}
                                 sx={{m: 0, p: 0, width: '90%' }}
                                 />
                         </Box>
@@ -1642,25 +1644,25 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                       <Button sx={{mt: 8}} fullWidth disabled={
                         (sendMoneyAddress && sendMoneyAddress.address && Number(sendMoneyAmount) > 0 && (Number(currentFeeAO) + Number(sendMoneyAmount)) < Number(chooseTokenBalance) ? false : true)
                         ||
-                        (isDisabledButton)                  
+                        (isDisabledButton)
                         } variant='contained' onClick={()=>handleWalletSendMoneyAO()}>
                         {uploadingButton}
                       </Button>
                     </Box>
                   </Grid>
                 </Grid>
-                      
+
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={isDisabledButton}
                 >
                   <CircularProgress color="inherit" size={45}/>
                 </Backdrop>
-                
+
               </Grid>
             )}
 
-            {pageModel == 'ManageAssets' && ( 
+            {pageModel == 'ManageAssets' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                     <Grid container spacing={2}>
@@ -1675,7 +1677,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         }}
                       />
                     </Grid>
-                    
+
                     {mySavingTokensData && mySavingTokensData.length > 0 && (
                       <Grid item xs={12} sx={{ py: 0 }}>
                           <Box sx={{ display: 'flex', alignItems: 'center', px: 2, pt: 1, pb: 3}}>
@@ -1698,7 +1700,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1708,8 +1710,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   {Token.TokenData.Name}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -1734,7 +1736,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                     })}
                     </Grid>
-                    
+
                     <Grid item xs={12} sx={{ py: 0 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', px: 2, pt: 2, pb: 3}}>
                           {t('All Assets') as string}
@@ -1755,7 +1757,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1765,8 +1767,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   {Token.TokenData.Name}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -1806,7 +1808,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                               >
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }} >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1816,8 +1818,8 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   {Token.TokenData.Name}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -1845,20 +1847,20 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                     {mySavingTokensData && mySavingTokensData.length > 0 && handleGetLeftAllTokens(allTokensData, mySavingTokensData).length == 0 && (
                       <Grid item xs={12} sx={{ py: 0 }}>
-                        <Box sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
                             justifyContent: 'center',
                             color: 'secondary.main',
-                            px: 2, 
-                            pt: 2, 
-                            pb: 3 
+                            px: 2,
+                            pt: 2,
+                            pb: 3
                         }}>
                             {t('No Assets') as string}
                         </Box>
                       </Grid>
                     )}
-                    
+
                 </Grid>
                 <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -1869,20 +1871,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {pageModel == 'SetPinCode' && ( 
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
-                  <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} setEncryptWalletDataKey={setEncryptWalletDataKey} />
-                </Grid>
-              </Grid>
+            {pageModel == 'SetPinCode' && (
+              <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} setEncryptWalletDataKey={setEncryptWalletDataKey} />
             )}
 
-            {pageModel == 'CheckPinCode' && ( 
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
-                  <CheckPinKeyboard handleWalletGoHome={handleWalletGoHome} setEncryptWalletDataKey={setEncryptWalletDataKey} />
-                </Grid>
-              </Grid>
+            {pageModel == 'CheckPinCode' && (
+              <CheckPinKeyboard handleWalletGoHome={handleWalletGoHome} setEncryptWalletDataKey={setEncryptWalletDataKey} />
             )}
 
         </ContentWrapper>

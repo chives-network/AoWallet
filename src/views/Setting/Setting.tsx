@@ -473,6 +473,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
         sx={{
           flex: 1,
           overflowY: 'auto',
+          overflowX: 'hidden',
           marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}

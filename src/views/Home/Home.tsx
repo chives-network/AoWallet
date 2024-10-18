@@ -9,8 +9,6 @@ import Setting from '../Setting/Setting'
 import Wallet from '../Wallet/Wallet'
 import MyWallet from '../MyWallet/MyWallet'
 
-
-
 const HomeModel = () => {
 
   const [currentTab, setCurrentTab] = useState<string>('Wallet')

@@ -59,7 +59,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
   const { t, i18n } = useTranslation()
 
   const contentHeightFixed = {}
-  
+
   const [model, setModel] = useState<string>('View')
   const [pageModel, setPageModel] = useState<string>('ListWallet')
   const [bottomMenus, setBottomMenus] = useState<any>([])
@@ -72,7 +72,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [importKeyValue, setImportKeyValue] = useState<string>("")
-  
+
 
   const handleWalletGoHome = () => {
     setModel('View')
@@ -82,7 +82,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
     setTitle(t('My Wallet') as string)
     setRightButtonText(t('Edit') as string)
   }
-  
+
   const LeftIconOnClick = () => {
     if(pageModel != 'ListWallet') {
       handleWalletGoHome()
@@ -104,7 +104,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
       setPageModel('ListWallet')
     }
   }
-    
+
   const [walletBalanceMap, setWalletBalanceMap] = useState<any>({})
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
   const [getWalletNicknamesData, setGetWalletNicknamesData] = useState<any>({})
@@ -122,7 +122,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
     };
 
     const intervalId = setInterval(myTask, 2 * 60 * 1000);
-    
+
     return () => clearInterval(intervalId);
 
   }, []);
@@ -130,7 +130,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
   useEffect(() => {
     const getAllWalletsData = getAllWallets(encryptWalletDataKey)
     if(getAllWalletsData == null || getAllWalletsData.length == 0)  {
-      
+
       //No wallet, and create one
       handleWalletCreate()
     }
@@ -151,7 +151,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
         walletBalanceMapItem[wallet.data.arweave.key] = currentBalance
       }));
       setWalletBalanceMap(walletBalanceMapItem)
-    };  
+    };
     processWallets();
   }, [getAllWalletsData])
 
@@ -206,7 +206,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
     setRightButtonText('')
   }
 
-  
+
 
   const handleWalletCreateWalletData = async () => {
     setIsLoading(true)
@@ -319,17 +319,17 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
         })
     }
   })
-  
+
   const handleImportWalletJsonFile = async (file: File) => {
     const jsonFileContent: string = await readFileText(file)
     const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey)
-    
+
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
         setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6), encryptWalletDataKey)
         handleWalletGoHome()
         toast.success(t('Import Json Files Success') as string, { duration: 1000, position: 'top-center' })
     }
-    else {      
+    else {
       toast.error(t('Import Json Files Failed') as string, { duration: 2500, position: 'top-center' })
       handleWalletGoHome()
     }
@@ -364,6 +364,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
         sx={{
           flex: 1,
           overflowY: 'auto',
+          overflowX: 'hidden',
           marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}
@@ -378,7 +379,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
           }}
           >
 
-          {pageModel == 'DeleteWallet' ? 
+          {pageModel == 'DeleteWallet' ?
           <Fragment>
               <Dialog
                   open={open}
@@ -402,8 +403,8 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
           :
           <Fragment></Fragment>
           }
-          
-          {getAllWalletsData && pageModel == 'ListWallet' ?  
+
+          {getAllWalletsData && pageModel == 'ListWallet' ?
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                   <Grid container spacing={2}>
@@ -422,7 +423,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                               </CustomAvatar>
                               <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSetCurrentWallet(wallet)}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -432,8 +433,8 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                                   {getWalletNicknamesData[wallet.data.arweave.key] ?? 'My Wallet'}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -441,12 +442,12 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                                   }}>
                                     {formatHash(wallet.data.arweave.key, 5)}
                                   </Typography>
-                                  
+
                                 </Box>
                               </Box>
                               <Box textAlign="right">
                                 {model == 'View' && (
-                                  <Typography variant='h6' sx={{ 
+                                  <Typography variant='h6' sx={{
                                     color: Number(walletBalanceMap[wallet.data.arweave.key]) > 0 ? 'info.dark' : 'secondary.dark',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -480,8 +481,8 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
 
                   </Grid>
               </Grid>
-                    
-              
+
+
 
               <Drawer
                 anchor={'bottom'}
@@ -537,18 +538,18 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
             <Fragment></Fragment>
           }
 
-          {pageModel == 'CreateWallet' && ( 
+          {pageModel == 'CreateWallet' && (
             <Grid container spacing={2}>
 
-              {isLoading ? 
+              {isLoading ?
               <Fragment>
                 <Grid container spacing={5}>
                   <Grid item xs={12}>
-                    <Box sx={{ 
-                      mt: 12, 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      flexDirection: 'column', 
+                    <Box sx={{
+                      mt: 12,
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexDirection: 'column',
                       justifyContent: 'center'
                     }}>
                       <CircularProgress sx={{ mb: 4 }} />
@@ -582,10 +583,10 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
             </Grid>
           )}
 
-          {pageModel == 'ImportKey' && ( 
+          {pageModel == 'ImportKey' && (
             <Grid container spacing={2}>
 
-              {isLoading ? 
+              {isLoading ?
               <Fragment>
                 <CardContent>
                     <Grid container spacing={5}>
@@ -627,25 +628,25 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                     </Box>
                   </Grid>
                 </Grid>
-                      
+
               </Fragment>
               }
-              
+
             </Grid>
           )}
 
-          {pageModel == 'ImportJsonFile' && ( 
+          {pageModel == 'ImportJsonFile' && (
             <Grid container spacing={2}>
 
-              {isLoading ? 
+              {isLoading ?
               <Fragment>
                 <Grid container spacing={5}>
                   <Grid item xs={12}>
-                    <Box sx={{ 
-                      mt: 12, 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      flexDirection: 'column', 
+                    <Box sx={{
+                      mt: 12,
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexDirection: 'column',
                       justifyContent: 'center'
                     }}>
                       <CircularProgress sx={{ mb: 4 }} />
@@ -681,7 +682,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
             </Grid>
           )}
 
-          {pageModel == 'RenameWallet' && ( 
+          {pageModel == 'RenameWallet' && (
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                   <Grid container spacing={2}>
@@ -700,11 +701,11 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                   </Box>
                 </Grid>
               </Grid>
-                    
+
             </Grid>
           )}
 
-          {pageModel == 'ExportKeyHidden' && ( 
+          {pageModel == 'ExportKeyHidden' && (
             <Grid container spacing={6}>
               <Grid item xs={12}>
                 <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
@@ -756,13 +757,13 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                   <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
                     {t("Show")}
                   </Button>
-                  
+
                 </div>
               </Grid>
             </Grid>
           )}
 
-          {pageModel == 'ExportKeyShow' && ( 
+          {pageModel == 'ExportKeyShow' && (
             <Grid container spacing={6}>
               <Grid item xs={12}>
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -804,13 +805,13 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
                   <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
                     {t("Hidden")}
                   </Button>
-                  
+
                 </div>
               </Grid>
             </Grid>
           )}
 
-          {pageModel == 'PinCode' && ( 
+          {pageModel == 'PinCode' && (
             <Grid container spacing={6}>
               <Grid item xs={12}>
                 <CheckPinKeyboard />

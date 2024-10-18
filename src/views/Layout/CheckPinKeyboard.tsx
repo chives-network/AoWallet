@@ -80,7 +80,7 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
       setInputValue(inputValue.slice(0, -1));
       setInputLength(Math.max(0, inputLength - 1));
       setHeaderTitle(t('Input Pin Code') as string)
-    } 
+    }
     else {
       if (inputLength < 6) {
         setInputValue(inputValue + num);
@@ -95,7 +95,7 @@ const CheckPinKeyboard = ({ handleWalletGoHome, setEncryptWalletDataKey } : any)
         const checkPasswordForWalletData = checkPasswordForWallet(inputValue)
 
         //console.log("checkPasswordForWalletData", checkPasswordForWalletData, inputValue)
-        
+
         if(checkPasswordForWalletData)   {
           setEncryptWalletDataKey(inputValue)
           handleWalletGoHome()
