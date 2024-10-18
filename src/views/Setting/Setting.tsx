@@ -88,7 +88,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
   const [uploadingButton, setUploadingButton] = useState<string>(`${t('Submit')}`)
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
-  
+
   const LanguageArray = [
         {name:'English', value:'en'},
         {name:'Chinese', value:'zh-CN'},
@@ -115,7 +115,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
     const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
-    
+
   }, []);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     setRightButtonText(t('QR') as string)
     setRightButtonIcon('')
   }
-  
+
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'MainSetting':
@@ -168,7 +168,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
         break
     }
   }
-  
+
   const RightButtonOnClick = () => {
     switch(pageModel) {
         case 'Contacts':
@@ -176,21 +176,21 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
           break
       }
   }
-    
+
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
 
   useEffect(() => {
     setHeaderHidden(false)
     setRightButtonIcon('')
   }, []);
-  
+
   const handleContactSave = () => {
     if(contactAddress && contactAddress.length == 43) {
         setChivesContacts(contactAddress, contactName, encryptWalletDataKey)
         handleClickContactsButton()
     }
   }
-  
+
   const handleContactDelete = (Address: string) => {
     deleteChivesContacts(Address, encryptWalletDataKey)
     handleClickContactsButton()
@@ -304,22 +304,22 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
       return true;
     };
-  
+
     if (!validateInputs()) {
-      
+
       return;
     }
-  
+
     setIsDisabledButton(true);
     setUploadingButton(t('Summitting...') as string);
-  
+
     try {
       let TokenProcessTxId: any = null;
       do {
         TokenProcessTxId = await AoCreateProcessAuto(chooseWallet.jwk);
         console.log("TokenProcessTxId", TokenProcessTxId);
       } while (TokenProcessTxId && TokenProcessTxId.length != 43);
-  
+
       const tokenInfo = {
         Name: tokenName,
         Ticker: tokenTicker,
@@ -327,7 +327,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
         Logo: tokenLogo,
         Denomination: tokenDenomination
       };
-  
+
       const createToken = async () => {
         let LoadBlueprintToken: any = await AoLoadBlueprintToken(chooseWallet.jwk, TokenProcessTxId, tokenInfo);
         console.log("handleTokenCreate LoadBlueprintToken:", LoadBlueprintToken);
@@ -335,7 +335,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
           await sleep(6000);
           LoadBlueprintToken = await AoLoadBlueprintToken(chooseWallet.jwk, TokenProcessTxId, tokenInfo);
         }
-  
+
         const AoDryRunBalance = await AoTokenBalanceDryRun(TokenProcessTxId, currentAddress);
         if (AoDryRunBalance) {
           setCounter(counter + 1);
@@ -344,7 +344,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
         }
 
       };
-  
+
       const result: any = await createToken();
       const TokenGetMap: any = await AoTokenInfoDryRun(result.Token)
       if(TokenGetMap) {
@@ -352,10 +352,10 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
         handleSelectTokenAndSave({TokenId: result.Token}, TokenGetMap)
       }
       console.log("createTokenData", createTokenData);
-  
+
       setUploadingButton(t('Submit') as string);
       setIsDisabledButton(false);
-    } 
+    }
     catch (error) {
       console.error("handleTokenCreate Error:", error);
       setUploadingButton(t('Submit') as string);
@@ -486,8 +486,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                 })
             }}
             >
-            
-            {pageModel == 'MainSetting' && ( 
+
+            {pageModel == 'MainSetting' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                     <Grid container spacing={2}>
@@ -499,7 +499,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickGeneralButton()}
                                     >
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                       color: 'text.primary',
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
@@ -509,8 +509,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     {t('General') as string}
                                     </Typography>
                                     <Box sx={{ display: 'flex'}}>
-                                    <Typography variant='body2' sx={{ 
-                                        color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -536,7 +536,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickContactsButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -546,8 +546,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Contacts') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -573,7 +573,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickSecurityPrivacyButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -583,8 +583,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Security & Privacy') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -610,7 +610,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -620,18 +620,9 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Support') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    flex: 1
-                                  }}>
-                                    {t('Contact our customer support') as string}
-                                  </Typography>
                                   <Link href={`https://discord.com/invite/aAkMH9Q3AY`} target='_blank'>
-                                    <Typography variant='body2' sx={{ 
-                                      color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                      color: `secondary.primary`,
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
@@ -641,8 +632,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     </Typography>
                                   </Link>
                                   <Link href={`https://twitter.com/aowallet`} target='_blank'>
-                                    <Typography variant='body2' sx={{ 
-                                      color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                      color: `secondary.primary`,
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
@@ -665,7 +656,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -675,8 +666,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Version') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -694,7 +685,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'General' && ( 
+            {pageModel == 'General' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                     <Grid container spacing={2}>
@@ -706,7 +697,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickLanguageButton()}
                                     >
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -716,8 +707,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     {t('Language') as string}
                                     </Typography>
                                     <Box sx={{ display: 'flex'}}>
-                                    <Typography variant='body2' sx={{ 
-                                        color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -743,7 +734,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickThemeButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -753,8 +744,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Theme') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -780,7 +771,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCurrencyButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -790,8 +781,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Currency') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -817,7 +808,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickNetworkButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -827,8 +818,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Network') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -854,7 +845,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </IconButton>
                               <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -864,8 +855,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {t('Create Token') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `secondary.primary`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -888,7 +879,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'Contacts' && ( 
+            {pageModel == 'Contacts' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                     <Grid container spacing={2}>
@@ -922,7 +913,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                               </CustomAvatar>
                               <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectContact(Address, contactsAll[Address])}
                                 >
-                                <Typography sx={{ 
+                                <Typography sx={{
                                   color: 'text.primary',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -932,8 +923,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   {contactsAll[Address]}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{ 
-                                    color: `primary.dark`, 
+                                  <Typography variant='body2' sx={{
+                                    color: `primary.dark`,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
@@ -941,7 +932,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   }}>
                                     {formatHash(Address, 10)}
                                   </Typography>
-                                  
+
                                 </Box>
                               </Box>
                               <Box textAlign="right">
@@ -961,7 +952,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'NewContact' && ( 
+            {pageModel == 'NewContact' && (
                 <Grid container spacing={2}>
                     <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                         <Grid container spacing={2}>
@@ -988,11 +979,11 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                             </Box>
                         </Grid>
                     </Grid>
-                        
+
                 </Grid>
             )}
 
-            {pageModel == 'SecurityPrivacy' && ( 
+            {pageModel == 'SecurityPrivacy' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100%)'}}>
                     <Grid container spacing={2}>
@@ -1004,7 +995,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickTermsOfUseButton()}
                                     >
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1014,8 +1005,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     {t('Terms of Use') as string}
                                     </Typography>
                                     <Box sx={{ display: 'flex'}}>
-                                    <Typography variant='body2' sx={{ 
-                                        color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -1041,7 +1032,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickPrivacyPolicyButton()}
                                     >
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1051,8 +1042,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     {t('Privacy Policy') as string}
                                     </Typography>
                                     <Box sx={{ display: 'flex'}}>
-                                    <Typography variant='body2' sx={{ 
-                                        color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -1078,7 +1069,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                 </IconButton>
                                 <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCheckPinCodeButton()}
                                     >
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1088,8 +1079,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                     {t('Change Pin Code') as string}
                                     </Typography>
                                     <Box sx={{ display: 'flex'}}>
-                                    <Typography variant='body2' sx={{ 
-                                        color: `secondary.primary`, 
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -1290,7 +1281,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
                       {createTokenData && createTokenData && (
                         <>
-                        <Typography sx={{ 
+                        <Typography sx={{
                                       color: 'text.primary',
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
@@ -1306,7 +1297,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         TokenId: {formatHash(createTokenData.TokenId, 10)}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1316,7 +1307,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         Name: {createTokenData.TokenData.Name}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1326,7 +1317,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         Ticker: {createTokenData.TokenData.Ticker}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1336,7 +1327,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         TotalSupply: {createTokenData.TokenData.TotalSupply}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1346,7 +1337,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         Version: {createTokenData.TokenData.Version}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1356,7 +1347,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         >
                         Denomination: {createTokenData.TokenData.Denomination}
                         </Typography>
-                        <Typography sx={{ 
+                        <Typography sx={{
                           color: 'text.primary',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -1372,7 +1363,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                 </Grid>
             )}
 
-            {pageModel == 'CheckPinCode' && ( 
+            {pageModel == 'CheckPinCode' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                   <CheckPinKeyboard handleWalletGoHome={handleClickSetPinCodeButton} setEncryptWalletDataKey={setEncryptWalletDataKey} />
@@ -1380,7 +1371,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'SetPinCode' && ( 
+            {pageModel == 'SetPinCode' && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                   <SetPinKeyboard setPinKeySuccess={setPinKeySuccess} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />
@@ -1388,7 +1379,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'PrivacyPolicy' && ( 
+            {pageModel == 'PrivacyPolicy' && (
               <Grid container spacing={6}>
                 <Grid item xs={12}>
                   <PrivacyPolicy />
@@ -1396,7 +1387,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
               </Grid>
             )}
 
-            {pageModel == 'TermsOfUse' && ( 
+            {pageModel == 'TermsOfUse' && (
               <Grid container spacing={6}>
                 <Grid item xs={12}>
                   <TermsofUse />

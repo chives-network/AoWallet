@@ -37,7 +37,7 @@ import { EmailListType } from '../../types/apps/emailTypes'
 
 import { OptionType } from '../../@core/components/option-menu/types'
 
-import { formatTimestampLocalTime} from '../../configs/functions';
+import { formatHash, formatTimestampLocalTime} from '../../configs/functions';
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -92,7 +92,7 @@ const ScrollWrapper = ({ children, hidden }: { children: ReactNode; hidden: bool
 const EmailList = (props: EmailListType) => {
   // ** Hook
   const { t } = useTranslation()
-  
+
   // ** Props
   const {
     store,
@@ -121,7 +121,7 @@ const EmailList = (props: EmailListType) => {
   const [starredList, setStarredList] = useState<any>({})
   const [selectedEmails, setSelectedEmails] = useState<any>({})
   const [haveReadEmails, setHaveReadEmails] = useState<any>({})
-  
+
   useEffect(()=>{
     setStarredList({})
     setSelectedEmails({})
@@ -165,7 +165,7 @@ const EmailList = (props: EmailListType) => {
     toast.success(t('Have moved to trash.') as string, { duration: 2500 })
     setSelectedEmails({})
   }
-  
+
   const handleMoveToSpam = async (id: string | null) => {
     handleMoveToFolder(id, folder, "Spam")
     toast.success(t('Have moved to spam.') as string, { duration: 2500 })
@@ -247,7 +247,7 @@ const EmailList = (props: EmailListType) => {
                 {folder}
               </Typography>
               <Typography variant="body2" >
-              Address: {currentAoAddress}
+              Address: {formatHash(currentAoAddress, 6)}
               </Typography>
               <IconButton sx={{mt: 1, ml: 1}} aria-label='capture screenshot' color='secondary' size='small' onClick={() => {
                   navigator.clipboard.writeText(currentAoAddress);
@@ -255,21 +255,6 @@ const EmailList = (props: EmailListType) => {
               }}>
                   <Icon icon='material-symbols:file-copy-outline-rounded' fontSize='inherit' />
               </IconButton>
-            </Box>
-            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-              <Input
-                size="small"
-                disabled
-                value={query}
-                placeholder={`${t(`Search`)}`}
-                onChange={e => setQuery(e.target.value)}
-                sx={{ width: '200px', '&:before, &:after': { display: 'none' } }}
-                startAdornment={
-                  <InputAdornment position='start' sx={{ color: 'text.disabled' }}>
-                    <Icon icon='mdi:magnify' fontSize='1.375rem' />
-                  </InputAdornment>
-                }
-              />
             </Box>
           </Box>
         </Box>
@@ -375,7 +360,7 @@ const EmailList = (props: EmailListType) => {
                     >
                       <Tooltip title={(FileFullStatus.Folder == "Trash" || FileFullStatus.Folder == "Spam") ? `${t(`You cannot perform operations on files in the Trash or Spam`)}` :''} arrow>
                         <Box sx={{ mr: 4, display: 'flex', overflow: 'hidden', alignItems: 'center' }}>
-                          
+
                           <Checkbox
                             onClick={e => e.stopPropagation()}
                             onChange={() => {
@@ -484,7 +469,7 @@ const EmailList = (props: EmailListType) => {
                             </IconButton>
                           </Tooltip>
                         ) : null}
-                        
+
 
                         {email && folder !== 'Spam' && folder !== 'Sent' ? (
                           <Tooltip placement='top' title='Move to Spam'>
@@ -525,7 +510,7 @@ const EmailList = (props: EmailListType) => {
             <CircularProgress color='inherit' />
           </Backdrop>
         </Box>
-        
+
         <Divider sx={{ m: '0 !important' }} />
         <Box sx={{ px: 3, py: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
