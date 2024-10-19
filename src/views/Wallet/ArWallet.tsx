@@ -57,7 +57,7 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
             <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
             </Tabs>
         </Box>
-        
+
         <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
             <Grid container spacing={2}>
 
@@ -87,9 +87,9 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                     LeftTwo = TagsMap['App-Name'] ?? TagsMap['Content-Type'] ?? 'Payment | Data'
                     RightOne = currentAddress == Tx.node.recipient ? formatHash(Tx.node.owner.address, 6) : formatHash(Tx.node.recipient, 6)
                     RightTwo = formatTimestamp(Tx.node?.block?.timestamp)
-                    Logo = 'https://web.aowallet.org/images/logo/AR.png'
+                    Logo = 'https://web.aowallet.org/images/logo/Ar.png'
                 }
-                
+
                 return (
                 <Grid item xs={12} sx={{ py: 0 }} key={index}>
                     <Card>
@@ -102,8 +102,8 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                             >
                             </CustomAvatar>
                             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                <Typography 
-                                    sx={{ 
+                                <Typography
+                                    sx={{
                                     color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -114,10 +114,10 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                                     {LeftOne}
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
-                                    <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                        color: `primary.dark`, 
+                                    <Typography
+                                    variant='body2'
+                                    sx={{
+                                        color: `primary.dark`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -131,8 +131,8 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                             </Box>
 
                             <Box textAlign="right">
-                                <Typography 
-                                    sx={{ 
+                                <Typography
+                                    sx={{
                                     color: 'secondary.main',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -148,10 +148,10 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                                     {RightOne}
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
-                                    <Typography 
-                                    variant='body2' 
-                                    sx={{ 
-                                        color: `success.secondary`, 
+                                    <Typography
+                                    variant='body2'
+                                    sx={{
+                                        color: `success.secondary`,
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
@@ -190,11 +190,11 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
 
 
 
-            
+
             </Grid>
 
         </Grid>
-                
+
         <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={isDisabledButton}

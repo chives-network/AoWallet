@@ -997,7 +997,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'https://web.aowallet.org/images/logo/AR.png'}
+                                  src={'https://web.aowallet.org/images/logo/Ar.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
