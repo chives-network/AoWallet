@@ -389,7 +389,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
       }
 
       if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs' && currentWalletTxsHasNextPage[activeTab] == true)  {
-        if(authConfig.tokenType == "Ar")  {
+        if(currentToken == "Ar")  {
           setIsDisabledButton(true)
           const allTxs = await GetArWalletAllTxs(currentAddress, activeTab, currentWalletTxsCursor)
           if(allTxs)  {
@@ -420,7 +420,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
           }
           setIsDisabledButton(false)
         }
-        if(authConfig.tokenType == "XWE")  {
+        if(currentToken == "Xwe")  {
           setIsDisabledButton(true)
           const allTxs = await getXweWalletAllTxs(currentAddress, activeTab, 0, 150)
           if(allTxs)  {
@@ -997,7 +997,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'https://web.aowallet.org/images/logo/Ar.png'}
+                                  src={'https://web.aowallet.org/images/logo/AR.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1256,7 +1256,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
               <Fragment></Fragment>
             }
 
-            {pageModel == 'AllTxs' && currentToken == "XWE" && (
+            {pageModel == 'AllTxs' && currentToken == "Xwe" && (
               <Grid container spacing={0}>
                 <Box
                   component='header'

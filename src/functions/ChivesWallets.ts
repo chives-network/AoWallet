@@ -811,7 +811,7 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
     }
     try {
         if(addressApiType && addressApiType!="" && Address && Address.length == 43)  {
-            const response = await axios.get(authConfig.backEndApi + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize, { timeout: 10000 }).then(res=>res.data)
+            const response = await axios.get(authConfig.backEndApiXwe + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize, { timeout: 10000 }).then(res=>res.data)
             const NewData: any[] = response.data.filter((record: any) => record.recipient)
             response.data = NewData
 
