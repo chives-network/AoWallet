@@ -32,7 +32,7 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage } from '../../functions/ChivesWallets'
+import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from '../../functions/ChivesWallets'
 import { BalanceMinus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
@@ -73,7 +73,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
+const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -279,8 +279,11 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [currentBalance, setCurrentBalance] = useState<string>("")
-  const [currentBalanceReservedRewards, setCurrentBalanceReservedRewards] = useState<string>("")
-  const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({})
+
+  const [currentBalanceXwe, setCurrentBalanceXwe] = useState<string>("") // Xwe
+  const [currentBalanceReservedRewards, setCurrentBalanceReservedRewards] = useState<string>("") // Xwe
+  const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({}) // Xwe
+
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
@@ -358,44 +361,35 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     const processWallets = async () => {
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
 
-        if(authConfig.tokenType == "XWE")  {
-          const currentBalanceTemp = await getWalletBalance(currentAddress);
-          if(currentBalanceTemp) {
-            setCurrentBalance(Number(currentBalanceTemp).toFixed(4).replace(/\.?0*$/, ''))
-          }
-
-          const getTxsInMemoryData = await getTxsInMemory()
-          setCurrentTxsInMemory(getTxsInMemoryData)
-          const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress)
-          if(balanceReservedRewards) {
-            setCurrentBalanceReservedRewards(balanceReservedRewards)
-          }
-
-          if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
-            const MinusBalance = BalanceMinus(Number(currentBalanceTemp) , Number(currentTxsInMemory['send'][currentAddress]))
-            setCurrentBalance(Number(MinusBalance).toFixed(4).replace(/\.?0*$/, ''))
-          }
-
+        //For Xwe
+        const currentBalanceTempXwe = await getWalletBalance(currentAddress, 'Xwe');
+        if(currentBalanceTempXwe) {
+          setCurrentBalanceXwe(Number(currentBalanceTempXwe).toFixed(4).replace(/\.?0*$/, ''))
+        }
+        const getTxsInMemoryData = await getTxsInMemory()
+        setCurrentTxsInMemory(getTxsInMemoryData)
+        const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress, 'Xwe')
+        if(balanceReservedRewards) {
+          setCurrentBalanceReservedRewards(balanceReservedRewards)
+        }
+        if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
+          const MinusBalance = BalanceMinus(Number(currentBalanceTempXwe) , Number(currentTxsInMemory['send'][currentAddress]))
+          setCurrentBalanceXwe(Number(MinusBalance).toFixed(4).replace(/\.?0*$/, ''))
         }
 
-        if(authConfig.tokenType == "AR")  {
-
-          handleGetMySavingTokensData()
-
-          const currentBalanceTemp = await getWalletBalance(currentAddress);
-          if(currentBalanceTemp) {
-            setCurrentBalance(Number(currentBalanceTemp).toFixed(4).replace(/\.?0*$/, ''))
-          }
-
-          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
-          setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
-
+        // For Ar
+        handleGetMySavingTokensData()
+        const currentBalanceTempAr = await getWalletBalance(currentAddress, 'Ar');
+        if(currentBalanceTempAr) {
+          setCurrentBalance(Number(currentBalanceTempAr).toFixed(4).replace(/\.?0*$/, ''))
         }
+        const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
+        setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
 
       }
 
       if(currentAddress && currentAddress.length == 43 && pageModel == 'AllTxs' && currentWalletTxsHasNextPage[activeTab] == true)  {
-        if(authConfig.tokenType == "AR")  {
+        if(authConfig.tokenType == "Ar")  {
           setIsDisabledButton(true)
           const allTxs = await GetArWalletAllTxs(currentAddress, activeTab, currentWalletTxsCursor)
           if(allTxs)  {
@@ -503,7 +497,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     if(pageModel == "SendMoneyInputAmount") {
       const getPriceDataFunction = async () => {
         try {
-          const getPriceData = await getPrice(50)
+          const getPriceData = await getPrice(50, currentToken)
           setCurrentFee(Number(getPriceData))
         } catch (error) {
           console.log('SendMoneyInputAmount Error:', error);
@@ -632,20 +626,25 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
   }
 
   const handleWalletSendMoney = async () => {
+    setSearchContactkeyWord('')
     setIsDisabledButton(true)
     setUploadingButton(`${t('Submitting...')}`)
-    const TxResult: any = await sendAmount(chooseWallet, sendMoneyAddress.address, String(sendMoneyAmount), [], '', "SubmitStatus", setUploadProgress);
+    const TxResult: any = await sendAmount(currentToken, chooseWallet, sendMoneyAddress.address, String(sendMoneyAmount), [], '', "SubmitStatus", setUploadProgress);
     if(TxResult && TxResult.status == 800) {
       toast.error(TxResult.statusText, { duration: 2500 })
     }
-    if(TxResult && TxResult.signature)  {
+    if(TxResult && TxResult.status == 200)  {
       toast.success(t("Successful Sent") as string, { duration: 2500 })
+      setChivesContacts(sendMoneyAddress.address, formatHash(sendMoneyAddress.address, 6), encryptWalletDataKey) //Save address to Contact
     }
+    console.log("uploadProgress TxResult", TxResult)
     setIsDisabledButton(false)
     setUploadingButton(`${t('Send')}`)
     setSendMoneyAmount('')
     handleWalletGoHome()
     console.log("uploadProgress", uploadProgress)
+
+    encryptWalletDataKey
   }
 
   const handleWalletSendMoneyAO = async () => {
@@ -849,6 +848,10 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
     setIsDisabledButton(false)
   }
 
+  const handleSwitchBlockchain = () => {
+    setCurrentToken(currentToken == 'Ar' ? 'Xwe' : 'Ar');
+  }
+
   useEffect(() => {
     if(searchAssetkeyWord.length == 43)  {
       handleSearchAoAssetOnChain()
@@ -901,17 +904,18 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         skin='light'
                         color='primary'
                         sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
-                        src={'https://web.aowallet.org/images/logo/' + authConfig.tokenName + '.png'}
+                        src={'/images/logo/' + currentToken + '.png'}
+                        onClick={()=>{handleSwitchBlockchain()}}
                       >
                       </CustomAvatar>
-                      <Typography variant="h5" mt={6}>
-                        {Number(currentBalance)} {authConfig.tokenName}
+                      <Typography variant="h5" mt={6} onClick={()=>{handleSwitchBlockchain()}} >
+                        {Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe)} {currentToken}
                       </Typography>
                       {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
                         <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='tdesign:plus' />
-                            {currentTxsInMemory['receive'][currentAddress]} {authConfig.tokenName}
+                            {currentTxsInMemory['receive'][currentAddress]} {currentToken}
                           </Box>
                         </Typography>
                       )}
@@ -919,7 +923,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='tdesign:minus' />
-                            {currentTxsInMemory['send'][currentAddress]} {authConfig.tokenName}
+                            {currentTxsInMemory['send'][currentAddress]} {currentToken}
                           </Box>
                         </Typography>
                       )}
@@ -927,7 +931,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='hugeicons:mining-02' />
-                            {Number(currentBalanceReservedRewards).toFixed(4).replace(/\.?0*$/, '')} {authConfig.tokenName}
+                            {Number(currentBalanceReservedRewards).toFixed(4).replace(/\.?0*$/, '')} {currentToken}
                           </Box>
                         </Typography>
                       )}
@@ -943,35 +947,35 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                           <Typography onClick={()=>handleClickReceiveButton()}>{t('Receive') as string}</Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=>handleClickAllTxsButton()}>
+                          <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} onClick={()=>handleClickAllTxsButton()}>
                             <History />
                           </IconButton>
                           <Typography sx={{
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
+                                        color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
                                       }}
-                                      onClick={()=>Number(currentBalance) > 0 && handleClickAllTxsButton()}>
+                                      onClick={()=>Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickAllTxsButton()}>
                             {t('Txs') as string}
                           </Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} >
+                          <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} >
                             <Casino />
                           </IconButton>
                           <Typography sx={{
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
+                                        color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
                                       }}
                                       >
                             {t('Swap') as string}
                           </Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>
-                          <IconButton disabled={Number(currentBalance) > 0 ? false : true} onClick={()=> Number(currentBalance) > 0 && handleClickSendButton()}>
+                          <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} onClick={()=> Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
                             <Send />
                           </IconButton>
                           <Typography sx={{
-                                        color: Number(currentBalance) > 0 ? `` : `secondary.dark`,
+                                        color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
                                       }}
-                                      onClick={()=>Number(currentBalance) > 0 && handleClickSendButton()}>
+                                      onClick={()=>Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
                             {t('Send') as string}
                           </Typography>
                         </Grid>
@@ -982,18 +986,18 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                           <Grid item xs={12} sx={{ py: 0 }}>
                               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                                {t('My Assets') as string}
+                                {t('My Coins') as string}
                               </Box>
                           </Grid>
 
                           <Grid item xs={12} sx={{ py: 0 }}>
                             <Card>
-                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain()}}>
                                 <CustomAvatar
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'https://web.aowallet.org/images/logo/' + authConfig.tokenName + '.png'}
+                                  src={'https://web.aowallet.org/images/logo/AR.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1020,7 +1024,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                         textAlign: 'left'
                                       }}
                                     >
-                                      {Number(currentBalance)}
+                                      {Number(currentBalance)} {authConfig.tokenName}
                                     </Typography>
                                   </Box>
                                 </Box>
@@ -1040,7 +1044,69 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                             </Card>
                           </Grid>
 
-                          {authConfig.tokenName && authConfig.tokenName == "AR" && (
+                          <Grid item xs={12} sx={{ py: 0 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain()}}>
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 0, width: 43, height: 43 }}
+                                  src={'https://web.aowallet.org/images/logo/Chives.png'}
+                                >
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                                  <Typography
+                                    sx={{
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      textAlign: 'left'
+                                    }}
+                                  >
+                                    {formatHash(currentAddress, 8)}
+                                  </Typography>
+                                  <Box sx={{ display: 'flex' }}>
+                                    <Typography
+                                      variant='body2'
+                                      sx={{
+                                        color: `primary.dark`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1,
+                                        textAlign: 'left'
+                                      }}
+                                    >
+                                      {Number(currentBalanceXwe)} {authConfig.tokenNameXwe}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                  <Typography variant='h6' sx={{
+                                    color: `info.dark`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    mr: 2,
+                                    ml: 2
+                                  }}>
+                                    {Number(currentBalanceXwe) > 0 ? Number(currentBalanceXwe).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
+
+                          {currentToken && currentToken == "Ar" && (
+                            <Grid item xs={12} sx={{ py: 0 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                                  {t('My Assets') as string}
+                                </Box>
+                            </Grid>
+                          )}
+
+                          {currentToken && currentToken == "Ar" && (
                             <Grid item xs={12} sx={{ py: 0 }}>
                               <Card>
                                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
@@ -1096,7 +1162,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                             </Grid>
                           )}
 
-                          {mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
+                          {currentToken && currentToken == "Ar" && mySavingTokensData && mySavingTokensData.map((Token: any, Index: number) => {
 
                             return (
                               <Grid item xs={12} sx={{ py: 0 }} key={Index}>
@@ -1158,12 +1224,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
 
                           <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                              {isDisabledManageAssets == false && authConfig.tokenName == "AR" && (
+                              {isDisabledManageAssets == false && currentToken == "Ar" && (
                                 <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
                                   {t('Manage Assets') as string}
                                 </Button>
                               )}
-                              {isDisabledManageAssets == true && authConfig.tokenName == "AR" && (
+                              {isDisabledManageAssets == true && currentToken == "Ar" && (
                                 <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text'>
                                   {t('Loading') as string} ...
                                 </Button>
@@ -1190,7 +1256,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               <Fragment></Fragment>
             }
 
-            {pageModel == 'AllTxs' && authConfig.tokenName == "XWE" && (
+            {pageModel == 'AllTxs' && currentToken == "XWE" && (
               <Grid container spacing={0}>
                 <Box
                   component='header'
@@ -1222,7 +1288,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                 <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
                     <Grid container spacing={2}>
 
-                    {authConfig.tokenName && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
+                    {currentToken && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
 
                       return (
                         <Grid item xs={12} sx={{ py: 0 }} key={index}>
@@ -1288,7 +1354,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                       )
                     })}
 
-                    {authConfig.tokenName && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
+                    {currentToken && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
                       <Grid item xs={12} sx={{ py: 0 }}>
                         <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
                           {t('No Record')}
@@ -1310,7 +1376,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
               </Grid>
             )}
 
-            {pageModel == 'AllTxs' && authConfig.tokenName == "AR" && (
+            {pageModel == 'AllTxs' && currentToken == "Ar" && (
               <ArWallet
                 currentWalletTxs={currentWalletTxs}
                 isDisabledButton={isDisabledButton}
@@ -1349,7 +1415,12 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                     {t('Copy') as string}
                   </Button>
                 </Grid>
-                <Grid item sx={{ mt: 8, width: '100%' }}>
+                <Grid item>
+                  <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '1rem !important' }}>
+                    {currentToken == 'Ar' ? 'Arweave Blockchain' : 'Chivesweave Blockchain'} {currentToken}
+                  </Typography>
+                </Grid>
+                <Grid item sx={{ mt: 4, width: '100%' }}>
                   <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={()=>handleAddressShare()}>
                   {t('Share') as string}
                   </Button>
@@ -1507,7 +1578,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                                   if (Array.isArray(newValue)) {
                                     newValue = newValue[0];
                                   }
-                                  const TotalLeft = BalanceMinus(Number(currentBalance), Number(currentFee))
+                                  const TotalLeft = BalanceMinus(Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe), Number(currentFee))
                                   const MultiValue = newValue / 100
                                   const result = BalanceTimes(Number(TotalLeft), MultiValue)
                                   if(newValue == 100) {
@@ -1523,7 +1594,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                         </Box>
                       </ThemeProvider>
                       <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                        {t('Max')}: {currentBalance} {authConfig.tokenName}
+                        {t('Max')}: {currentToken == 'Ar' ? currentBalance : currentBalanceXwe} {currentToken}
                       </Typography>
                       <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
                         {t('Fee')}: {currentFee}
@@ -1532,7 +1603,7 @@ const Wallet = ({ setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisab
                   <Grid item xs={12} sx={{ py: 1 }}>
                     <Box sx={{width: '100%', mr: 2}}>
                       <Button sx={{mt: 8}} fullWidth disabled={
-                        (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentBalance) ? false : true)
+                        (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) ? false : true)
                         ||
                         (isDisabledButton)
                         } variant='contained' onClick={()=>handleWalletSendMoney()}>

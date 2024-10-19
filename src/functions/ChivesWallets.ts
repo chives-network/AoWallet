@@ -18,6 +18,7 @@ import axios from 'axios'
 import authConfig from '../configs/auth'
 
 const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
+const chivesweave = Arweave.init(urlToSettings(authConfig.backEndApiXwe))
 
 const chivesWallets: string = authConfig.chivesWallets
 const chivesCurrentWallet: string = authConfig.chivesCurrentWallet
@@ -35,7 +36,7 @@ const chivesAllAoFaucets: string = authConfig.chivesAllAoFaucets
 export function calculateSHA256(input: string) {
     const hash = crypto.createHash('sha256');
     hash.update(input);
-    
+
     return hash.digest('hex');
 }
 
@@ -64,11 +65,11 @@ export function DecryptWalletDataAES256GCMV1(encrypted: string, key: string) {
         decipher.setAuthTag(Buffer.from(tag, 'hex'));
         let decrypted = decipher.update(encryptedText, 'hex', 'utf-8');
         decrypted += decipher.final('utf-8');
-    
+
         return decrypted;
     }
     catch(error: any) {
-        
+
         return ''
     }
 }
@@ -85,14 +86,14 @@ export function isSetPasswordForWallet() {
             return true
         }
     }
-    
+
     return true
 }
 
 export function setPasswordForWallet(encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
         const NanoId = getNanoid(32)
-        const DecryptWalletData = EncryptWalletDataAES256GCMV1(NanoId as string, encryptWalletDataKey)  
+        const DecryptWalletData = EncryptWalletDataAES256GCMV1(NanoId as string, encryptWalletDataKey)
         window.localStorage.setItem(chivesIsSetPassword, DecryptWalletData)
         if(authConfig.isChromeExtension && chrome && chrome.storage && chrome.storage.sync)   {
             chrome.storage.sync.set({ [chivesIsSetPassword]: DecryptWalletData }, () => {
@@ -104,28 +105,28 @@ export function setPasswordForWallet(encryptWalletDataKey: string) {
 
 export function checkPasswordForWallet(encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)  
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, encryptWalletDataKey)  
+        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, encryptWalletDataKey)
         if(DecryptWalletData && DecryptWalletData.length == 32)  {
 
             return true
         }
         else {
-            
+
             return false
         }
-    } 
+    }
 
     return false
 }
 
 export function resetPasswordForWallet(oldKey: string, newKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)  
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, oldKey)  
+        const chivesIsSetPasswordData = window.localStorage.getItem(chivesIsSetPassword)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesIsSetPasswordData as string, oldKey)
         if(DecryptWalletData && DecryptWalletData.length == 32)  {
-            
-            const EncryptWalletData = EncryptWalletDataAES256GCMV1(DecryptWalletData as string, newKey)  
+
+            const EncryptWalletData = EncryptWalletDataAES256GCMV1(DecryptWalletData as string, newKey)
             window.localStorage.setItem(chivesIsSetPassword, EncryptWalletData)
             if(authConfig.isChromeExtension && chrome && chrome.storage && chrome.storage.sync)   {
                 chrome.storage.sync.set({ [chivesIsSetPassword]: EncryptWalletData }, () => {
@@ -136,7 +137,7 @@ export function resetPasswordForWallet(oldKey: string, newKey: string) {
             return true
         }
         else {
-            
+
             return false
         }
     }
@@ -148,8 +149,8 @@ export function resetPasswordForWallet(oldKey: string, newKey: string) {
 
 export function resetChivesWalletsEncryptedKey(oldKey: string, newKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesWalletsList = window.localStorage.getItem(chivesWallets)  
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const chivesWalletsList = window.localStorage.getItem(chivesWallets)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         if(walletExists && walletExists.length > 0)  {
 
@@ -164,7 +165,7 @@ export function resetChivesWalletsEncryptedKey(oldKey: string, newKey: string) {
             return true
         }
         else {
-            
+
             return false
         }
     }
@@ -176,8 +177,8 @@ export function resetChivesWalletsEncryptedKey(oldKey: string, newKey: string) {
 
 export function resetChivesWalletNickNameEncryptedKey(oldKey: string, newKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesWalletsList = window.localStorage.getItem(chivesWalletNickname)  
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const chivesWalletsList = window.localStorage.getItem(chivesWalletNickname)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         if(walletExists && walletExists.length > 0)  {
 
@@ -192,7 +193,7 @@ export function resetChivesWalletNickNameEncryptedKey(oldKey: string, newKey: st
             return true
         }
         else {
-            
+
             return false
         }
     }
@@ -204,8 +205,8 @@ export function resetChivesWalletNickNameEncryptedKey(oldKey: string, newKey: st
 
 export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) {
     if(typeof window !== 'undefined')  {
-        const chivesWalletsList = window.localStorage.getItem(chivesContacts)  
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)    
+        const chivesWalletsList = window.localStorage.getItem(chivesContacts)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, oldKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
         if(walletExists)  {
 
@@ -220,7 +221,7 @@ export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) 
             return true
         }
         else {
-            
+
             return false
         }
     }
@@ -231,15 +232,15 @@ export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) 
 }
 
 export async function generateArWalletJsonData (encryptWalletDataKey: string) {
-    
+
     try {
         const ArWalletJsonData = await arweave.wallets.generate()
-            
+
         const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey)
 
         return ImportJsonFileWalletAddress
 
-    } 
+    }
     catch (error) {
         console.log('Error generateArWalletJsonData:', error);
     }
@@ -256,10 +257,10 @@ export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: s
     mnemonicToJwkValue.jwk = wallet
 
     //Get Wallet Data From LocalStorage
-    const chivesWalletsList = window.localStorage.getItem(chivesWallets)  
-    const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)    
+    const chivesWalletsList = window.localStorage.getItem(chivesWallets)
+    const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
     const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
-    
+
     //Check wallet exist
     const WalletExistFilter = walletExists.filter((item: any)=>item.jwk.n==wallet.n)
     console.log("WalletExistFilter", WalletExistFilter)
@@ -268,20 +269,20 @@ export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: s
         //Get Wallet Max Id
         let walletId = 0
         while (walletExists.find((w: any) => +w.id === walletId)) { walletId++ }
-        
+
         //Make walletData
         const walletData: any = {...mnemonicToJwkValue}
         walletData.id ??= walletId
         walletData.uuid ??= v4() as string
         walletData.settings ??= {}
         walletData.state ??= {"hot": true}
-    
+
         //Make Addresss From Jwk
         const key = await arweave.wallets.jwkToAddress(walletData.jwk as any)
         const publicKey = walletData.jwk.n
         walletData.data ??= {}
-        walletData.data.arweave = { key, publicKey }            
-        
+        walletData.data.arweave = { key, publicKey }
+
         //Write New Wallet Data to LocalStorage
         walletExists.push(walletData)
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(walletExists), encryptWalletDataKey)
@@ -291,7 +292,7 @@ export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: s
                 console.log('Data saved to chrome.storage:', EncryptWalletData);
             });
         }
-    
+
         //const addFileToJwkValue = await addFileToJwk('')
         //console.log("addImportDataValue:", addImportDataValue)
 
@@ -308,7 +309,7 @@ export async function addFileToJwk (keyfile: string) {
     try {
         const data = keyfile != null && keyfile != '' && JSON.parse(keyfile) as JWKInterface
 		const jwk = data || await arweave.wallets.generate()
-		
+
         return { jwk }
     } catch (error) {
       console.log('Error addFileToJwk:', error);
@@ -320,7 +321,7 @@ export function urlToSettings (url: string) {
     const protocol = obj.protocol.replace(':', '')
     const host = obj.hostname
     const port = obj.port ? parseInt(obj.port) : protocol === 'https' ? 443 : 80
-    
+
     return { protocol, host, port }
 };
 
@@ -330,7 +331,7 @@ export function getAllWallets(encryptWalletDataKey: string) {
         const chivesWalletsList = window.localStorage.getItem(chivesWallets)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
-        
+
         return walletExists
     }
 };
@@ -353,8 +354,8 @@ export function getCurrentWalletAddress(encryptWalletDataKey: string) {
                 }
                 CurrentWalletAddress = walletExists[0].data.arweave.key
             }
-        }    
-        
+        }
+
         return String(CurrentWalletAddress)
     }
 };
@@ -368,7 +369,7 @@ export function getCurrentWallet(encryptWalletDataKey: string) {
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         let foundWallet = walletExists.find((wallet: any) => wallet.data.arweave.key === CurrentWalletAddress);
-        
+
         if(foundWallet == undefined && walletExists && walletExists[0] && walletExists[0].data && walletExists[0].data.arweave && walletExists[0].data.arweave.key) {
             foundWallet = walletExists[0]
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(walletExists[0].data.arweave.key, encryptWalletDataKey)
@@ -390,7 +391,7 @@ export function setCurrentWallet(Address: string, encryptWalletDataKey: string) 
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         const foundWallet = walletExists.find((wallet: any) => wallet.data.arweave.key === Address);
-        
+
         if(foundWallet && foundWallet.data && foundWallet.data.arweave && foundWallet.data.arweave.key) {
             const EncryptWalletData = EncryptWalletDataAES256GCMV1(Address, encryptWalletDataKey)
             window.localStorage.setItem(chivesCurrentWallet, EncryptWalletData)
@@ -419,7 +420,7 @@ export function setWalletNickname(Address: string, Nickname: string, encryptWall
             });
         }
     }
-    
+
     return true
 }
 
@@ -428,7 +429,7 @@ export function getWalletNicknames(encryptWalletDataKey: string) {
         const chivesWalletNicknameData = window.localStorage.getItem(chivesWalletNickname)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletNicknameData as string, encryptWalletDataKey)
         const chivesWalletNicknameObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         return chivesWalletNicknameObject
     }
 }
@@ -439,7 +440,7 @@ export function getWalletById(WalletId: number, encryptWalletDataKey: string) {
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         const foundWallet = walletExists.find((wallet: any) => Number(wallet.id) === WalletId);
-        
+
         return foundWallet
     }
 };
@@ -450,7 +451,7 @@ export function getWalletByUuid(Uuid: string, encryptWalletDataKey: string) {
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         const foundWallet = walletExists.find((wallet: any) => wallet.uuid === Uuid);
-        
+
         return foundWallet
     }
 };
@@ -461,7 +462,7 @@ export function getWalletByAddress(Address: string, encryptWalletDataKey: string
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesWalletsList as string, encryptWalletDataKey)
         const walletExists = DecryptWalletData ? JSON.parse(DecryptWalletData) : []
         const foundWallet = walletExists.find((wallet: any) => wallet.data.arweave.key === Address);
-        
+
         return foundWallet
     }
 };
@@ -479,7 +480,7 @@ export function deleteWalletById(WalletId: number, encryptWalletDataKey: string)
                 console.log('Data saved to chrome.storage:', EncryptWalletData);
             });
         }
-        
+
         return true
     }
 };
@@ -497,7 +498,7 @@ export function deleteWalletByWallet(WalletJwk: any, encryptWalletDataKey: strin
                 console.log('Data saved to chrome.storage:', EncryptWalletData);
             });
         }
-        
+
         return true
     }
 };
@@ -516,7 +517,7 @@ export function setMyAoTokens(Address: string, MyAoTokens: any, encryptWalletDat
             });
         }
     }
-    
+
     return true
 }
 
@@ -539,7 +540,7 @@ export function addMyAoToken(Address: string, TokenInfor: any, encryptWalletData
             });
         }
     }
-    
+
     return true
 }
 
@@ -559,7 +560,7 @@ export function deleteMyAoToken(Address: string, TokenId: string, encryptWalletD
             });
         }
     }
-    
+
     return true
 }
 
@@ -568,7 +569,7 @@ export function getMyAoTokens(Address: string, encryptWalletDataKey: string) {
         const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesMyAoTokensData as string, encryptWalletDataKey)
         const chivesMyAoTokensObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         return chivesMyAoTokensObject[Address] ?? []
     }
 }
@@ -587,7 +588,7 @@ export function setAllAoTokens(Address: string, AllAoTokens: any, encryptWalletD
             });
         }
     }
-    
+
     return true
 }
 
@@ -596,7 +597,7 @@ export function getAllAoTokens(Address: string, encryptWalletDataKey: string) {
         const chivesAllAoTokensData = window.localStorage.getItem(chivesAllAoTokens)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllAoTokensData as string, encryptWalletDataKey)
         const chivesAllAoTokensObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         return chivesAllAoTokensObject[Address] ?? []
     }
 }
@@ -616,7 +617,7 @@ export function setAllAoFaucets(Address: string, AllAoFaucets: any, encryptWalle
             });
         }
     }
-    
+
     return true
 }
 
@@ -625,7 +626,7 @@ export function getAllAoFaucets(Address: string, encryptWalletDataKey: string) {
         const chivesAllAoFaucetsData = window.localStorage.getItem(chivesAllAoFaucets)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllAoFaucetsData as string, encryptWalletDataKey)
         const chivesAllAoFaucetsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         return chivesAllAoFaucetsObject[Address] ?? []
     }
 }
@@ -644,7 +645,7 @@ export function setMyAoFaucetTokenBalance(Address: string, MyAoFaucetTokenBalanc
             });
         }
     }
-    
+
     return true
 }
 
@@ -653,7 +654,7 @@ export function getMyAoFaucetTokenBalance(Address: string, encryptWalletDataKey:
         const chivesMyAoFaucetTokenBalanceData = window.localStorage.getItem("chivesMyAoFaucetTokenBalance")
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesMyAoFaucetTokenBalanceData as string, encryptWalletDataKey)
         const chivesMyAoFaucetTokenBalanceObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         return chivesMyAoFaucetTokenBalanceObject[Address] ?? []
     }
 }
@@ -664,7 +665,7 @@ export function setTokenAllHolderTxs(Address: string, AllHolderTxs: any, encrypt
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(AllHolderTxs), encryptWalletDataKey)
         window.localStorage.setItem("chivesAllHolderTxs____" + calculateSHA256(Address), EncryptWalletData)
     }
-    
+
     return true
 }
 
@@ -673,59 +674,90 @@ export function getTokenAllHolderTxs(Address: string, encryptWalletDataKey: stri
         const chivesAllHolderTxsData = window.localStorage.getItem("chivesAllHolderTxs____" + calculateSHA256(Address))
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllHolderTxsData as string, encryptWalletDataKey)
         const chivesAllHolderTxsObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : undefined
-        
+
         return chivesAllHolderTxsObject
     }
 }
 
-export async function getWalletBalance(Address: string) {    
+export async function getWalletBalance(Address: string, tokenType: string) {
     try {
+        if(tokenType == 'Xwe')  {
 
-        return arweave.ar.winstonToAr(await arweave.wallets.getBalance(Address))
-    } 
-    catch (e) { 
-        console.warn('getWalletBalance failed') 
+          return chivesweave.ar.winstonToAr(await chivesweave.wallets.getBalance(Address))
+        }
+        else {
+
+          return arweave.ar.winstonToAr(await arweave.wallets.getBalance(Address))
+        }
+    }
+    catch (e) {
+        console.warn('getWalletBalance failed')
     }
 }
 
-export async function getWalletBalanceWinston(Address: string) {
+export async function getWalletBalanceWinston(Address: string, tokenType: string) {
     try {
+      if(tokenType == 'Xwe')  {
+
+        return await chivesweave.wallets.getBalance(Address)
+      }
+      else {
 
         return await arweave.wallets.getBalance(Address)
-    } 
-    catch (e) { 
-        console.warn('getWalletBalance failed') 
+      }
+    }
+    catch (e) {
+        console.warn('getWalletBalance failed')
     }
 }
 
-export async function getPrice(byteSize: number) {
+export async function getPrice(byteSize: number, tokenType: string) {
     try {
+      if(tokenType == 'Xwe')  {
+
+        return chivesweave.ar.winstonToAr(await chivesweave.transactions.getPrice(byteSize))
+      }
+      else {
 
         return arweave.ar.winstonToAr(await arweave.transactions.getPrice(byteSize))
-    } 
-    catch (e) { 
-        console.warn('getWalletBalance failed') 
+      }
+    }
+    catch (e) {
+        console.warn('getWalletBalance failed')
     }
 }
 
-export async function getPriceWinston(byteSize: number) {
+export async function getPriceWinston(byteSize: number, tokenType: string) {
     try {
+      if(tokenType == 'Xwe')  {
+
+        return await chivesweave.transactions.getPrice(byteSize)
+      }
+      else {
 
         return await arweave.transactions.getPrice(byteSize)
-    } 
-    catch (e) { 
-        console.warn('getWalletBalance failed') 
+      }
+    }
+    catch (e) {
+        console.warn('getWalletBalance failed')
     }
 }
 
-export async function getWalletBalanceReservedRewards(Address: string) {
+export async function getWalletBalanceReservedRewards(Address: string, tokenType: string) {
     try {
+      if(tokenType == 'Xwe')  {
+        const reserved_rewards_total = await axios.get(authConfig.backEndApiXwe + '/wallet/' + Address + '/reserved_rewards_total', { timeout: 10000 } ).then(res=>res.data);
+
+        return arweave.ar.winstonToAr(reserved_rewards_total)
+      }
+      else {
         const reserved_rewards_total = await axios.get(authConfig.backEndApi + '/wallet/' + Address + '/reserved_rewards_total', { timeout: 10000 } ).then(res=>res.data);
 
         return arweave.ar.winstonToAr(reserved_rewards_total)
-    } 
-    catch (e) { 
-        console.warn('getWalletBalance failed') 
+      }
+    }
+    catch (e) {
+        console.warn('getWalletBalance failed')
     }
 }
 
@@ -750,13 +782,13 @@ export async function getTxsInMemory() {
                         ReceiveTxsInMemory[item.recipient] = Number(item.quantity.xwe)
                     }
                 }
-                
+
                 return {send: SendTxsInMemory, receive: ReceiveTxsInMemory}
             }
         }
-    } 
-    catch (e) { 
-        console.warn('getTxsInMemory failed') 
+    }
+    catch (e) {
+        console.warn('getTxsInMemory failed')
     }
 }
 
@@ -782,23 +814,23 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
             const response = await axios.get(authConfig.backEndApi + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize, { timeout: 10000 }).then(res=>res.data)
             const NewData: any[] = response.data.filter((record: any) => record.recipient)
             response.data = NewData
-            
+
             return response
         }
-    } 
-    catch (e) { 
-        console.warn('getXweWalletAllTxs failed') 
+    }
+    catch (e) {
+        console.warn('getXweWalletAllTxs failed')
     }
 
 }
 
 export function winstonToAr(winston: string) {
-    
+
     return arweave.ar.winstonToAr(winston)
 }
 
 export function arToWinston(ar: string) {
-    
+
     return arweave.ar.arToWinston(ar)
 }
 
@@ -854,8 +886,10 @@ export async function readFileText(file: File): Promise<string> {
     });
 }
 
-export async function sendAmount(walletData: any, target: string, amount: string, tags: any, data: string | Uint8Array | ArrayBuffer | undefined, fileName: string, setUploadProgress: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>) {
-    const quantity = amount && amount.length > 0 && amount != "" ? arweave.ar.arToWinston(new BigNumber(amount).toString()) : '0' ;
+export async function sendAmount(currentToken: string, walletData: any, target: string, amount: string, tags: any, data: string | Uint8Array | ArrayBuffer | undefined, fileName: string, setUploadProgress: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>) {
+
+    const ArweaveOrChivesweaveProvider = currentToken == 'Ar' ? arweave : chivesweave;
+    const quantity = amount && amount.length > 0 && amount != "" ? ArweaveOrChivesweaveProvider.ar.arToWinston(new BigNumber(amount).toString()) : '0' ;
 
     //Check Fee and Send Amount must smaller than wallet balance
 
@@ -864,35 +898,35 @@ export async function sendAmount(walletData: any, target: string, amount: string
 	    txSettings.target = target
         txSettings.quantity = quantity
     }
-	if (data && data != undefined && data != '') { txSettings.data = data }
+	  if (data && data != undefined && data != '') { txSettings.data = data }
 
     //Make Tx Data
-    const tx = await arweave.createTransaction(txSettings)
-    
+    const tx = await ArweaveOrChivesweaveProvider.createTransaction(txSettings)
+
     //Add Tags
     for (const tag of tags || []) { tx.addTag(tag.name, tag.value) }
-    
-    await arweave.transactions.sign(tx, walletData.jwk);
-    const currentFee = await getPriceWinston(Number(tx.data_size))
-    const currentBalance = await getWalletBalanceWinston(walletData.data.arweave.key)
+
+    await ArweaveOrChivesweaveProvider.transactions.sign(tx, walletData.jwk);
+    const currentFee = await getPriceWinston(Number(tx.data_size), currentToken)
+    const currentBalance = await getWalletBalanceWinston(walletData.data.arweave.key, currentToken)
 
     if(Number(currentBalance) < (Number(currentFee) + Number(quantity)) )       {
 
         return { status: 800, statusText: 'Insufficient balance, need: ' + winstonToAr(String(Number(currentFee) + Number(quantity))) }
     }
-    
+
     //console.log('currentBalance', currentBalance);
     //console.log('currentFee', currentFee);
     //console.log('quantity', Number(quantity));
 
-    if (!tx.chunks?.chunks?.length) { 
-		const txResult = await arweave.transactions.post(tx);
+    if (!tx.chunks?.chunks?.length) {
+		const txResult = await ArweaveOrChivesweaveProvider.transactions.post(tx);
 		if(txResult.status==200) {
 			console.log('Transaction sent', txResult);
-            
+
             //Update the upload process
             fileName && fileName.length > 0 && setUploadProgress((prevProgress) => {
-                
+
                 return {
                 ...prevProgress,
                 [fileName]: 100,
@@ -900,40 +934,40 @@ export async function sendAmount(walletData: any, target: string, amount: string
             });
 		}
 		else if(txResult.status==400) {
-			console.error(txResult.statusText, txResult); 
+			console.error(txResult.statusText, txResult);
 		}
-		else {			
+		else {
 			console.log('Unknow error', txResult);
 		}
 
-		return txResult; 
+		return txResult;
 	}
 
-    //Upload Data if have Chunks
-    const UploadChunksStatus: any = {}
-    const uploader = await arweave.transactions.getUploader(tx)
-	const storageKey = 'uploader:' + tx.id
+  //Upload Data if have Chunks
+  const UploadChunksStatus: any = {}
+  const uploader = await ArweaveOrChivesweaveProvider.transactions.getUploader(tx)
+  const storageKey = 'uploader:' + tx.id
 	localStorage.setItem(storageKey, JSON.stringify(uploader))
 	UploadChunksStatus[tx.id] ??= {}
 	UploadChunksStatus[tx.id].upload = 0
     console.log('Begin upload data txid', tx.id)
-    
+
     //console.log('uploader begin: ', uploader)
     let uploadRecords = 0
 	while (!uploader.isComplete) {
 		await uploader.uploadChunk()
 		localStorage.setItem(storageKey, JSON.stringify(uploader))
 		UploadChunksStatus[tx.id].upload = uploader.pctComplete
-        
+
         //Update the upload process
         fileName && fileName.length > 0 && setUploadProgress((prevProgress) => {
-            
+
             return {
             ...prevProgress,
             [fileName]: uploader.pctComplete,
             };
         });
-		
+
         //console.log("uploader processing: ",uploadRecords, uploader.pctComplete)
         uploadRecords = uploadRecords + 1
 	}
@@ -941,10 +975,10 @@ export async function sendAmount(walletData: any, target: string, amount: string
 		localStorage.removeItem(storageKey)
 		setTimeout(() => delete UploadChunksStatus[tx.id], 1000)
 		console.log('Transaction sent: ', tx)
-        
+
         //Update the upload process
         fileName && fileName.length > 0 && setUploadProgress((prevProgress) => {
-            
+
             return {
             ...prevProgress,
             [fileName]: uploader.pctComplete,
@@ -958,25 +992,25 @@ export async function sendAmount(walletData: any, target: string, amount: string
     //console.log('uploader end: ', uploader)
     //console.log('UploadChunksStatus: ', UploadChunksStatus)
 
-    return tx; 
+    return tx;
 }
 
 export function encode (text: string) {
 	const encoder = new TextEncoder()
-	
+
     return encoder.encode(text)
 }
 
 export function decode (buffer: BufferSource) {
 	const decoder = new TextDecoder()
-	
+
     return decoder.decode(buffer)
 }
 
 export async function getHash (data: string | Uint8Array) {
 	const content = typeof data === 'string' ? encode(data) : data
 	const buffer = await window.crypto.subtle.digest('SHA-256', content)
-    
+
     //@ts-ignore
     return [...new Uint8Array(buffer)].map(x => x.toString(16).padStart(2, '0')).join('')
 }
@@ -999,9 +1033,9 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
                     BundleTypeMap[BundleTypeArray[index]] = item?.id
                 }
             })
-            const dataContent = data.slice(-1)[0]  
+            const dataContent = data.slice(-1)[0]
             console.log("dataContent", dataContent)
-            console.log("BundleTypeMap", BundleTypeMap)  
+            console.log("BundleTypeMap", BundleTypeMap)
             const jsonData = JSON.parse(dataContent['data'])
             if(BundleTypeMap['Avatar'] != undefined && BundleTypeMap['Avatar'].length == 43)      {
                 jsonData['Avatar'] = BundleTypeMap['Avatar']
@@ -1011,21 +1045,21 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
             }
             const jsonDataNew: any[] = [{...dataContent, ['data']: JSON.stringify(jsonData)}]
             console.log("jsonDataNew____________________", jsonDataNew)
-            const dataContentList = await Promise.all(jsonDataNew.map((item: any) => createDataItem(walletData, item)))  
-            console.log("dataContentList", dataContentList)  
-            dataItems = dataItemsList.concat(dataContentList) 
-            console.log("dataItems______________________", dataItems)  
-            
+            const dataContentList = await Promise.all(jsonDataNew.map((item: any) => createDataItem(walletData, item)))
+            console.log("dataContentList", dataContentList)
+            dataItems = dataItemsList.concat(dataContentList)
+            console.log("dataItems______________________", dataItems)
+
         }
         else {
             //Other Case
             dataItems = await Promise.all(data.map((item: any) => createDataItem(walletData, item)))
         }
-        
+
         //dataItems.map((item: any)=>{
         //    console.log("getProcessedData item id:", item?.id)
         //})
-        
+
         const trustedAddresses = walletAddress ? [walletAddress] : []
         const deduplicated = await deduplicate(dataItems, trustedAddresses)
         const deduplicatedDataItems = dataItems.map((item: any, i: number) => deduplicated[i] || item)
@@ -1039,15 +1073,15 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
                 const manifest = generateManifest(paths, deduplicatedDataItems, index)
                 bundleItems.push(await createDataItem(walletData, { ...manifest }))
                 console.log("getProcessedData bundleItems 2:", bundleItems)
-            } 
-            catch (e) { 
-                console.warn('manifest generation failed') 
+            }
+            catch (e) {
+                console.warn('manifest generation failed')
             }
         }
-        
+
         return (await createBundle(walletData, bundleItems)).getRaw()
     }
-    else { 
+    else {
         throw 'multiple files unsupported for '
     }
 }
@@ -1059,13 +1093,13 @@ async function deduplicate (transactions: ArDataItemParams[], trustedAddresses?:
 		({ tx, hash: tx.tags?.find(tag => tag.name === 'File-Hash')?.value || await getHash(tx.data) }))).results
 	const chunks = [] as typeof entries[]
 	while (entries.length) { chunks.push(entries.splice(0, 500)) }
-	
+
     return (await PromisePool.for(chunks).withConcurrency(3).process(async chunk => {
         const checkResultOnMainnet: any[] = await axios.get(authConfig.backEndApi + '/statistics_network', { timeout: 10000 })
                                 .then(() => {
-                                        
+
                                         //console.log("deduplicate in lib", res.data)
-                                        
+
                                         return []
                                     }
                                 )
@@ -1084,7 +1118,7 @@ async function deduplicate (transactions: ArDataItemParams[], trustedAddresses?:
 
 
 export function hasMatchingTags(requiredTags: { name: string; value: string }[], existingTags: { name: string; value: string }[]): boolean {
-	
+
     return !requiredTags.find(requiredTag => !existingTags.find(existingTag =>
 		existingTag.name === requiredTag.name && existingTag.value === requiredTag.value))
 }
@@ -1098,7 +1132,7 @@ export async function getSize (data: any, processedData: any): Promise<number> {
 	const processed = processedData
 	if (processed == undefined) { throw 'Error' }
 	if (typeof processed === 'string') { return data.length }
-	
+
     return ArrayBuffer.isView(processed) ? processed?.byteLength : new Uint8Array(processed).byteLength
 }
 
@@ -1113,7 +1147,7 @@ export function generateManifest (localPaths: string[], transactions: Array<{ id
 		paths[path] = { id }
 	})
 	const indexParam = index ? { index: { path: index } } : {}
-	
+
     return {
 		data: JSON.stringify({
 			manifest: 'chivesweave/paths',
@@ -1133,7 +1167,7 @@ async function createDataItem (walletData: any, item: ArDataItemParams) {
     const anchor = arweave.utils.bufferTob64(crypto.getRandomValues(new Uint8Array(32))).slice(0, 32)
     const dataItem = createData(data, signer, { tags, target, anchor })
     await dataItem.sign(signer)
-    
+
     return dataItem
 }
 
@@ -1145,7 +1179,7 @@ export async function createDataItemSigner (walletDataJwk: any, item: ArDataItem
     const anchor = arweave.utils.bufferTob64(crypto.getRandomValues(new Uint8Array(32))).slice(0, 32)
     const dataItem = createData(data, signer, { tags, target, anchor })
     await dataItem.sign(signer)
-    
+
     return {
         id: dataItem.id,
         raw: dataItem.getRaw()
@@ -1157,7 +1191,7 @@ async function createBundle (walletData: any, items: Awaited<ReturnType<typeof c
     // @ts-ignore
     const { bundleAndSignData, signers } = await import('../../scripts/arbundles')
     const signer = new signers.ArweaveSigner(walletData.jwk)
-    
+
     return bundleAndSignData(items, signer)
 }
 
@@ -1223,8 +1257,8 @@ export async function decryptWithPrivateKey(privateKeyJwk: any, encryptedData: s
 
 export function setChivesContacts(Address: string, Name: string, encryptWalletDataKey: string) {
     try {
-        const chivesContactsText = window.localStorage.getItem(chivesContacts)   
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)   
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)
         const chivesContactsList = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
         chivesContactsList[Address] = Name
         const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesContactsList), encryptWalletDataKey)
@@ -1244,8 +1278,8 @@ export function setChivesContacts(Address: string, Name: string, encryptWalletDa
 
 export function deleteChivesContacts(Address: string, encryptWalletDataKey: string) {
     try {
-        const chivesContactsText = window.localStorage.getItem(chivesContacts)     
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey) 
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)
         const chivesContactsList = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
         if (Address in chivesContactsList) {
             delete chivesContactsList[Address];
@@ -1267,12 +1301,12 @@ export function deleteChivesContacts(Address: string, encryptWalletDataKey: stri
 
 export function searchChivesContacts(searchValue: string, encryptWalletDataKey: string) {
     try {
-        const chivesContactsText = window.localStorage.getItem(chivesContacts)    
-        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)  
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)
+        const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)
         const chivesContactsList = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        
+
         const result: any = {};
-        
+
         for (const key in chivesContactsList) {
             if (key.toLowerCase().includes(searchValue.toLowerCase()) || chivesContactsList[key].toLowerCase().includes(searchValue.toLowerCase())) {
                 result[key] = chivesContactsList[key]
@@ -1282,7 +1316,7 @@ export function searchChivesContacts(searchValue: string, encryptWalletDataKey: 
         if(Object.keys(result).length == 0 && searchValue && searchValue.length == 43)  {
             result[searchValue] = 'Input Address'
         }
-        
+
         return result
     }
     catch (error: any) {
@@ -1292,7 +1326,7 @@ export function searchChivesContacts(searchValue: string, encryptWalletDataKey: 
 
 export function getChivesContacts(encryptWalletDataKey: string) {
     try {
-        const chivesContactsText = window.localStorage.getItem(chivesContacts)      
+        const chivesContactsText = window.localStorage.getItem(chivesContacts)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesContactsText as string, encryptWalletDataKey)
         const chivesContactsList = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
 
@@ -1306,7 +1340,7 @@ export function getChivesContacts(encryptWalletDataKey: string) {
 export function GetFileCacheStatus(Drive: any) {
     const CacheStatus: any = {}
     const FullStatus: any = {}
-    
+
     //Step 1: Database
     if(Drive && Drive.table && Drive.table.item_star && Drive.table.item_star=="Star")  {
         FullStatus['Star'] = true
@@ -1314,12 +1348,12 @@ export function GetFileCacheStatus(Drive: any) {
     if(Drive && Drive.table && Drive.table.item_label)  {
         FullStatus['Label'] = Drive.table.item_label
     }
-    
+
     //Step 2 : Local Storage Cache
     if(typeof window !== 'undefined')  {
         const TxId: string = Drive?.id
         const ChivesDriveActions = authConfig.chivesDriveActions
-        const ChivesDriveActionsList = window.localStorage.getItem(ChivesDriveActions)      
+        const ChivesDriveActionsList = window.localStorage.getItem(ChivesDriveActions)
         const ChivesDriveActionsMap: any = ChivesDriveActionsList ? JSON.parse(ChivesDriveActionsList) : {}
         if(ChivesDriveActionsMap && ChivesDriveActionsMap['Star'] && ChivesDriveActionsMap['Star'][TxId] !== undefined )  {
             CacheStatus['Star'] = ChivesDriveActionsMap['Star'][TxId];
@@ -1334,7 +1368,7 @@ export function GetFileCacheStatus(Drive: any) {
             FullStatus['Folder'] = ChivesDriveActionsMap['Folder'][TxId];
         }
 
-        const chivesTxStatusText = window.localStorage.getItem(chivesTxStatus)      
+        const chivesTxStatusText = window.localStorage.getItem(chivesTxStatus)
         const chivesTxStatusList = chivesTxStatusText ? JSON.parse(chivesTxStatusText) : []
 
         if(chivesTxStatusList && chivesTxStatusList.length > 0)  {
@@ -1351,7 +1385,7 @@ export function GetFileCacheStatus(Drive: any) {
                 if(ChivesDriveActionsMaTx && ChivesDriveActionsMaTx['Folder'] && ChivesDriveActionsMaTx['Folder'][TxId] !== undefined )  {
                     CacheStatus['Folder'] = ChivesDriveActionsMaTx['Folder'][TxId];
                     FullStatus['Folder'] = ChivesDriveActionsMaTx['Folder'][TxId];
-                }            
+                }
             })
         }
     }

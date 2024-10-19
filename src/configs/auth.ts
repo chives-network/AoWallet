@@ -1,8 +1,9 @@
 const config = {
   AppName: 'AoWallet',
-  AppVersion: '0.0.4',
-  tokenType: 'AR', // AR or XWE
-  tokenName: 'AR',
+  AppVersion: '0.0.8',
+  tokenType: 'Ar', // Ar or Xwe
+  tokenName: 'Ar',
+  tokenFullName: 'Arweave',
   backEndApi: 'https://arweave.net',
   backEndApiImage: 'https://arweave.net',
   AoConnectWebSite: "https://www.ao.link",
@@ -32,7 +33,11 @@ const config = {
   AoConnectChatRoom: 'AoConnectChatRoom',
   EncryptGrade: 'PIN',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
-  isChromeExtension: false
+  isChromeExtension: false,
+  tokenNameXwe: 'Xwe',
+  tokenFullNameXwe: 'Chivesweave',
+  backEndApiXwe: 'https://api.chivesweave.org'
 }
 
 export default config;
+

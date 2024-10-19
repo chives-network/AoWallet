@@ -62,8 +62,8 @@
   "AoToken Name": "AoToken Name",
   "AoToken Ticker": "AoToken Ticker",
   "AoToken Id": "AoToken Id",
-  "Have load all data": "Have load all data", 
-  "Wallet exist, not need import again": "Wallet exist, not need import again", 
+  "Have load all data": "Have load all data",
+  "Wallet exist, not need import again": "Wallet exist, not need import again",
   "Import Json Files Success": "Import Json Files Success",
   "Import Json Files Failed": "Import Json Files Failed",
   "Here is my wallet address": "Here is my wallet address",
@@ -116,6 +116,7 @@
   "You have already applied, please wait 24 hours and try again.": "You have already applied, please wait 24 hours and try again.",
   "Create Token": "Create Token",
   "Requirement AR": "Requirement AR",
-  "Requirement AO": "Requirement AO"
-  
+  "Requirement AO": "Requirement AO",
+  "My Coins": "My Coins"
+
 }

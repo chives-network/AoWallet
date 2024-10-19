@@ -54,7 +54,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : any) => {
+const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabledFooter } : any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
 
@@ -147,7 +147,7 @@ const MyWallet = ({ setCurrentTab, encryptWalletDataKey, setDisabledFooter } : a
     const walletBalanceMapItem: any = {}
     const processWallets = async () => {
       await Promise.all(getAllWalletsData.map(async (wallet: any) => {
-        const currentBalance = await getWalletBalance(wallet.data.arweave.key);
+        const currentBalance = await getWalletBalance(wallet.data.arweave.key, currentToken);
         walletBalanceMapItem[wallet.data.arweave.key] = currentBalance
       }));
       setWalletBalanceMap(walletBalanceMapItem)
