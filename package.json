@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build-chrome": "next build && node rename_next_folder.js",
+    "build-chrome": "next build && node script_rename.js && node script_compress.js",
     "export": "next export",
     "start": "next start",
     "lint": "next lint",
@@ -38,6 +38,7 @@
     "@reduxjs/toolkit": "1.9.5",
     "@supercharge/promise-pool": "^3.1.0",
     "@zxing/library": "^0.21.2",
+    "archiver": "^7.0.1",
     "arweave": "^1.14.4",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",

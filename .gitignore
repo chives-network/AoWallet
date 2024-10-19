@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# Chrome Extension Output File
+./AoWalletChromeExtension.zip
+
 # production
 /build
 
