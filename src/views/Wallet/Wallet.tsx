@@ -904,7 +904,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                         skin='light'
                         color='primary'
                         sx={{ width: 60, height: 60, fontSize: '1.5rem', margin: 'auto' }}
-                        src={'/images/logo/' + currentToken + '.png'}
+                        src={'https://web.aowallet.org/images/logo/' + currentToken + '.png'}
                         onClick={()=>{handleSwitchBlockchain()}}
                       >
                       </CustomAvatar>
@@ -997,7 +997,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'https://web.aowallet.org/images/logo/AR.png'}
+                                  src={'https://web.aowallet.org/images/logo/Ar.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1051,7 +1051,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                                   skin='light'
                                   color={'primary'}
                                   sx={{ mr: 0, width: 43, height: 43 }}
-                                  src={'https://web.aowallet.org/images/logo/Chives.png'}
+                                  src={'https://web.aowallet.org/images/logo/Xwe.png'}
                                 >
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -1298,7 +1298,7 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
                               skin='light'
                               color={'primary'}
                               sx={{ mr: 0, width: 38, height: 38 }}
-                              src={'https://web.aowallet.org/images/logo/Chives.png'}
+                              src={'https://web.aowallet.org/images/logo/Xwe.png'}
                             >
                             </CustomAvatar>
                             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={ async ()=>{
