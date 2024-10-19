@@ -122,7 +122,7 @@ const App = (props: ExtendedAppProps) => {
             name='description'
             content={`${themeConfig.templateName} – By AoWallet`}
           />
-          <meta name='keywords' content='AoWallet & Arweave Wallet & Chives Network' />
+          <meta name='keywords' content='AoWallet & Arweave Wallet & Chivesweve Wallet & Chives Network' />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
           <link rel="icon" type="image/png" href="/icons/icon16.png" sizes="16x16" />
           <link rel="icon" type="image/png" href="/icons/icon32.png" sizes="32x32" />

@@ -6,11 +6,11 @@ const PrivacyPolicy = () => {
       <div className="d-export-content">
         <h2 id="introduction"><span>Introduction</span></h2>
         <p>
-          <span>We, </span><strong>AoWallet & Arweave Wallet</strong><span> ("</span><strong>AoWallet & Arweave Wallet</strong><span>", "</span><strong>we</strong><span>" or "</span><strong>us</strong><span>")</span>
+          <span>We, </span><strong>AoWallet & Arweave Wallet & Chivesweve Wallet</strong><span> ("</span><strong>AoWallet & Arweave Wallet & Chivesweve Wallet</strong><span>", "</span><strong>we</strong><span>" or "</span><strong>us</strong><span>")</span>
           <span> respect your privacy and are strongly committed to keeping secure any information we obtain from you or about you. This privacy policy ("Privacy Policy") applies to the personal information that Chatbook processes in connection with Chatbook websites, software and related services (the “Services”), that link to or reference this Privacy Policy. If you have any questions about how we use your personal information, please contact </span>
           chivescoin@gmail.com
         </p>
-        
+
 
         <h2 id="what-information-we-collect"><span>What Information We Collect</span></h2>
         <p>
@@ -42,7 +42,7 @@ const PrivacyPolicy = () => {
         <ul>
           <li><span>When you sign-up or log-in to your account using other services such as Google, we collect information from the service, such as access token.</span></li>
         </ul>
-        
+
 
         <h2 id="how-we-use-your-information"><strong>How We Use Your Information</strong></h2>
         <p><strong>We use your information to promote the safety and security of our Services, including by scanning, analyzing, and reviewing content, messages and associated metadata for violations of our Terms of Service or other conditions and policies. We also use it to operate, provide, develop, and improve the Services, including for the following purposes.</strong></p>
@@ -59,7 +59,7 @@ const PrivacyPolicy = () => {
           <li><span>Promote the Service or third party services through marketing communications, contests, or promotions;</span></li>
           <li><span>For any other purposes for which you have provided the information, with your consent or at your direction.</span></li>
         </ul>
-        
+
 
         <h2 id="how-we-share-your-information"><span>How We Share Your Information</span></h2>
 
@@ -80,34 +80,34 @@ const PrivacyPolicy = () => {
 
         <h3 id="with-your-consent"><strong>With Your Consent</strong></h3>
         <p><span>Depending on where you live, we may share personal information with the proper authorization or to provide the Services you have requested or authorized. For example, if you choose to log in to our Services using a social network account, or share information from our Services to a social media service, we will share that information with those Platforms.</span></p>
-        
+
         <p><strong>Third-party content</strong>. <span>The Services may contain links to policies, functionality, or content maintained by third parties not controlled by us. We are not responsible for, and make no representations regarding, such policies, functionality, or content or any other practices or operations of such third parties.</span></p>
-        
+
 
         <h2 id="your-rights"><span>Your Rights</span></h2>
         <p><span>Depending on where you live, you may have certain rights with respect to your personal information, such as a right to know how we collect and use your personal information. You may also have a right to access, change, oppose, request a copy of your authorization, file complaints before the competent authorities, withdraw your consent, or limit our collection and use of your personal information as well as to request that we delete it, and potentially others. In certain circumstances, you can also ask us to provide additional information about our collection and use of your personal information. Please note that your exercise of certain rights may impact your ability to use some or all of </span><strong>Chatbook Services'</strong><span> features and functionalities.</span></p>
         <p><span>If you have registered for an account, you may also access, review, and update certain personal information that you have provided to us by logging into your account and using available features and functionalities. </span></p>
         <p><span>Please contact us by using the contact information provided in this Privacy Policy if you would like to exercise any of your rights. We will respond to your request consistent with applicable law and subject to proper verification.</span></p>
-        
+
 
         <h2 id="your-choices"><span>Your Choices</span></h2>
         <p><span>You can control and access some of your personal information directly through settings. For example, you can manage your API keys. Should you choose to do so, you may also delete your entire account via your settings.</span></p>
         <p><span>You may also be able to control some of the information we collect about you through your device browser settings to refuse or disable Cookies. Because each browser is different, please consult the instructions provided by your browser. Please note that you may need to take additional steps to refuse or disable certain types of Cookies. In addition, your choice to disable Cookies is specific to the particular browser or device that you are using when you disable Cookies, so you may need to separately disable Cookies for each type of browser or device. If you choose to refuse, disable, or delete Cookies, some of the functionality of the Services may no longer be available to you. Without this information, we are not able to provide you with all of the requested services.</span></p>
-        
+
 
         <h2 id="data-security"><span>Data Security</span></h2>
         <p><span>Security of your information is important to us. We maintain commercially reasonable technical, administrative, and physical security measures that are designed to protect your information from unauthorized access, theft, disclosure, modification, or loss. We regularly review our security measures to consider available new technology and methods. However, no Internet or email transmission is ever fully secure or error free. In particular, email sent to or from us may not be secure. Therefore, you should take special care in deciding what information you send to us via the Service or email. In addition, we are not responsible for circumvention of any privacy settings or security measures contained on the Service, or third-party websites.</span></p>
-        
+
 
         <h2 id="data-retention"><span>Data Retention</span></h2>
         <p><span>We retain information for as long as necessary to provide our Services and for the other purposes set out in this Privacy Policy. We also retain information when necessary to comply with contractual and legal obligations, when we have a legitimate business interest to do so (such as improving and developing our Services, and enhancing their safety, security and stability), and for the exercise or defense of legal claims.</span></p>
         <p><span>The retention periods will be different depending on the type of information, the purposes for which we use the informationand any legal requirements. For example, when we process your information to provide you with the Services, we keep this information for as long as you have an account. This information includes your profile Information, input and payment information. If you violate any of our terms, policies or guidlines, we may remove your profile Information, input and/or payment information from public view immediately but keep your information as necessary to process the violation.</span></p>
-        
+
 
         <h2 id="international-data-transfers"><span>International Data Transfers</span></h2>
         <p><span>The personal information we collect from you may be stored on a server located outside of the country where you live. We store the information we collect in secure servers located in the People's Republic of China .</span></p>
         <p><span>Where we transfer any personal information out of the country where you live, including for one or more of the purposes as set out in this Policy, we will do so in accordance with the requirements of applicable data protection laws.</span></p>
-        
+
 
         <h2 id="information-relating-to-children-under-18"><span>Information relating to children <span className="highlight">under 18</span></span></h2>
         <p><span>Our Services are not aimed at children under the age of 18. If you are 14 or older, but under 18, you should read and agree to this privacy policy together with your parents or other guardians before using our Services.</span></p>
@@ -115,11 +115,11 @@ const PrivacyPolicy = () => {
           chivescoin@gmail.com
           <span>.</span>
         </p>
-        
+
 
         <h2 id="privacy-policy-updates"><span>Privacy Policy Updates</span></h2>
         <p><span>We may update this Privacy Policy from time to time as required by law. When we update the Privacy Policy, we will notify you by updating the “Last Updated” date at the top of the new Privacy Policy, posting the new Privacy Policy, or by providing any other notice required by applicable law. We recommend that you review the Privacy Policy each time you access our Services to stay informed of our privacy practices.</span></p>
-        
+
 
         <h2 id="contact-us"><span>Contact Us</span></h2>
         <p><span>Questions, comments and requests regarding this policy should be addressed to </span>
