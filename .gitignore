@@ -13,7 +13,7 @@
 /out/
 
 # Chrome Extension Output File
-./AoWalletChromeExtension.zip
+AoWalletChromeExtension.zip
 
 # production
 /build
