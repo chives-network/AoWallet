@@ -73,7 +73,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
+const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -846,10 +846,6 @@ const Wallet = ({ currentToken, setCurrentToken, setCurrentTab, specifyTokenSend
       console.log("handleTokenSearch TokenGetMap", TokenGetMap)
     }
     setIsDisabledButton(false)
-  }
-
-  const handleSwitchBlockchain = () => {
-    setCurrentToken(currentToken == 'Ar' ? 'Xwe' : 'Ar');
   }
 
   useEffect(() => {

@@ -17,13 +17,17 @@ const HomeModel = () => {
   const [disabledFooter, setDisabledFooter] = useState<boolean>(true)
   const [encryptWalletDataKey, setEncryptWalletDataKey] = useState<string>('')
 
+  const handleSwitchBlockchain = () => {
+    setCurrentToken(currentToken == 'Ar' ? 'Xwe' : 'Ar');
+  }
+
   return (
     <Fragment>
-      {currentTab == "MyWallet" && (<MyWallet currentToken={currentToken} setCurrentToken={setCurrentToken} setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} setDisabledFooter={setDisabledFooter}/>)}
-      {currentTab == "Wallet" && (<Wallet currentToken={currentToken} setCurrentToken={setCurrentToken} setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} setDisabledFooter={setDisabledFooter} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey}/>)}
-      {currentTab == "Faucet" && (<Faucet currentToken={currentToken} setCurrentToken={setCurrentToken} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend} encryptWalletDataKey={encryptWalletDataKey} />)}
-      {currentTab == "Email" && (<Email currentToken={currentToken} setCurrentToken={setCurrentToken} encryptWalletDataKey={encryptWalletDataKey} />)}
-      {currentTab == "Setting" && (<Setting currentToken={currentToken} setCurrentToken={setCurrentToken} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />)}
+      {currentTab == "MyWallet" && (<MyWallet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} encryptWalletDataKey={encryptWalletDataKey} setDisabledFooter={setDisabledFooter}/>)}
+      {currentTab == "Wallet" && (<Wallet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} setDisabledFooter={setDisabledFooter} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey}/>)}
+      {currentTab == "Faucet" && (<Faucet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend} encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Email" && (<Email currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Setting" && (<Setting currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />)}
       <Footer Hidden={false} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend}  currentTab={currentTab} disabledFooter={disabledFooter}/>
     </Fragment>
   )

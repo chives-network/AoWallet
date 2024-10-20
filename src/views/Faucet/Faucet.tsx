@@ -16,6 +16,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CardContent from '@mui/material/CardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import toast from 'react-hot-toast'
+import axios from 'axios'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -43,7 +44,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: any) => {
+const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -58,7 +59,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
   const [chooseWallet, setChooseWallet] = useState<any>(null)
   const [chooseFaucet, setChooseFaucet] = useState<any>(null)
-  
+
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
   const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
@@ -75,7 +76,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
     setChooseFaucet(null)
     console.log("chooseWallet", chooseWallet)
   }
-  
+
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'FaucetFaucet':
@@ -84,7 +85,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
     }
   }
 
-  
+
   const RightButtonOnClick = () => {
 
     console.log("chooseFaucet", chooseFaucet)
@@ -100,7 +101,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
     }
 
     //handleWalletGoHome()
-    
+
   }
 
   const [refreshWalletData, setRefreshWalletData] = useState<number>(0)
@@ -108,14 +109,14 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
   const handleGetAllFaucetsData = async () => {
 
     const getAllAoFaucetsData = getAllAoFaucets(currentAddress, encryptWalletDataKey)
-    if(getAllAoFaucetsData) {   
+    if(getAllAoFaucetsData) {
       setAllFaucetsData(getAllAoFaucetsData)
     }
     if(getAllAoFaucetsData.length == 0) {
       setIsDisabledButton(true)
     }
     console.log("getAllAoFaucetsData", getAllAoFaucetsData, currentAddress)
-    
+
     try {
       const ChivesServerDataGetFaucetsData1 = await ChivesServerDataGetFaucets(authConfig.AoConnectChivesServerTxId, authConfig.AoConnectChivesServerUser)
       if(ChivesServerDataGetFaucetsData1) {
@@ -134,10 +135,44 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
       }
     }
     catch(e: any) {
-      console.log("handleGetAllFaucetsData Error", e)  
-      setIsDisabledButton(false)    
+      console.log("handleGetAllFaucetsData Error", e)
+      setIsDisabledButton(false)
     }
 
+  }
+
+  const handelGetAmountFromXweFaucet = async (Faucet: any) => {
+    console.log("Faucet", Faucet)
+    if(Faucet.Code == 'GetXweByStakingAr' || Faucet.Code == 'GetXweEveryDay')  {
+      const res = await axios.post('https://faucet.chivesweave.org/faucet.php', { Code: Faucet.Code, Address: currentAddress, Rule: Faucet.Rule, TokenName: Faucet.TokenName, GetAmount: Faucet.GetAmount }).then(res=>res.data);
+      try {
+        if(res && res.result == "OK")  {
+          toast.success(t('Have sent to your address') as string, {
+            duration: 2000
+          })
+          toast.success(t('TxId') + ': ' + formatHash(res.TXID, 8), {
+            duration: 2000
+          })
+        }
+        else if(res && res.result == "Transaction already processed.")  {
+          toast.success(t('Have sent to your address') as string, {
+            duration: 2000
+          })
+          toast.success(t('TxId') + ': ' + formatHash(res.TXID, 8), {
+            duration: 2000
+          })
+        }
+        else {
+          toast.error(res.result, {
+            duration: 2000
+          })
+        }
+      }
+      catch(Error: any) {
+        console.log("handelGetAmountFromXweFaucet", Error)
+      }
+      console.log("Faucet Res", res)
+    }
   }
 
   const handelGetAmountFromFaucet = async (Faucet: any) => {
@@ -191,7 +226,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [AoFaucetInfoData.FaucetTokenId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
           console.log("AoDryRunBalanceCoinFormat1-1", AoFaucetInfoData.FaucetTokenId, AoDryRunBalanceCoinFormat)
           setMyFaucetTokenBalanceData((prevState: any)=>({
-            ...prevState, 
+            ...prevState,
             [AoFaucetInfoData.FaucetTokenId]: AoDryRunBalanceCoinFormat
           }))
         }
@@ -205,7 +240,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
           console.log("AoDryRunBalanceCoinFormat2-2", Faucet.FaucetId, AoDryRunBalanceCoinFormat)
           setMyFaucetTokenBalanceData((prevState: any)=>({
-            ...prevState, 
+            ...prevState,
             [Faucet.FaucetId]: AoDryRunBalanceCoinFormat
           }))
         }
@@ -235,7 +270,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
   const handleGetMyFaucetTokenBalance = async () => {
 
     const getMyAoFaucetTokenBalanceData = getMyAoFaucetTokenBalance(currentAddress, encryptWalletDataKey);
-    if(getMyAoFaucetTokenBalanceData) {   
+    if(getMyAoFaucetTokenBalanceData) {
       setMyFaucetTokenBalanceData(getMyAoFaucetTokenBalanceData)
     }
     try {
@@ -266,7 +301,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                 setMyAoFaucetTokenBalance(currentAddress, {...getMyAoFaucetTokenBalanceData, [Faucet.FaucetId]: AoDryRunBalanceCoinFormat}, encryptWalletDataKey); // Immediately update the local storage balance
                 console.log("AoDryRunBalanceCoinFormat2", AoDryRunBalanceCoinFormat)
                 setMyFaucetTokenBalanceData((prevState: any)=>({
-                  ...prevState, 
+                  ...prevState,
                   [Faucet.FaucetId]: AoDryRunBalanceCoinFormat
                 }))
                 setMyFaucetTokenBalanceData((prevState: any)=>{
@@ -286,7 +321,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
           console.error("All promises failed:", error);
         });
       }
-    } 
+    }
     catch (e: any) {
       console.log("handleGetMySavingTokensBalance Error", e);
     }
@@ -302,7 +337,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
   }
 
 
-  useEffect(() => {    
+  useEffect(() => {
 
     setHeaderHidden(false)
     setRightButtonIcon('solar:dollar-linear')
@@ -319,13 +354,33 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
 
   }, [currentAddress]);
 
-  useEffect(() => {   
+  useEffect(() => {
     if(allFaucetsData && allFaucetsData.length > 0) {
       handleGetMyFaucetTokenBalance()
     }
   }, [allFaucetsData]);
 
-  
+  const ChivesweaveFaucetList = [
+    {
+      'Code': 'GetXweByStakingAr',
+      'Project': 'Get Xwe when you have Ar',
+      'TokenName': 'Chivesweave',
+      'ShortName': 'Xwe',
+      'Rule': 'EveryDay',
+      'GetAmount': '1',
+      'RequirementAr': '0.1'
+    },
+    {
+      'Code': 'GetXweEveryDay',
+      'Project': 'Get Xwe Every Day',
+      'TokenName': 'Chivesweave',
+      'ShortName': 'Xwe',
+      'Rule': 'EveryDay',
+      'GetAmount': '0.1',
+      'RequirementAr': '0.1'
+    }
+  ]
+
 
   return (
     <Fragment>
@@ -336,7 +391,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
         sx={{
           flex: 1,
           overflowY: 'auto',
-          marginTop: '48px', // Adjust according to the height of the AppBar
+          marginTop: '35px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
         }}
       >
@@ -349,10 +404,59 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                 })
             }}
             >
+
               <Grid container spacing={2}>
+                <Grid item xs={12} sx={{ py: 0 }}>
+                  <Card>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain()}}>
+                      <CustomAvatar
+                        skin='light'
+                        color={'primary'}
+                        sx={{ mr: 0, width: 43, height: 43 }}
+                        src={'https://web.aowallet.org/images/logo/' + currentToken + '.png'}
+                      >
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left'
+                          }}
+                        >
+                          {formatHash(currentAddress, 8)}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left'
+                          }}
+                        >
+                          {currentToken == 'Ar' ? 'Arweave' : 'Chivesweave'}
+                        </Typography>
+                      </Box>
+                      <Box textAlign="right">
+                        <Typography variant='h6' sx={{
+                          color: `info.dark`,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          mr: 2,
+                          ml: 2
+                        }}>
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
                 <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
-                    {allFaucetsData && allFaucetsData.map((Faucet: any, Index: number) => {
+                    {currentToken == 'Ar' && allFaucetsData && allFaucetsData.map((Faucet: any, Index: number) => {
 
                       let isShow = false
                       if(isRechargeMode == false && Number(myFaucetTokenBalanceData[Faucet.FaucetId]) >= Number(Faucet.FaucetData.FaucetAmount)) {
@@ -366,7 +470,7 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                         <Fragment key={Index}>
                           { isShow && (
                             <Grid item xs={12} sx={{ py: 2 }}>
-                              <Card>     
+                              <Card>
                                 <CardContent>
                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <CustomAvatar
@@ -420,13 +524,6 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                                     </Box>
                                   </Box>
 
-                                  <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Icon icon='material-symbols:info-outline' />
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement AR') as string}: {Faucet.FaucetData.RequirementAR ?? 0}</Typography>
-                                    </Box>
-                                  </Box>
-
                                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                         {isRechargeMode == false && Number(myFaucetTokenBalanceData[Faucet.FaucetId]) >= Number(Faucet.FaucetData.FaucetAmount) && (
@@ -445,9 +542,75 @@ const Faucet = ({ setCurrentTab, setSpecifyTokenSend, encryptWalletDataKey }: an
                                 </CardContent>
                               </Card>
                             </Grid>
-                          )} 
+                          )}
                         </Fragment>
                       )
+
+                    })}
+
+                    {currentToken == 'Xwe' && ChivesweaveFaucetList && ChivesweaveFaucetList.map((Faucet: any, Index: number) => {
+
+                    return (
+                      <Fragment key={Index}>
+                        { true && (
+                          <Grid item xs={12} sx={{ py: 2 }}>
+                            <Card>
+                              <CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                  <CustomAvatar
+                                    skin='light'
+                                    color={'primary'}
+                                    sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                    src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                                  >
+                                  </CustomAvatar>
+                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography sx={{ fontWeight: 600 }}>{Faucet.Project}</Typography>
+                                    <Typography variant='caption' sx={{ letterSpacing: '0.4px', cursor: 'pointer' }}>
+                                      {formatHash(currentAddress, 8)}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+
+                                <Divider
+                                  sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
+                                />
+
+                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                  <Icon icon='mdi:clock-time-three-outline' />
+                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.Rule}</Typography>
+                                  </Box>
+                                </Box>
+
+                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                  <Icon icon='f7:money-dollar-circle' />
+                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.GetAmount}</Typography>
+                                  </Box>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                  <Icon icon='material-symbols:money-bag-outline' />
+                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement Ar') as string}: {Faucet.RequirementAr}</Typography>
+                                  </Box>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                  <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromXweFaucet(Faucet)}>
+                                        {t('Get Xwe') as string}
+                                    </Button>
+                                  </Box>
+                                </Box>
+
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                        )}
+                      </Fragment>
+                    )
 
                     })}
                   </Grid>
