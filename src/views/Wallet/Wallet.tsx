@@ -932,7 +932,10 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                         </Typography>
                       )}
 
-                      <Typography variant="h6" mt={2}>
+                      <Typography variant="h6" mt={2} onClick={()=>{
+                        navigator.clipboard.writeText(currentAddress);
+                        toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                      }}>
                         {formatHash(currentAddress, 6)}
                       </Typography>
                       <Grid container spacing={4} justifyContent="center" mt={2}>
@@ -1402,7 +1405,12 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                   <QRCode value={currentAddress} size={180} />
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1" sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}>
+                  <Typography variant="body1"
+                    sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}
+                    onClick={()=>{
+                        navigator.clipboard.writeText(currentAddress);
+                        toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                    }}>
                     {currentAddress}
                   </Typography>
                 </Grid>

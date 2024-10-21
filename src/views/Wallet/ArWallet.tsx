@@ -9,6 +9,7 @@ import CustomAvatar from '../../@core/components/mui/avatar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
+import toast from 'react-hot-toast'
 
 // ** MUI Imports
 import Icon from '../../@core/components/icon'
@@ -143,6 +144,7 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                                         await Clipboard.write({
                                             string: RightOneFullText
                                         });
+                                        toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
                                     }}
                                 >
                                     {RightOne}
