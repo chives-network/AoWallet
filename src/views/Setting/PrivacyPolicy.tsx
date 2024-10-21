@@ -6,7 +6,7 @@ const PrivacyPolicy = () => {
       <div className="d-export-content">
         <h2 id="introduction"><span>Introduction</span></h2>
         <p>
-          <span>We, </span><strong>AoWallet & Arweave Wallet & Chivesweve Wallet</strong><span> ("</span><strong>AoWallet & Arweave Wallet & Chivesweve Wallet</strong><span>", "</span><strong>we</strong><span>" or "</span><strong>us</strong><span>")</span>
+          <span>We, </span><strong>AoWallet & Arweave Wallet</strong><span> ("</span><strong>AoWallet & Arweave Wallet</strong><span>", "</span><strong>we</strong><span>" or "</span><strong>us</strong><span>")</span>
           <span> respect your privacy and are strongly committed to keeping secure any information we obtain from you or about you. This privacy policy ("Privacy Policy") applies to the personal information that Chatbook processes in connection with Chatbook websites, software and related services (the “Services”), that link to or reference this Privacy Policy. If you have any questions about how we use your personal information, please contact </span>
           chivescoin@gmail.com
         </p>

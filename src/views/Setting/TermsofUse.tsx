@@ -4,21 +4,21 @@ const TermsofUse = () => {
   return (
     <div style={{margin: '20px'}}>
       <div className="d-export-content">
-        <h1 id="AoWallet & Arweave Wallet & Chivesweve Wallet-open-platform-terms-of-service">
-          <span>AoWallet & Arweave Wallet & Chivesweve Wallet Terms of Use</span>
+        <h1 id="AoWallet & Arweave Wallet-open-platform-terms-of-service">
+          <span>AoWallet & Arweave Wallet Terms of Use</span>
         </h1>
-        <p><span>Dear users, welcome to the AoWallet & Arweave Wallet & Chivesweve Wallet!</span></p>
+        <p><span>Dear users, welcome to the AoWallet & Arweave Wallet!</span></p>
 
         <p>
           <span>
-            AoWallet & Arweave Wallet & Chivesweve Wallet products and services are jointly owned and operated by Chives Network. Before using the Services, please make sure to carefully read and understand this "AoWallet & Arweave Wallet & Chivesweve Wallet Terms of Use" (hereinafter referred to as "these Terms") as well as other related terms, policies, or guidelines of this platform. When you use a specific function of the Services, there may be separate terms, related business rules, etc. ("Specific Terms") for that specific function. In the event of any conflict between these Terms and the Specific Terms, the provisions of the Specific Terms shall prevail. <strong>All the aforementioned terms and rules form an integral part of these Terms (collectively referred to as "All Terms"), and have the same legal effect as the main text of these Terms.</strong>
+            AoWallet & Arweave Wallet products and services are jointly owned and operated by Chives Network. Before using the Services, please make sure to carefully read and understand this "AoWallet & Arweave Wallet Terms of Use" (hereinafter referred to as "these Terms") as well as other related terms, policies, or guidelines of this platform. When you use a specific function of the Services, there may be separate terms, related business rules, etc. ("Specific Terms") for that specific function. In the event of any conflict between these Terms and the Specific Terms, the provisions of the Specific Terms shall prevail. <strong>All the aforementioned terms and rules form an integral part of these Terms (collectively referred to as "All Terms"), and have the same legal effect as the main text of these Terms.</strong>
           </span>
         </p>
 
         <p>
           <span>
             <strong>
-              Among them, the AoWallet & Arweave Wallet & Chivesweve Wallet Open Platform Terms of Service is specifically applicable to your use of the Application Programming Interface (API) or other developer tools and open platform services provided by this platform.
+              Among them, the AoWallet & Arweave Wallet Open Platform Terms of Service is specifically applicable to your use of the Application Programming Interface (API) or other developer tools and open platform services provided by this platform.
             </strong>
           </span>
         </p>
@@ -37,25 +37,25 @@ const TermsofUse = () => {
 
         <p>
           <span>
-            1.1 AoWallet & Arweave Wallet & Chivesweve Wallet's products and services include those provided to you through websites, applications (which may include different versions), software development kits (SDKs) for third-party websites and applications, application programming interfaces (APIs), and innovative forms that emerge with technological development. These encompass platforms with generative artificial intelligence services at their core, among other functionalities (hereinafter referred to as "the Services").
+            1.1 AoWallet & Arweave Wallet's products and services include those provided to you through websites, applications (which may include different versions), software development kits (SDKs) for third-party websites and applications, application programming interfaces (APIs), and innovative forms that emerge with technological development. These encompass platforms with generative artificial intelligence services at their core, among other functionalities (hereinafter referred to as "the Services").
           </span>
         </p>
 
         <p>
           <span>
-            1.2 The architecture of the AoWallet & Arweave Wallet & Chivesweve Wallet model is based on Transformer, and its training framework is PyTorch. AoWallet & Arweave Wallet & Chivesweve Wallet offers generative artificial intelligence services, where users input text information (hereinafter referred to as "input") into a dialogue box. Based on the user's input, AoWallet & Arweave Wallet & Chivesweve Wallet produces relevant content as a response (hereinafter referred to as "output" or "generated content"), including text, tables, and code, among others. AoWallet & Arweave Wallet & Chivesweve Wallet collects and analyzes users' input and output information to enhance recognition and response capabilities, improving the intelligence and content quality of the Services. Users can evaluate the output, including actions such as "like" or "dislike", to provide feedback on their opinion of the information generated by AoWallet & Arweave Wallet & Chivesweve Wallet.
+            1.2 The architecture of the AoWallet & Arweave Wallet model is based on Transformer, and its training framework is PyTorch. AoWallet & Arweave Wallet offers generative artificial intelligence services, where users input text information (hereinafter referred to as "input") into a dialogue box. Based on the user's input, AoWallet & Arweave Wallet produces relevant content as a response (hereinafter referred to as "output" or "generated content"), including text, tables, and code, among others. AoWallet & Arweave Wallet collects and analyzes users' input and output information to enhance recognition and response capabilities, improving the intelligence and content quality of the Services. Users can evaluate the output, including actions such as "like" or "dislike", to provide feedback on their opinion of the information generated by AoWallet & Arweave Wallet.
           </span>
         </p>
 
         <p>
           <span>
-            1.3 You can use the Services in web form through terminals such as computers and mobile phones, with specific details subject to those provided by AoWallet & Arweave Wallet & Chivesweve Wallet. Additionally, AoWallet & Arweave Wallet & Chivesweve Wallet will continuously enrich the terminals and forms you use for the Services. You understand and agree that AoWallet & Arweave Wallet & Chivesweve Wallet reserves the right to add new services or change, suspend, or terminate the above services.
+            1.3 You can use the Services in web form through terminals such as computers and mobile phones, with specific details subject to those provided by AoWallet & Arweave Wallet. Additionally, AoWallet & Arweave Wallet will continuously enrich the terminals and forms you use for the Services. You understand and agree that AoWallet & Arweave Wallet reserves the right to add new services or change, suspend, or terminate the above services.
           </span>
         </p>
 
         <p>
           <span>
-            1.4 AoWallet & Arweave Wallet & Chivesweve Wallet will take necessary measures (not less than industry practices) to ensure the cyber security and stable operation of the Services. We will also make efforts to enhance and improve technology to ensure a better user experience. If you have any questions or feedback about our services, you can contact us through the method described in Section 12.
+            1.4 AoWallet & Arweave Wallet will take necessary measures (not less than industry practices) to ensure the cyber security and stable operation of the Services. We will also make efforts to enhance and improve technology to ensure a better user experience. If you have any questions or feedback about our services, you can contact us through the method described in Section 12.
           </span>
         </p>
 
@@ -73,7 +73,7 @@ const TermsofUse = () => {
 
         <p>
           <span>
-            2.1 the Services is primarily intended for adults. If you are under 18 years old, please read these Terms with your legal guardian and use the Services only with the consent of your legal guardian. AoWallet & Arweave Wallet & Chivesweve Wallet fully understands the importance of protecting minors and will take corresponding protective measures in accordance with legal requirements and industry mainstream practices.
+            2.1 the Services is primarily intended for adults. If you are under 18 years old, please read these Terms with your legal guardian and use the Services only with the consent of your legal guardian. AoWallet & Arweave Wallet fully understands the importance of protecting minors and will take corresponding protective measures in accordance with legal requirements and industry mainstream practices.
           </span>
         </p>
 
@@ -148,19 +148,19 @@ const TermsofUse = () => {
 
         <p>
           <span>
-            3.1 You fully understand and agree that, under these Terms, we grant you a revocable, non-transferable, non-exclusive, and non-commercial right to legally use this product and related services. All other rights not expressly authorized by these Terms are reserved by AoWallet & Arweave Wallet & Chivesweve Wallet, and before exercising such rights, you must obtain written permission from AoWallet & Arweave Wallet & Chivesweve Wallet. Additionally, AoWallet & Arweave Wallet & Chivesweve Wallet's failure to exercise any of these rights does not constitute a waiver of those rights. If you publish or disseminate outputs generated by the Services, you must: (1) proactively verify the authenticity and accuracy of the output content to avoid spreading false information; (2) clearly indicate that the output content is generated by artificial intelligence, to alert the public to the synthetic nature of the content; (3) avoid publishing and disseminating any output content that violates the usage specifications of these Terms.
+            3.1 You fully understand and agree that, under these Terms, we grant you a revocable, non-transferable, non-exclusive, and non-commercial right to legally use this product and related services. All other rights not expressly authorized by these Terms are reserved by AoWallet & Arweave Wallet, and before exercising such rights, you must obtain written permission from AoWallet & Arweave Wallet. Additionally, AoWallet & Arweave Wallet's failure to exercise any of these rights does not constitute a waiver of those rights. If you publish or disseminate outputs generated by the Services, you must: (1) proactively verify the authenticity and accuracy of the output content to avoid spreading false information; (2) clearly indicate that the output content is generated by artificial intelligence, to alert the public to the synthetic nature of the content; (3) avoid publishing and disseminating any output content that violates the usage specifications of these Terms.
           </span>
         </p>
 
         <p>
           <span>
-            3.2 When using the Services provided by AoWallet & Arweave Wallet & Chivesweve Wallet, users shall comply with these Terms and adhere to the principles of voluntariness, equality, fairness, and good faith. Users shall not use the service to infringe on the legal rights of others or seek unjust benefits, nor shall they disrupt the normal order of the internet platform.
+            3.2 When using the Services provided by AoWallet & Arweave Wallet, users shall comply with these Terms and adhere to the principles of voluntariness, equality, fairness, and good faith. Users shall not use the service to infringe on the legal rights of others or seek unjust benefits, nor shall they disrupt the normal order of the internet platform.
           </span>
         </p>
 
         <p>
           <span>
-            3.3 To fulfill legal and compliance requirements, AoWallet & Arweave Wallet & Chivesweve Wallet has the right to use technical or manual means to review the behavior and information of users using the Services, including but not limited to reviewing inputs and outputs, establishing risk filtering mechanisms, and creating databases for illegal content features.
+            3.3 To fulfill legal and compliance requirements, AoWallet & Arweave Wallet has the right to use technical or manual means to review the behavior and information of users using the Services, including but not limited to reviewing inputs and outputs, establishing risk filtering mechanisms, and creating databases for illegal content features.
           </span>
         </p>
 
@@ -237,13 +237,13 @@ const TermsofUse = () => {
           <span>(11) Developing products and services that compete with the Services using the Services (unless such restriction violates relevant laws and regulations).</span>
         </p>
         <p>
-          <span>(12) Removing or tampering with the AI-generated identifiers or prominent identifiers of deep synthesis content related to the Services without the consent of AoWallet & Arweave Wallet & Chivesweve Wallet or without a legitimate and justifiable basis.</span>
+          <span>(12) Removing or tampering with the AI-generated identifiers or prominent identifiers of deep synthesis content related to the Services without the consent of AoWallet & Arweave Wallet or without a legitimate and justifiable basis.</span>
         </p>
         <p>
-          <span>(13) Obtaining Outputs in a manner that causes unreasonable load on AoWallet & Arweave Wallet & Chivesweve Wallet's computer systems or facilities, or engaging in activities that may lead to such situations.</span>
+          <span>(13) Obtaining Outputs in a manner that causes unreasonable load on AoWallet & Arweave Wallet's computer systems or facilities, or engaging in activities that may lead to such situations.</span>
         </p>
         <p>
-          <span>(14) Copying, transferring, renting, lending, selling, or providing sublicenses or sublicensing the whole or any part of the service without the authorization of AoWallet & Arweave Wallet & Chivesweve Wallet.</span>
+          <span>(14) Copying, transferring, renting, lending, selling, or providing sublicenses or sublicensing the whole or any part of the service without the authorization of AoWallet & Arweave Wallet.</span>
         </p>
 
 
@@ -258,13 +258,13 @@ const TermsofUse = () => {
 
       <p>
         <span>
-          4.1 Except as provided in the following terms, the intellectual property rights and related interests of the content provided by AoWallet & Arweave Wallet & Chivesweve Wallet in the Services (including but not limited to software, technology, programs, web pages, text, images, graphics, audio, video, charts, layout design, electronic documents, etc.) belong to AoWallet & Arweave Wallet & Chivesweve Wallet. The copyright, patent rights, and other intellectual property rights of the software on which AoWallet & Arweave Wallet & Chivesweve Wallet relies to provide Services are owned by AoWallet & Arweave Wallet & Chivesweve Wallet, its affiliated entities, or the respective rights holders. Without our permission, no one is allowed to use (including but not limited to monitoring, copying, disseminating, displaying, mirroring, uploading, downloading through any robots, "spiders," or similar programs or devices) the content related services.
+          4.1 Except as provided in the following terms, the intellectual property rights and related interests of the content provided by AoWallet & Arweave Wallet in the Services (including but not limited to software, technology, programs, web pages, text, images, graphics, audio, video, charts, layout design, electronic documents, etc.) belong to AoWallet & Arweave Wallet. The copyright, patent rights, and other intellectual property rights of the software on which AoWallet & Arweave Wallet relies to provide Services are owned by AoWallet & Arweave Wallet, its affiliated entities, or the respective rights holders. Without our permission, no one is allowed to use (including but not limited to monitoring, copying, disseminating, displaying, mirroring, uploading, downloading through any robots, "spiders," or similar programs or devices) the content related services.
         </span>
       </p>
 
       <p>
         <span>
-          4.2 You are responsible for all Inputs you submit to our Services and corresponding Outputs. By submitting Inputs to our Services, you represent and warrant that you have all rights, licenses, and permissions that are necessary for us to process the Inputs under our Terms. You also represent and warrant that your submitting Inputs to us and corresponding Outputs will not violate our Terms, or any laws or regulations applicable to those Inputs and Outputs. As between you and AoWallet & Arweave Wallet & Chivesweve Wallet, and to the extent permitted by applicable law, you retain any right, title, and interest that you have in the Inputs you submit.
+          4.2 You are responsible for all Inputs you submit to our Services and corresponding Outputs. By submitting Inputs to our Services, you represent and warrant that you have all rights, licenses, and permissions that are necessary for us to process the Inputs under our Terms. You also represent and warrant that your submitting Inputs to us and corresponding Outputs will not violate our Terms, or any laws or regulations applicable to those Inputs and Outputs. As between you and AoWallet & Arweave Wallet, and to the extent permitted by applicable law, you retain any right, title, and interest that you have in the Inputs you submit.
         </span>
       </p>
 
@@ -276,7 +276,7 @@ const TermsofUse = () => {
 
       <p>
         <span>
-          4.4 Without our permission, you or your end users shall not use any trademarks, service marks, trade names, domain names, website names, company logos (LOGOs), URLs, or other prominent brand features related to the Services, including but not limited to "AoWallet & Arweave Wallet & Chivesweve Wallet," etc., in any way, either singly or in combination. You are not allowed to display, use, or apply for registration of trademarks, domain names, etc., related to the aforementioned terms in any way, and you shall not perform acts that expressly or implicitly indicate the right to display, use, or otherwise deal with these identifiers to others.
+          4.4 Without our permission, you or your end users shall not use any trademarks, service marks, trade names, domain names, website names, company logos (LOGOs), URLs, or other prominent brand features related to the Services, including but not limited to "AoWallet & Arweave Wallet," etc., in any way, either singly or in combination. You are not allowed to display, use, or apply for registration of trademarks, domain names, etc., related to the aforementioned terms in any way, and you shall not perform acts that expressly or implicitly indicate the right to display, use, or otherwise deal with these identifiers to others.
         </span>
       </p>
 
@@ -365,13 +365,13 @@ const TermsofUse = () => {
 
       <p>
         <span>
-          9.1 When the content provided by the Services includes content from plugins, third-party websites, etc., AoWallet & Arweave Wallet & Chivesweve Wallet shall not responsible for the effectiveness of this content and do not guarantee the authenticity, legality, or security of any content, products, services, or other materials obtained through these means. You shall carefully evaluate the legality, accuracy, authenticity, applicability, completeness, and security of this content and take prudent preventive measures. If you are unsure about the legality, accuracy, authenticity, practicality, completeness, and security of this content, it is advisable to consult with professionals. To the extent permitted by law, AoWallet & Arweave Wallet & Chivesweve Wallet is not liable for any personal or property losses incurred by you as a result of using any third-party information or links, including but not limited to losses related to downloading computer viruses, defamation of reputation or goodwill, or infringement of rights such as copyright or intellectual property.
+          9.1 When the content provided by the Services includes content from plugins, third-party websites, etc., AoWallet & Arweave Wallet shall not responsible for the effectiveness of this content and do not guarantee the authenticity, legality, or security of any content, products, services, or other materials obtained through these means. You shall carefully evaluate the legality, accuracy, authenticity, applicability, completeness, and security of this content and take prudent preventive measures. If you are unsure about the legality, accuracy, authenticity, practicality, completeness, and security of this content, it is advisable to consult with professionals. To the extent permitted by law, AoWallet & Arweave Wallet is not liable for any personal or property losses incurred by you as a result of using any third-party information or links, including but not limited to losses related to downloading computer viruses, defamation of reputation or goodwill, or infringement of rights such as copyright or intellectual property.
         </span>
       </p>
 
       <p>
         <span>
-          9.2 In response to your violation of these Terms or other service terms, AoWallet & Arweave Wallet & Chivesweve Wallet reserves the right to independently judge and take measures against you, including issuing warnings, setting deadlines for correction, restricting account functions, suspending usage, closing accounts, prohibiting re-registration, deleting relevant content, etc., without the need for prior notification. We have the right to announce the results of the actions taken and, based on the actual circumstances, decide whether to restore usage. For behaviors suspected of violating laws and regulations or involving illegal activities, relevant records will be retained, and reports will be made to the competent authorities in accordance with the law, cooperating with their investigations. You shall be solely responsible for any legal liabilities, claims, demands, or losses asserted by third parties resulting therefrom, and you shall compensate us for any losses incurred, including litigation fees, arbitration fees, attorney fees, notary fees, announcement fees, appraisal fees, travel expenses, investigation and evidence collection fees, compensation, liquidated damages, settlement costs, and administrative fines incurred in protecting our rights.
+          9.2 In response to your violation of these Terms or other service terms, AoWallet & Arweave Wallet reserves the right to independently judge and take measures against you, including issuing warnings, setting deadlines for correction, restricting account functions, suspending usage, closing accounts, prohibiting re-registration, deleting relevant content, etc., without the need for prior notification. We have the right to announce the results of the actions taken and, based on the actual circumstances, decide whether to restore usage. For behaviors suspected of violating laws and regulations or involving illegal activities, relevant records will be retained, and reports will be made to the competent authorities in accordance with the law, cooperating with their investigations. You shall be solely responsible for any legal liabilities, claims, demands, or losses asserted by third parties resulting therefrom, and you shall compensate us for any losses incurred, including litigation fees, arbitration fees, attorney fees, notary fees, announcement fees, appraisal fees, travel expenses, investigation and evidence collection fees, compensation, liquidated damages, settlement costs, and administrative fines incurred in protecting our rights.
         </span>
       </p>
 
@@ -405,7 +405,7 @@ const TermsofUse = () => {
 
       <p>
         <span>
-          11.2 In the event of a dispute arising from the signing, performance, or interpretation of these Terms, the Parties shall make efforts to resolve it amicably through negotiation. If negotiation fails, either Party has the right to file a lawsuit with a court having jurisdiction over the location of the registered office of Hangzhou AoWallet & Arweave Wallet & Chivesweve Wallet Artificial Intelligence Co., Ltd.
+          11.2 In the event of a dispute arising from the signing, performance, or interpretation of these Terms, the Parties shall make efforts to resolve it amicably through negotiation. If negotiation fails, either Party has the right to file a lawsuit with a court having jurisdiction over the location of the registered office of Hangzhou AoWallet & Arweave Wallet Artificial Intelligence Co., Ltd.
         </span>
       </p>
 
@@ -416,7 +416,7 @@ const TermsofUse = () => {
 
       <p>
         <span>
-          12.1 Your acceptance of these Terms includes acceptance of any modifications AoWallet & Arweave Wallet & Chivesweve Wallet makes to any term at any time. We have the right to modify these Terms at any time, and the updated Terms will be announced through appropriate channels such as the official website. Once announced, it replaces the original terms. Please refer to the latest version of these Terms on the official website. If you do not accept the modified terms, please stop using the Services immediately. Your continued usage of the Service will be considered as your acceptance of the modified terms.
+          12.1 Your acceptance of these Terms includes acceptance of any modifications AoWallet & Arweave Wallet makes to any term at any time. We have the right to modify these Terms at any time, and the updated Terms will be announced through appropriate channels such as the official website. Once announced, it replaces the original terms. Please refer to the latest version of these Terms on the official website. If you do not accept the modified terms, please stop using the Services immediately. Your continued usage of the Service will be considered as your acceptance of the modified terms.
         </span>
       </p>
 
