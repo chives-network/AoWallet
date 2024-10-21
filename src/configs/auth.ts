@@ -1,6 +1,6 @@
 const config = {
   AppName: 'AoWallet',
-  AppVersion: '0.0.8',
+  AppVersion: '0.0.9',
   tokenType: 'Ar', // Ar or Xwe
   tokenName: 'Ar',
   tokenFullName: 'Arweave',
