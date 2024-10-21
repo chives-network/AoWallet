@@ -63,6 +63,8 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
   const [allFaucetsData, setAllFaucetsData] = useState<any[]>([])
   const [myFaucetTokenBalanceData, setMyFaucetTokenBalanceData] = useState<any[]>([])
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+  const [isDisabledButtonXwe, setIsDisabledButtonXwe] = useState<any>({GetXweByStakingAr: false, GetXweEveryDay: false})
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRechargeMode, setIsRechargeMode] = useState<boolean>(false)
 
 
@@ -144,6 +146,11 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
   const handelGetAmountFromXweFaucet = async (Faucet: any) => {
     console.log("Faucet", Faucet)
     if(Faucet.Code == 'GetXweByStakingAr' || Faucet.Code == 'GetXweEveryDay')  {
+      setIsDisabledButtonXwe((prevState: any)=>({
+        ...prevState,
+        [Faucet.Code]: true
+      }))
+      setIsLoading(true)
       const res = await axios.post('https://faucet.chivesweave.org/faucet.php', { Code: Faucet.Code, Address: currentAddress, Rule: Faucet.Rule, TokenName: Faucet.TokenName, GetAmount: Faucet.GetAmount }).then(res=>res.data);
       try {
         if(res && res.result == "OK")  {
@@ -153,24 +160,37 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
           toast.success(t('TxId') + ': ' + formatHash(res.TXID, 8), {
             duration: 2000
           })
+          setIsDisabledButtonXwe((prevState: any)=>({
+            ...prevState,
+            [Faucet.Code]: true
+          }))
         }
         else if(res && res.result == "Transaction already processed.")  {
-          toast.success(t('Have sent to your address') as string, {
+          toast.error(t(res.result) as string, {
             duration: 2000
           })
-          toast.success(t('TxId') + ': ' + formatHash(res.TXID, 8), {
+          toast.error(t('TxId') + ': ' + formatHash(res.TXID, 8), {
             duration: 2000
           })
+          setIsDisabledButtonXwe((prevState: any)=>({
+            ...prevState,
+            [Faucet.Code]: true
+          }))
         }
         else {
           toast.error(res.result, {
             duration: 2000
           })
+          setIsDisabledButtonXwe((prevState: any)=>({
+            ...prevState,
+            [Faucet.Code]: true
+          }))
         }
       }
       catch(Error: any) {
         console.log("handelGetAmountFromXweFaucet", Error)
       }
+      setIsLoading(false)
       console.log("Faucet Res", res)
     }
   }
@@ -599,7 +619,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
                                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                   <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Button disabled={isDisabledButton} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromXweFaucet(Faucet)}>
+                                    <Button disabled={isDisabledButtonXwe[Faucet.Code]} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromXweFaucet(Faucet)}>
                                         {t('Get Xwe') as string}
                                     </Button>
                                   </Box>
@@ -616,7 +636,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
                   </Grid>
                   <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={isDisabledButton}
+                    open={isLoading}
                   >
                     <CircularProgress color="inherit" size={45}/>
                   </Backdrop>

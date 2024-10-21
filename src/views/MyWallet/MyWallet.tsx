@@ -440,7 +440,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                                     whiteSpace: 'nowrap',
                                     flex: 1
                                   }}>
-                                    {formatHash(wallet.data.arweave.key, 5)}
+                                    {formatHash(wallet.data.arweave.key, 5)} {currentToken}
                                   </Typography>
 
                                 </Box>
