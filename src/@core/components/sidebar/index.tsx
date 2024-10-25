@@ -59,7 +59,3 @@ const Sidebar = (props: BoxProps & SidebarType) => {
 }
 
 export default Sidebar
-
-Sidebar.defaultProps = {
-  direction: 'left'
-}

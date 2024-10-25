@@ -28,7 +28,9 @@ const HomeModel = () => {
       {currentTab == "Faucet" && (<Faucet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend} encryptWalletDataKey={encryptWalletDataKey} />)}
       {currentTab == "Email" && (<Email currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} />)}
       {currentTab == "Setting" && (<Setting currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />)}
-      <Footer Hidden={false} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend}  currentTab={currentTab} disabledFooter={disabledFooter}/>
+      {disabledFooter == false && (
+        <Footer Hidden={false} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend}  currentTab={currentTab} disabledFooter={disabledFooter}/>
+      )}
     </Fragment>
   )
 }
