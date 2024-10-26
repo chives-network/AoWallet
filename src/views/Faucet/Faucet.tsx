@@ -163,7 +163,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
           }))
         }
         else if(res && res.status == "ok" && res.result == "OK")  {
-          toast.success(t('Have sent to your address') as string, {
+          toast.success(t(res.message) as string, {
             duration: 2000
           })
           toast.success(t('TxId') + ': ' + formatHash(res.TXID, 8), {
