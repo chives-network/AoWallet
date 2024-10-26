@@ -153,7 +153,16 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
       setIsLoading(true)
       const res = await axios.post('https://faucet.chivesweave.org/faucet.php', { Code: Faucet.Code, Address: currentAddress, Rule: Faucet.Rule, TokenName: Faucet.TokenName, GetAmount: Faucet.GetAmount }).then(res=>res.data);
       try {
-        if(res && res.result == "OK")  {
+        if(res && res.status == "error")  {
+          toast.error(res.message, {
+            duration: 4000
+          })
+          setIsDisabledButtonXwe((prevState: any)=>({
+            ...prevState,
+            [Faucet.Code]: true
+          }))
+        }
+        else if(res && res.status == "ok" && res.result == "OK")  {
           toast.success(t('Have sent to your address') as string, {
             duration: 2000
           })
@@ -165,7 +174,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
             [Faucet.Code]: true
           }))
         }
-        else if(res && res.result == "Transaction already processed.")  {
+        else if(res && res.status == "ok" && res.result == "Transaction already processed.")  {
           toast.error(t(res.result) as string, {
             duration: 2000
           })
@@ -382,22 +391,22 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
   const ChivesweaveFaucetList = [
     {
-      'Code': 'GetXweByStakingAr',
-      'Project': 'Get Xwe when you have Ar',
-      'TokenName': 'Chivesweave',
-      'ShortName': 'Xwe',
-      'Rule': 'EveryDay',
-      'GetAmount': '1',
-      'RequirementAr': '0.1'
-    },
-    {
       'Code': 'GetXweEveryDay',
       'Project': 'Get Xwe Every Day',
       'TokenName': 'Chivesweave',
       'ShortName': 'Xwe',
       'Rule': 'EveryDay',
-      'GetAmount': '0.1',
-      'RequirementAr': '0.1'
+      'GetAmount': '0.1 Xwe',
+      'Requirement': 'None'
+    },
+    {
+      'Code': 'GetXweByStakingAr',
+      'Project': 'Get Xwe when you have Ar',
+      'TokenName': 'Chivesweave',
+      'ShortName': 'Xwe',
+      'Rule': 'EveryDay',
+      'GetAmount': '1 Xwe',
+      'Requirement': 'Balance more than 0.1 Ar'
     }
   ]
 
@@ -597,25 +606,27 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
                                 />
 
                                 <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                  <Icon icon='mdi:clock-time-three-outline' />
-                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.Rule}</Typography>
-                                  </Box>
-                                </Box>
-
-                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
                                   <Icon icon='f7:money-dollar-circle' />
                                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.GetAmount}</Typography>
                                   </Box>
                                 </Box>
 
-                                <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                  <Icon icon='material-symbols:money-bag-outline' />
+                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                  <Icon icon='mdi:clock-time-three-outline' />
                                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement Ar') as string}: {Faucet.RequirementAr}</Typography>
+                                    <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.Rule}</Typography>
                                   </Box>
                                 </Box>
+
+                                {Faucet.Requirement && (
+                                  <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='material-symbols:money-bag-outline' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement') as string}: {Faucet.Requirement}</Typography>
+                                    </Box>
+                                  </Box>
+                                )}
 
                                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                   <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
