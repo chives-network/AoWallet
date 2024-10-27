@@ -106,7 +106,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const [sendMoneyAddress, setSendMoneyAddress] = useState<any>({name: '', address: ''})
   const [sendMoneyAmount, setSendMoneyAmount] = useState<string>('')
 
-  const [activeTab, setActiveTab] = useState<string>('Sent')
+  const [activeTab, setActiveTab] = useState<string>('AllTxs')
 
   const currentFeeAO = 0
 
@@ -1323,7 +1323,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                                   <Typography
                                     variant='body2'
                                     sx={{
-                                      color: `primary.dark`,
+                                      color: Tx.block && Tx.block.timestamp ? `primary.dark` : `warning.dark`,
                                       overflow: 'hidden',
                                       textOverflow: 'ellipsis',
                                       whiteSpace: 'nowrap',
@@ -1331,7 +1331,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                                       textAlign: 'left'
                                     }}
                                   >
-                                    {formatTimestamp(Tx.block.timestamp)}
+                                    {Tx.block && Tx.block.timestamp ? formatTimestamp(Tx.block.timestamp) : t('Memory Pool Tx')}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1345,7 +1345,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                                   mr: 2
                                 }}>
                                   {Tx.owner.address == currentAddress ? ' - ' : ' + '}
-                                  {Number(Tx.quantity.xwe).toFixed(2)}
+                                  {Number(Tx.quantity.xwe).toFixed(4)}
                                 </Typography>
 
                               </Box>

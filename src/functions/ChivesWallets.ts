@@ -765,29 +765,53 @@ export async function getTxsInMemoryXwe() {
     try {
           const response = await axios.get(authConfig.backEndApiXwe + '/tx/pending/record', { timeout: 10000 } ).then(res=>res.data);
           if(response && response.length>0) {
-              const SendTxsInMemory: any = {}
-              const ReceiveTxsInMemory: any = {}
-              const BalanceTxsInMemory: any = {}
+              const SendTxsAmountInMemory: any = {}
+              const ReceiveTxsAmountInMemory: any = {}
+              const BalanceTxsAmountInMemory: any = {}
+              const SendTxsListInMemory: any = {}
+              const ReceiveTxsListInMemory: any = {}
+              const BalanceTxsListInMemory: any = {}
               for (const item of response) {
-                  if(SendTxsInMemory[item.owner.address])  {
-                      SendTxsInMemory[item.owner.address] = BalancePlus(Number(item.quantity.xwe), Number(SendTxsInMemory[item.owner.address]))
-                      BalanceTxsInMemory[item.owner.address] = BalanceMinus(Number(BalanceTxsInMemory[item.owner.address]), Number(item.quantity.xwe))
+                  if(SendTxsAmountInMemory[item.owner.address])  {
+                      SendTxsAmountInMemory[item.owner.address] = BalancePlus(Number(item.quantity.xwe), Number(SendTxsAmountInMemory[item.owner.address]))
+                      BalanceTxsAmountInMemory[item.owner.address] = BalanceMinus(Number(BalanceTxsAmountInMemory[item.owner.address]), Number(item.quantity.xwe))
+                      SendTxsListInMemory[item.owner.address].push(item)
                   }
                   else {
-                      SendTxsInMemory[item.owner.address] = Number(item.quantity.xwe)
-                      BalanceTxsInMemory[item.recipient] = 0 - Number(item.quantity.xwe)
+                      SendTxsAmountInMemory[item.owner.address] = Number(item.quantity.xwe)
+                      BalanceTxsAmountInMemory[item.recipient] = 0 - Number(item.quantity.xwe)
+                      SendTxsListInMemory[item.owner.address] = []
+                      SendTxsListInMemory[item.owner.address].push(item)
                   }
-                  if(ReceiveTxsInMemory[item.recipient])  {
-                      ReceiveTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(ReceiveTxsInMemory[item.recipient]))
-                      BalanceTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(BalanceTxsInMemory[item.recipient]))
+                  if(ReceiveTxsAmountInMemory[item.recipient])  {
+                      ReceiveTxsAmountInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(ReceiveTxsAmountInMemory[item.recipient]))
+                      BalanceTxsAmountInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(BalanceTxsAmountInMemory[item.recipient]))
+                      ReceiveTxsListInMemory[item.recipient].push(item)
                   }
                   else {
-                      ReceiveTxsInMemory[item.recipient] = Number(item.quantity.xwe)
-                      BalanceTxsInMemory[item.recipient] = Number(item.quantity.xwe)
+                      ReceiveTxsAmountInMemory[item.recipient] = Number(item.quantity.xwe)
+                      BalanceTxsAmountInMemory[item.recipient] = Number(item.quantity.xwe)
+                      ReceiveTxsListInMemory[item.recipient] = []
+                      ReceiveTxsListInMemory[item.recipient].push(item)
                   }
+                  if(BalanceTxsListInMemory[item.owner.address] == undefined) {
+                    BalanceTxsListInMemory[item.owner.address] = []
+                  }
+                  BalanceTxsListInMemory[item.owner.address].push(item)
+                  if(BalanceTxsListInMemory[item.recipient] == undefined) {
+                    BalanceTxsListInMemory[item.recipient] = []
+                  }
+                  BalanceTxsListInMemory[item.recipient].push(item)
               }
 
-              return {send: SendTxsInMemory, receive: ReceiveTxsInMemory, balance: BalanceTxsInMemory}
+              return {
+                send: SendTxsAmountInMemory,
+                receive: ReceiveTxsAmountInMemory,
+                balance: BalanceTxsAmountInMemory,
+                Sent: SendTxsListInMemory,
+                Received: ReceiveTxsListInMemory,
+                AllTxs: BalanceTxsListInMemory,
+              }
           }
     }
     catch (e) {
@@ -797,26 +821,44 @@ export async function getTxsInMemoryXwe() {
 
 export async function getXweWalletAllTxs(Address: string, Type: string, pageId = 0, pageSize = 10) {
 
+    const getTxsInMemoryXweData: any = await getTxsInMemoryXwe()
+
     let addressApiType = ''
+    let txsRecordsInMemory: any[] = []
     switch(Type) {
         case 'AllTxs':
             addressApiType = "txsrecord";
+            if(getTxsInMemoryXweData && getTxsInMemoryXweData['AllTxs'][Address] && getTxsInMemoryXweData['AllTxs'][Address] && getTxsInMemoryXweData['AllTxs'][Address].length > 0) {
+              txsRecordsInMemory = getTxsInMemoryXweData['AllTxs'][Address]
+            }
             break;
         case 'Sent':
             addressApiType = "send";
+            if(getTxsInMemoryXweData && getTxsInMemoryXweData['Sent'][Address] && getTxsInMemoryXweData['Sent'][Address] && getTxsInMemoryXweData['Sent'][Address].length > 0) {
+              txsRecordsInMemory = getTxsInMemoryXweData['Sent'][Address]
+            }
             break;
         case 'Received':
             addressApiType = "deposits";
+            if(getTxsInMemoryXweData && getTxsInMemoryXweData['Received'][Address] && getTxsInMemoryXweData['Received'][Address] && getTxsInMemoryXweData['Received'][Address].length > 0) {
+              txsRecordsInMemory = getTxsInMemoryXweData['Received'][Address]
+            }
             break;
         case 'Files':
             addressApiType = "datarecord";
             break;
     }
+
     try {
         if(addressApiType && addressApiType!="" && Address && Address.length == 43)  {
             const response = await axios.get(authConfig.backEndApiXwe + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize, { timeout: 10000 }).then(res=>res.data)
             const NewData: any[] = response.data.filter((record: any) => record.recipient)
-            response.data = NewData
+            if(txsRecordsInMemory && txsRecordsInMemory.length > 0) {
+              response.data = [...txsRecordsInMemory, ...NewData]
+            }
+            else {
+              response.data = NewData
+            }
 
             return response
         }
