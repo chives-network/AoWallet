@@ -56,7 +56,7 @@
     "i18next-http-backend": "2.2.0",
     "immutable": "^4.3.7",
     "install": "^0.13.0",
-    "next": "14.2.5",
+    "next": "^14.2.16",
     "npm": "^10.2.3",
     "nprogress": "0.2.0",
     "prismjs": "1.29.0",
