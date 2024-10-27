@@ -32,8 +32,8 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useTheme } from '@mui/material/styles'
 
-import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemory, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from '../../functions/ChivesWallets'
-import { BalanceMinus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
+import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemoryXwe, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from '../../functions/ChivesWallets'
+import { BalanceMinus, BalancePlus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
 
@@ -366,15 +366,17 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
         if(currentBalanceTempXwe) {
           setCurrentBalanceXwe(Number(currentBalanceTempXwe).toFixed(4).replace(/\.?0*$/, ''))
         }
-        const getTxsInMemoryData = await getTxsInMemory()
-        setCurrentTxsInMemory(getTxsInMemoryData)
-        const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress, 'Xwe')
-        if(balanceReservedRewards) {
-          setCurrentBalanceReservedRewards(balanceReservedRewards)
-        }
-        if(currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress])  {
-          const MinusBalance = BalanceMinus(Number(currentBalanceTempXwe) , Number(currentTxsInMemory['send'][currentAddress]))
-          setCurrentBalanceXwe(Number(MinusBalance).toFixed(4).replace(/\.?0*$/, ''))
+        if(currentToken == "Xwe")  {
+          const getTxsInMemoryXweData = await getTxsInMemoryXwe()
+          setCurrentTxsInMemory(getTxsInMemoryXweData)
+          const balanceReservedRewards = await getWalletBalanceReservedRewards(currentAddress, 'Xwe')
+          if(balanceReservedRewards) {
+            setCurrentBalanceReservedRewards(balanceReservedRewards)
+          }
+          if(currentTxsInMemory && currentTxsInMemory['balance'] && currentTxsInMemory['balance'][currentAddress])  {
+            const NewBalance = BalancePlus(Number(currentBalanceTempXwe) , Number(currentTxsInMemory['balance'][currentAddress]))
+            setCurrentBalanceXwe(Number(NewBalance).toFixed(4).replace(/\.?0*$/, ''))
+          }
         }
 
         // For Ar
@@ -432,7 +434,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
     };
     processWallets();
-  }, [currentAddress, pageModel, activeTab, page])
+  }, [currentAddress, currentToken, pageModel, activeTab, page])
 
   useEffect(() => {
     const isSetPasswordForWalletData = isSetPasswordForWallet()
@@ -991,7 +993,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
                           <Grid item xs={12} sx={{ py: 0 }}>
                             <Card>
-                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain()}}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Ar')}}>
                                 <CustomAvatar
                                   skin='light'
                                   color={'primary'}
@@ -1045,7 +1047,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
                           <Grid item xs={12} sx={{ py: 0 }}>
                             <Card>
-                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain()}}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Xwe')}}>
                                 <CustomAvatar
                                   skin='light'
                                   color={'primary'}

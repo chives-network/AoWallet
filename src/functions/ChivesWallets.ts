@@ -2,7 +2,7 @@ import { PromisePool } from '@supercharge/promise-pool'
 
 import type { JWKInterface } from 'arweave/web/lib/wallet'
 
-import { BalancePlus } from '../functions/AoConnect/AoConnect'
+import { BalancePlus, BalanceMinus } from '../functions/AoConnect/AoConnect'
 
 import { customAlphabet } from 'nanoid';
 
@@ -761,34 +761,37 @@ export async function getWalletBalanceReservedRewards(Address: string, tokenType
     }
 }
 
-export async function getTxsInMemory() {
+export async function getTxsInMemoryXwe() {
     try {
-        if(authConfig.tokenType == "XWE")           {
-            const response = await axios.get(authConfig.backEndApi + '/tx/pending/record', { timeout: 10000 } ).then(res=>res.data);
-            if(response && response.length>0) {
-                const SendTxsInMemory: any = {}
-                const ReceiveTxsInMemory: any = {}
-                for (const item of response) {
-                    if(SendTxsInMemory[item.owner.address])  {
-                        SendTxsInMemory[item.owner.address] = BalancePlus(Number(item.quantity.xwe), Number(SendTxsInMemory[item.owner.address]))
-                    }
-                    else {
-                        SendTxsInMemory[item.owner.address] = Number(item.quantity.xwe)
-                    }
-                    if(ReceiveTxsInMemory[item.recipient])  {
-                        ReceiveTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(ReceiveTxsInMemory[item.recipient]))
-                    }
-                    else {
-                        ReceiveTxsInMemory[item.recipient] = Number(item.quantity.xwe)
-                    }
-                }
+          const response = await axios.get(authConfig.backEndApiXwe + '/tx/pending/record', { timeout: 10000 } ).then(res=>res.data);
+          if(response && response.length>0) {
+              const SendTxsInMemory: any = {}
+              const ReceiveTxsInMemory: any = {}
+              const BalanceTxsInMemory: any = {}
+              for (const item of response) {
+                  if(SendTxsInMemory[item.owner.address])  {
+                      SendTxsInMemory[item.owner.address] = BalancePlus(Number(item.quantity.xwe), Number(SendTxsInMemory[item.owner.address]))
+                      BalanceTxsInMemory[item.owner.address] = BalanceMinus(Number(BalanceTxsInMemory[item.owner.address]), Number(item.quantity.xwe))
+                  }
+                  else {
+                      SendTxsInMemory[item.owner.address] = Number(item.quantity.xwe)
+                      BalanceTxsInMemory[item.recipient] = 0 - Number(item.quantity.xwe)
+                  }
+                  if(ReceiveTxsInMemory[item.recipient])  {
+                      ReceiveTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(ReceiveTxsInMemory[item.recipient]))
+                      BalanceTxsInMemory[item.recipient] = BalancePlus(Number(item.quantity.xwe), Number(BalanceTxsInMemory[item.recipient]))
+                  }
+                  else {
+                      ReceiveTxsInMemory[item.recipient] = Number(item.quantity.xwe)
+                      BalanceTxsInMemory[item.recipient] = Number(item.quantity.xwe)
+                  }
+              }
 
-                return {send: SendTxsInMemory, receive: ReceiveTxsInMemory}
-            }
-        }
+              return {send: SendTxsInMemory, receive: ReceiveTxsInMemory, balance: BalanceTxsInMemory}
+          }
     }
     catch (e) {
-        console.warn('getTxsInMemory failed')
+        console.warn('getTxsInMemoryXwe failed')
     }
 }
 

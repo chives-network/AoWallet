@@ -17,8 +17,13 @@ const HomeModel = () => {
   const [disabledFooter, setDisabledFooter] = useState<boolean>(true)
   const [encryptWalletDataKey, setEncryptWalletDataKey] = useState<string>('')
 
-  const handleSwitchBlockchain = () => {
-    setCurrentToken(currentToken == 'Ar' ? 'Xwe' : 'Ar');
+  const handleSwitchBlockchain = (targetToken: string | null = null) => {
+    if(targetToken != null) {
+      setCurrentToken(targetToken);
+    }
+    else {
+      setCurrentToken(currentToken == 'Ar' ? 'Xwe' : 'Ar');
+    }
   }
 
   return (
