@@ -1272,7 +1272,8 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                     top: -10,
                     position: 'fixed',
                     mt: '48px',
-                    height: '48px'
+                    height: '48px',
+                    paddingTop: 'env(safe-area-inset-top)'
                   }}
                 >
                   <Tabs

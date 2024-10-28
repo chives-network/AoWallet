@@ -45,7 +45,8 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                 position: 'fixed',
                 top: 45,
                 ml: -4,
-                height: '40px'
+                height: '40px',
+                paddingTop: 'env(safe-area-inset-top)'
             }}
         >
             <Tabs
