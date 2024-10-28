@@ -189,6 +189,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
           overflowX: 'hidden',
           marginTop: '48px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
+          paddingTop: 'env(safe-area-inset-top)'
         }}
       >
         <ContentWrapper

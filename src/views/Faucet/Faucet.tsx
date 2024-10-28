@@ -422,6 +422,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
           overflowY: 'auto',
           marginTop: '35px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
+          paddingTop: 'env(safe-area-inset-top)'
         }}
       >
         <ContentWrapper

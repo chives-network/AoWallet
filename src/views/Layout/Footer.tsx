@@ -49,7 +49,7 @@ const Footer = (props: any) => {
                 setSpecifyTokenSend(null)
                 setCurrentTab('Faucet')
                 break;
-              case 3:
+              case 2:
                 setSpecifyTokenSend(null)
                 setCurrentTab('Setting')
                 break;
