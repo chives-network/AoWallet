@@ -1269,7 +1269,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    top: -10,
+                    top: 0,
                     position: 'fixed',
                     mt: '48px',
                     height: '48px',
@@ -1288,7 +1288,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                   </Tabs>
                 </Box>
 
-                <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
+                <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
                     <Grid container spacing={2}>
 
                     {currentToken && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
