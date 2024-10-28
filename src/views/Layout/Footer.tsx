@@ -49,10 +49,6 @@ const Footer = (props: any) => {
                 setSpecifyTokenSend(null)
                 setCurrentTab('Faucet')
                 break;
-              case 2:
-                setSpecifyTokenSend(null)
-                setCurrentTab('Email')
-                break;
               case 3:
                 setSpecifyTokenSend(null)
                 setCurrentTab('Setting')
@@ -63,7 +59,6 @@ const Footer = (props: any) => {
         >
           <BottomNavigationAction label={t("Wallet")} disabled={disabledFooter} icon={<Icon icon='material-symbols:account-balance-wallet-outline' />} />
           <BottomNavigationAction label={t("Faucet")} disabled={disabledFooter} icon={<Icon icon='material-symbols:swap-horiz-rounded' />} />
-          <BottomNavigationAction label={t("Email")} disabled={disabledFooter} icon={<Icon icon='mdi:email-outline' />} />
           <BottomNavigationAction label={t("Setting")} disabled={disabledFooter} icon={<Icon icon='material-symbols:settings-outline' />} />
         </BottomNavigation>
       </Box>
