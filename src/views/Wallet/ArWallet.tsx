@@ -55,12 +55,12 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                 aria-label="icon position tabs example"
                 sx={{ my: 0, py: 0}}
             >
-            <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
-            <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
+            <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
+            <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
             </Tabs>
         </Box>
 
-        <Grid item xs={12} sx={{mt: '40px', height: 'calc(100% - 56px)'}}>
+        <Grid item xs={12} sx={{mt: '35px', height: 'calc(100% - 56px)'}}>
             <Grid container spacing={2}>
 
             {authConfig.tokenName && currentWalletTxsData && currentWalletTxsData.map((Tx: any, index: number) => {

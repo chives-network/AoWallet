@@ -330,7 +330,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                         sx={{ width: 60, height: 60, fontSize: '1.5rem' }}
                         src={GetAppAvatar(TokenData.Logo)}
                     />
-                    <Box sx={{ position: 'absolute', top: 0, right: 0, marginRight: -2, marginTop: -3 }}>
+                    <Box sx={{ position: 'absolute', top: 0, right: 0, marginRight: -2, marginTop: -2 }}>
                         <Typography variant="body2">
                             {t('Holders')}: {holdersNumber}
                         </Typography>
@@ -430,11 +430,11 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                         allowScrollButtonsMobile
                         aria-label="icon position tabs example"
                     >
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'MyTxs'} iconPosition="start" label={t("MyTxs") as string} />
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} iconPosition="start" label={t("Sent") as string} />
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} iconPosition="start" label={t("Received") as string} />
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'AllTxs'} iconPosition="start" label={t("AllTxs") as string} />
-                        <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Holders'} iconPosition="start" label={t("Holders") as string} />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'MyTxs'} iconPosition="start" label={t("MyTxs") as string} />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} iconPosition="start" label={t("Sent") as string} />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} iconPosition="start" label={t("Received") as string} />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'AllTxs'} iconPosition="start" label={t("AllTxs") as string} />
+                        <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Holders'} iconPosition="start" label={t("Holders") as string} />
                     </Tabs>
                 </Box>
             )}

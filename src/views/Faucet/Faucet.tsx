@@ -90,19 +90,19 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
   const RightButtonOnClick = () => {
 
-    console.log("chooseFaucet", chooseFaucet)
+    if(currentToken == 'Ar')  {
+      console.log("chooseFaucet", chooseFaucet)
 
-    if(RightButtonIcon == 'solar:dollar-linear')  {
-      setRightButtonIcon('solar:dollar-bold')
-      setIsRechargeMode(true)
+      if(RightButtonIcon == 'solar:dollar-linear')  {
+        setRightButtonIcon('solar:dollar-bold')
+        setIsRechargeMode(true)
+      }
+
+      if(RightButtonIcon == 'solar:dollar-bold')  {
+        setRightButtonIcon('solar:dollar-linear')
+        setIsRechargeMode(false)
+      }
     }
-
-    if(RightButtonIcon == 'solar:dollar-bold')  {
-      setRightButtonIcon('solar:dollar-linear')
-      setIsRechargeMode(false)
-    }
-
-    //handleWalletGoHome()
 
   }
 
@@ -369,7 +369,10 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
   useEffect(() => {
 
     setHeaderHidden(false)
-    setRightButtonIcon('solar:dollar-linear')
+
+    if(currentToken == 'Ar')  {
+      setRightButtonIcon('solar:dollar-linear')
+    }
 
     const currentAddressTemp = getCurrentWalletAddress(encryptWalletDataKey)
     setCurrentAddress(String(currentAddressTemp))
