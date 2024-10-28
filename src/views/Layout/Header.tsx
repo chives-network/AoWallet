@@ -18,6 +18,7 @@ const Header = (props: any) => {
       elevation={0}
       sx={{
         backgroundColor: 'background.paper',
+        paddingTop: 'env(safe-area-inset-top)'
       }}
     >
       <Toolbar sx={{ height: '100%', display: 'flex', alignItems: 'center', minHeight: 48 }}>
