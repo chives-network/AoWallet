@@ -365,7 +365,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
           flex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
-          marginTop: '48px', // Adjust according to the height of the AppBar
+          marginTop: '35px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer
           paddingTop: 'env(safe-area-inset-top)'
         }}

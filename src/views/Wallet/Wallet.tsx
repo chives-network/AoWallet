@@ -879,7 +879,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
           flex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
-          marginTop: '48px', // Adjust according to the height of the AppBar
+          marginTop: '35px', // Adjust according to the height of the AppBar
           marginBottom: '56px', // Adjust according to the height of the Footer,
           paddingTop: 'env(safe-area-inset-top)'
         }}
@@ -1259,36 +1259,34 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
             }
 
             {pageModel == 'AllTxs' && currentToken == "Xwe" && (
-              <Grid container spacing={0}>
+              <Grid container spacing={0} >
                 <Box
                   component='header'
                   sx={{
                     backgroundColor: 'background.paper',
-                    width: '91%',
+                    width: '100%',
                     zIndex: 10,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    top: 0,
-                    position: 'fixed',
-                    mt: '48px',
-                    height: '48px',
-                    paddingTop: 'env(safe-area-inset-top)'
+                    height: '40px'
                   }}
                 >
                   <Tabs
                     value={activeTab}
                     onChange={handleChangeActiveTab}
                     aria-label="icon position tabs example"
-                    sx={{ height: '48px', my: 0, py: 0}}
+                    sx={{ my: 0, py: 0}}
+                    variant="scrollable"
+                    allowScrollButtonsMobile
                   >
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label="All Txs" />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label="All Txs" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
                   </Tabs>
                 </Box>
 
-                <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
+                <Grid item xs={12} sx={{mt: '20px', height: 'calc(100% - 56px)'}}>
                     <Grid container spacing={2}>
 
                     {currentToken && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {

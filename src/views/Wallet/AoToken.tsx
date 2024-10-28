@@ -35,12 +35,12 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
 
     const TokenData = {...chooseToken.TokenData, TokenId: chooseToken.TokenId}
     const TokenId = chooseToken.TokenId
-    
+
     const [tokenListAction, setTokenListAction] = useState<string>(TokenData.Release == "ChivesToken" ? "MyTxs" : "Holders")
     const pageSize = 20
     const startIndex = TokenData.Release == "ChivesToken" ? (page) * pageSize : 0
     const endIndex = (page+1) * pageSize
-    
+
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [holdersNumber, setHoldersNumber] = useState<number>(0)
     const [circulatingSupply, setCirculatingSupply] = useState<string>('')
@@ -111,8 +111,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                     console.log("handleAoTokenReceivedTransactions", page, TokenData)
                     break;
                 case 'Holders':
-                    if( TokenData && TokenData.Release == "ChivesToken" 
-                        && tokenHoldersTxsChivesToken && tokenHoldersTxsChivesToken[0] && tokenHoldersTxsChivesToken[1] 
+                    if( TokenData && TokenData.Release == "ChivesToken"
+                        && tokenHoldersTxsChivesToken && tokenHoldersTxsChivesToken[0] && tokenHoldersTxsChivesToken[1]
                         && startIndex > 0 && startIndex > tokenHoldersTxsChivesToken[1] ) {
 
                         break;
@@ -236,7 +236,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
         if(authConfig.AoConnectBlockTxIds.includes(CurrentToken)) {
             console.log("handleAoTokenBalancesDryRunOfficialToken", "This token can not search txs records, due to txs are too large.")
 
-            return 
+            return
         }
         const getTokenAllHolderTxsData = getTokenAllHolderTxs(CurrentToken, encryptWalletDataKey);
         if (getTokenAllHolderTxsData) {
@@ -279,7 +279,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
         if(authConfig.AoConnectBlockTxIds.includes(CurrentToken)) {
             console.log("handleAoTokenBalancesDryRunChivesToken", "This token can not search txs records, due to txs are too large.")
 
-            return 
+            return
         }
         if(Denomination) {
             try{
@@ -294,7 +294,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     .sort((a: any, b: any) => b[1] - a[1])
                                     .reduce((acc: any, [key, value]) => {
                                         acc[key] = FormatBalance(Number(value), Number(Denomination));
-                                        
+
                                         return acc;
                                     }, {} as { [key: string]: number });
                 setCirculatingSupply(CirculatingSupply)
@@ -386,7 +386,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                         <Casino />
                     </IconButton>
                     <Typography sx={{
-                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`, 
+                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`,
                                         ml: 0.5
                                     }}
                                 >
@@ -400,14 +400,14 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                         <Send />
                     </IconButton>
                     <Typography sx={{
-                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`, 
+                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`,
                                     }}
                                 onClick={()=>Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 && handleClickSendButtonAO()}>
                         {t('Send') as string}
                     </Typography>
                 </Grid>
             </Grid>
-                
+
             {TokenData.Release == "ChivesToken" && (
                 <Box
                     component='header'
@@ -463,7 +463,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                     </Tabs>
                 </Box>
             )}
-            
+
             <Grid item xs={12} sx={{mt: 0, height: 'calc(100% - 56px)'}}>
                 <Grid container spacing={2} sx={{mt: 4}}>
 
@@ -481,8 +481,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: 'text.primary',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -498,10 +498,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 {formatHash(TokenIdValue, 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -515,8 +515,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'info.main',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -555,8 +555,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: 'text.primary',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -567,10 +567,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                                 {formatHash(TokenIdValue[0], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -584,8 +584,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'info.main',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -632,8 +632,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'text.primary',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -649,10 +649,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             {t('From') as string}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -671,8 +671,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: 'info.main',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -704,8 +704,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'text.primary',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -721,10 +721,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             {Tx[3] === "Received" ? `${t('From') as string}: ${formatHash(Tx[1], 5)}` : `${t('To') as string}: ${formatHash(Tx[1], 5)}`}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -738,8 +738,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: Tx[3] === "Received" ? "primary.main" : "info.main",
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -772,8 +772,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'text.primary',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -789,10 +789,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             {t('To')}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -806,8 +806,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: 'info.main',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -840,8 +840,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     >
                                     </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                                 color: 'text.primary',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -857,10 +857,10 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                             {t('From')}: {formatHash(Tx[1], 5)}
                                         </Typography>
                                         <Box sx={{ display: 'flex' }}>
-                                            <Typography 
-                                                variant='body2' 
-                                                sx={{ 
-                                                    color: `primary.dark`, 
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    color: `primary.dark`,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
@@ -874,8 +874,8 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                                     </Box>
 
                                     <Box textAlign="right">
-                                        <Typography 
-                                            sx={{ 
+                                        <Typography
+                                            sx={{
                                             color: 'info.main',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -913,7 +913,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                 </Grid>
 
             </Grid>
-                    
+
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={isLoading}
