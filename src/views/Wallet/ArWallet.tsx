@@ -42,11 +42,7 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                position: 'fixed',
-                top: 45,
-                ml: -4,
-                height: '40px',
-                paddingTop: 'env(safe-area-inset-top)'
+                height: '40px'
             }}
         >
             <Tabs
