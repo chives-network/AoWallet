@@ -910,7 +910,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                       <Typography variant="h5" mt={6} onClick={()=>{handleSwitchBlockchain()}} >
                         {Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe)} {currentToken}
                       </Typography>
-                      {currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
+                      {currentToken == "Xwe" && currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
                         <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='tdesign:plus' />
@@ -918,7 +918,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                           </Box>
                         </Typography>
                       )}
-                      {currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
+                      {currentToken == "Xwe" && currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
                         <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
                           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Icon icon='tdesign:minus' />
