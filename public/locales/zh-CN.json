@@ -110,5 +110,15 @@
   "Check Pin Code": "检查PIN码",
   "Set Pin Code": "设置PIN码",
   "Change pin code success": "更改PIN码成功",
-  "Change Pin Code": "更改PIN码"
+  "Change Pin Code": "更改PIN码",
+  "You have already applied, can not apply again.": "您已申请过，无法再次申请。",
+  "You have already applied, please wait 24 hours and try again.": "您已申请过，请等待24小时后再试。",
+  "Create Token": "创建代币",
+  "Requirement": "要求",
+  "Requirement AR": "AR要求",
+  "Requirement AO": "AO要求",
+  "My Coins": "我的币",
+  "Get airdrop success": "领取空投成功",
+  "Need your wallet balance more than 0.1 AR": "需要您的钱包余额大于0.1 AR",
+  "Have sent, please try again tomorrow": "已发送，请明天再试"
 }
