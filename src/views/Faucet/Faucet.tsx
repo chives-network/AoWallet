@@ -154,7 +154,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
       const res = await axios.post('https://faucet.chivesweave.org/faucet.php', { Code: Faucet.Code, Address: currentAddress, Rule: Faucet.Rule, TokenName: Faucet.TokenName, GetAmount: Faucet.GetAmount }).then(res=>res.data);
       try {
         if(res && res.status == "error")  {
-          toast.error(res.message, {
+          toast.error(t(res.message) as string, {
             duration: 4000
           })
           setIsDisabledButtonXwe((prevState: any)=>({
@@ -174,7 +174,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
             [Faucet.Code]: true
           }))
         }
-        else if(res && res.status == "ok" && res.result == "Transaction already processed.")  {
+        else if(res && res.status == "ok" && res.result == "Transaction already processed")  {
           toast.error(t(res.result) as string, {
             duration: 2000
           })

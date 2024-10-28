@@ -543,6 +543,12 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   }
 
   const handleClickAllTxsButton = () => {
+    if(currentToken == 'Ar') {
+      setActiveTab('Sent')
+    }
+    else {
+      setActiveTab('AllTxs')
+    }
     setPageModel('AllTxs')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Wallet Txs') as string)

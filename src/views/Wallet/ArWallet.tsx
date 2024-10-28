@@ -56,7 +56,7 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
             </Tabs>
         </Box>
 
-        <Grid item xs={12} sx={{mt: '35px', height: 'calc(100% - 56px)'}}>
+        <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
             <Grid container spacing={2}>
 
             {authConfig.tokenName && currentWalletTxsData && currentWalletTxsData.map((Tx: any, index: number) => {
