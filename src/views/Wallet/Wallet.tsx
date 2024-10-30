@@ -19,7 +19,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
 
-import { CallReceived, History, Casino, Send } from '@mui/icons-material';
+import { CallReceived, History, Send } from '@mui/icons-material';
 
 import { QRCode } from 'react-qrcode-logo';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -963,17 +963,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                                       }}
                                       onClick={()=>Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickAllTxsButton()}>
                             {t('Txs') as string}
-                          </Typography>
-                        </Grid>
-                        <Grid item sx={{mx: 2}}>
-                          <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} >
-                            <Casino />
-                          </IconButton>
-                          <Typography sx={{
-                                        color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
-                                      }}
-                                      >
-                            {t('Swap') as string}
                           </Typography>
                         </Grid>
                         <Grid item sx={{mx: 2}}>

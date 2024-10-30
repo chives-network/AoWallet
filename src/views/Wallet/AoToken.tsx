@@ -12,7 +12,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
 import IconButton from '@mui/material/IconButton'
-import { CallReceived, History, Casino, Send } from '@mui/icons-material'
+import { CallReceived, History, Send } from '@mui/icons-material'
 
 // ** MUI Imports
 import authConfig from '../../configs/auth'
@@ -378,20 +378,6 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                             setTokenHoldersTxsChivesToken({})
                         }
                     }}>{t('Holders') as string}</Typography>
-                </Grid>
-                <Grid item sx={{mx: 2}}>
-                    <IconButton
-                        disabled={Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? false : true}
-                        >
-                        <Casino />
-                    </IconButton>
-                    <Typography sx={{
-                                        color: Number(myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId]) > 0 ? `` : `secondary.dark`,
-                                        ml: 0.5
-                                    }}
-                                >
-                        {t('Swap') as string}
-                    </Typography>
                 </Grid>
                 <Grid item sx={{mx: 2}}>
                     <IconButton
