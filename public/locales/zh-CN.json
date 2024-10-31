@@ -128,5 +128,7 @@
   "Yes": "是",
   "No": "否",
   "Once this wallet is deleted, it cannot be restored.": "一旦此钱包被删除，将无法恢复。",
-  "Do you want delete this wallet": "您想要删除此钱包吗？"
+  "Do you want delete this wallet": "您想要删除此钱包吗？",
+  "Wallet Json Key Content": "钱包Json密钥内容",
+  "Import Mnemonic": "导入助记词"
 }

@@ -560,11 +560,13 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     })}
 
                     {model == 'Edit' && (
-                      <Box sx={{width: '100%'}}>
-                        <Button sx={{mt: 5}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
-                          {t("Create Wallet")}
-                        </Button>
-                      </Box>
+                      <Grid item xs={12} sx={{ py: 0 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', py: 1, width: '100%'}}>
+                            <Button sx={{mt: 5}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
+                              {t("Create Wallet")}
+                            </Button>
+                          </Box>
+                      </Grid>
                     )}
 
                   </Grid>
