@@ -839,43 +839,46 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                             </Box>
                           </Card>
                         </Grid>
-                        <Grid item xs={12} sx={{ py: 1 }}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCreateTokenButton()}>
-                                <Icon icon='material-symbols:token-outline' fontSize={34} />
-                              </IconButton>
-                              <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
-                                >
-                                <Typography sx={{
-                                  color: 'text.primary',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                                >
-                                  {t('Create Token') as string}
-                                </Typography>
-                                <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{
-                                    color: `secondary.primary`,
+                        {false && (
+                          <Grid item xs={12} sx={{ py: 1 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickCreateTokenButton()}>
+                                  <Icon icon='material-symbols:token-outline' fontSize={34} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickCreateTokenButton()}
+                                  >
+                                  <Typography sx={{
+                                    color: 'text.primary',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    flex: 1
-                                  }}>
+                                  }}
+                                  >
                                     {t('Create Token') as string}
                                   </Typography>
+                                  <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{
+                                      color: `secondary.primary`,
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      flex: 1
+                                    }}>
+                                      {t('Create Token') as string}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
                                 </Box>
                               </Box>
-                              <Box textAlign="right">
-                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickLanguageButton()}>
-                                      <Icon icon='mdi:chevron-right' fontSize={30} />
-                                  </IconButton>
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
+                            </Card>
+                          </Grid>
+                        )}
+
                     </Grid>
                 </Grid>
               </Grid>
@@ -1108,7 +1111,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             {pageModel == 'Language' && (
                 <Grid container spacing={2}>
 
-                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectLanguage(e.target.value)}>
+                    <RadioGroup row value={'value'}  sx={{width: '100%', mt: 1}} onClick={(e: any)=>e.target.value && handleSelectLanguage(e.target.value)}>
                         {LanguageArray.map((Language: any, index: number) => {
 
                             return (
@@ -1137,7 +1140,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             {pageModel == 'Theme' && (
                 <Grid container spacing={2}>
 
-                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectTheme(e.target.value)}>
+                    <RadioGroup row value={'value'}  sx={{width: '100%', mt: 1}} onClick={(e: any)=>e.target.value && handleSelectTheme(e.target.value)}>
                         {themeArray.map((Theme: any, index: number) => {
 
                             return (
@@ -1166,7 +1169,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             {pageModel == 'Currency' && (
                 <Grid container spacing={2}>
 
-                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectCurrency(e.target.value)}>
+                    <RadioGroup row value={'value'}  sx={{width: '100%', mt: 1}} onClick={(e: any)=>e.target.value && handleSelectCurrency(e.target.value)}>
                         {currencyArray.map((Currency: any, index: number) => {
 
                             return (
@@ -1195,7 +1198,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             {pageModel == 'Network' && (
                 <Grid container spacing={2}>
 
-                    <RadioGroup row value={'value'}  sx={{width: '100%'}} onClick={(e: any)=>e.target.value && handleSelectNetwork(e.target.value)}>
+                    <RadioGroup row value={'value'}  sx={{width: '100%', mt: 1}} onClick={(e: any)=>e.target.value && handleSelectNetwork(e.target.value)}>
                         {networkArray.map((Network: any, index: number) => {
 
                             return (
@@ -1222,14 +1225,13 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             )}
 
             {pageModel == 'CreateToken' && (
-                <Grid container spacing={2}>
-
+                <Grid container spacing={2} mt={1}>
                       <TextField
                         fullWidth
                         size='small'
                         value={tokenName}
                         placeholder={t('Token Name, eg. AOTest') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenName(e.target.value)
                         }}
@@ -1239,7 +1241,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenTicker}
                         placeholder={t('Token Ticker, eg. AOT') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenTicker(e.target.value)
                         }}
@@ -1249,7 +1251,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenTotalBalance}
                         placeholder={t('Total Balance, eg. 10000') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenTotalBalance(String(Number(e.target.value)))
                         }}
@@ -1259,7 +1261,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenLogo}
                         placeholder={t('Token Logo Hash, length 32 tx id on AR') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenLogo(e.target.value)
                         }}
@@ -1269,7 +1271,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenDenomination}
                         placeholder={t('Token Denomination, eg. 12') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 0 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 0, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenDenomination(e.target.value)
                         }}
