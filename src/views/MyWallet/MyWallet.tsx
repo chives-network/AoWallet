@@ -43,9 +43,16 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
-import { Capacitor } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+import Rollbar from "rollbar"
 
+const rollbarConfig = {
+  accessToken: "500d22dec90f4b8c8adeeeaad8e789c0",
+  environment: "production",
+};
+
+const rollbar = new Rollbar(rollbarConfig);
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -312,6 +319,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
         console.log('文件保存成功');
       } catch (error) {
         console.error('文件保存失败', error);
+        rollbar.error("文件保存失败", error as Error);
       }
     }
     else if (platform === 'ios') {
@@ -326,6 +334,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
         console.log('文件保存成功');
       } catch (error) {
         console.error('文件保存失败', error);
+        rollbar.error("文件保存失败", error as Error);
       }
     }
     else if (platform === 'web') {
