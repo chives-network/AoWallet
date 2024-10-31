@@ -43,6 +43,10 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+
+
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
   width: '100%',
@@ -289,11 +293,46 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
     setPageModel('DeleteWallet')
   }
 
-  const handleClickToExport = () => {
+  const handleClickToExport = async () => {
     const Address = chooseWallet.data.arweave.key
     const fileName = "chivesweave_keyfile_" + Address + "____" + removePunctuation(getWalletNicknamesData[Address]) + ".json";
     const mimeType = "text/plain";
-    downloadTextFile(JSON.stringify(chooseWallet.jwk), fileName, mimeType);
+
+    const platform = Capacitor.getPlatform();
+
+    if (platform === 'android') {
+      console.log('当前平台是 Android');
+      try {
+        await Filesystem.writeFile({
+          path: fileName,
+          data: JSON.stringify(chooseWallet.jwk),
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+        console.log('文件保存成功');
+      } catch (error) {
+        console.error('文件保存失败', error);
+      }
+    }
+    else if (platform === 'ios') {
+      console.log('当前平台是 iOS');
+      try {
+        await Filesystem.writeFile({
+          path: fileName,
+          data: JSON.stringify(chooseWallet.jwk),
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+        console.log('文件保存成功');
+      } catch (error) {
+        console.error('文件保存失败', error);
+      }
+    }
+    else if (platform === 'web') {
+      console.log('当前平台是 Web');
+      downloadTextFile(JSON.stringify(chooseWallet.jwk), fileName, mimeType);
+    }
+
   };
 
   const handleNoClose = () => {
