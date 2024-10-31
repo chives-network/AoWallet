@@ -904,7 +904,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{height: '100%'}}>
                   <Grid container spacing={2}>
-                    <Box p={2} textAlign="center" sx={{width: '100%'}}>
+                    <Box p={2} textAlign="center" sx={{position: 'relative', width: '100%'}}>
                       <CustomAvatar
                         skin='light'
                         color='primary'
@@ -917,20 +917,24 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                         {Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe)} {currentToken}
                       </Typography>
                       {currentToken == "Xwe" && currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
-                        <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
-                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Icon icon='tdesign:plus' />
-                            {currentTxsInMemory['receive'][currentAddress]} {currentToken}
-                          </Box>
-                        </Typography>
+                        <Box sx={{ position: 'absolute', top: 5, right: 20 }}>
+                          <Typography variant="body1" component="div" sx={{ color: 'primary.main' }}>
+                            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <Icon icon='tdesign:plus' />
+                              {currentTxsInMemory['receive'][currentAddress]} {currentToken}
+                            </Box>
+                          </Typography>
+                        </Box>
                       )}
                       {currentToken == "Xwe" && currentTxsInMemory && currentTxsInMemory['send'] && currentTxsInMemory['send'][currentAddress] && (
-                        <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
-                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Icon icon='tdesign:minus' />
-                            {currentTxsInMemory['send'][currentAddress]} {currentToken}
-                          </Box>
-                        </Typography>
+                        <Box sx={{ position: 'absolute', top: currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] ? 30 : 5, right: 20 }}>
+                          <Typography variant="body1" component="div" sx={{ color: 'warning.main' }}>
+                            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <Icon icon='tdesign:minus' />
+                              {currentTxsInMemory['send'][currentAddress]} {currentToken}
+                            </Box>
+                          </Typography>
+                        </Box>
                       )}
                       {currentBalanceReservedRewards && Number(currentBalanceReservedRewards) > 0 && (
                         <Typography variant="body1" component="div" sx={{ color: 'info.main' }}>
@@ -1275,9 +1279,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                     variant="scrollable"
                     allowScrollButtonsMobile
                   >
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label="All Txs" />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label="Sent" />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label="Received" />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label={t("All Txs") as string} />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label={t("Sent") as string} />
+                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label={t("Received") as string} />
                   </Tabs>
                 </Box>
 

@@ -120,5 +120,7 @@
   "My Coins": "我的币",
   "Get airdrop success": "领取空投成功",
   "Need your wallet balance more than 0.1 AR": "需要您的钱包余额大于0.1 AR",
-  "Have sent, please try again tomorrow": "已发送，请明天再试"
+  "Have sent, please try again tomorrow": "已发送，请明天再试",
+  "Wallet Txs": "交易记录",
+  "All Txs": "全部记录"
 }

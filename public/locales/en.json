@@ -121,6 +121,8 @@
   "My Coins": "My Coins",
   "Get airdrop success" : "Get airdrop success",
   "Need your wallet balance more than 0.1 AR" : "Need your wallet balance more than 0.1 AR",
-  "Have sent, please try again tomorrow" : "Have sent, please try again tomorrow"
+  "Have sent, please try again tomorrow" : "Have sent, please try again tomorrow",
+  "Wallet Txs": "Wallet Txs",
+  "All Txs": "All Txs"
 
 }

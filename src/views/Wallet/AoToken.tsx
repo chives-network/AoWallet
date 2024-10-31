@@ -340,6 +340,7 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
                             {t('Issue')}: {circulatingSupply}
                         </Typography>
                     </Box>
+
                 </Box>
                 <Typography variant="h5" mt={3}>
                     {myAoTokensBalance && myAoTokensBalance[currentAddress] && myAoTokensBalance[currentAddress][TokenId] } {TokenData.Ticker}
