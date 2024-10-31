@@ -124,6 +124,13 @@
   "Need your wallet balance more than 0.1 AR" : "Need your wallet balance more than 0.1 AR",
   "Have sent, please try again tomorrow" : "Have sent, please try again tomorrow",
   "Wallet Txs": "Wallet Txs",
-  "All Txs": "All Txs"
+  "All Txs": "All Txs",
+  "Are you deleting your wallet?": "Are you deleting your wallet?",
+  "Yes": "Yes",
+  "No": "No",
+  "Once this wallet is deleted, it cannot be restored.": "Once this wallet is deleted, it cannot be restored.",
+  "Do you want delete this wallet": "Do you want delete this wallet",
+  "Wallet Json Key Content": "Wallet Json Key Content",
+  "Import Mnemonic": "Import Mnemonic"
 
 }

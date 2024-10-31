@@ -33,7 +33,7 @@ import toast from 'react-hot-toast'
 import TextField2 from '../../views/Layout/TextField2'
 import { useDropzone } from 'react-dropzone'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWalletJsonData, importWalletJsonFile, readFileText } from '../../functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWallet12MnemonicData, importWalletJsonFile, readFileText, jwkFromMnemonic } from '../../functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -83,6 +83,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   const [chooseWalletName, setChooseWalletName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [importKeyValue, setImportKeyValue] = useState<string>("")
+  const [importMnemonicValue, setImportMnemonicValue] = useState<string>("")
 
 
   const handleWalletGoHome = () => {
@@ -180,6 +181,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   const handleCreateWalletMenu = () => {
     const bottomMenusList: any[] = []
     bottomMenusList.push({icon: 'material-symbols:add', title: t('Add Wallet'), function: 'handleWalletCreate'})
+    bottomMenusList.push({icon: 'mdi:code-json', title: t('Import Mnemonic'), function: 'handleWalletMnemonic'})
     bottomMenusList.push({icon: 'mdi:code-json', title: t('Import Key'), function: 'handleWalletImportKey'})
     bottomMenusList.push({icon: 'material-symbols:download-sharp', title: t('Import Json File'), function: 'handleWalletImportJsonFile'})
     setBottomMenus(bottomMenusList)
@@ -203,6 +205,13 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
     setRightButtonText('')
   }
 
+  const handleWalletMnemonic = () => {
+    setPageModel('ImportMnemonic')
+    setLeftIcon('mdi:code-json')
+    setTitle(t('Import Mnemonic') as string)
+    setRightButtonText('')
+  }
+
   const handleWalletImportKey = () => {
     setPageModel('ImportKey')
     setLeftIcon('mdi:code-json')
@@ -221,7 +230,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletCreateWalletData = async () => {
     setIsLoading(true)
-    const ImportJsonFileWalletAddress: any = await generateArWalletJsonData(encryptWalletDataKey)
+    const ImportJsonFileWalletAddress: any = await generateArWallet12MnemonicData(encryptWalletDataKey)
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
         setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
         setChooseWalletName('')
@@ -229,6 +238,40 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
         handleWalletGoHome()
     }
     setIsLoading(false)
+  }
+
+  const handleWalletImportMnemonicData = async () => {
+    try {
+      setIsLoading(true)
+      const ImportWallet = await jwkFromMnemonic(importMnemonicValue)
+      console.log("importMnemonicValue", importMnemonicValue, ImportWallet)
+      if(ImportWallet)  {
+        const IsExist = getAllWalletsData.filter((wallet: any) => wallet.jwk.n == ImportWallet.n)
+        if(IsExist && IsExist.length > 0)  {
+          setChooseWalletName('')
+          setImportMnemonicValue('')
+          handleWalletGoHome()
+          toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
+        }
+        else {
+          const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, importMnemonicValue)
+          if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
+              setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
+              setChooseWalletName('')
+              setImportMnemonicValue('')
+              handleWalletGoHome()
+          }
+        }
+      }
+      else {
+        toast.error(t('Import mnemonic invalid') as string, { duration: 2500, position: 'top-center' })
+      }
+      setIsLoading(false)
+    }
+    catch(e: any) {
+      toast.error(t('Import mnemonic failed') as string, { duration: 2500, position: 'top-center' })
+      setIsLoading(false)
+    }
   }
 
   const handleWalletImportKeyData = async () => {
@@ -242,7 +285,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
         toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
       }
       else {
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, '')
         if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
             setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
             setChooseWalletName('')
@@ -264,7 +307,6 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletRename = () => {
     setPageModel('RenameWallet')
-    console.log("handleWalletRename", chooseWallet)
     chooseWallet && setChooseWalletName(getWalletNicknamesData[chooseWallet.data.arweave.key] ?? 'My Wallet')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Rename Wallet') as string)
@@ -279,7 +321,6 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   };
 
   const handleWalletExportKeyShow = () => {
-    console.log("handleWalletExportKeyShow", chooseWallet)
     setPageModel('ExportKeyShow')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Show Key') as string)
@@ -287,7 +328,6 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   }
 
   const handleWalletExportKeyHidden = () => {
-    console.log("handleWalletExportKeyHidden", chooseWallet)
     setPageModel('ExportKeyHidden')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Hidden Key') as string)
@@ -295,7 +335,6 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   }
 
   const handleWalletDelete = async () => {
-    console.log("handleWalletDelete", chooseWallet)
     setOpen(true);
     setPageModel('DeleteWallet')
   }
@@ -370,7 +409,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleImportWalletJsonFile = async (file: File) => {
     const jsonFileContent: string = await readFileText(file)
-    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey)
+    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey, '')
 
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
         setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6), encryptWalletDataKey)
@@ -521,8 +560,8 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     })}
 
                     {model == 'Edit' && (
-                      <Box sx={{width: '100%', mr: 2}}>
-                        <Button sx={{mt: 5, ml: 2}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
+                      <Box sx={{width: '100%'}}>
+                        <Button sx={{mt: 5}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
                           {t("Create Wallet")}
                         </Button>
                       </Box>
@@ -563,6 +602,9 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                           case 'handleWalletCreate':
                             handleWalletCreate();
                             break;
+                          case 'handleWalletMnemonic':
+                            handleWalletMnemonic();
+                            break;
                           case 'handleWalletImportKey':
                             handleWalletImportKey();
                             break;
@@ -593,18 +635,12 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
               {isLoading ?
               <Fragment>
                 <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    <Box sx={{
-                      mt: 12,
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexDirection: 'column',
-                      justifyContent: 'center'
-                    }}>
-                      <CircularProgress sx={{ mb: 4 }} />
-                      <Typography>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                    </Box>
-                  </Grid>
+                    <Grid item xs={12}>
+                        <Box sx={{ mt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <CircularProgress sx={{ mb: 4 }} />
+                            <Typography sx={{mt: 3}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                        </Box>
+                    </Grid>
                 </Grid>
               </Fragment>
               :
@@ -617,10 +653,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={chooseWalletName}
                       onChange={(e) => setChooseWalletName(e.target.value)}
                       placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 } }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1, mt: 2 } }}
                     />
                     <Box sx={{width: '100%', mt: 2}}>
-                      <Button sx={{mt: 8}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
+                      <Button sx={{mt: 5}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
                         {t("Create Wallet")}
                       </Button>
                     </Box>
@@ -637,16 +673,14 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
               {isLoading ?
               <Fragment>
-                <CardContent>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12}>
-                            <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                                <CircularProgress sx={{ ml: 5, mb: 4 }} />
-                                <Typography sx={{ml: 5}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                            </Box>
-                        </Grid>
+                <Grid container spacing={5}>
+                    <Grid item xs={12}>
+                        <Box sx={{ mt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <CircularProgress sx={{ mb: 4 }} />
+                            <Typography sx={{mt: 3}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                        </Box>
                     </Grid>
-                </CardContent>
+                </Grid>
               </Fragment>
               :
               <Fragment>
@@ -658,21 +692,71 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={chooseWalletName}
                       onChange={(e) => setChooseWalletName(e.target.value)}
                       placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 } }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
                     />
                     <TextField
                       multiline
-                      rows={8}
+                      rows={6}
                       fullWidth
                       size='small'
                       value={importKeyValue}
                       onChange={(e) => setImportKeyValue(e.target.value)}
-                      placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 3 }}
+                      placeholder={t('Wallet Json Key Content') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
                     />
-                    <Box sx={{width: '100%', mr: 2}}>
-                      <Button sx={{mt: 8, ml: 2}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
+                    <Box sx={{width: '100%'}}>
+                      <Button sx={{mt: 8}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
                         {t("Import Key")}
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+
+              </Fragment>
+              }
+
+            </Grid>
+          )}
+
+          {pageModel == 'ImportMnemonic' && (
+            <Grid container spacing={2}>
+
+              {isLoading ?
+              <Fragment>
+                <Grid container spacing={5}>
+                    <Grid item xs={12}>
+                        <Box sx={{ mt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <CircularProgress sx={{ mb: 4 }} />
+                            <Typography sx={{mt: 3}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                        </Box>
+                    </Grid>
+                </Grid>
+              </Fragment>
+              :
+              <Fragment>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                  <Grid container spacing={2}>
+                    <TextField
+                      fullWidth
+                      size='small'
+                      value={chooseWalletName}
+                      onChange={(e) => setChooseWalletName(e.target.value)}
+                      placeholder={t('Wallet Name') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                    />
+                    <TextField
+                      multiline
+                      rows={2}
+                      fullWidth
+                      size='small'
+                      value={importMnemonicValue}
+                      onChange={(e) => setImportMnemonicValue(e.target.value)}
+                      placeholder={t('12 mnemonic words') as string}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                    />
+                    <Box sx={{width: '100%'}}>
+                      <Button sx={{mt: 8}} disabled={chooseWalletName == '' || importMnemonicValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportMnemonicData}>
+                        {t("Import Mnemonic")}
                       </Button>
                     </Box>
                   </Grid>
@@ -690,18 +774,12 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
               {isLoading ?
               <Fragment>
                 <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    <Box sx={{
-                      mt: 12,
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexDirection: 'column',
-                      justifyContent: 'center'
-                    }}>
-                      <CircularProgress sx={{ mb: 4 }} />
-                      <Typography>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
-                    </Box>
-                  </Grid>
+                    <Grid item xs={12}>
+                        <Box sx={{ mt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <CircularProgress sx={{ mb: 4 }} />
+                            <Typography sx={{mt: 3}}>{`${t(`Create a new wallet, please wait`)}`} ...</Typography>
+                        </Box>
+                    </Grid>
                 </Grid>
               </Fragment>
               :
@@ -741,10 +819,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     value={chooseWalletName}
                     onChange={(e) => setChooseWalletName(e.target.value)}
                     placeholder={t('My Wallet') as string}
-                    sx={{ '& .MuiInputBase-root': { borderRadius: 5 } }}
+                    sx={{ '& .MuiInputBase-root': { borderRadius: 1, mt: 2 } }}
                   />
-                  <Box sx={{width: '100%', mr: 3}}>
-                    <Button sx={{mt: 8, mx: 2}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
+                  <Box sx={{width: '100%'}}>
+                    <Button sx={{mt: 8}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
                       {t("Save")}
                     </Button>
                   </Box>
@@ -758,28 +836,28 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
             <Grid container spacing={6}>
               <Grid item xs={12}>
                 <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'primary.main', height: '100%' }}>
-                <Box
-                  position="relative"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
                   <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    bottom={0}
-                    sx={{
-                      backdropFilter: 'blur(5px)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      borderRadius: 1
-                    }}
-                  />
-                  <TextField2
+                    position="relative"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Box
+                      position="absolute"
+                      top={0}
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      sx={{
+                        backdropFilter: 'blur(5px)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        borderRadius: 1
+                      }}
+                    />
+                    <TextField2
                       disabled
                       multiline
-                      rows={8}
+                      rows={6}
                       size="small"
                       sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
                   />
@@ -789,10 +867,27 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       sx={{ mt: 5, width: '100px' }}
                       size="small"
                       variant="outlined"
-                      onClick={() => {
-                        navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
-                      }}
                       disabled
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
+                    </Button>
+                  </Box>
+
+                  <TextField2
+                      disabled
+                      multiline
+                      rows={2}
+                      size="small"
+                      value={''}
+                      sx={{ mt: 5, width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                  />
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      disabled
+                      sx={{ mt: 5, width: '200px' }}
+                      size="small"
+                      variant="outlined"
                       startIcon={<Icon icon='mdi:pencil' />}
                     >
                       {t("Copy")}
@@ -818,7 +913,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                   <TextField2
                       multiline
-                      rows={8}
+                      rows={6}
                       size="small"
                       value={JSON.stringify(chooseWallet.jwk)}
                       sx={{ width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
@@ -831,6 +926,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       variant="outlined"
                       onClick={() => {
                         navigator.clipboard.writeText(JSON.stringify(chooseWallet.jwk));
+                        toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
                       }}
                       startIcon={<Icon icon='mdi:pencil' />}
                     >
@@ -844,6 +940,29 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       startIcon={<Icon icon='mdi:pencil' />}
                     >
                       {t("Export")}
+                    </Button>
+                  </Box>
+
+                  <TextField2
+                      multiline
+                      rows={2}
+                      size="small"
+                      value={chooseWallet.mnemonic}
+                      sx={{ mt: 5, width: '100%', resize: 'both', '& .MuiInputBase-input': { fontSize: '0.875rem' } }}
+                      placeholder={t("Mnemonic") as string}
+                  />
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button
+                      sx={{ mt: 5, width: '200px' }}
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        navigator.clipboard.writeText(chooseWallet.mnemonic);
+                        toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                      }}
+                      startIcon={<Icon icon='mdi:pencil' />}
+                    >
+                      {t("Copy")}
                     </Button>
                   </Box>
 

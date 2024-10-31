@@ -4,7 +4,7 @@ import type { JWKInterface } from 'arweave/web/lib/wallet'
 
 import { BalancePlus, BalanceMinus } from '../functions/AoConnect/AoConnect'
 
-import { customAlphabet } from 'nanoid';
+import { customAlphabet } from 'nanoid'
 
 // @ts-ignore
 import { v4 } from 'uuid'
@@ -12,6 +12,11 @@ import BigNumber from 'bignumber.js'
 
 import Arweave from 'arweave'
 import crypto from 'crypto'
+
+import * as bip39 from 'bip39'
+
+import { mnemonicToSeed } from "bip39-web-crypto"
+import { getKeyPairFromSeed } from "human-crypto-keys"
 
 // ** Third Party Imports
 import axios from 'axios'
@@ -231,12 +236,48 @@ export function resetChivesContactsEncryptedKey(oldKey: string, newKey: string) 
     }
 }
 
+export async function jwkFromMnemonic (mnemonic: string) {
+  const seedBuffer = await mnemonicToSeed(mnemonic);
+  const { privateKey } = await getKeyPairFromSeed(
+
+    //@ts-ignore
+    seedBuffer,
+    {
+      id: "rsa",
+      modulusLength: 4096
+    },
+    { privateKeyFormat: "pkcs8-der" }
+  );
+  const jwk = pkcs8ToJwk(privateKey as any);
+
+  return jwk;
+}
+
+export async function generateArWallet12MnemonicData (encryptWalletDataKey: string) {
+
+    try {
+        const mnemonic = bip39.generateMnemonic()
+        const ArWalletJsonData = await jwkFromMnemonic(mnemonic)
+
+        console.log('generateArWallet12MnemonicData newMnemonic:', mnemonic)
+        console.log('generateArWallet12MnemonicData ArWalletJsonData:', ArWalletJsonData)
+
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, mnemonic)
+
+        return ImportJsonFileWalletAddress
+
+    }
+    catch (error) {
+        console.log('Error generateArWalletJsonData:', error);
+    }
+}
+
 export async function generateArWalletJsonData (encryptWalletDataKey: string) {
 
     try {
         const ArWalletJsonData = await arweave.wallets.generate()
 
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, '')
 
         return ImportJsonFileWalletAddress
 
@@ -251,10 +292,11 @@ export async function jwkToAddress (jwk: any) {
     return await arweave.wallets.jwkToAddress(jwk as any)
 }
 
-export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: string) {
+export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: string, mnemonic: string) {
 
     const mnemonicToJwkValue: any = {}
     mnemonicToJwkValue.jwk = wallet
+    mnemonicToJwkValue.mnemonic = mnemonic
 
     //Get Wallet Data From LocalStorage
     const chivesWalletsList = window.localStorage.getItem(chivesWallets)
@@ -308,7 +350,7 @@ export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: s
 export async function addFileToJwk (keyfile: string) {
     try {
         const data = keyfile != null && keyfile != '' && JSON.parse(keyfile) as JWKInterface
-		const jwk = data || await arweave.wallets.generate()
+		    const jwk = data || await arweave.wallets.generate()
 
         return { jwk }
     } catch (error) {

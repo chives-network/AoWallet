@@ -123,5 +123,10 @@
   "Need your wallet balance more than 0.1 AR": "需要您的钱包余额大于0.1 AR",
   "Have sent, please try again tomorrow": "已发送，请明天再试",
   "Wallet Txs": "交易记录",
-  "All Txs": "全部记录"
+  "All Txs": "全部记录",
+  "Are you deleting your wallet?": "您正在删除钱包吗？",
+  "Yes": "是",
+  "No": "否",
+  "Once this wallet is deleted, it cannot be restored.": "一旦此钱包被删除，将无法恢复。",
+  "Do you want delete this wallet": "您想要删除此钱包吗？"
 }
