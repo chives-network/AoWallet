@@ -258,14 +258,9 @@ export async function generateArWallet12MnemonicData (encryptWalletDataKey: stri
     try {
         const mnemonic = bip39.generateMnemonic()
         const ArWalletJsonData = await jwkFromMnemonic(mnemonic)
-
-        console.log('generateArWallet12MnemonicData newMnemonic:', mnemonic)
-        console.log('generateArWallet12MnemonicData ArWalletJsonData:', ArWalletJsonData)
-
         const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, mnemonic)
 
         return ImportJsonFileWalletAddress
-
     }
     catch (error) {
         console.log('Error generateArWalletJsonData:', error);
