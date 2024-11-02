@@ -572,8 +572,6 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                   </Grid>
               </Grid>
 
-
-
               <Drawer
                 anchor={'bottom'}
                 open={drawerStatus}
