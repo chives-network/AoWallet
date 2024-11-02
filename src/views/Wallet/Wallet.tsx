@@ -1465,7 +1465,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                         size='small'
                         value={searchContactkeyWord}
                         placeholder={t('Search or Input Address') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3, ml: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, ml: 2 }}
                         onChange={(e: any)=>{
                           setSearchContactkeyWord(e.target.value)
                           const searchChivesContactsData = searchChivesContacts(e.target.value, encryptWalletDataKey)
@@ -1569,7 +1569,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                           }
                         }}
                         placeholder={t('Amount') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2, px: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2, px: 2 }}
                       />
                       <ThemeProvider theme={themeSlider}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
@@ -1607,7 +1607,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                   </Grid>
                   <Grid item xs={12} sx={{ py: 1 }}>
                     <Box sx={{width: '100%', px: 2, mr: 2}}>
-                      <Button sx={{mt: 8}} fullWidth disabled={
+                      <Button sx={{mt: 5}} fullWidth disabled={
                         (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) ? false : true)
                         ||
                         (isDisabledButton)
@@ -1673,7 +1673,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                           }
                         }}
                         placeholder={t('Amount') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mt: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2 }}
                       />
                       <ThemeProvider theme={themeSlider}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
@@ -1719,7 +1719,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                   </Grid>
                   <Grid item xs={12} sx={{ py: 1 }}>
                     <Box sx={{width: '100%', mr: 2}}>
-                      <Button sx={{mt: 8}} fullWidth disabled={
+                      <Button sx={{mt: 5}} fullWidth disabled={
                         (sendMoneyAddress && sendMoneyAddress.address && Number(sendMoneyAmount) > 0 && (Number(currentFeeAO) + Number(sendMoneyAmount)) < Number(chooseTokenBalance) ? false : true)
                         ||
                         (isDisabledButton)
@@ -1741,7 +1741,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
             )}
 
             {pageModel == 'ManageAssets' && (
-              <Grid container spacing={2}>
+              <Grid container spacing={2} mt={1}>
                 <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
                     <Grid container spacing={2}>
                       <TextField
@@ -1749,7 +1749,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                         size='small'
                         value={searchAssetkeyWord}
                         placeholder={t('Search Assets') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 5 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3 }}
                         onChange={(e: any)=>{
                           setSearchAssetkeyWord(e.target.value)
                         }}

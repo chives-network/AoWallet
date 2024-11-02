@@ -561,8 +561,8 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
                     {model == 'Edit' && (
                       <Grid item xs={12} sx={{ py: 0 }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', py: 1, width: '100%'}}>
-                            <Button sx={{mt: 5}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', width: '100%'}}>
+                            <Button sx={{mt: 4}} fullWidth variant='contained' onClick={()=>handleWalletCreateMenu()}>
                               {t("Create Wallet")}
                             </Button>
                           </Box>
@@ -655,9 +655,9 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={chooseWalletName}
                       onChange={(e) => setChooseWalletName(e.target.value)}
                       placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1, mt: 2 } }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 2, mt: 2 } }}
                     />
-                    <Box sx={{width: '100%', mt: 2}}>
+                    <Box sx={{width: '100%'}}>
                       <Button sx={{mt: 5}} disabled={chooseWalletName=='' ? true : false} fullWidth variant='contained' onClick={handleWalletCreateWalletData}>
                         {t("Create Wallet")}
                       </Button>
@@ -694,7 +694,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={chooseWalletName}
                       onChange={(e) => setChooseWalletName(e.target.value)}
                       placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2 }}
                     />
                     <TextField
                       multiline
@@ -704,10 +704,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={importKeyValue}
                       onChange={(e) => setImportKeyValue(e.target.value)}
                       placeholder={t('Wallet Json Key Content') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2 }}
                     />
                     <Box sx={{width: '100%'}}>
-                      <Button sx={{mt: 8}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
+                      <Button sx={{mt: 5}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
                         {t("Import Key")}
                       </Button>
                     </Box>
@@ -744,7 +744,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={chooseWalletName}
                       onChange={(e) => setChooseWalletName(e.target.value)}
                       placeholder={t('Wallet Name') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2 }}
                     />
                     <TextField
                       multiline
@@ -754,10 +754,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       value={importMnemonicValue}
                       onChange={(e) => setImportMnemonicValue(e.target.value)}
                       placeholder={t('12 mnemonic words') as string}
-                      sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mt: 2 }}
+                      sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2 }}
                     />
                     <Box sx={{width: '100%'}}>
-                      <Button sx={{mt: 8}} disabled={chooseWalletName == '' || importMnemonicValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportMnemonicData}>
+                      <Button sx={{mt: 5}} disabled={chooseWalletName == '' || importMnemonicValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportMnemonicData}>
                         {t("Import Mnemonic")}
                       </Button>
                     </Box>
@@ -821,10 +821,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     value={chooseWalletName}
                     onChange={(e) => setChooseWalletName(e.target.value)}
                     placeholder={t('My Wallet') as string}
-                    sx={{ '& .MuiInputBase-root': { borderRadius: 1, mt: 2 } }}
+                    sx={{ '& .MuiInputBase-root': { borderRadius: 2, mt: 2 } }}
                   />
                   <Box sx={{width: '100%'}}>
-                    <Button sx={{mt: 8}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
+                    <Button sx={{mt: 5}} fullWidth variant='contained' onClick={()=>handleWalletRenameSave()}>
                       {t("Save")}
                     </Button>
                   </Box>
@@ -853,7 +853,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       sx={{
                         backdropFilter: 'blur(5px)',
                         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: 1
+                        borderRadius: 2
                       }}
                     />
                     <TextField2
@@ -896,11 +896,11 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     </Button>
                   </Box>
 
-                  <Card sx={{mt: 8}}>
+                  <Card sx={{mt: 5}}>
                     <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
                     <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
                   </Card>
-                  <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
+                  <Button sx={{mt: 5}} fullWidth variant='contained' onClick={() => handleWalletExportKeyShow()}>
                     {t("Show")}
                   </Button>
 
@@ -968,11 +968,11 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                     </Button>
                   </Box>
 
-                  <Card sx={{mt: 8}}>
+                  <Card sx={{mt: 5}}>
                     <Typography sx={{my: 2, pl: 2, fontWeight: 600, color: 'warning.main', textDecoration: 'none'}}>{t('Never Share Your Recovery Phrase') as string}</Typography>
                     <Typography sx={{my: 2, pl: 2, color: 'text.secondary'}}>{t('Anyone with it has full control over your wallet. Our support team will never ask for it') as string}</Typography>
                   </Card>
-                  <Button sx={{mt: 8}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
+                  <Button sx={{mt: 5}} fullWidth variant='contained' onClick={() => handleWalletExportKeyHidden()}>
                     {t("Hidden")}
                   </Button>
 

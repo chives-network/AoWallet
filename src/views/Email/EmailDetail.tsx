@@ -67,10 +67,10 @@ const EmailDetail = (props: EmailDetailType) => {
         handleReadEmailContent(currentEmail.Id, folder)
       }
     };
-  
+
     fetchData();
   }, [currentEmail]);
-  
+
 
   // ** Hook
   const { settings } = useSettings()
@@ -147,7 +147,7 @@ const EmailDetail = (props: EmailDetailType) => {
       show={emailDetailWindowOpen}
       sx={{ zIndex: 3, width: '100%', overflow: 'hidden' }}
       onClose={() => {
-        setEmailDetailWindowOpen(false)        
+        setEmailDetailWindowOpen(false)
       }}
     >
       {currentEmail && currentEmail ? (
@@ -174,7 +174,7 @@ const EmailDetail = (props: EmailDetailType) => {
                   size='small'
                   sx={{ mr: 2 }}
                   onClick={() => {
-                    setEmailDetailWindowOpen(false)                    
+                    setEmailDetailWindowOpen(false)
                   }}
                 >
                   <Icon icon={goBackIcon} fontSize='2rem' />
@@ -243,7 +243,7 @@ const EmailDetail = (props: EmailDetailType) => {
                   sx={{
                     mb: 3,
                     width: '100%',
-                    borderRadius: 1,
+                    borderRadius: 2,
                     overflow: 'visible',
                     position: 'relative',
                     backgroundColor: 'background.paper',
@@ -288,7 +288,7 @@ const EmailDetail = (props: EmailDetailType) => {
                           options={[
                             {
                               text: t('Reply'),
-                              menuItemProps: { 
+                              menuItemProps: {
                                 sx: { '& svg': { mr: 2 } },
                                 onClick: () => {
                                   handleReply()
@@ -314,7 +314,7 @@ const EmailDetail = (props: EmailDetailType) => {
                   <Divider sx={{ m: '0 !important' }} />
                   <Box sx={{ p: 4, pt: 4 }}>
                     <Typography variant='subtitle2' sx={{ color: 'text.primary', whiteSpace: 'pre-line' }}>
-                    {currentEmail.Content}                                 
+                    {currentEmail.Content}
                     </Typography>
                   </Box>
                 </Box>
@@ -323,7 +323,7 @@ const EmailDetail = (props: EmailDetailType) => {
                   sx={{
                     p: 5,
                     width: '100%',
-                    borderRadius: 1,
+                    borderRadius: 2,
                     border: '1px solid',
                     borderColor: 'divider',
                     backgroundColor: 'background.paper',

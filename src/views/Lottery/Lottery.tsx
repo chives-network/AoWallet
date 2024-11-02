@@ -211,7 +211,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
                 margin: 'auto',
                 padding: { xs: 2, sm: 3 },
                 backgroundColor: 'background.paper',
-                borderRadius: 1,
+                borderRadius: 2,
                 boxShadow: 1,
               }} dangerouslySetInnerHTML={{ __html: `While from a user perspective, there will be a smooth experience and seem like one contest, there’ll actually be two draws: one for the lottery and one for the jackpot. Both will run simultaneously. Note that wagering puts you in for a chance of winning both, however, there are some key differences between the lottery and the jackpot:
 

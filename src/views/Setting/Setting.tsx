@@ -885,15 +885,15 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
             )}
 
             {pageModel == 'Contacts' && (
-              <Grid container spacing={2}>
+              <Grid container spacing={2} mt={0}>
                 <Grid item xs={12} sx={{height: 'calc(100%)'}}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} pl={2}>
                       <TextField
                         fullWidth
                         size='small'
                         value={searchContactkeyWord}
                         placeholder={t('Search Contact') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 2 }}
                         onChange={(e: any)=>{
                             setSearchContactkeyWord(e.target.value)
                             const searchChivesContactsData = searchChivesContacts(e.target.value, encryptWalletDataKey)
@@ -959,32 +959,27 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
             {pageModel == 'NewContact' && (
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sx={{height: 'calc(100%)'}}>
-                        <Grid container spacing={2}>
-                            <TextField
-                                fullWidth
-                                size='small'
-                                value={contactName}
-                                onChange={(e) => setContactName(e.target.value)}
-                                placeholder={t('Contact Name') as string}
-                                sx={{ '& .MuiInputBase-root': { borderRadius: 2 } }}
-                            />
-                            <TextField
-                                fullWidth
-                                size='small'
-                                value={contactAddress}
-                                onChange={(e) => setContactAddress(e.target.value)}
-                                placeholder={t('Contact Address') as string}
-                                sx={{ mt: 3, '& .MuiInputBase-root': { borderRadius: 2 } }}
-                            />
-                            <Box sx={{width: '100%', mr: 3}}>
-                                <Button sx={{mt: 8, mx: 2}} disabled={contactName != '' && contactAddress && contactAddress.length == 43 ? false : true} fullWidth variant='contained' onClick={()=>handleContactSave()}>
-                                {t("Save")}
-                                </Button>
-                            </Box>
-                        </Grid>
-                    </Grid>
-
+                  <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                    <TextField
+                        fullWidth
+                        size='small'
+                        value={contactName}
+                        onChange={(e) => setContactName(e.target.value)}
+                        placeholder={t('Contact Name') as string}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 } }}
+                    />
+                    <TextField
+                        fullWidth
+                        size='small'
+                        value={contactAddress}
+                        onChange={(e) => setContactAddress(e.target.value)}
+                        placeholder={t('Contact Address') as string}
+                        sx={{ mt: 3, '& .MuiInputBase-root': { borderRadius: 2 } }}
+                    />
+                    <Button sx={{mt: 5, px: 2}} disabled={contactName != '' && contactAddress && contactAddress.length == 43 ? false : true} fullWidth variant='contained' onClick={()=>handleContactSave()}>
+                    {t("Save")}
+                    </Button>
+                  </Grid>
                 </Grid>
             )}
 
@@ -1231,7 +1226,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenName}
                         placeholder={t('Token Name, eg. AOTest') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenName(e.target.value)
                         }}
@@ -1241,7 +1236,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenTicker}
                         placeholder={t('Token Ticker, eg. AOT') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenTicker(e.target.value)
                         }}
@@ -1251,7 +1246,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenTotalBalance}
                         placeholder={t('Total Balance, eg. 10000') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenTotalBalance(String(Number(e.target.value)))
                         }}
@@ -1261,7 +1256,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenLogo}
                         placeholder={t('Token Logo Hash, length 32 tx id on AR') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 3, mx: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenLogo(e.target.value)
                         }}
@@ -1271,14 +1266,14 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         size='small'
                         value={tokenDenomination}
                         placeholder={t('Token Denomination, eg. 12') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 1 }, mb: 0, mx: 2 }}
+                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 0, mx: 2 }}
                         onChange={(e: any)=>{
                           setTokenDenomination(e.target.value)
                         }}
                       />
 
                       <Box sx={{width: '100%', mx: 2, display: 'flex', justifyContent: 'center'}}>
-                        <Button sx={{mt: 8}}  disabled={isDisabledButton} variant='contained' onClick={()=>handleCreateTokenButton()}>
+                        <Button sx={{mt: 5}}  disabled={isDisabledButton} variant='contained' onClick={()=>handleCreateTokenButton()}>
                           {uploadingButton}
                         </Button>
                       </Box>

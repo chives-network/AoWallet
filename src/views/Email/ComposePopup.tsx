@@ -269,7 +269,7 @@ const ComposePopup = (props: MailComposeType) => {
         display: 'block',
         zIndex: theme => `${theme.zIndex.drawer} + 1`,
         '& .MuiDrawer-paper': {
-          borderRadius: 1,
+          borderRadius: 2,
           position: 'static',
           width: composePopupWidth
         }

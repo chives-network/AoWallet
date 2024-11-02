@@ -64,7 +64,7 @@ const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
   const [composeTitle, setComposeTitle] = useState<string>(`${t(`Compose`)}`)
   const [composeOpen, setComposeOpen] = useState<boolean>(false)
   const toggleComposeOpen = () => setComposeOpen(!composeOpen)
-  
+
   //const hidden = useMediaQuery(theme.breakpoints.down('lg'))
   const hidden = true
   const store = useSelector((state: RootState) => state.email)
@@ -86,7 +86,7 @@ const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
 
   // ** State
   const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 12 })
-  
+
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setPaginationModel({ ...paginationModel, page });
     console.log("handlePageChange", event)
@@ -122,7 +122,7 @@ const EmailAppLayout = ({ encryptWalletDataKey }: any) => {
         width: '100%',
         height: '100%',
         display: 'flex',
-        borderRadius: 1,
+        borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',
         boxShadow: skin === 'bordered' ? 0 : 6,
