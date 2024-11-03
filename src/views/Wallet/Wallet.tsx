@@ -197,6 +197,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       case 'MainWallet':
         setCurrentTab('MyWallet')
         break
+      case 'ViewTx':
+        handleClickViewTxReturnButton()
+        break;
     }
   }
 
@@ -283,6 +286,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const [currentBalanceXwe, setCurrentBalanceXwe] = useState<string>("") // Xwe
   const [currentBalanceReservedRewards, setCurrentBalanceReservedRewards] = useState<string>("") // Xwe
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({}) // Xwe
+  const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
 
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
@@ -549,6 +553,18 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     else {
       setActiveTab('AllTxs')
     }
+    setPageModel('AllTxs')
+    setLeftIcon('mdi:arrow-left-thin')
+    setTitle(t('Wallet Txs') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+    setCurrentWalletTxsCursor({})
+    setCurrentWalletTxs(null)
+    setPage(0)
+    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true})
+  }
+
+  const handleClickViewTxReturnButton = () => {
     setPageModel('AllTxs')
     setLeftIcon('mdi:arrow-left-thin')
     setTitle(t('Wallet Txs') as string)
@@ -874,6 +890,8 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       },
     },
   });
+
+  console.log("currentTx", currentTx)
 
   return (
     <Fragment>
@@ -1238,7 +1256,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                             </Box>
                           </Grid>
 
-
                         </Grid>
                       </Fragment>
 
@@ -1293,7 +1310,10 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                       return (
                         <Grid item xs={12} sx={{ py: 0 }} key={index}>
                           <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={ ()=>{
+                                setCurrentTx(Tx)
+                                setPageModel('ViewTx')
+                              } }>
                             <CustomAvatar
                               skin='light'
                               color={'primary'}
@@ -1301,12 +1321,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                               src={'https://web.aowallet.org/images/logo/Xwe.png'}
                             >
                             </CustomAvatar>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }} onClick={ async ()=>{
-                              await Clipboard.write({
-                                string: Tx.owner.address == currentAddress ? Tx.recipient : Tx.owner.address
-                              });
-                              toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-                            }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
                                 <Typography
                                   sx={{
                                     color: 'text.primary',
@@ -1372,6 +1387,134 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 >
                   <CircularProgress color="inherit" size={45}/>
                 </Backdrop>
+
+              </Grid>
+            )}
+
+            {pageModel == 'ViewTx' && currentToken == "Xwe" && currentTx && (
+              <Grid container spacing={0} >
+
+                <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
+                  <Grid container spacing={2}>
+
+                    <Grid item xs={12} sx={{ py: 0 }} >
+                        <Box px={2} pb={2} textAlign="center" sx={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+                          <Typography variant='h3' sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mb: 1.5, mr: 1 }}>
+                            {currentTx.owner.address == currentAddress ? ' - ' : ' + '}
+                          </Typography>
+                          <Typography variant='h2' sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {currentTx.quantity.xwe}
+                          </Typography>
+                          <Typography variant='body2' sx={{ marginLeft: '5px', mb: 1 }}>
+                            {currentToken}
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('TxId')}: </Typography>
+                          </Box>
+                          <Box textAlign="right" onClick={ async ()=>{
+                                                    await Clipboard.write({
+                                                      string: currentTx.id
+                                                    });
+                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                                                  }}>
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {formatHash(currentTx.id, 8)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('From Address')}: </Typography>
+                          </Box>
+                          <Box textAlign="right" onClick={ async ()=>{
+                                                    await Clipboard.write({
+                                                      string: currentTx.owner.address
+                                                    });
+                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                                                  }}>
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {formatHash(currentTx.owner.address, 8)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Target Address')}: </Typography>
+                          </Box>
+                          <Box textAlign="right" onClick={ async ()=>{
+                                                    await Clipboard.write({
+                                                      string: currentTx.recipient
+                                                    });
+                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                                                  }}>
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {formatHash(currentTx.recipient, 8)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Block Height')}: </Typography>
+                          </Box>
+                          <Box textAlign="right">
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {currentTx.block.height}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Block Time')}: </Typography>
+                          </Box>
+                          <Box textAlign="right">
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {formatTimestamp(currentTx.block.timestamp)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Block Hash')}: </Typography>
+                          </Box>
+                          <Box textAlign="right" onClick={ async ()=>{
+                                                    await Clipboard.write({
+                                                      string: currentTx.block.indep_hash
+                                                    });
+                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
+                                                  }}>
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {formatHash(currentTx.block.indep_hash, 8)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Data Size')}: </Typography>
+                          </Box>
+                          <Box textAlign="right">
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {currentTx.data.size}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                              <Typography >{t('Tx Fee')}: </Typography>
+                          </Box>
+                          <Box textAlign="right">
+                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                              {currentTx.fee.xwe}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                    </Grid>
+
+                  </Grid>
+                </Grid>
 
               </Grid>
             )}
@@ -1451,7 +1594,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                       }
                     }}>
                         Close Video
-                      </Button>
+                  </Button>
                 </Grid>
               </Grid>
             )}
