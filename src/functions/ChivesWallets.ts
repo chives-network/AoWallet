@@ -883,13 +883,18 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
             break;
         case 'Files':
             addressApiType = "datarecord";
+            if(getTxsInMemoryXweData && getTxsInMemoryXweData['Received'][Address] && getTxsInMemoryXweData['Received'][Address] && getTxsInMemoryXweData['Received'][Address].length > 0) {
+              txsRecordsInMemory = getTxsInMemoryXweData['Received'][Address]
+            }
             break;
     }
+    console.log("currentWalletTxs addressApiType", addressApiType)
 
     try {
         if(addressApiType && addressApiType!="" && Address && Address.length == 43)  {
-            const response = await axios.get(authConfig.backEndApiXwe + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize, { timeout: 10000 }).then(res=>res.data)
-            const NewData: any[] = response.data.filter((record: any) => record.recipient)
+            const url = authConfig.backEndApiXwe + '/wallet/' + `${Address}` + '/' + `${addressApiType}` + '/' + `${pageId}` + '/' + pageSize
+            const response = await axios.get(url, { timeout: 10000 }).then(res=>res.data)
+            const NewData: any[] = response.data.filter((record: any) => addressApiType == "datarecord" ? record.id : record.recipient)
             if(txsRecordsInMemory && txsRecordsInMemory.length > 0) {
               response.data = [...txsRecordsInMemory, ...NewData]
             }
@@ -904,6 +909,17 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
         console.warn('getXweWalletAllTxs failed')
     }
 
+}
+
+export function getXweWalletImageThumbnail(FileInfo: any | null) {
+  if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43) {
+
+    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+  }
+  else {
+
+    return 'https://web.aowallet.org/images/logo/Xwe.png'
+  }
 }
 
 export function winstonToAr(winston: string) {

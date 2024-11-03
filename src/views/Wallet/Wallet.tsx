@@ -17,7 +17,6 @@ import { getInitials } from '../../@core/utils/get-initials'
 import Slider from '@mui/material/Slider'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
-import Tab from '@mui/material/Tab'
 
 import { CallReceived, History, Send } from '@mui/icons-material';
 
@@ -45,7 +44,7 @@ import { GetArWalletAllTxs } from '../../functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp, ansiRegex } from '../../configs/functions'
+import { formatHash, ansiRegex } from '../../configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
@@ -53,10 +52,10 @@ import SetPinKeyboard from '../Layout/SetPinKeyboard'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 import ArWallet from './ArWallet'
 import AoToken from './AoToken'
+import XweAllTxs from './XweAllTxs'
+import XweViewTx from './XweViewTx'
 
 import { createTheme, ThemeProvider } from '@mui/material';
-
-import Tabs from '@mui/material/Tabs';
 
 import { BrowserMultiFormatReader } from '@zxing/library';
 
@@ -98,7 +97,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const [contactsAll, setContactsAll] = useState<any>({})
   const [currentWalletTxs, setCurrentWalletTxs] = useState<any>(null)
   const [currentWalletTxsCursor, setCurrentWalletTxsCursor] = useState<any>({})
-  const [currentWalletTxsHasNextPage, setCurrentWalletTxsHasNextPage] = useState<any>({'Sent': true, 'Received': true, 'AllTxs': true})
+  const [currentWalletTxsHasNextPage, setCurrentWalletTxsHasNextPage] = useState<any>({'Sent': true, 'Received': true, 'AllTxs': true, 'Files': true})
 
   const [mySavingTokensData, setMySavingTokensData] = useState<any[]>([])
   const [allTokensData, setAllTokensData] = useState<any[]>([])
@@ -432,6 +431,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
           if(allTxs)  {
             setCurrentWalletTxs(allTxs)
           }
+          console.log("currentWalletTxs allTxs", allTxs)
           setIsDisabledButton(false)
         }
       }
@@ -561,7 +561,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     setCurrentWalletTxsCursor({})
     setCurrentWalletTxs(null)
     setPage(0)
-    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true})
+    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true, 'Files': true})
   }
 
   const handleClickViewTxReturnButton = () => {
@@ -573,7 +573,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     setCurrentWalletTxsCursor({})
     setCurrentWalletTxs(null)
     setPage(0)
-    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true})
+    setCurrentWalletTxsHasNextPage({'Sent': true, 'Received': true, 'AllTxs': true, 'Files': true})
   }
 
   const handleClickSendButton = () => {
@@ -1275,248 +1275,25 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
             }
 
             {pageModel == 'AllTxs' && currentToken == "Xwe" && (
-              <Grid container spacing={0} >
-                <Box
-                  component='header'
-                  sx={{
-                    backgroundColor: 'background.paper',
-                    width: '100%',
-                    zIndex: 10,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '40px'
-                  }}
-                >
-                  <Tabs
-                    value={activeTab}
-                    onChange={handleChangeActiveTab}
-                    aria-label="icon position tabs example"
-                    sx={{ my: 0, py: 0}}
-                    variant="scrollable"
-                    allowScrollButtonsMobile
-                  >
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'AllTxs'} icon={<Icon fontSize={20} icon='ant-design:transaction-outlined' />} iconPosition="start" label={t("All Txs") as string} />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Sent'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-right' />} iconPosition="start" label={t("Sent") as string} />
-                    <Tab sx={{ textTransform: 'none', my: 0, py: 0, minHeight: '40px'}} value={'Received'} icon={<Icon fontSize={20} icon='mdi:receipt-text-arrow-left' />} iconPosition="start" label={t("Received") as string} />
-                  </Tabs>
-                </Box>
-
-                <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
-                    <Grid container spacing={2}>
-
-                    {currentToken && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
-
-                      return (
-                        <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={ ()=>{
-                                setCurrentTx(Tx)
-                                setPageModel('ViewTx')
-                              } }>
-                            <CustomAvatar
-                              skin='light'
-                              color={'primary'}
-                              sx={{ mr: 0, width: 38, height: 38 }}
-                              src={'https://web.aowallet.org/images/logo/Xwe.png'}
-                            >
-                            </CustomAvatar>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                                <Typography
-                                  sx={{
-                                    color: 'text.primary',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    textAlign: 'left'
-                                  }}
-                                >
-                                  {Tx.owner.address == currentAddress ? formatHash(Tx.recipient, 8) : formatHash(Tx.owner.address, 8)}
-                                </Typography>
-                                <Box sx={{ display: 'flex' }}>
-                                  <Typography
-                                    variant='body2'
-                                    sx={{
-                                      color: Tx.block && Tx.block.timestamp ? `primary.dark` : `warning.dark`,
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      whiteSpace: 'nowrap',
-                                      flex: 1,
-                                      textAlign: 'left'
-                                    }}
-                                  >
-                                    {Tx.block && Tx.block.timestamp ? formatTimestamp(Tx.block.timestamp) : t('Memory Pool Tx')}
-                                  </Typography>
-                                </Box>
-                              </Box>
-
-                              <Box textAlign="right">
-                                <Typography variant='h6' sx={{
-                                  color: `info.dark`,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                  mr: 2
-                                }}>
-                                  {Tx.owner.address == currentAddress ? ' - ' : ' + '}
-                                  {Number(Tx.quantity.xwe).toFixed(4)}
-                                </Typography>
-
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
-                      )
-                    })}
-
-                    {currentToken && currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
-                      <Grid item xs={12} sx={{ py: 0 }}>
-                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', px: 2, py: 1}}>
-                          {t('No Record')}
-                        </Box>
-                      </Grid>
-                    )}
-
-                    </Grid>
-
-                </Grid>
-
-                <Backdrop
-                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                  open={isDisabledButton}
-                >
-                  <CircularProgress color="inherit" size={45}/>
-                </Backdrop>
-
-              </Grid>
+              <XweAllTxs
+                currentWalletTxs={currentWalletTxs}
+                isDisabledButton={isDisabledButton}
+                currentAddress={currentAddress}
+                handleChangeActiveTab={handleChangeActiveTab}
+                activeTab={activeTab}
+                setCurrentTx={setCurrentTx}
+                setPageModel={setPageModel}
+                />
             )}
 
             {pageModel == 'ViewTx' && currentToken == "Xwe" && currentTx && (
-              <Grid container spacing={0} >
-
-                <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
-                  <Grid container spacing={2}>
-
-                    <Grid item xs={12} sx={{ py: 0 }} >
-                        <Box px={2} pb={2} textAlign="center" sx={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-                          <Typography variant='h3' sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mb: 1.5, mr: 1 }}>
-                            {currentTx.owner.address == currentAddress ? ' - ' : ' + '}
-                          </Typography>
-                          <Typography variant='h2' sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {currentTx.quantity.xwe}
-                          </Typography>
-                          <Typography variant='body2' sx={{ marginLeft: '5px', mb: 1 }}>
-                            {currentToken}
-                          </Typography>
-                        </Box>
-
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('TxId')}: </Typography>
-                          </Box>
-                          <Box textAlign="right" onClick={ async ()=>{
-                                                    await Clipboard.write({
-                                                      string: currentTx.id
-                                                    });
-                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-                                                  }}>
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {formatHash(currentTx.id, 8)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('From Address')}: </Typography>
-                          </Box>
-                          <Box textAlign="right" onClick={ async ()=>{
-                                                    await Clipboard.write({
-                                                      string: currentTx.owner.address
-                                                    });
-                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-                                                  }}>
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {formatHash(currentTx.owner.address, 8)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Target Address')}: </Typography>
-                          </Box>
-                          <Box textAlign="right" onClick={ async ()=>{
-                                                    await Clipboard.write({
-                                                      string: currentTx.recipient
-                                                    });
-                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-                                                  }}>
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {formatHash(currentTx.recipient, 8)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Block Height')}: </Typography>
-                          </Box>
-                          <Box textAlign="right">
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {currentTx.block.height}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Block Time')}: </Typography>
-                          </Box>
-                          <Box textAlign="right">
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {formatTimestamp(currentTx.block.timestamp)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Block Hash')}: </Typography>
-                          </Box>
-                          <Box textAlign="right" onClick={ async ()=>{
-                                                    await Clipboard.write({
-                                                      string: currentTx.block.indep_hash
-                                                    });
-                                                    toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
-                                                  }}>
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {formatHash(currentTx.block.indep_hash, 8)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Data Size')}: </Typography>
-                          </Box>
-                          <Box textAlign="right">
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {currentTx.data.size}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                              <Typography >{t('Tx Fee')}: </Typography>
-                          </Box>
-                          <Box textAlign="right">
-                            <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                              {currentTx.fee.xwe}
-                            </Typography>
-                          </Box>
-                        </Box>
-
-                    </Grid>
-
-                  </Grid>
-                </Grid>
-
-              </Grid>
+              <XweViewTx
+                currentTx={currentTx}
+                currentAddress={currentAddress}
+                currentToken={currentToken}
+                page={page}
+                setPage={setPage}
+                />
             )}
 
             {pageModel == 'AllTxs' && currentToken == "Ar" && (

@@ -131,6 +131,7 @@
   "Once this wallet is deleted, it cannot be restored.": "Once this wallet is deleted, it cannot be restored.",
   "Do you want delete this wallet": "Do you want delete this wallet",
   "Wallet Json Key Content": "Wallet Json Key Content",
-  "Import Mnemonic": "Import Mnemonic"
+  "Import Mnemonic": "Import Mnemonic",
+  "Files": "Files"
 
 }
