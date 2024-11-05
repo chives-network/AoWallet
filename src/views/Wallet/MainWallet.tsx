@@ -22,8 +22,10 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { GetAppAvatar } from '../../functions/AoConnect/Token'
 
+import MyFilesSummary from './MyFilesSummary'
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton } : any) => {
+
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon } : any) => {
 
   const { t } = useTranslation()
 
@@ -226,6 +228,15 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                   </Card>
                 </Grid>
 
+                {currentToken && currentToken == "Xwe" && (
+                  <MyFilesSummary
+                    currentAddress={currentAddress}
+                    setCurrentTx={setCurrentTx}
+                    setPageModel={setPageModel}
+                    setLeftIcon={setLeftIcon}
+                  />
+                )}
+
                 {currentToken && currentToken == "Ar" && (
                   <Grid item xs={12} sx={{ py: 0 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}>
@@ -350,20 +361,22 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
 
                 })}
 
-                <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
-                    {isDisabledManageAssets == false && currentToken == "Ar" && (
-                      <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
-                        {t('Manage Assets') as string}
-                      </Button>
-                    )}
-                    {isDisabledManageAssets == true && currentToken == "Ar" && (
-                      <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text'>
-                        {t('Loading') as string} ...
-                      </Button>
-                    )}
-                  </Box>
-                </Grid>
+                {currentToken && currentToken == "Ar" && (
+                  <Grid item xs={12} sx={{ py: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1 }}>
+                      {isDisabledManageAssets == false && currentToken == "Ar" && (
+                        <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text' startIcon={<Icon icon='mdi:add' />} onClick={() => handleClickManageAssetsButton()}>
+                          {t('Manage Assets') as string}
+                        </Button>
+                      )}
+                      {isDisabledManageAssets == true && currentToken == "Ar" && (
+                        <Button disabled={isDisabledManageAssets} sx={{ textTransform: 'none', mt: 3, ml: 2 }} variant='text'>
+                          {t('Loading') as string} ...
+                        </Button>
+                      )}
+                    </Box>
+                  </Grid>
+                )}
 
               </Grid>
             </Fragment>

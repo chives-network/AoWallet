@@ -912,7 +912,23 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
 }
 
 export function getXweWalletImageThumbnail(FileInfo: any | null) {
-  if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43) {
+  if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'image') {
+
+    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pdf') {
+
+    return '/images/files/pdf.png'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'docx') {
+
+    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'xlsx') {
+
+    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'video') {
 
     return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
   }

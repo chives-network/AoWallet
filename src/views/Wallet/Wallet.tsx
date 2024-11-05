@@ -42,6 +42,7 @@ import SendMoneyInputAmount from './SendMoneyInputAmount'
 import SendMoneySelectContact from './SendMoneySelectContact'
 import ReceiveMoney from './ReceiveMoney'
 import MainWallet from './MainWallet'
+import XweViewFile from './XweViewFile'
 
 import { BrowserMultiFormatReader } from '@zxing/library';
 
@@ -169,6 +170,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       case 'ManageAssets':
       case 'ViewToken':
       case 'ScanQRCode':
+      case 'ViewFile':
         if (stream) {
           closeVideoStream(stream);
         }
@@ -850,8 +852,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     }
   }, [searchAssetkeyWord]);
 
-  console.log("currentTx", currentTx)
-
   return (
     <Fragment>
       <Header Hidden={HeaderHidden} LeftIcon={LeftIcon} LeftIconOnClick={LeftIconOnClick} Title={Title} RightButtonText={RightButtonText} RightButtonOnClick={RightButtonOnClick} RightButtonIcon={RightButtonIcon}/>
@@ -896,6 +896,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 isDisabledManageAssets={isDisabledManageAssets}
                 handleClickManageAssetsButton={handleClickManageAssetsButton}
                 isDisabledButton={isDisabledButton}
+                setCurrentTx={setCurrentTx}
+                setPageModel={setPageModel}
+                setLeftIcon={setLeftIcon}
               />
             :
               <Fragment></Fragment>
@@ -915,6 +918,16 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
             {pageModel == 'ViewTx' && currentToken == "Xwe" && currentTx && (
               <XweViewTx
+                currentTx={currentTx}
+                currentAddress={currentAddress}
+                currentToken={currentToken}
+                page={page}
+                setPage={setPage}
+                />
+            )}
+
+            {pageModel == 'ViewFile' && currentToken == "Xwe" && currentTx && (
+              <XweViewFile
                 currentTx={currentTx}
                 currentAddress={currentAddress}
                 currentToken={currentToken}

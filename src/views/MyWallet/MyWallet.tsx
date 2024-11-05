@@ -1,6 +1,8 @@
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react'
 
+import { validateMnemonic } from 'bip39-web-crypto';
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -242,31 +244,37 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletImportMnemonicData = async () => {
     try {
-      setIsLoading(true)
-      const ImportWallet = await jwkFromMnemonic(importMnemonicValue)
-      console.log("importMnemonicValue", importMnemonicValue, ImportWallet)
-      if(ImportWallet)  {
-        const IsExist = getAllWalletsData.filter((wallet: any) => wallet.jwk.n == ImportWallet.n)
-        if(IsExist && IsExist.length > 0)  {
-          setChooseWalletName('')
-          setImportMnemonicValue('')
-          handleWalletGoHome()
-          toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
-        }
-        else {
-          const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, importMnemonicValue)
-          if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
-              setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
-              setChooseWalletName('')
-              setImportMnemonicValue('')
-              handleWalletGoHome()
-          }
-        }
+      const validateMnemonicData = validateMnemonic(importMnemonicValue)
+      if(!validateMnemonicData) {
+        toast.error(t('Mnemonic is invalid') as string, { duration: 2500, position: 'top-center' })
       }
       else {
-        toast.error(t('Import mnemonic invalid') as string, { duration: 2500, position: 'top-center' })
+        setIsLoading(true)
+        const ImportWallet = await jwkFromMnemonic(importMnemonicValue)
+        console.log("importMnemonicValue", importMnemonicValue, ImportWallet)
+        if(ImportWallet)  {
+          const IsExist = getAllWalletsData.filter((wallet: any) => wallet.jwk.n == ImportWallet.n)
+          if(IsExist && IsExist.length > 0)  {
+            setChooseWalletName('')
+            setImportMnemonicValue('')
+            handleWalletGoHome()
+            toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
+          }
+          else {
+            const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, importMnemonicValue)
+            if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
+                setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
+                setChooseWalletName('')
+                setImportMnemonicValue('')
+                handleWalletGoHome()
+            }
+          }
+        }
+        else {
+          toast.error(t('Import mnemonic invalid') as string, { duration: 2500, position: 'top-center' })
+        }
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
     catch(e: any) {
       toast.error(t('Import mnemonic failed') as string, { duration: 2500, position: 'top-center' })
