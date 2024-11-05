@@ -186,10 +186,6 @@ const ArWallet = ({ currentWalletTxs, isDisabledButton, currentAddress, handleCh
                 </Grid>
             )}
 
-
-
-
-
             </Grid>
 
         </Grid>
