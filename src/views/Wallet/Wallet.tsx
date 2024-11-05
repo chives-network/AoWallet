@@ -12,9 +12,6 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from '../../@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
-import TextField from '@mui/material/TextField'
-import { getInitials } from '../../@core/utils/get-initials'
-import Slider from '@mui/material/Slider'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -29,10 +26,9 @@ import Button from '@mui/material/Button'
 import Icon from '../../@core/components/icon'
 import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
-import { useTheme } from '@mui/material/styles'
 
 import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemoryXwe, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from '../../functions/ChivesWallets'
-import { BalanceMinus, BalancePlus, BalanceTimes, FormatBalance } from '../../functions/AoConnect/AoConnect'
+import { BalancePlus, FormatBalance } from '../../functions/AoConnect/AoConnect'
 
 import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
 
@@ -56,8 +52,8 @@ import XweAllTxs from './XweAllTxs'
 import XweViewTx from './XweViewTx'
 import ManageAssets from './ManageAssets'
 import SendMoneyInputAmountAO from './SendMoneyInputAmountAO'
-
-import { createTheme, ThemeProvider } from '@mui/material';
+import SendMoneyInputAmount from './SendMoneyInputAmount'
+import SendMoneySelectContact from './SendMoneySelectContact'
 
 import { BrowserMultiFormatReader } from '@zxing/library';
 
@@ -77,7 +73,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTokenSend, setSpecifyTokenSend, setDisabledFooter, encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   // ** Hook
   const { t, i18n } = useTranslation()
-  const theme = useTheme()
 
   const contentHeightFixed = {}
 
@@ -880,19 +875,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     }
   }, [searchAssetkeyWord]);
 
-
-  const themeSlider = createTheme({
-    components: {
-      MuiSlider: {
-        styleOverrides: {
-          root: {
-            color: theme.palette.primary.main,
-          },
-        },
-      },
-    },
-  });
-
   console.log("currentTx", currentTx)
 
   return (
@@ -1379,175 +1361,30 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
             )}
 
             {pageModel == 'SendMoneySelectContact' && (
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 104px)', mt: 2}}>
-                    <Grid container spacing={2}>
-                      <TextField
-                        fullWidth
-                        size='small'
-                        value={searchContactkeyWord}
-                        placeholder={t('Search or Input Address') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3, ml: 2 }}
-                        onChange={(e: any)=>{
-                          setSearchContactkeyWord(e.target.value)
-                          const searchChivesContactsData = searchChivesContacts(e.target.value, encryptWalletDataKey)
-                          setContactsAll(searchChivesContactsData)
-                          console.log("e.target.value", e.target.value)
-                        }}
-                      />
-                    </Grid>
-                    <Grid container spacing={2}>
-                    {Object.keys(contactsAll).map((Address: any, index: number) => {
-
-                      return (
-                        <Grid item xs={12} sx={{ py: 1 }} key={index}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                              <CustomAvatar
-                                skin='light'
-                                color={'primary'}
-                                sx={{ mr: 0, width: 43, height: 43, fontSize: '1.5rem' }}
-                              >
-                                {getInitials(Address).toUpperCase()}
-                              </CustomAvatar>
-                              <Box sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleSelectAddress({name: contactsAll[Address], address: Address})}
-                                >
-                                <Typography sx={{
-                                  color: 'text.primary',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                                >
-                                  {contactsAll[Address]}
-                                </Typography>
-                                <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{
-                                    color: `primary.dark`,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    flex: 1
-                                  }}>
-                                    {formatHash(Address, 10)}
-                                  </Typography>
-
-                                </Box>
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
-                      )
-
-                    })}
-                    </Grid>
-
-                </Grid>
-              </Grid>
+              <SendMoneySelectContact
+                searchContactkeyWord={searchContactkeyWord}
+                setSearchContactkeyWord={setSearchContactkeyWord}
+                setContactsAll={setContactsAll}
+                searchChivesContacts={searchChivesContacts}
+                encryptWalletDataKey={encryptWalletDataKey}
+                contactsAll={contactsAll}
+                handleSelectAddress={handleSelectAddress}
+              />
             )}
 
             {pageModel == 'SendMoneyInputAmount' && sendMoneyAddress && (
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{height: 'calc(100% - 100px)'}}>
-                    <Grid item xs={12} sx={{ pb: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2}}>
-                          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-                            >
-                            <Typography sx={{
-                              color: 'text.primary',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}
-                            >
-                             {t('Send to')}
-                            </Typography>
-                            <Box sx={{ display: 'flex', mt: 1}}>
-                              <Typography variant='body2' sx={{
-                                color: `primary.dark`,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                flex: 1,
-                                fontSize: '12px'
-                              }}>
-                                {sendMoneyAddress.address}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sx={{ py: 1 }}>
-                      <TextField
-                        disabled={isDisabledButton}
-                        fullWidth
-                        size='small'
-                        value={sendMoneyAmount}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const regex = /^[0-9]*\.?[0-9]*$/;
-                          if (regex.test(value)) {
-                            setSendMoneyAmount(value);
-                          }
-                        }}
-                        placeholder={t('Amount') as string}
-                        sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mt: 2, px: 2 }}
-                      />
-                      <ThemeProvider theme={themeSlider}>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 0, py: 0 }}>
-                          <Slider size="small"
-                                disabled={isDisabledButton}
-                                defaultValue={0}
-                                aria-labelledby="small-slider"
-                                min={0}
-                                max={100}
-                                onChange={( _ , newValue: number | number[])=>{
-                                  if (Array.isArray(newValue)) {
-                                    newValue = newValue[0];
-                                  }
-                                  const TotalLeft = BalanceMinus(Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe), Number(currentFee))
-                                  const MultiValue = newValue / 100
-                                  const result = BalanceTimes(Number(TotalLeft), MultiValue)
-                                  if(newValue == 100) {
-                                    setSendMoneyAmount( String(Number(result)) )
-
-                                  }
-                                  else {
-                                    setSendMoneyAmount( String(Number(result).toFixed(4)) )
-                                  }
-                                }}
-                                sx={{m: 0, p: 0, width: '90%' }}
-                                />
-                        </Box>
-                      </ThemeProvider>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                        {t('Max')}: {currentToken == 'Ar' ? currentBalance : currentBalanceXwe} {currentToken}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1.2, ml: 3 }}>
-                        {t('Fee')}: {currentFee}
-                      </Typography>
-                  </Grid>
-                  <Grid item xs={12} sx={{ py: 1 }}>
-                    <Box sx={{width: '100%', px: 2, mr: 2}}>
-                      <Button sx={{mt: 5}} fullWidth disabled={
-                        (sendMoneyAddress && sendMoneyAddress.address && currentFee && Number(sendMoneyAmount) > 0 && (Number(currentFee) + Number(sendMoneyAmount)) < Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) ? false : true)
-                        ||
-                        (isDisabledButton)
-                        } variant='contained' onClick={()=>handleWalletSendMoney()}>
-                        {uploadingButton}
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                <Backdrop
-                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                  open={isDisabledButton}
-                >
-                  <CircularProgress color="inherit" size={45}/>
-                </Backdrop>
-
-              </Grid>
+              <SendMoneyInputAmount
+                sendMoneyAddress={sendMoneyAddress}
+                isDisabledButton={isDisabledButton}
+                sendMoneyAmount={sendMoneyAmount}
+                setSendMoneyAmount={setSendMoneyAmount}
+                currentToken={currentToken}
+                currentBalance={currentBalance}
+                currentBalanceXwe={currentBalanceXwe}
+                currentFee={currentFee}
+                handleWalletSendMoney={handleWalletSendMoney}
+                uploadingButton={uploadingButton}
+              />
             )}
 
             {(pageModel == 'SendMoneyInputAmountAO' || pageModel == 'SendMoneyInputAmountAOFaucet') && sendMoneyAddress && (
