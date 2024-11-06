@@ -922,11 +922,15 @@ export function getXweWalletImageThumbnail(FileInfo: any | null) {
   }
   else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'docx') {
 
-    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+    return '/images/files/docx.png'
   }
   else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'xlsx') {
 
-    return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
+    return '/images/files/xlsx.png'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pptx') {
+
+    return '/images/files/pptx.png'
   }
   else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'video') {
 

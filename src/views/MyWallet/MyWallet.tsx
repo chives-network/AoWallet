@@ -244,7 +244,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletImportMnemonicData = async () => {
     try {
-      const validateMnemonicData = validateMnemonic(importMnemonicValue)
+      const validateMnemonicData = await validateMnemonic(importMnemonicValue)
       if(!validateMnemonicData) {
         toast.error(t('Mnemonic is invalid') as string, { duration: 2500, position: 'top-center' })
       }

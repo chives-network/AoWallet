@@ -217,7 +217,7 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken } : any) => {
                         <Typography >{t('Content Type')}: </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
-                      <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                      <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'wrap', mr: 2 }}>
                         {currentTx.table.content_type}
                       </Typography>
                     </Box>
