@@ -16,17 +16,17 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItem, { ListItemProps } from '@mui/material/ListItem'
 
 // ** Icon Imports
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 
 // ** Third Party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // ** Custom Components Imports
-import CustomBadge from '../../@core/components/mui/badge'
+import CustomBadge from 'src/@core/components/mui/badge'
 
 // ** Types
-import { CustomBadgeProps } from '../../@core/components/mui/badge/types'
-import { EmailSidebarType } from '../../types/apps/Chivesweave'
+import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
+import { EmailSidebarType } from 'src/types/apps/Chivesweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -52,7 +52,7 @@ const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
 const SidebarLeft = (props: EmailSidebarType) => {
   // ** Hook
   const { t } = useTranslation()
-  
+
   // ** Props
   const {
     store,

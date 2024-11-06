@@ -10,8 +10,8 @@ import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import CustomAvatar from '../../@core/components/mui/avatar'
-import { getInitials } from '../../@core/utils/get-initials'
+import CustomAvatar from 'src/@core/components/mui/avatar'
+import { getInitials } from 'src/@core/utils/get-initials'
 import IconButton from '@mui/material/IconButton'
 import Drawer from '@mui/material/Drawer'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -30,16 +30,16 @@ import DialogContentText from '@mui/material/DialogContentText'
 
 // ** MUI Imports
 import Button from '@mui/material/Button'
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
-import TextField2 from '../../views/Layout/TextField2'
+import TextField2 from 'src/views/Layout/TextField2'
 import { useDropzone } from 'react-dropzone'
 
 import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWallet12MnemonicData, importWalletJsonFile, readFileText, jwkFromMnemonic } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from '../../configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'

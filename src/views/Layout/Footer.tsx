@@ -3,7 +3,7 @@ import { useState } from 'react';
 // ** MUI Imports
 import Box from '@mui/material/Box'
 
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';

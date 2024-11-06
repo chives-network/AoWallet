@@ -10,21 +10,21 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 // ** Hooks
-import { useSettings } from '../../@core/hooks/useSettings'
+import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Types
-import { RootState, AppDispatch } from '../../store'
+import { RootState, AppDispatch } from 'src/store'
 
 // ** Email App Component Imports
-import EmailList from '../../views/Email/EmailList'
-import SidebarLeft from '../../views/Email/SidebarLeft'
-import ComposePopup from '../../views/Email/ComposePopup'
+import EmailList from 'src/views/Email/EmailList'
+import SidebarLeft from 'src/views/Email/SidebarLeft'
+import ComposePopup from 'src/views/Email/ComposePopup'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
 // ** Actions
-import { fetchData } from '../../store/apps/email'
+import { fetchData } from 'src/store/apps/email'
 
 import { getCurrentWalletAddress, getCurrentWallet } from 'src/functions/ChivesWallets'
 

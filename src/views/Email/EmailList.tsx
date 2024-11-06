@@ -16,13 +16,13 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import ListItem, { ListItemProps } from '@mui/material/ListItem'
 
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 
 // ** Third Party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // ** Custom Components Imports
-import OptionsMenu from '../../@core/components/option-menu'
+import OptionsMenu from 'src/@core/components/option-menu'
 
 // ** Email App Component Imports
 import { setTimeout } from 'timers'
@@ -31,11 +31,11 @@ import EmailDetail from './EmailDetail'
 import Pagination from '@mui/material/Pagination'
 
 // ** Types
-import { EmailListType } from '../../types/apps/emailTypes'
+import { EmailListType } from 'src/types/apps/emailTypes'
 
-import { OptionType } from '../../@core/components/option-menu/types'
+import { OptionType } from 'src/@core/components/option-menu/types'
 
-import { formatHash, formatTimestampLocalTime} from '../../configs/functions';
+import { formatHash, formatTimestampLocalTime} from 'src/configs/functions';
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -47,7 +47,7 @@ import { ChivesEmailReadEmailContent } from 'src/functions/AoConnect/ChivesEmail
 
 import { DecryptEmailAES256GCMV1 } from 'src/functions/ChivesEncrypt'
 import { ChivesEmailMoveToFolder } from 'src/functions/AoConnect/ChivesEmail'
-import authConfig from '../../configs/auth'
+import authConfig from 'src/configs/auth'
 import toast from 'react-hot-toast'
 
 
