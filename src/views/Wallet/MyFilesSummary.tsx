@@ -37,10 +37,10 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
   return (
     <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2, pb: 0, width: '100%' }}>
-        <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}>
           {t('My Files') as string}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'left', px: 2, pt: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'left', px: 2, pt: 3 }}>
           <IconButton onClick={()=>null} sx={{ py: 0 }}>
             <Icon icon={'ic:sharp-add-circle-outline'}/>
           </IconButton>
