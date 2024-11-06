@@ -202,7 +202,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   const handleWalletCreate = () => {
     setChooseWalletName('')
     setPageModel('CreateWallet')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Create Wallet') as string)
     setRightButtonText('')
   }
@@ -223,7 +223,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletImportJsonFile = () => {
     setPageModel('ImportJsonFile')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Import Json File') as string)
     setRightButtonText('')
   }
@@ -316,7 +316,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   const handleWalletRename = () => {
     setPageModel('RenameWallet')
     chooseWallet && setChooseWalletName(getWalletNicknamesData[chooseWallet.data.arweave.key] ?? 'My Wallet')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Rename Wallet') as string)
     setRightButtonText('')
   }
@@ -330,14 +330,14 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleWalletExportKeyShow = () => {
     setPageModel('ExportKeyShow')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Show Key') as string)
     setRightButtonText('')
   }
 
   const handleWalletExportKeyHidden = () => {
     setPageModel('ExportKeyHidden')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Hidden Key') as string)
     setRightButtonText('')
   }

@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import toast from 'react-hot-toast'
-import authConfig from '../../configs/auth'
+import authConfig from 'src/configs/auth'
 
 import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemoryXwe, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from 'src/functions/ChivesWallets'
 import { BalancePlus, FormatBalance } from 'src/functions/AoConnect/AoConnect'
@@ -26,7 +26,7 @@ import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, ansiRegex } from '../../configs/functions'
+import { formatHash, ansiRegex } from 'src/configs/functions'
 
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
@@ -901,6 +901,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 setPageModel={setPageModel}
                 setLeftIcon={setLeftIcon}
                 setTitle={setTitle}
+                setRightButtonIcon={setRightButtonIcon}
               />
             :
               <Fragment></Fragment>

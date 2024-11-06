@@ -6,26 +6,26 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from '../../@core/components/mui/avatar'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import IconButton from '@mui/material/IconButton'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 
 import { CallReceived, History, Send } from '@mui/icons-material';
-import { formatHash } from '../../configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
 import toast from 'react-hot-toast'
-import authConfig from '../../configs/auth'
+import authConfig from 'src/configs/auth'
 import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
 
   const { t } = useTranslation()
 
@@ -235,6 +235,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                     setPageModel={setPageModel}
                     setLeftIcon={setLeftIcon}
                     setTitle={setTitle}
+                    setRightButtonIcon={setRightButtonIcon}
                   />
                 )}
 

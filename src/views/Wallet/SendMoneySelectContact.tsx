@@ -3,13 +3,13 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from '../../@core/components/mui/avatar'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import TextField from '@mui/material/TextField'
-import { getInitials } from '../../@core/utils/get-initials'
+import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash } from '../../configs/functions'
+import { formatHash } from 'src/configs/functions'
 
 
 

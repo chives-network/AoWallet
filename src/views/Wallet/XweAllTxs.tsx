@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from '../../@core/components/mui/avatar'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
@@ -12,7 +12,7 @@ import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { formatHash, formatTimestamp, formatStorageSize } from '../../configs/functions'
+import { formatHash, formatTimestamp, formatStorageSize } from 'src/configs/functions'
 
 import Tabs from '@mui/material/Tabs';
 

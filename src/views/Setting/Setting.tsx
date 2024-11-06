@@ -199,7 +199,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickContactsButton = () => {
     setCounter(counter + 1)
     setPageModel('Contacts')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Contacts') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:add')
@@ -211,7 +211,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickSecurityPrivacyButton = () => {
     setCounter(counter + 1)
     setPageModel('SecurityPrivacy')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Security & Privacy') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -223,7 +223,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickGeneralButton = () => {
     setCounter(counter + 1)
     setPageModel('General')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('General Setting') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -232,7 +232,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickLanguageButton = () => {
     setCounter(counter + 1)
     setPageModel('Language')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Language') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -241,7 +241,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickThemeButton = () => {
     setCounter(counter + 1)
     setPageModel('Theme')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Theme') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -250,7 +250,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickCurrencyButton = () => {
     setCounter(counter + 1)
     setPageModel('Currency')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Currency') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -259,7 +259,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickNetworkButton = () => {
     setCounter(counter + 1)
     setPageModel('Network')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Network') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -268,7 +268,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickCreateTokenButton = () => {
     setCounter(counter + 1)
     setPageModel('CreateToken')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Create Token') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -366,7 +366,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
   const handleClickNewContactButton = () => {
     setPageModel('NewContact')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('New Contact') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -378,7 +378,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     setContactAddress(Address)
     setContactName(Name)
     setPageModel('NewContact')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Edit Conact') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -422,7 +422,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
   const handleClickTermsOfUseButton = () => {
     setPageModel('TermsOfUse')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Terms of Use') as string)
     setRightButtonText('')
     setRightButtonIcon('')
@@ -430,7 +430,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
   const handleClickPrivacyPolicyButton = () => {
     setPageModel('PrivacyPolicy')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Privacy Policy') as string)
     setRightButtonText('')
     setRightButtonIcon('')

@@ -4,13 +4,13 @@ import { Clipboard } from '@capacitor/clipboard';
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from '../../@core/components/mui/avatar'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import toast from 'react-hot-toast'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
-import { formatHash, formatTimestamp, formatStorageSize } from '../../configs/functions'
+import { formatHash, formatTimestamp, formatStorageSize } from 'src/configs/functions'
 
 
 const XweViewFile = ({ currentTx, currentAddress, currentToken } : any) => {

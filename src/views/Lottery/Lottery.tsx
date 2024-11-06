@@ -108,7 +108,7 @@ const Lottery = ({ encryptWalletDataKey }: any) => {
 
     if(RightButtonIcon == 'mdi:qrcode')  {
       setPageModel('ScanQRCode')
-      setLeftIcon('mdi:arrow-left-thin')
+      setLeftIcon('ic:twotone-keyboard-arrow-left')
       setTitle(t('Scan QRCode') as string)
       setRightButtonText(t('') as string)
       setRightButtonIcon('')

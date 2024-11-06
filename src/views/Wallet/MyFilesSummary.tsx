@@ -6,7 +6,7 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from '../../@core/components/mui/avatar'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -15,9 +15,9 @@ import { getMyLatestFiles } from 'src/functions/ChivesDrive'
 import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
 import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
-import Icon from '../../@core/components/icon'
+import Icon from 'src/@core/components/icon'
 
-const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon, setTitle } : any) => {
+const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
 
   const { t } = useTranslation()
 
@@ -44,8 +44,9 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
           <IconButton sx={{ py: 0 }}
                     onClick={ ()=>{
                       setPageModel('UploadMyFiles')
-                      setLeftIcon('mdi:arrow-left-thin')
+                      setLeftIcon('ic:twotone-keyboard-arrow-left')
                       setTitle(t('Upload My Files') as string)
+                      setRightButtonIcon('')
                     }}>
             <Icon icon={'ic:sharp-add-circle-outline'}/>
           </IconButton>
@@ -58,7 +59,8 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
                     onClick={ ()=>{
                       setCurrentTx(Item)
                       setPageModel('ViewFile')
-                      setLeftIcon('mdi:arrow-left-thin')
+                      setLeftIcon('ic:twotone-keyboard-arrow-left')
+                      setRightButtonIcon('')
                     }}>
               <CustomAvatar
                 skin='light'
