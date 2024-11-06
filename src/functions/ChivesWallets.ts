@@ -912,27 +912,32 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
 }
 
 export function getXweWalletImageThumbnail(FileInfo: any | null) {
-  if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'image') {
+  console.log("FileInfo.table.item_type", FileInfo.table.item_type)
+  if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'image') {
 
     return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
   }
-  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pdf') {
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pdf') {
 
     return '/images/files/pdf.png'
   }
-  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'docx') {
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'docx') {
 
     return '/images/files/docx.png'
   }
-  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'xlsx') {
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'xlsx') {
 
     return '/images/files/xlsx.png'
   }
-  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pptx') {
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'pptx') {
 
     return '/images/files/pptx.png'
   }
-  else if(FileInfo && FileInfo.table && FileInfo.table.app_name && FileInfo.table.app_name == 'ChivesDrive' && FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'video') {
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'application/zip') {
+
+    return '/images/files/zip.png'
+  }
+  else if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'video') {
 
     return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
   }
