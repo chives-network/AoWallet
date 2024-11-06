@@ -13,11 +13,11 @@ import { useTranslation } from 'react-i18next'
 
 import { getMyLatestFiles } from 'src/functions/ChivesDrive'
 import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
-import { getXweWalletImageThumbnail } from '../../functions/ChivesWallets'
+import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
 import Icon from '../../@core/components/icon'
 
-const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon } : any) => {
+const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon, setTitle } : any) => {
 
   const { t } = useTranslation()
 
@@ -41,7 +41,12 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
           {t('My Files') as string}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'left', px: 2, pt: 3 }}>
-          <IconButton onClick={()=>null} sx={{ py: 0 }}>
+          <IconButton sx={{ py: 0 }}
+                    onClick={ ()=>{
+                      setPageModel('UploadMyFiles')
+                      setLeftIcon('mdi:arrow-left-thin')
+                      setTitle(t('Upload My Files') as string)
+                    }}>
             <Icon icon={'ic:sharp-add-circle-outline'}/>
           </IconButton>
         </Box>

@@ -13,16 +13,16 @@ import Button from '@mui/material/Button'
 import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 
-import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemoryXwe, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from '../../functions/ChivesWallets'
-import { BalancePlus, FormatBalance } from '../../functions/AoConnect/AoConnect'
+import { isSetPasswordForWallet, checkPasswordForWallet, getAllWallets, getWalletBalance, getWalletNicknames, getCurrentWalletAddress, getCurrentWallet, getPrice, sendAmount, getTxsInMemoryXwe, getWalletBalanceReservedRewards, getXweWalletAllTxs, getChivesContacts, searchChivesContacts, setMyAoTokens, getMyAoTokens, getAllAoTokens, setAllAoTokens, deleteMyAoToken, addMyAoToken, getChivesLanguage, setChivesContacts } from 'src/functions/ChivesWallets'
+import { BalancePlus, FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
-import { ChivesServerDataGetTokens } from '../../functions/AoConnect/ChivesServerData'
+import { ChivesServerDataGetTokens } from 'src/functions/AoConnect/ChivesServerData'
 
-import { AoTokenBalanceDryRun, AoTokenTransfer, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
+import { AoTokenBalanceDryRun, AoTokenTransfer, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
 
-import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from '../../functions/AoConnect/MyProcessTxIds'
+import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
-import { GetArWalletAllTxs } from '../../functions/Arweave'
+import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -43,6 +43,7 @@ import SendMoneySelectContact from './SendMoneySelectContact'
 import ReceiveMoney from './ReceiveMoney'
 import MainWallet from './MainWallet'
 import XweViewFile from './XweViewFile'
+import UploadMyFiles from './UploadMyFiles'
 
 import { BrowserMultiFormatReader } from '@zxing/library';
 
@@ -171,6 +172,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       case 'ViewToken':
       case 'ScanQRCode':
       case 'ViewFile':
+      case 'UploadMyFiles':
         if (stream) {
           closeVideoStream(stream);
         }
@@ -569,7 +571,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     setSendMoneyAddress(null)
   }
 
-
   const handleClickManageAssetsButton = () => {
     setPageModel('ManageAssets')
     setLeftIcon('ic:twotone-keyboard-arrow-left')
@@ -899,6 +900,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 setCurrentTx={setCurrentTx}
                 setPageModel={setPageModel}
                 setLeftIcon={setLeftIcon}
+                setTitle={setTitle}
               />
             :
               <Fragment></Fragment>
@@ -933,6 +935,15 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentToken={currentToken}
                 page={page}
                 setPage={setPage}
+                />
+            )}
+
+            {pageModel == 'UploadMyFiles' && currentToken == "Xwe" && currentTx && (
+              <UploadMyFiles
+                currentAddress={currentAddress}
+                chooseWallet={chooseWallet}
+                handleWalletGoHome={handleWalletGoHome}
+                encryptWalletDataKey={encryptWalletDataKey}
                 />
             )}
 

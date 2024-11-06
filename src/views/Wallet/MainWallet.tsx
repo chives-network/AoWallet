@@ -20,12 +20,12 @@ import { useTranslation } from 'react-i18next'
 
 import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
-import { GetAppAvatar } from '../../functions/AoConnect/Token'
+import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle } : any) => {
 
   const { t } = useTranslation()
 
@@ -234,6 +234,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                     setCurrentTx={setCurrentTx}
                     setPageModel={setPageModel}
                     setLeftIcon={setLeftIcon}
+                    setTitle={setTitle}
                   />
                 )}
 

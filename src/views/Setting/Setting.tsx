@@ -23,10 +23,10 @@ import toast from 'react-hot-toast'
 import authConfig from '../../configs/auth'
 import { useSettings } from '../../@core/hooks/useSettings'
 
-import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken, resetPasswordForWallet, resetChivesWalletsEncryptedKey, resetChivesWalletNickNameEncryptedKey, resetChivesContactsEncryptedKey  } from '../../functions/ChivesWallets'
-import { AoCreateProcessAuto, FormatBalance, sleep } from '../../functions/AoConnect/AoConnect'
-import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
-import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
+import { getCurrentWalletAddress, getCurrentWallet, setChivesContacts, getChivesContacts, deleteChivesContacts, searchChivesContacts, getChivesLanguage, setChivesLanguage, addMyAoToken, resetPasswordForWallet, resetChivesWalletsEncryptedKey, resetChivesWalletNickNameEncryptedKey, resetChivesContactsEncryptedKey  } from 'src/functions/ChivesWallets'
+import { AoCreateProcessAuto, FormatBalance, sleep } from 'src/functions/AoConnect/AoConnect'
+import { AoLoadBlueprintToken, AoTokenBalanceDryRun, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
+import { MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

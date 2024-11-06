@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next'
 // ** Actions
 import { fetchData } from '../../store/apps/email'
 
-import { getCurrentWalletAddress, getCurrentWallet } from '../../functions/ChivesWallets'
+import { getCurrentWalletAddress, getCurrentWallet } from 'src/functions/ChivesWallets'
 
 // ** Variables
 const EmailCategoriesColors: any = {

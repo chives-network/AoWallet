@@ -35,7 +35,7 @@ import toast from 'react-hot-toast'
 import TextField2 from '../../views/Layout/TextField2'
 import { useDropzone } from 'react-dropzone'
 
-import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWallet12MnemonicData, importWalletJsonFile, readFileText, jwkFromMnemonic } from '../../functions/ChivesWallets'
+import { getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWallet12MnemonicData, importWalletJsonFile, readFileText, jwkFromMnemonic } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

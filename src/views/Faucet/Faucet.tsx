@@ -24,14 +24,14 @@ import { useTranslation } from 'react-i18next'
 import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import { formatHash } from '../../configs/functions'
-import { FormatBalance } from '../../functions/AoConnect/AoConnect'
+import { FormatBalance } from 'src/functions/AoConnect/AoConnect'
 
-import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets, getMyAoFaucetTokenBalance, setMyAoFaucetTokenBalance, addMyAoToken } from '../../functions/ChivesWallets'
-import { GetAppAvatar, AoTokenBalanceDryRun, AoTokenInfoDryRun } from '../../functions/AoConnect/Token'
-import { AoFaucetGetFaucet, AoFaucetInfo } from '../../functions/AoConnect/ChivesFaucet'
+import { getCurrentWalletAddress, getCurrentWallet, getAllAoFaucets, setAllAoFaucets, getMyAoFaucetTokenBalance, setMyAoFaucetTokenBalance, addMyAoToken } from 'src/functions/ChivesWallets'
+import { GetAppAvatar, AoTokenBalanceDryRun, AoTokenInfoDryRun } from 'src/functions/AoConnect/Token'
+import { AoFaucetGetFaucet, AoFaucetInfo } from 'src/functions/AoConnect/ChivesFaucet'
 
-import { ChivesServerDataGetFaucets } from '../../functions/AoConnect/ChivesServerData'
-import { MyProcessTxIdsAddToken } from '../../functions/AoConnect/MyProcessTxIds'
+import { ChivesServerDataGetFaucets } from 'src/functions/AoConnect/ChivesServerData'
+import { MyProcessTxIdsAddToken } from 'src/functions/AoConnect/MyProcessTxIds'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,

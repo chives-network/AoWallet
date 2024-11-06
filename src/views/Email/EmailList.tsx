@@ -40,13 +40,13 @@ import { formatHash, formatTimestampLocalTime} from '../../configs/functions';
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 
-import { GetAppAvatarModId } from '../../functions/AoConnect/Token'
+import { GetAppAvatarModId } from 'src/functions/AoConnect/Token'
 
-import { GetFileCacheStatus } from '../../functions/ChivesWallets'
-import { ChivesEmailReadEmailContent } from '../../functions/AoConnect/ChivesEmail'
+import { GetFileCacheStatus } from 'src/functions/ChivesWallets'
+import { ChivesEmailReadEmailContent } from 'src/functions/AoConnect/ChivesEmail'
 
-import { DecryptEmailAES256GCMV1 } from '../../functions/ChivesEncrypt'
-import { ChivesEmailMoveToFolder } from '../../functions/AoConnect/ChivesEmail'
+import { DecryptEmailAES256GCMV1 } from 'src/functions/ChivesEncrypt'
+import { ChivesEmailMoveToFolder } from 'src/functions/AoConnect/ChivesEmail'
 import authConfig from '../../configs/auth'
 import toast from 'react-hot-toast'
 

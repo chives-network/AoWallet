@@ -16,9 +16,9 @@ import InputLabel from '@mui/material/InputLabel'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 
-import { EncryptEmailAES256GCMV1 } from '../../functions/ChivesEncrypt'
+import { EncryptEmailAES256GCMV1 } from 'src/functions/ChivesEncrypt'
 
-import { ChivesEmailSendEmail } from '../../functions/AoConnect/ChivesEmail'
+import { ChivesEmailSendEmail } from 'src/functions/AoConnect/ChivesEmail'
 
 import authConfig from '../../configs/auth'
 

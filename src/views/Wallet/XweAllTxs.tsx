@@ -8,7 +8,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tab from '@mui/material/Tab'
 
-import { getXweWalletImageThumbnail } from '../../functions/ChivesWallets'
+import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

@@ -133,6 +133,10 @@
   "Wallet Json Key Content": "Wallet Json Key Content",
   "Import Mnemonic": "Import Mnemonic",
   "Files": "Files",
-  "My Files": "My Files"
+  "My Files": "My Files",
+  "Remove All": "Remove All",
+  "Upload Files": "Upload Files",
+  "Upload My Files": "Upload My Files",
+  "Drag & Drop files here or click to upload": "Drag & Drop files here or click to upload"
 
 }

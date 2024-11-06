@@ -25,9 +25,9 @@ import Tabs from '@mui/material/Tabs'
 
 import { BigNumber } from 'bignumber.js'
 
-import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetAppAvatar } from '../../functions/AoConnect/Token'
-import {setTokenAllHolderTxs, getTokenAllHolderTxs } from '../../functions/ChivesWallets'
-import { FormatBalance, FormatBalanceString } from '../../functions/AoConnect/AoConnect'
+import {AoTokenBalancesDryRun, AoTokenBalancesPageDryRun, AoTokenAllTransactions, AoTokenSentTransactions, AoTokenReceivedTransactions, AoTokenMyAllTransactions, GetAppAvatar } from 'src/functions/AoConnect/Token'
+import {setTokenAllHolderTxs, getTokenAllHolderTxs } from 'src/functions/ChivesWallets'
+import { FormatBalance, FormatBalanceString } from 'src/functions/AoConnect/AoConnect'
 
 const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokensBalance, page, setPage, handleClickReceiveButtonAO, handleClickSendButtonAO } : any) => {
 

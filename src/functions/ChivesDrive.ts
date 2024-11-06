@@ -13,7 +13,7 @@ import authConfig from 'src/configs/auth'
 
 import { urlToSettings, getPriceWinston, getWalletBalanceWinston, winstonToAr, getCurrentWallet, getCurrentWalletAddress, getChivesLanguage, readFile, getWalletBalance  } from './ChivesWallets'
 
-const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
+const arweave = Arweave.init(urlToSettings(authConfig.backEndApiXwe))
 
 const chivesProfile: string = authConfig.chivesProfile
 const chivesReferee: string = authConfig.chivesReferee
@@ -237,7 +237,7 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
         const trustedAddresses = walletAddress ? [walletAddress] : []
         const deduplicated = await deduplicate(dataItems, trustedAddresses)
         const deduplicatedDataItems = dataItems.map((item: any, i: number) => deduplicated[i] || item)
-        console.log("getProcessedData deduplicatedDataItems:", deduplicatedDataItems)
+        console.log("getProcessedData deduplicated:", deduplicated)
         bundleItems.push(...deduplicatedDataItems.filter((item: any): item is Exclude<typeof item, string> => typeof item !== 'string'))
         console.log("getProcessedData bundleItems 1:", bundleItems)
         if(Manifest)  {
@@ -262,32 +262,43 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
 
 
 //Check File Hash from mainnet, if file have exist on mainnet, should not upload
-async function deduplicate (transactions: ArDataItemParams[], trustedAddresses?: string[]): Promise<Array<string | undefined>> {
-	const entries = (await PromisePool.for(transactions).withConcurrency(5).process(async tx =>
-		({ tx, hash: tx.tags?.find(tag => tag.name === 'File-Hash')?.value || await getHash(tx.data) }))).results
-	const chunks = [] as typeof entries[]
-	while (entries.length) { chunks.push(entries.splice(0, 500)) }
+async function deduplicate(transactions: ArDataItemParams[], trustedAddresses?: string[]): Promise<Array<string | undefined>> {
 
-    return (await PromisePool.for(chunks).withConcurrency(3).process(async chunk => {
-        const checkResultOnMainnet: any[] = await axios.get(authConfig.backEndApi + '/statistics_network', { headers: { }, params: { } })
-                                .then(() => {
+  const entries = (await PromisePool
+      .for(transactions)
+      .withConcurrency(5)
+      .process(async tx => ({
+          tx,
+          hash: tx.tags?.find(tag => tag.name === 'File-Hash')?.value || await getHash(tx.data)
+      }))).results;
 
-                                        //console.log("deduplicate in lib", res.data)
+  const chunks = [] as typeof entries[];
+  while (entries.length) {
+      chunks.push(entries.splice(0, 500));
+  }
 
-                                        return []
-                                    }
-                                )
+  return (await PromisePool
+      .for(chunks)
+      .withConcurrency(3)
+      .process(async chunk => {
+          const checkResultOnMainnet: any[] = await axios.get(authConfig.backEndApiXwe + '/info', { headers: {}, params: {} }).then(() => { return []; });
 
-		return (await PromisePool.for(chunk).withConcurrency(3).process(async entry => {
-            const result = checkResultOnMainnet
-				.filter((tx: any) => tx.tags.find((tag: any) => tag.name === 'File-Hash' && tag.value === entry.hash))
-				.filter((tx: any) => !entry.tx.tags || hasMatchingTags(entry.tx.tags, tx.tags))
-			for (const tx of result) {
-				const verified = trustedAddresses ? trustedAddresses.includes(tx.owner.address) : await verifyData(entry.hash, tx.id)
-				if (verified) { return tx }
-			}
-		})).results
-	})).results.flat().map(tx => tx?.node.id)
+          return (await PromisePool
+              .for(chunk)
+              .withConcurrency(3)
+              .process(async entry => {
+                  const result = checkResultOnMainnet
+                      .filter((tx: any) => tx.tags.find((tag: any) => tag.name === 'File-Hash' && tag.value === entry.hash))
+                      .filter((tx: any) => !entry.tx.tags || hasMatchingTags(entry.tx.tags, tx.tags));
+
+                  for (const tx of result) {
+                      const verified = trustedAddresses ? trustedAddresses.includes(tx.owner.address) : await verifyData(entry.hash, tx.id);
+                      if (verified) {
+                          return tx;
+                      }
+                  }
+              })).results;
+      })).results.flat().map(tx => tx?.node.id);
 }
 
 export async function ownerToAddress(owner: string) {
@@ -572,7 +583,7 @@ export async function CheckBundleTxStatus() {
             chivesTxStatusList.map(async (Item: any) => {
                 try {
                     const TxId = Item.TxResult.id;
-                    const response = await axios.get(authConfig.backEndApi + '/tx/' + TxId + '/unbundle/0/9');
+                    const response = await axios.get(authConfig.backEndApiXwe + '/tx/' + TxId + '/unbundle/0/9');
                     if(response && response.data && response.data.txs && response.data.txs.length > 0) {
                         console.log("response.data", response.data)
                         deleteLockStatus(TxId)
@@ -593,11 +604,11 @@ export async function CheckBundleTxStatus() {
 }
 
 export async function parseBundleTx() {
-    const response = await axios.get(authConfig.backEndApi + '/bundletx/0/60' );
+    const response = await axios.get(authConfig.backEndApiXwe + '/bundletx/0/60' );
     if(response && response.data && response.data.data && response.data.data.length>0) {
         for (const item of response.data.data) {
             try {
-              await axios.get(authConfig.backEndApi + '/tx/' + item.id + '/unbundle/0/6');
+              await axios.get(authConfig.backEndApiXwe + '/tx/' + item.id + '/unbundle/0/6');
             }
             catch (error) {
             }
@@ -607,7 +618,7 @@ export async function parseBundleTx() {
 }
 
 export async function getWalletProfile(currentAddress: string) {
-    const response = await axios.get(authConfig.backEndApi + '/profile/' + currentAddress );
+    const response = await axios.get(authConfig.backEndApiXwe + '/profile/' + currentAddress );
     if(response && response.data && response.data.Profile && response.data.Profile.Name) {
         return response.data
     }
@@ -627,7 +638,7 @@ export async function updateLightNodeAddress(Address: string) {
 }
 
 export async function getWalletLightNode() {
-    const response = await axios.get(authConfig.backEndApi + '/lightnode/status');
+    const response = await axios.get(authConfig.backEndApiXwe + '/lightnode/status');
     if(response && response.data && response.data.NodeApi) {
         return response.data
     }
@@ -637,7 +648,7 @@ export async function getWalletLightNode() {
 }
 
 export async function chivesLightNodeUrl(Address: string) {
-    const response = await axios.get(authConfig.backEndApi + '/lightnode/nodeurl/' + Address);
+    const response = await axios.get(authConfig.backEndApiXwe + '/lightnode/nodeurl/' + Address);
     if(response && response.data) {
         return response.data
     }
@@ -647,7 +658,7 @@ export async function chivesLightNodeUrl(Address: string) {
 }
 
 export async function checkNodeStatus() {
-    const response = await axios.get(authConfig.backEndApi + '/info' );
+    const response = await axios.get(authConfig.backEndApiXwe + '/info' );
     const Node = response.data
     if(Node.height <= Node.blocks) {
         //true

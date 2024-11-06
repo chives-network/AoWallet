@@ -31,9 +31,9 @@ import { useTranslation } from 'react-i18next'
 
 import { formatTimestampLocalTime } from '../../configs/functions';
 
-import { GetFileCacheStatus } from '../../functions/ChivesWallets'
+import { GetFileCacheStatus } from 'src/functions/ChivesWallets'
 
-import { GetAppAvatarModId } from '../../functions/AoConnect/Token'
+import { GetAppAvatarModId } from 'src/functions/AoConnect/Token'
 
 const EmailDetail = (props: EmailDetailType) => {
   // ** Hook

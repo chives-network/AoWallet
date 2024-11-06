@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { getXweWalletImageThumbnail } from '../../functions/ChivesWallets'
+import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 import { formatHash, formatTimestamp, formatStorageSize } from '../../configs/functions'
 
 

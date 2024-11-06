@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { BalanceMinus, BalanceTimes } from '../../functions/AoConnect/AoConnect'
+import { BalanceMinus, BalanceTimes } from 'src/functions/AoConnect/AoConnect'
 
 
 

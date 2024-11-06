@@ -14,7 +14,7 @@ import Icon from '../../@core/components/icon'
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import { formatHash } from '../../configs/functions'
-import { GetAppAvatar } from '../../functions/AoConnect/Token'
+import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 
 const ManageAssets = ({ searchAssetkeyWord, setSearchAssetkeyWord, mySavingTokensData, handleSearchAssets, handleSelectDeleteMyToken, handleGetLeftAllTokens, allTokensData, handleSelectTokenAndSave, searchAssetOnChain, isDisabledButton } : any) => {
 

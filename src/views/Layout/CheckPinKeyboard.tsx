@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 
-import { checkPasswordForWallet } from '../../functions/ChivesWallets'
+import { checkPasswordForWallet } from 'src/functions/ChivesWallets'
 
 
 // 圆形按钮样式

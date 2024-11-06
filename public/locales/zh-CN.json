@@ -132,5 +132,9 @@
   "Wallet Json Key Content": "钱包Json密钥内容",
   "Import Mnemonic": "导入助记词",
   "Files": "文件",
-  "My Files": "我的文件"
+  "My Files": "我的文件",
+  "Remove All": "删除记录",
+  "Upload Files": "上传文件",
+  "Upload My Files": "上传我的文件",
+  "Drag & Drop files here or click to upload": "将文件拖放到此处或点击上传"
 }

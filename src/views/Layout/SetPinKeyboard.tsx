@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, Grid, Container, Box, styled } from '@mui/material';
 
-import { setPasswordForWallet } from '../../functions/ChivesWallets'
+import { setPasswordForWallet } from 'src/functions/ChivesWallets'
 
 // 圆形按钮样式
 const RoundButton = styled(Button)(() => ({
@@ -120,7 +120,7 @@ const SetPinKeyboard = ({ setPinKeySuccess, encryptWalletDataKey, setEncryptWall
             setFirstTimeInput('')
         }
     }
-    
+
   }, [inputValue, inputLength]);
 
 
