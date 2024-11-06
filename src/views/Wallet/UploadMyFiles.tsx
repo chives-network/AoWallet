@@ -19,7 +19,7 @@ import toast from 'react-hot-toast'
 import Icon from 'src/@core/components/icon'
 
 // ** Hooks
-import { getCurrentWallet, getAllWallets, getWalletBalance, setWalletNickname, getWalletNicknames, downloadTextFile, removePunctuation, deleteWalletByWallet, setCurrentWallet, getChivesLanguage, generateArWallet12MnemonicData, importWalletJsonFile, readFileText, jwkFromMnemonic } from 'src/functions/ChivesWallets'
+import { getChivesLanguage } from 'src/functions/ChivesWallets'
 import { sendAmount, getHash, getProcessedData } from 'src/functions/ChivesDrive'
 import {EncryptDataWithKey} from 'src/functions/ChivesEncrypt'
 
@@ -52,7 +52,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const UploadMyFiles = ({ currentAddress, chooseWallet, handleWalletGoHome, encryptWalletDataKey } : any) => {
+const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
 
   // ** Hook
   const { t } = useTranslation()
