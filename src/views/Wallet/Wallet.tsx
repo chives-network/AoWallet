@@ -251,7 +251,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     if(RightButtonIcon == 'mdi:qrcode')  {
       startScan()
       setPageModel('ScanQRCode')
-      setLeftIcon('mdi:arrow-left-thin')
+      setLeftIcon('ic:twotone-keyboard-arrow-left')
       setTitle(t('Scan QRCode') as string)
       setRightButtonText(t('') as string)
       setRightButtonIcon('')
@@ -506,7 +506,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickReceiveButton = () => {
     setPageModel('ReceiveMoney')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Receive') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -514,7 +514,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickReceiveButtonAO = () => {
     setPageModel('ReceiveMoneyAO')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Receive') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -528,7 +528,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       setActiveTab('AllTxs')
     }
     setPageModel('AllTxs')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Wallet Txs') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -540,7 +540,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickViewTxReturnButton = () => {
     setPageModel('AllTxs')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Wallet Txs') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -552,7 +552,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickSendButton = () => {
     setPageModel('SendMoneySelectContact')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Select Contact') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -562,7 +562,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const handleClickSendButtonAO = () => {
     console.log("chooseToken", chooseToken)
     setPageModel('SendMoneySelectContact')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Select Contact') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -572,7 +572,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickManageAssetsButton = () => {
     setPageModel('ManageAssets')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Manage Assets') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -580,7 +580,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickViewTokenButton = (Token: any) => {
     setPageModel('ViewToken')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:qrcode')
@@ -599,7 +599,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleClickViewTokenButtonAO = () => {
     setPageModel('ViewToken')
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
@@ -617,7 +617,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       setPageModel('SendMoneyInputAmount')
       setTitle(t('Input Amount') as string)
     }
-    setLeftIcon('mdi:arrow-left-thin')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
     setSendMoneyAmount('')

@@ -131,5 +131,6 @@
   "Do you want delete this wallet": "您想要删除此钱包吗？",
   "Wallet Json Key Content": "钱包Json密钥内容",
   "Import Mnemonic": "导入助记词",
-  "Files": "文件"
+  "Files": "文件",
+  "My Files": "我的文件"
 }

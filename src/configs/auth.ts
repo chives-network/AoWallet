@@ -34,7 +34,7 @@ const config = {
   AoConnectChatRoom: 'AoConnectChatRoom',
   EncryptGrade: 'PIN',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
-  isChromeExtension: false,
+  isChromeExtension: true,
   tokenNameXwe: 'Xwe',
   tokenFullNameXwe: 'Chivesweave',
   backEndApiXwe: 'https://api.chivesweave.org'

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from '../../@core/components/mui/avatar'
 
@@ -13,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { getMyLatestFiles } from 'src/functions/ChivesDrive'
 import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
 import { getXweWalletImageThumbnail } from '../../functions/ChivesWallets'
+
+import Icon from '../../@core/components/icon'
 
 const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon } : any) => {
 
@@ -32,12 +35,17 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
   console.log("myFiles", myFiles)
 
   return (
-    <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', py: 2, pl: 2 }}>
-      <Grid item xs={12} sx={{ py: 0 }}>
-          <Box sx={{ display: 'flex', alignItems: 'left', px: 2, py: 1}}>
-            {t('My Files') as string}
-          </Box>
-      </Grid>
+    <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2, pb: 0, width: '100%' }}>
+        <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 4 }}>
+          {t('My Files') as string}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'left', px: 2, pt: 1 }}>
+          <IconButton onClick={()=>null} sx={{ py: 0 }}>
+            <Icon icon={'ic:sharp-add-circle-outline'}/>
+          </IconButton>
+        </Box>
+      </Box>
       {myFiles && myFiles.data && myFiles.data.length > 0 && myFiles.data.map((Item: any, Index: number)=>(
         <Grid item xs={12} sx={{ py: 0 }} key={Index}>
           <Card>
