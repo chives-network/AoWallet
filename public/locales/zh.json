@@ -136,5 +136,8 @@
   "Remove All": "删除记录",
   "Upload Files": "上传文件",
   "Upload My Files": "上传我的文件",
-  "Drag & Drop files here or click to upload": "将文件拖放到此处或点击上传"
+  "Uploading": "上传中",
+  "Drag & Drop files here or click to upload": "将文件拖放到此处或点击上传",
+  "Upload complete, it will appear in your list after 5 minutes": "上传完成, 5分钟之后,将会显示在您的列表里面",
+  "Continue uploading": "继续上传"
 }

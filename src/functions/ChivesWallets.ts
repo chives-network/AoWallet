@@ -22,6 +22,8 @@ import { getKeyPairFromSeed } from "human-crypto-keys"
 import axios from 'axios'
 import authConfig from '../configs/auth'
 
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
 const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
 const chivesweave = Arweave.init(urlToSettings(authConfig.backEndApiXwe))
 
@@ -980,6 +982,22 @@ export async function downloadUrlFile(url: string, fileName: string, mimeType: s
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+export async function downloadCapacitorFile(url: string, fileName: string) {
+  try {
+    const response = await axios.get(url, { responseType: 'blob' });
+    const savedFile = await Filesystem.writeFile({
+      path: fileName,
+      data: response.data,
+      directory: Directory.Documents,
+      encoding: Encoding.UTF8,
+    });
+    console.log('File downloaded and saved:', savedFile);
+  }
+  catch (error) {
+    console.error('Error downloading file:', error);
+  }
 }
 
 export function removePunctuation(text: string) {

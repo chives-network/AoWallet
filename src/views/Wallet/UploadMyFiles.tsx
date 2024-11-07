@@ -65,6 +65,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
   const [removeAllButton, setRemoveAllButton] = useState<string>(`${t(`Remove All`)}`)
   const [isDisabledRemove, setIsDisabledRemove] = useState<boolean>(false)
   const [isEncryptFile, setIsEncryptFile] = useState<boolean>(false)
+  const [uploadingText, setUploadingText] = useState<string>(`${t(`Drag & Drop files here or click to upload`)}`)
 
   // ** Hooks
   const { getRootProps, getInputProps } = useDropzone({
@@ -148,6 +149,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     setIsDisabledRemove(false)
     setUploadingButton(`${t(`Upload Files`)}`)
     setUploadProgress({})
+    setUploadingText(t('Drag & Drop files here or click to upload') as string)
   }
 
   const handleUploadAllFiles = () => {
@@ -158,6 +160,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
   }
 
   const uploadMultiFiles = async () => {
+    setUploadingText(t('Uploading') as string)
     const getChivesLanguageData: string = getChivesLanguage();
 
     //Make the bundle data
@@ -234,7 +237,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     const chivesTxStatusList = chivesTxStatusText ? JSON.parse(chivesTxStatusText) : []
     const TxResultNew = {...TxResult, data:'', chunks:''}
     chivesTxStatusList.push({TxResult: TxResultNew, ChivesDriveActionsMap: ChivesDriveActionsMap})
-    console.log("chivesTxStatusList-FileUploaderMultiple", chivesTxStatusList)
+    console.log("chivesTxStatusList-FileUploaderMultiple", TxResult)
     window.localStorage.setItem(chivesTxStatus, JSON.stringify(chivesTxStatusList))
 
     if(TxResult.status == 800) {
@@ -243,6 +246,10 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
       setIsDisabledButton(false)
       setIsDisabledRemove(false)
       setUploadingButton(`${t(`Upload Files`)}`)
+      setUploadingText(t('Drag & Drop files here or click to upload') as string)
+    }
+    if(TxResult && TxResult.signature) {
+      setUploadingText(t('Upload complete, it will appear in your list after 5 minutes') as string)
     }
 
   };
@@ -285,7 +292,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
         setIsDisabledButton(true)
         setIsDisabledRemove(false)
         setUploadingButton(t("Upload success") as string)
-        setRemoveAllButton(t("Clean Records") as string)
+        setRemoveAllButton(t("Continue uploading") as string)
         toast.success(t('Successfully submitted to blockchain') as string, { duration: 4000 })
     }
   }, [uploadProgress])
@@ -325,15 +332,25 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
 
   return (
     <Fragment>
-      <div {...getRootProps({ className: 'dropzone' })}>
-        <input {...getInputProps()} />
+      {isDisabledButton == false && (
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <input {...getInputProps()} />
+          <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
+            <Img alt='Upload img' src='/images/misc/upload.png' />
+            <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
+              <HeadingTypography variant='h5'>{uploadingText}</HeadingTypography>
+            </Box>
+          </Box>
+        </div>
+      )}
+      {isDisabledButton == true && (
         <Box sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'], alignItems: 'center' }}>
           <Img alt='Upload img' src='/images/misc/upload.png' />
           <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
-            <HeadingTypography variant='h5'>{`${t('Drag & Drop files here or click to upload')}`}</HeadingTypography>
+            <HeadingTypography variant='body'>{uploadingText}</HeadingTypography>
           </Box>
         </Box>
-      </div>
+      )}
       {files.length ? (
         <Fragment>
           <List>{fileList}</List>
