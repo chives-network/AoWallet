@@ -50,10 +50,10 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
               )}
 
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('TxId')}: </Typography>
                 </Box>
-                <Box textAlign="right" onClick={ async ()=>{
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }} onClick={ async ()=>{
                                           await Clipboard.write({
                                             string: currentTx.id
                                           });
@@ -65,10 +65,10 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('From Address')}: </Typography>
                 </Box>
-                <Box textAlign="right" onClick={ async ()=>{
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }} onClick={ async ()=>{
                                           await Clipboard.write({
                                             string: currentTx.owner.address
                                           });
@@ -81,10 +81,10 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
               </Box>
               {currentTx && currentTx.recipient && (
                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                       <Typography >{t('Target Address')}: </Typography>
                   </Box>
-                  <Box textAlign="right" onClick={ async ()=>{
+                  <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }} onClick={ async ()=>{
                                             await Clipboard.write({
                                               string: currentTx.recipient
                                             });
@@ -97,30 +97,31 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
                 </Box>
               )}
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('Block Height')}: </Typography>
                 </Box>
-                <Box textAlign="right">
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                   <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                     {currentTx.block.height}
                   </Typography>
                 </Box>
               </Box>
+
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('Block Time')}: </Typography>
                 </Box>
-                <Box textAlign="right">
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                   <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                     {formatTimestamp(currentTx.block.timestamp)}
                   </Typography>
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('Block Hash')}: </Typography>
                 </Box>
-                <Box textAlign="right" onClick={ async ()=>{
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }} onClick={ async ()=>{
                                           await Clipboard.write({
                                             string: currentTx.block.indep_hash
                                           });
@@ -132,20 +133,20 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('Data Size')}: </Typography>
                 </Box>
-                <Box textAlign="right">
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                   <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                     {formatStorageSize(currentTx.data.size)}
                   </Typography>
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                     <Typography >{t('Tx Fee')}: </Typography>
                 </Box>
-                <Box textAlign="right">
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                   <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                     {currentTx.fee.xwe}
                   </Typography>
@@ -154,10 +155,10 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
 
               {currentTx && currentTx.table && currentTx.table.bundleid && (
                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('Bundle Id')}: </Typography>
                     </Box>
-                    <Box textAlign="right" onClick={ async ()=>{
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }} onClick={ async ()=>{
                                             await Clipboard.write({
                                               string: currentTx.table.bundleid
                                             });
@@ -172,51 +173,51 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type && (
                 <>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('App Name')}: </Typography>
                     </Box>
-                    <Box textAlign="right">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                       <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                         {currentTx.table.app_name}
                       </Typography>
                     </Box>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('App Version')}: </Typography>
                     </Box>
-                    <Box textAlign="right">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                       <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                         {currentTx.table.app_version}
                       </Typography>
                     </Box>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('Is Public')}: </Typography>
                     </Box>
-                    <Box textAlign="right">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
                       <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
                         {currentTx.table.is_public}
                       </Typography>
                     </Box>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('File Name')}: </Typography>
                     </Box>
-                    <Box textAlign="right">
-                      <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
-                        {formatHash(currentTx.table.item_name, 16)}
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
+                      <Typography sx={{ mr: 2 }}>
+                        {currentTx.table.item_name}
                       </Typography>
                     </Box>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
                         <Typography >{t('Content Type')}: </Typography>
                     </Box>
-                    <Box textAlign="right">
-                      <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'right' }}>
+                      <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'wrap', mr: 2 }}>
                         {currentTx.table.content_type}
                       </Typography>
                     </Box>

@@ -912,7 +912,7 @@ export async function getXweWalletAllTxs(Address: string, Type: string, pageId =
 }
 
 export function getXweWalletImageThumbnail(FileInfo: any | null) {
-  console.log("FileInfo.table.item_type", FileInfo.table.item_type)
+
   if(FileInfo && FileInfo.table && FileInfo.table.app_name&& FileInfo.table.id && FileInfo.table.id.length == 43 && FileInfo.table.item_type == 'image') {
 
     return authConfig.backEndApiXwe + '/' + FileInfo.table.id + '/thumbnail'
