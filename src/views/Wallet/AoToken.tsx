@@ -51,7 +51,6 @@ const AoToken = ({ encryptWalletDataKey, currentAddress, chooseToken, myAoTokens
     const [tokenHoldersTxsChivesToken, setTokenHoldersTxsChivesToken] = useState<any>({})
     const [tokenHoldersTxsOfficialToken, setTokenHoldersTxsOfficialToken] = useState<any[]>([])
 
-
     const handleChangeActiveTab = (event: any, value: string) => {
         setTokenListAction(value)
         setPage(0)

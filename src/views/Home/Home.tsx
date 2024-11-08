@@ -5,6 +5,7 @@ import Footer from '../Layout/Footer'
 
 import Email from '../Email/Email'
 import Faucet from '../Faucet/Faucet'
+import Drive from '../Drive/Drive'
 import Setting from '../Setting/Setting'
 import Wallet from '../Wallet/Wallet'
 import MyWallet from '../MyWallet/MyWallet'
@@ -32,6 +33,7 @@ const HomeModel = () => {
       {currentTab == "Wallet" && (<Wallet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} specifyTokenSend={specifyTokenSend} setSpecifyTokenSend={setSpecifyTokenSend} setDisabledFooter={setDisabledFooter} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey}/>)}
       {currentTab == "Faucet" && (<Faucet currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend} encryptWalletDataKey={encryptWalletDataKey} />)}
       {currentTab == "Email" && (<Email currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} />)}
+      {currentTab == "Drive" && (<Drive currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} />)}
       {currentTab == "Setting" && (<Setting currentToken={currentToken} setCurrentToken={setCurrentToken} handleSwitchBlockchain={handleSwitchBlockchain} encryptWalletDataKey={encryptWalletDataKey} setEncryptWalletDataKey={setEncryptWalletDataKey} />)}
       {disabledFooter == false && (
         <Footer Hidden={false} setCurrentTab={setCurrentTab} setSpecifyTokenSend={setSpecifyTokenSend}  currentTab={currentTab} disabledFooter={disabledFooter}/>
