@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
+import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -16,6 +17,19 @@ import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
 import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
 import Icon from 'src/@core/components/icon'
+
+// Styled component for the upload image inside the dropzone area
+const Img = styled('img')(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    marginRight: theme.spacing(15.75)
+  },
+  [theme.breakpoints.down('md')]: {
+    marginBottom: theme.spacing(4)
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 160
+  }
+}))
 
 const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
 
@@ -32,7 +46,7 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
     getMyFiles(currentAddress);
   }, [currentAddress]);
 
-  //console.log("myFiles", myFiles)
+  console.log("myFiles", myFiles)
 
   return (
     <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 2 }}>
@@ -113,6 +127,19 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
           </Card>
         </Grid>
       ))}
+      {myFiles && myFiles.data && myFiles.data.length == 0 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
+          <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
+                    onClick={ ()=>{
+                      setPageModel('UploadMyFiles')
+                      setLeftIcon('ic:twotone-keyboard-arrow-left')
+                      setTitle(t('Upload My Files') as string)
+                      setRightButtonIcon('')
+                    }}>
+            <Img alt='Upload img' src='/images/misc/upload.png' />
+          </Box>
+        </Box>
+      )}
     </Grid>
   )
 
