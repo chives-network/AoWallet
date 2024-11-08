@@ -73,7 +73,7 @@ export async function sendAmount(walletData: any, target: string, amount: string
 	    txSettings.target = target
         txSettings.quantity = quantity
     }
-	if (data && data != undefined && data != '') { txSettings.data = data }
+	  if (data && data != undefined && data != '') { txSettings.data = data }
 
     //Make Tx Data
     const tx = await arweave.createTransaction(txSettings)

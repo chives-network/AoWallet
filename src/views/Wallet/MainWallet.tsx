@@ -231,6 +231,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                 {currentToken && currentToken == "Xwe" && (
                   <MyFilesSummary
                     currentAddress={currentAddress}
+                    currentBalanceXwe={currentBalanceXwe}
                     setCurrentTx={setCurrentTx}
                     setPageModel={setPageModel}
                     setLeftIcon={setLeftIcon}

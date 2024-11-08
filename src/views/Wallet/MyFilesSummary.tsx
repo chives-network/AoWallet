@@ -17,6 +17,7 @@ import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
 import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
 import Icon from 'src/@core/components/icon'
+import toast from 'react-hot-toast'
 
 // Styled component for the upload image inside the dropzone area
 const Img = styled('img')(({ theme }) => ({
@@ -31,7 +32,7 @@ const Img = styled('img')(({ theme }) => ({
   }
 }))
 
-const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
+const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
 
   const { t } = useTranslation()
 
@@ -46,7 +47,7 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
     getMyFiles(currentAddress);
   }, [currentAddress]);
 
-  console.log("myFiles", myFiles)
+  console.log("currentBalanceXwe", currentBalanceXwe)
 
   return (
     <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 2 }}>
@@ -57,10 +58,15 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
         <Box sx={{ display: 'flex', alignItems: 'left', px: 2, pt: 3 }}>
           <IconButton sx={{ py: 0 }}
                     onClick={ ()=>{
-                      setPageModel('UploadMyFiles')
-                      setLeftIcon('ic:twotone-keyboard-arrow-left')
-                      setTitle(t('Upload My Files') as string)
-                      setRightButtonIcon('')
+                      if(currentBalanceXwe < 0.01) {
+                        toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 5000, position: 'top-center' })
+                      }
+                      else {
+                        setPageModel('UploadMyFiles')
+                        setLeftIcon('ic:twotone-keyboard-arrow-left')
+                        setTitle(t('Upload My Files') as string)
+                        setRightButtonIcon('')
+                      }
                     }}>
             <Icon icon={'ic:sharp-add-circle-outline'}/>
           </IconButton>
@@ -131,10 +137,15 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
           <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
                     onClick={ ()=>{
-                      setPageModel('UploadMyFiles')
-                      setLeftIcon('ic:twotone-keyboard-arrow-left')
-                      setTitle(t('Upload My Files') as string)
-                      setRightButtonIcon('')
+                      if(currentBalanceXwe < 0.01) {
+                        toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 5000, position: 'top-center' })
+                      }
+                      else {
+                        setPageModel('UploadMyFiles')
+                        setLeftIcon('ic:twotone-keyboard-arrow-left')
+                        setTitle(t('Upload My Files') as string)
+                        setRightButtonIcon('')
+                      }
                     }}>
             <Img alt='Upload img' src='/images/misc/upload.png' />
           </Box>
