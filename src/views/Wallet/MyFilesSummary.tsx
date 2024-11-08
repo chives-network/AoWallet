@@ -32,7 +32,7 @@ const MyFilesSummary = ({ currentAddress, setCurrentTx, setPageModel, setLeftIco
     getMyFiles(currentAddress);
   }, [currentAddress]);
 
-  console.log("myFiles", myFiles)
+  //console.log("myFiles", myFiles)
 
   return (
     <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 2 }}>

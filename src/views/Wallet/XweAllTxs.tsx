@@ -118,64 +118,67 @@ const XweAllTxs = ({ currentWalletTxs, isDisabledButton, currentAddress, handleC
 
             {activeTab && activeTab == 'Files' && currentWalletTxs && currentWalletTxs.data.map((Tx: any, index: number) => {
 
-            return (
-              <Grid item xs={12} sx={{ py: 0 }} key={index}>
-                <Card>
-                  <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={ ()=>{
-                      setCurrentTx(Tx)
-                      setPageModel('ViewTx')
-                    } }>
-                  <CustomAvatar
-                    skin='light'
-                    color={'primary'}
-                    sx={{ mr: 0, width: 38, height: 38 }}
-                    src={getXweWalletImageThumbnail(Tx)}
-                  >
-                  </CustomAvatar>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                      <Typography
-                        sx={{
-                          color: 'text.primary',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          textAlign: 'left'
-                        }}
-                      >
-                        {Tx.table.item_name}
-                      </Typography>
-                      <Box sx={{ display: 'flex' }}>
-                        <Typography
-                          variant='body2'
-                          sx={{
-                            color: Tx.block && Tx.block.timestamp ? `primary.dark` : `warning.dark`,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            flex: 1,
-                            textAlign: 'left'
-                          }}
+              return (
+                <>
+                  {Tx && Tx.table && Tx.table.item_name && (
+                    <Grid item xs={12} sx={{ py: 0 }} key={index}>
+                      <Card>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={ ()=>{
+                            setCurrentTx(Tx)
+                            setPageModel('ViewTx')
+                          } }>
+                        <CustomAvatar
+                          skin='light'
+                          color={'primary'}
+                          sx={{ mr: 0, width: 38, height: 38 }}
+                          src={getXweWalletImageThumbnail(Tx)}
                         >
-                          {Tx.block && Tx.block.timestamp ? formatTimestamp(Tx.block.timestamp) : t('Memory Pool Tx')}
-                        </Typography>
-                      </Box>
-                    </Box>
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                            <Typography
+                              sx={{
+                                color: 'text.primary',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                textAlign: 'left'
+                              }}
+                            >
+                              {Tx.table.item_name}
+                            </Typography>
+                            <Box sx={{ display: 'flex' }}>
+                              <Typography
+                                variant='body2'
+                                sx={{
+                                  color: Tx.block && Tx.block.timestamp ? `primary.dark` : `warning.dark`,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  flex: 1,
+                                  textAlign: 'left'
+                                }}
+                              >
+                                {Tx.block && Tx.block.timestamp ? formatTimestamp(Tx.block.timestamp) : t('Memory Pool Tx')}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box textAlign="right">
+                            <Typography sx={{
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              mr: 2
+                            }}>
+                              {formatStorageSize(Tx.table.data_size)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Card>
+                    </Grid>
 
-                    <Box textAlign="right">
-                      <Typography sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                        mr: 2
-                      }}>
-                        {formatStorageSize(Tx.table.data_size)}
-                      </Typography>
-
-                    </Box>
-                  </Box>
-                </Card>
-              </Grid>
-            )
+                  )}
+                </>
+              )
             })}
 
             {currentWalletTxs && currentWalletTxs.data && currentWalletTxs.data.length == 0 && (
