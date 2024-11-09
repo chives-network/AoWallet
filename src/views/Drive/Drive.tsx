@@ -70,6 +70,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
 
   const [currentBalanceXwe, setCurrentBalanceXwe] = useState<string>("") // Xwe
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({}) // Xwe
+  const [totalFiles, setTotalFiles] = useState<number | null>(null) // Xwe
   const [myFiles, setMyFiles] = useState<any[]>([]) // Xwe
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -180,9 +181,11 @@ const Drive = ({ encryptWalletDataKey }: any) => {
           setMyFiles((preV: any)=>(
             [...preV, ...getMyLatestFilesData.data]
           ))
+          setTotalFiles(getMyLatestFilesData.total)
         }
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length == 0) {
           setIsLoadingFinished(true)
+          setTotalFiles(getMyLatestFilesData.total)
         }
         setIsLoading(false)
         console.log("getMyLatestFilesData", getMyLatestFilesData)
@@ -283,12 +286,12 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                   </Card>
                 </Grid>
               ))}
-              {isLoading == false && myFiles && myFiles.length == 0 && (
+              {isLoading == false && totalFiles != null && Number(totalFiles) == 0 && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
                   <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
                             onClick={ ()=>{
                               if(Number(currentBalanceXwe) < 0.01) {
-                                toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 5000, position: 'top-center' })
+                                toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 2500, position: 'top-center' })
                               }
                               else {
                                 setPageModel('UploadMyFiles')
@@ -301,7 +304,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                   </Box>
                 </Box>
               )}
-              {isLoading && isLoadingFinished == false && (
+              {isLoading && isLoadingFinished == false && Number(totalFiles) > 0 && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
@@ -313,7 +316,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                   </Grid>
                 </Fragment>
               )}
-              {isLoadingFinished == true && (
+              {isLoadingFinished == true && Number(totalFiles) > 0 && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
