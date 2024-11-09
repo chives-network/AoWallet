@@ -89,7 +89,7 @@ const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPa
                 src={getXweWalletImageThumbnail(Item)}
               >
               </CustomAvatar>
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', width: '60%', ml: 1.5 }}>
                 <Typography
                   sx={{
                     color: 'text.primary',
@@ -117,7 +117,7 @@ const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPa
                   </Typography>
                 </Box>
               </Box>
-              <Box textAlign="right">
+              <Box textAlign="right" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Typography variant='h6' sx={{
                   color: `info.dark`,
                   overflow: 'hidden',

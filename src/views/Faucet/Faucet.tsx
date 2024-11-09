@@ -380,7 +380,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
     const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
 
-    if(currentAddress && currentAddress.length == 43) {
+    if(currentToken == 'Ar' && currentAddress && currentAddress.length == 43) {
       handleGetAllFaucetsData()
     }
 

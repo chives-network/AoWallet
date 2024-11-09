@@ -372,13 +372,15 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
         }
 
         // For Ar
-        handleGetMySavingTokensData()
         const currentBalanceTempAr = await getWalletBalance(currentAddress, 'Ar');
         if(currentBalanceTempAr) {
           setCurrentBalance(Number(currentBalanceTempAr).toFixed(4).replace(/\.?0*$/, ''))
         }
-        const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
-        setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
+        if(currentToken == "Ar")  {
+          const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
+          setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
+          handleGetMySavingTokensData() // Get Balanes For AO Token
+        }
 
       }
 
@@ -438,7 +440,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   }, [getWalletNicknamesData, currentAddress, encryptWalletDataKey]);
 
   useEffect(() => {
-    if(currentAddress && currentAddress.length == 43 && specifyTokenSend && specifyTokenSend.Name && specifyTokenSend.Address && specifyTokenSend.TokenId && encryptWalletDataKey)  {
+    if(currentToken == "Ar" && currentAddress && currentAddress.length == 43 && specifyTokenSend && specifyTokenSend.Name && specifyTokenSend.Address && specifyTokenSend.TokenId && encryptWalletDataKey)  {
       handleDirectSendTokenOut()
     }
   }, [currentAddress, specifyTokenSend, encryptWalletDataKey]);

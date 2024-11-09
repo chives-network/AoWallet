@@ -73,7 +73,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
   const [totalFiles, setTotalFiles] = useState<number | null>(null) // Xwe
   const [myFiles, setMyFiles] = useState<any[]>([]) // Xwe
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoadingFinished, setIsLoadingFinished] = useState<boolean>(false)
 
 
@@ -242,7 +242,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                         src={getXweWalletImageThumbnail(Item)}
                       >
                       </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '65%', ml: 1.5 }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '60%', ml: 1.5 }}>
                         <Typography
                           sx={{
                             color: 'text.primary',
@@ -270,7 +270,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                           </Typography>
                         </Box>
                       </Box>
-                      <Box textAlign="right">
+                      <Box textAlign="right" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                         <Typography variant='h6' sx={{
                           color: `info.dark`,
                           overflow: 'hidden',
@@ -304,11 +304,11 @@ const Drive = ({ encryptWalletDataKey }: any) => {
                   </Box>
                 </Box>
               )}
-              {isLoading && isLoadingFinished == false && Number(totalFiles) > 0 && (
+              {isLoading && isLoadingFinished == false && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
-                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                          <Box sx={{ mt: 5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                               <CircularProgress sx={{ mb: 4 }} />
                               <Typography sx={{mt: 3}}>{`${t(`Loading`)}`} ...</Typography>
                           </Box>
