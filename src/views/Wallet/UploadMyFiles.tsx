@@ -158,6 +158,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet, setLeftIcon, setDisabledF
   useEffect(() => {
     const fetchPriceData = async () => {
       try {
+          setCurrentFee('')
           const getPriceData = await getPrice(totalSize, currentToken);
           setCurrentFee(String(getPriceData));
       } catch (error) {

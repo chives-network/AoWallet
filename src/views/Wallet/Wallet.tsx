@@ -947,7 +947,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 chooseWallet={chooseWallet}
                 handleWalletGoHome={handleWalletGoHome}
                 encryptWalletDataKey={encryptWalletDataKey}
-                />
+                setLeftIcon={setLeftIcon}
+                setDisabledFooter={setDisabledFooter}
+              />
             )}
 
             {pageModel == 'AllTxs' && currentToken == "Ar" && (
