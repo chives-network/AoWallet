@@ -25,6 +25,14 @@ import {EncryptDataWithKey} from 'src/functions/ChivesEncrypt'
 
 import authConfig from 'src/configs/auth'
 
+import Rollbar from "rollbar"
+
+const rollbarConfig = {
+  accessToken: "500d22dec90f4b8c8adeeeaad8e789c0",
+  environment: "production",
+};
+
+const rollbar = new Rollbar(rollbarConfig);
 interface FileProp {
   name: string
   type: string
@@ -160,96 +168,98 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
   }
 
   const uploadMultiFiles = async () => {
-    setUploadingText(t('Uploading') as string)
-    const getChivesLanguageData: string = getChivesLanguage();
+    try {
+      setUploadingText(t('Uploading') as string)
+      const getChivesLanguageData: string = getChivesLanguage();
 
-    //Make the bundle data
-    const formData = (await Promise.all(files?.map(async file => {
-      let data = file instanceof File ? await readFile(file) : file
-      const tags = [] as Tag[]
-      if(isEncryptFile)    {
-        //Encrypt File Content
-        const FileContent = new TextDecoder().decode(data);
-        const FileEncrypt = EncryptDataWithKey(FileContent, file.name, chooseWallet.jwk);
-        console.log("FileEncrypt", FileEncrypt)
-        setBaseTags(tags, {
-          'App-Name': FileEncrypt['App-Name'],
-          'App-Version': FileEncrypt['App-Version'],
-          'Content-Type': file.type,
-          'File-Name': FileEncrypt['File-Name'],
-          'File-Hash': FileEncrypt['File-Hash'],
-          'Cipher-ALG': FileEncrypt['Cipher-ALG'],
-          'Cipher-IV': FileEncrypt['Cipher-IV'],
-          'Cipher-TAG': FileEncrypt['Cipher-TAG'],
-          'Cipher-UUID': FileEncrypt['Cipher-UUID'],
-          'Cipher-KEY': FileEncrypt['Cipher-KEY'],
-          'Entity-Type': FileEncrypt['Entity-Type'],
-          'Unix-Time': FileEncrypt['Unix-Time']
-        })
-        data = FileEncrypt['Cipher-CONTENT']
+      //Make the bundle data
+      const formData = (await Promise.all(files?.map(async file => {
+        let data = file instanceof File ? await readFile(file) : file
+        const tags = [] as Tag[]
+        if(isEncryptFile)    {  //Encrypt File Content
+          const FileContent = new TextDecoder().decode(data);
+          const FileEncrypt = EncryptDataWithKey(FileContent, file.name, chooseWallet.jwk);
+          console.log("FileEncrypt", FileEncrypt)
+          setBaseTags(tags, {
+            'App-Name': FileEncrypt['App-Name'],
+            'App-Version': FileEncrypt['App-Version'],
+            'Content-Type': file.type,
+            'File-Name': FileEncrypt['File-Name'],
+            'File-Hash': FileEncrypt['File-Hash'],
+            'Cipher-ALG': FileEncrypt['Cipher-ALG'],
+            'Cipher-IV': FileEncrypt['Cipher-IV'],
+            'Cipher-TAG': FileEncrypt['Cipher-TAG'],
+            'Cipher-UUID': FileEncrypt['Cipher-UUID'],
+            'Cipher-KEY': FileEncrypt['Cipher-KEY'],
+            'Entity-Type': FileEncrypt['Entity-Type'],
+            'Unix-Time': FileEncrypt['Unix-Time']
+          })
+          data = FileEncrypt['Cipher-CONTENT']
+        }
+        else {  //Not Encrypt File Content
+          setBaseTags(tags, {
+            'Content-Type': file.type,
+            'File-Name': file.name,
+            'File-Hash': await getHash(data),
+            'File-Public': 'Public',
+            'File-Summary': '',
+            'Cipher-ALG': '',
+            'File-Parent': 'Root',
+            'File-Language': getChivesLanguageData,
+            'File-Pages': '',
+            'Entity-Type': 'File',
+            'App-Name': authConfig['AppName'],
+            'App-Version': authConfig['AppVersion'],
+            'App-Instance': authConfig['AppInstance'],
+            'Unix-Time': String(Date.now())
+          })
+        }
+
+        return { data, tags, path: file.name }
+      })))
+
+      const getProcessedDataValue = await getProcessedData(chooseWallet, currentAddress, formData, true, []);
+
+      const target = ""
+      const amount = ""
+      const data = getProcessedDataValue
+
+      console.log("getChivesLanguageData", getChivesLanguageData)
+      setIsEncryptFile(false)
+
+      //Make the tags
+      const tags: any = []
+      tags.push({name: "Bundle-Format", value: 'binary'})
+      tags.push({name: "Bundle-Version", value: '2.0.0'})
+      tags.push({name: "Entity-Type", value: "Bundle"})
+      tags.push({name: "Entity-Number", value: String(files.length)})
+
+      const TxResult: any = await sendAmount(chooseWallet, target, amount, tags, data, "UploadBundleFile", setUploadProgress);
+
+      //Save Tx Records Into LocalStorage
+      const chivesTxStatus: string = authConfig.chivesTxStatus
+      const ChivesDriveActionsMap: any = {}
+      const chivesTxStatusText = window.localStorage.getItem(chivesTxStatus)
+      const chivesTxStatusList = chivesTxStatusText ? JSON.parse(chivesTxStatusText) : []
+      const TxResultNew = {...TxResult, data:'', chunks:''}
+      chivesTxStatusList.push({TxResult: TxResultNew, ChivesDriveActionsMap: ChivesDriveActionsMap})
+      console.log("chivesTxStatusList-FileUploaderMultiple", TxResult)
+      window.localStorage.setItem(chivesTxStatus, JSON.stringify(chivesTxStatusList))
+
+      if(TxResult.status == 800) {
+        //Insufficient balance
+        toast.error(TxResult.statusText, { duration: 4000 })
+        setIsDisabledButton(false)
+        setIsDisabledRemove(false)
+        setUploadingButton(`${t(`Upload Files`)}`)
+        setUploadingText(t('Drag & Drop files here or click to upload') as string)
       }
-      else {
-
-        //Not Encrypt File Content
-        setBaseTags(tags, {
-          'Content-Type': file.type,
-          'File-Name': file.name,
-          'File-Hash': await getHash(data),
-          'File-Public': 'Public',
-          'File-Summary': '',
-          'Cipher-ALG': '',
-          'File-Parent': 'Root',
-          'File-Language': getChivesLanguageData,
-          'File-Pages': '',
-          'Entity-Type': 'File',
-          'App-Name': authConfig['AppName'],
-          'App-Version': authConfig['AppVersion'],
-          'App-Instance': authConfig['AppInstance'],
-          'Unix-Time': String(Date.now())
-        })
+      if(TxResult && TxResult.signature) {
+        setUploadingText(t('Upload complete, it will appear in your list after 5 minutes') as string)
       }
-
-      return { data, tags, path: file.name }
-    })))
-
-    const getProcessedDataValue = await getProcessedData(chooseWallet, currentAddress, formData, true, []);
-
-    const target = ""
-    const amount = ""
-    const data = getProcessedDataValue
-
-    console.log("getChivesLanguageData", getChivesLanguageData)
-    setIsEncryptFile(false)
-
-    //Make the tags
-    const tags: any = []
-    tags.push({name: "Bundle-Format", value: 'binary'})
-    tags.push({name: "Bundle-Version", value: '2.0.0'})
-    tags.push({name: "Entity-Type", value: "Bundle"})
-    tags.push({name: "Entity-Number", value: String(files.length)})
-
-    const TxResult: any = await sendAmount(chooseWallet, target, amount, tags, data, "UploadBundleFile", setUploadProgress);
-
-    //Save Tx Records Into LocalStorage
-    const chivesTxStatus: string = authConfig.chivesTxStatus
-    const ChivesDriveActionsMap: any = {}
-    const chivesTxStatusText = window.localStorage.getItem(chivesTxStatus)
-    const chivesTxStatusList = chivesTxStatusText ? JSON.parse(chivesTxStatusText) : []
-    const TxResultNew = {...TxResult, data:'', chunks:''}
-    chivesTxStatusList.push({TxResult: TxResultNew, ChivesDriveActionsMap: ChivesDriveActionsMap})
-    console.log("chivesTxStatusList-FileUploaderMultiple", TxResult)
-    window.localStorage.setItem(chivesTxStatus, JSON.stringify(chivesTxStatusList))
-
-    if(TxResult.status == 800) {
-      //Insufficient balance
-      toast.error(TxResult.statusText, { duration: 4000 })
-      setIsDisabledButton(false)
-      setIsDisabledRemove(false)
-      setUploadingButton(`${t(`Upload Files`)}`)
-      setUploadingText(t('Drag & Drop files here or click to upload') as string)
     }
-    if(TxResult && TxResult.signature) {
-      setUploadingText(t('Upload complete, it will appear in your list after 5 minutes') as string)
+    catch(error: any) {
+      rollbar.error("uploadMultiFiles", error as Error);
     }
 
   };
