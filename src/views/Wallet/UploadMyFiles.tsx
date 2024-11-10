@@ -60,7 +60,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
+const UploadMyFiles = ({ currentAddress, chooseWallet, setLeftIcon, setDisabledFooter } : any) => {
 
   // ** Hook
   const { t } = useTranslation()
@@ -106,8 +106,6 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     const filtered = uploadedFiles.filter((i: FileProp) => i.name !== file.name)
     setFiles([...filtered])
   }
-
-  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
 
   const fileList = files.map((file: FileProp) => (
     <ListItem key={file.name} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -155,17 +153,19 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     </ListItem>
   ))
 
+  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+
   useEffect(() => {
     const fetchPriceData = async () => {
       try {
-          const getPriceData = await getPrice(50, currentToken);
+          const getPriceData = await getPrice(totalSize, currentToken);
           setCurrentFee(String(getPriceData));
       } catch (error) {
           console.error('Error fetching price data:', error);
       }
     };
     fetchPriceData();
-  }, [files])
+  }, [totalSize])
 
   const handleRemoveAllFiles = () => {
     setFiles([])
@@ -176,11 +176,15 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     setUploadingText(t('Drag & Drop files here or click to upload') as string)
   }
 
-  const handleUploadAllFiles = () => {
+  const handleUploadAllFiles = async () => {
     setIsDisabledButton(true)
     setIsDisabledRemove(true)
     setUploadingButton(`${t(`Uploading`)}...`)
-    uploadMultiFiles();
+    setLeftIcon('')
+    setDisabledFooter(true)
+    await uploadMultiFiles()
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setDisabledFooter(false)
   }
 
   const uploadMultiFiles = async () => {

@@ -49,7 +49,7 @@ const Img = styled('img')(({ theme }) => ({
   }
 }))
 
-const Drive = ({ encryptWalletDataKey }: any) => {
+const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
   // ** Hook
   const { t } = useTranslation()
 
@@ -104,6 +104,7 @@ const Drive = ({ encryptWalletDataKey }: any) => {
       setPageModel('UploadMyFiles')
       setLeftIcon('ic:twotone-keyboard-arrow-left')
       setTitle(t('Upload My Files') as string)
+      setRightButtonIcon('')
     }
   }
 
@@ -336,6 +337,8 @@ const Drive = ({ encryptWalletDataKey }: any) => {
               chooseWallet={chooseWallet}
               handleWalletGoHome={handleWalletGoHome}
               encryptWalletDataKey={encryptWalletDataKey}
+              setLeftIcon={setLeftIcon}
+              setDisabledFooter={setDisabledFooter}
             />
           )}
 
