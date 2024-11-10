@@ -140,5 +140,6 @@
   "Drag & Drop files here or click to upload": "将文件拖放到此处或点击上传",
   "Upload complete, it will appear in your list after 5 minutes": "上传完成, 5分钟之后,将会显示在您的列表里面",
   "Continue uploading": "继续上传",
-  "Drive": "网盘"
+  "Drive": "网盘",
+  "Total Size": "全部大小"
 }

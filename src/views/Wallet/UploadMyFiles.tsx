@@ -19,7 +19,7 @@ import toast from 'react-hot-toast'
 import Icon from 'src/@core/components/icon'
 
 // ** Hooks
-import { getChivesLanguage } from 'src/functions/ChivesWallets'
+import { getChivesLanguage, getPrice } from 'src/functions/ChivesWallets'
 import { sendAmount, getHash, getProcessedData } from 'src/functions/ChivesDrive'
 import {EncryptDataWithKey} from 'src/functions/ChivesEncrypt'
 
@@ -66,6 +66,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
   const { t } = useTranslation()
 
   // ** State
+  const currentToken = 'Xwe'
   const [files, setFiles] = useState<File[]>([])
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const [uploadingButton, setUploadingButton] = useState<string>(`${t(`Upload Files`)}`)
@@ -74,6 +75,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
   const [isDisabledRemove, setIsDisabledRemove] = useState<boolean>(false)
   const [isEncryptFile, setIsEncryptFile] = useState<boolean>(false)
   const [uploadingText, setUploadingText] = useState<string>(`${t(`Drag & Drop files here or click to upload`)}`)
+  const [currentFee, setCurrentFee] = useState<string>('')
 
   // ** Hooks
   const { getRootProps, getInputProps } = useDropzone({
@@ -105,6 +107,8 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
     setFiles([...filtered])
   }
 
+  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+
   const fileList = files.map((file: FileProp) => (
     <ListItem key={file.name} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div className='file-details' style={{ display: 'flex', alignItems: 'center' }}>
@@ -115,8 +119,8 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
           <Typography className='file-name'>{file.name}</Typography>
           <Typography className='file-size' variant='body2'>
             {Math.round(file.size / 100) / 10 > 1000
-              ? `${(Math.round(file.size / 100) / 10000).toFixed(1)} mb`
-              : `${(Math.round(file.size / 100) / 10).toFixed(1)} kb`}
+              ? `${(Math.round(file.size / 100) / 10000).toFixed(1)} Mb`
+              : `${(Math.round(file.size / 100) / 10).toFixed(1)} Kb`}
           </Typography>
         </div>
       </div>
@@ -150,6 +154,18 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
       )}
     </ListItem>
   ))
+
+  useEffect(() => {
+    const fetchPriceData = async () => {
+      try {
+          const getPriceData = await getPrice(50, currentToken);
+          setCurrentFee(String(getPriceData));
+      } catch (error) {
+          console.error('Error fetching price data:', error);
+      }
+    };
+    fetchPriceData();
+  }, [files])
 
   const handleRemoveAllFiles = () => {
     setFiles([])
@@ -371,6 +387,10 @@ const UploadMyFiles = ({ currentAddress, chooseWallet } : any) => {
             <Button variant='contained' onClick={handleUploadAllFiles} disabled={isDisabledButton}>
               {uploadingButton}
             </Button>
+          </Box>
+          <Box className='buttons' sx={{ display: 'flex', justifyContent: 'center', gap: 8, mt: 4 }}>
+            <Typography className='file-size' variant='body2'>{t('Total Size') as string}: {`${(Math.round(totalSize / 100) / 10000).toFixed(1)} Mb`}</Typography>
+            <Typography className='file-size' variant='body2'> {t('Fee') as string}: {currentFee} {currentToken}</Typography>
           </Box>
         </Fragment>
       ) : null}
