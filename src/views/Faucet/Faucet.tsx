@@ -87,7 +87,6 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
     }
   }
 
-
   const RightButtonOnClick = () => {
 
     if(currentToken == 'Ar')  {
@@ -384,7 +383,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
       handleGetAllFaucetsData()
     }
 
-  }, [currentAddress]);
+  }, [currentAddress, currentToken]);
 
   useEffect(() => {
     if(allFaucetsData && allFaucetsData.length > 0) {
