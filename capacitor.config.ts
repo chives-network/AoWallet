@@ -4,7 +4,14 @@ const config: CapacitorConfig = {
   appId: 'org.aowallet.app',
   appName: 'AoWallet',
   webDir: 'out',
-  "bundledWebRuntime": true
+  plugins: {
+    LiveUpdates: {
+      appId: '3ba80b94',
+      channel: 'Production',
+      autoUpdateMethod: 'background',
+      maxVersions: 2
+    }
+  }
 };
 
 export default config;
