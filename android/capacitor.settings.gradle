@@ -14,5 +14,8 @@ project(':capacitor-clipboard').projectDir = new File('../node_modules/@capacito
 include ':capacitor-filesystem'
 project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacitor/filesystem/android')
 
+include ':capacitor-live-updates'
+project(':capacitor-live-updates').projectDir = new File('../node_modules/@capacitor/live-updates/android')
+
 include ':capacitor-share'
 project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/share/android')

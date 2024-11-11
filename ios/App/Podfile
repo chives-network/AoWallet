@@ -15,6 +15,7 @@ def capacitor_pods
   pod 'CapacitorBarcodeScanner', :path => '../../node_modules/@capacitor/barcode-scanner'
   pod 'CapacitorClipboard', :path => '../../node_modules/@capacitor/clipboard'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
+  pod 'CapacitorLiveUpdates', :path => '../../node_modules/@capacitor/live-updates'
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
 end
 

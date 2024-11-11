@@ -13,6 +13,7 @@ dependencies {
     implementation project(':capacitor-barcode-scanner')
     implementation project(':capacitor-clipboard')
     implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-live-updates')
     implementation project(':capacitor-share')
 
 }
