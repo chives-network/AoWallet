@@ -312,10 +312,12 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const [page, setPage] = useState<number>(0)
   const [innerHeight, setInnerHeight] = useState<number | string>(0)
+  const [innerWidth, setInnerWidth] = useState<number | string>(0)
 
   useEffect(() => {
     const handleResize = () => {
       setInnerHeight(window.innerHeight);
+      setInnerWidth(window.innerWidth);
     };
 
     const handleScroll = () => {
@@ -326,6 +328,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
       console.log("windowHeight", windowHeight);
       console.log("documentHeight", documentHeight);
       console.log("innerHeight", innerHeight);
+      console.log("innerWidth", innerWidth);
       console.log("scrollY", scrollY);
       console.log("page", page);
 
@@ -351,6 +354,10 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   useEffect(() => {
     const processWallets = async () => {
+      if(window) {
+        setInnerWidth(window.innerWidth);
+        console.log("innerWidth", window.innerWidth);
+      }
       if(currentAddress && currentAddress.length == 43 && pageModel == 'MainWallet' && page == 0)  {
 
         //For Xwe
@@ -928,6 +935,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentToken={currentToken}
                 page={page}
                 setPage={setPage}
+                innerWidth={innerWidth}
                 />
             )}
 
@@ -938,6 +946,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentToken={currentToken}
                 page={page}
                 setPage={setPage}
+                innerWidth={innerWidth}
                 />
             )}
 

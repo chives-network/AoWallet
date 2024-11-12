@@ -1,21 +1,30 @@
+import React, { useState } from 'react';
+
 import { Clipboard } from '@capacitor/clipboard';
+import { Capacitor } from '@capacitor/core';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import toast from 'react-hot-toast'
+import authConfig from 'src/configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
+import { getXweWalletImageThumbnail, downloadCapacitorFile, downloadUrlFile } from 'src/functions/ChivesWallets'
 import { formatHash, formatTimestamp, formatStorageSize } from 'src/configs/functions'
 
 
 const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
 
   const { t } = useTranslation()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const platform = Capacitor.getPlatform();
 
   return (
     <Grid container spacing={0} >
@@ -170,6 +179,7 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
                     </Box>
                   </Box>
               )}
+
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type && (
                 <>
                   <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
@@ -228,6 +238,24 @@ const XweViewTx = ({ currentTx, currentAddress, currentToken } : any) => {
                     </Box>
                   )}
                 </>
+              )}
+
+              {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && (platform == "ios" || platform == "android") && (
+                <Button disabled={isLoading} fullWidth sx={{mt: 2}} variant='contained' onClick={() => {
+                        setIsLoading(true)
+                        downloadCapacitorFile(authConfig.backEndApiXwe + '/' +  currentTx.table.id, currentTx.table.item_name)
+                        }}>
+                  {t('download')}
+                </Button>
+              )}
+
+              {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && platform == "web" && currentTx.table.content_type && (
+                <Button disabled={isLoading} fullWidth sx={{mt: 2}} variant='contained' onClick={() => {
+                        setIsLoading(true)
+                        downloadUrlFile(authConfig.backEndApiXwe + '/' +  currentTx.table.id, currentTx.table.item_name, currentTx.table.content_type)
+                        }}>
+                  {t('download')}
+                </Button>
               )}
 
           </Grid>

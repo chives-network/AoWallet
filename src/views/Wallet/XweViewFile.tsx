@@ -8,17 +8,22 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CustomAvatar from 'src/@core/components/mui/avatar'
 import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
-import { getXweWalletImageThumbnail, downloadCapacitorFile, downloadUrlFile } from 'src/functions/ChivesWallets'
+import CardMedia from '@mui/material/CardMedia'
+import { downloadCapacitorFile, downloadUrlFile } from 'src/functions/ChivesWallets'
 import { formatHash, formatTimestamp, formatStorageSize } from 'src/configs/functions'
 
+import Preview from '../Preview/Preview'
 
-const XweViewFile = ({ currentTx, currentAddress, currentToken } : any) => {
+const toggleImagesPreviewDrawer = () => {
+  console.log("toggleImagesPreviewDrawer")
+}
+
+const XweViewFile = ({ currentTx, currentAddress, currentToken, innerWidth } : any) => {
 
   const { t } = useTranslation()
 
@@ -29,19 +34,23 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken } : any) => {
   return (
     <Grid container spacing={0} >
 
-      <Grid item xs={12} sx={{mt: '10px', height: 'calc(100% - 56px)'}}>
+      <Grid item xs={12} sx={{mt: 0, height: 'calc(100% - 56px)'}}>
         <Grid container spacing={2}>
 
           <Grid item xs={12} sx={{ py: 0 }} >
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type == 'image' && (
-                <Box px={2} pb={2} textAlign="center" sx={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-                  <CustomAvatar
-                    skin='light'
-                    color={'primary'}
-                    sx={{ mr: 0, width: 100, height: 100 }}
-                    src={getXweWalletImageThumbnail(currentTx)}
-                  >
-                  </CustomAvatar>
+                <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                    <CardMedia component="img" image={`${authConfig.backEndApiXwe}/${currentTx.table.id}/thumbnail`} sx={{ 'width':'100%', objectFit: 'contain', borderRadius: 1 }}/>
+                </Box>
+              )}
+              {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type == 'video' && (
+                <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                    <CardMedia component="video" controls src={`${authConfig.backEndApiXwe}/${currentTx.table.id}`} sx={{ 'width':'100%', objectFit: 'contain', borderRadius: 1 }}/>
+                </Box>
+              )}
+              {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type == 'pdf' && (
+                <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
+                  <Preview key={currentTx.table.id} open={true} toggleImagesPreviewDrawer={toggleImagesPreviewDrawer} imagesList={[`${authConfig.backEndApiXwe}/${currentTx.table.id}`]} imagesType={['pdf']} innerWidth={innerWidth} />
                 </Box>
               )}
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_type == null && (
@@ -232,11 +241,6 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken } : any) => {
                       </Typography>
                     </Box>
                   </Box>
-                  {currentTx.table.item_name && currentTx.table.item_type == 'image' && (
-                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                        <img src={getXweWalletImageThumbnail(currentTx)} alt={currentTx.table.item_name} style={{'width':'100%', 'borderRadius': '4px'}}/>
-                    </Box>
-                  )}
                 </>
               )}
 
