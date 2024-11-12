@@ -45,10 +45,7 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken, innerWidth } : a
               )}
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type == 'video' && (
                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
-                    <video width="100%" height="100%" controls autoPlay muted >
-                      <source src={`${authConfig.backEndApiXwe}/${currentTx.table.id}`} type={currentTx.table.content_type} />
-                      Your browser does not support the video tag.
-                    </video>
+                    <img src={authConfig.backEndApiXwe + '/' + currentTx.table.id} alt={currentTx.table.item_name} style={{'width':'100%', 'borderRadius': '4px'}}/>
                 </Box>
               )}
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.item_type == 'pdf' && (
