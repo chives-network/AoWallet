@@ -46,7 +46,7 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken, innerWidth } : a
               {currentTx && currentTx.table && currentTx.table.id && currentTx.table.item_name && currentTx.table.content_type && currentTx.table.item_type == 'video' && (
                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
                     <video width="100%" height="100%" controls autoPlay >
-                      <source src={`${authConfig.backEndApiXwe}/${currentTx.table.id}`} type={currentTx.table.content_type} />
+                      <source src={`https://faucet.chivesweave.org/001.mp4`} type={currentTx.table.content_type} />
                       Your browser does not support the video tag.
                     </video>
                 </Box>
