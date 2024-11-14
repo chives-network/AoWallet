@@ -23,17 +23,19 @@ const ManageAssets = ({ searchAssetkeyWord, setSearchAssetkeyWord, mySavingToken
   return (
     <Grid container spacing={2} mt={1}>
       <Grid item xs={12} sx={{height: 'calc(100% - 104px)'}}>
-          <Grid container spacing={2}>
-            <TextField
-              fullWidth
-              size='small'
-              value={searchAssetkeyWord}
-              placeholder={t('Search Assets') as string}
-              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3 }}
-              onChange={(e: any)=>{
-                setSearchAssetkeyWord(e.target.value)
-              }}
-            />
+          <Grid item xs={12} sx={{ py: 0 }}>
+            <Box>
+              <TextField
+                fullWidth
+                size='small'
+                value={searchAssetkeyWord}
+                placeholder={t('Search Assets') as string}
+                sx={{ '& .MuiInputBase-root': { borderRadius: 2 }, mb: 3 }}
+                onChange={(e: any)=>{
+                  setSearchAssetkeyWord(e.target.value)
+                }}
+              />
+            </Box>
           </Grid>
 
           {mySavingTokensData && mySavingTokensData.length > 0 && (

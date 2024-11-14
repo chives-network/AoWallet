@@ -709,11 +709,15 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   }
 
   const handleGetMySavingTokensData = async () => {
+    const AoWalletTokenJson = JSON.parse('[{"TokenData":{"Data-Protocol":"ao","Variant":"ao.TN.1","Type":"Message","From-Process":"NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ","From-Module":"JdN3ffZQaFE33-s20LSp2uLhm9Z94wnG59aLRnBAecU","Ref_":"490","Release":"ChivesToken","TokenHolders":"60","Denomination":"3","TotalSupply":"21000000.0","Ticker":"AOW","Name":"AoWallet","Logo":"WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630","Version":"20240819"},"TokenSort":"100","TokenId":"NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ","TokenGroup":"AoWallet"}]')
+
     const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
-    console.log("getMyAoTokensData00000", JSON.stringify(getMyAoTokensData))
-    if(getMyAoTokensData) {
-      setMySavingTokensData(getMyAoTokensData)
+    const getMyAoTokensDataNew = getMyAoTokensData && getMyAoTokensData.length > 0 ? getMyAoTokensData : AoWalletTokenJson
+    if(getMyAoTokensDataNew) {
+      setMySavingTokensData(getMyAoTokensDataNew)
     }
+
+    setIsDisabledManageAssets(false)
 
     try {
       const MyProcessTxIdsGetTokensData = await MyProcessTxIdsGetTokens(authConfig.AoConnectMyProcessTxIds, currentAddress);
@@ -738,8 +742,11 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
             return {...Token, TokenData: TokenData}
           })
-          setMyAoTokens(currentAddress, dataArrayFilter, encryptWalletDataKey)
-          setMySavingTokensData(dataArrayFilter)
+
+          const dataArrayFilterNew = dataArrayFilter && dataArrayFilter.length > 0 ? dataArrayFilter : AoWalletTokenJson
+
+          setMyAoTokens(currentAddress, dataArrayFilterNew, encryptWalletDataKey)
+          setMySavingTokensData(dataArrayFilterNew)
 
           //console.log("handleGetMySavingTokensData dataArrayFilter", dataArrayFilter)
       }
@@ -749,8 +756,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     }
 
     handleGetMySavingTokensBalance()
-
-    setIsDisabledManageAssets(false)
 
     //handleGetAllTokensData()
 

@@ -608,9 +608,8 @@ export function getMyAoTokens(Address: string, encryptWalletDataKey: string) {
         const chivesMyAoTokensData = window.localStorage.getItem(chivesMyAoTokens)
         const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesMyAoTokensData as string, encryptWalletDataKey)
         const chivesMyAoTokensObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
-        const AoWalletTokenJson = JSON.parse('[{"TokenData":{"Data-Protocol":"ao","Variant":"ao.TN.1","Type":"Message","From-Process":"NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ","From-Module":"JdN3ffZQaFE33-s20LSp2uLhm9Z94wnG59aLRnBAecU","Ref_":"490","Release":"ChivesToken","TokenHolders":"60","Denomination":"3","TotalSupply":"21000000.0","Ticker":"AOW","Name":"AoWallet","Logo":"WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630","Version":"20240819"},"TokenSort":"100","TokenId":"NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ","TokenGroup":"AoWallet"}]')
 
-        return chivesMyAoTokensObject[Address] && chivesMyAoTokensObject[Address].length > 0 ? chivesMyAoTokensObject[Address] : AoWalletTokenJson
+        return chivesMyAoTokensObject[Address] && chivesMyAoTokensObject[Address].length > 0 ? chivesMyAoTokensObject[Address] : []
     }
 }
 
