@@ -40,6 +40,10 @@ import TermsofUse from './TermsofUse'
 import PrivacyPolicy from './PrivacyPolicy'
 import Link from 'next/link'
 
+import BlockRewards from '../Explorer/BlockRewards'
+import Addresses from '../Explorer/Addresses'
+import Nodes from '../Explorer/Nodes'
+
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
   width: '100%',
@@ -141,6 +145,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
       case 'General':
       case 'Contacts':
       case 'Support':
+      case 'BlockExplorer':
       case 'SecurityPrivacy':
         handleWalletGoHome()
         break
@@ -165,6 +170,14 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
       case 'PrivacyPolicy':
       case 'TermsOfUse':
         handleClickSecurityPrivacyButton()
+        break
+      case 'Blocks':
+      case 'BlockRewards':
+      case 'Addresses':
+      case 'Transactions':
+      case 'Nodes':
+      case 'Memory Pool':
+        handleClickBlockExplorerButton()
         break
     }
   }
@@ -213,6 +226,18 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     setPageModel('SecurityPrivacy')
     setLeftIcon('ic:twotone-keyboard-arrow-left')
     setTitle(t('Security & Privacy') as string)
+    setRightButtonText(t('') as string)
+    setRightButtonIcon('')
+    setContactAddress('')
+    setContactName('')
+    setSearchContactkeyWord('')
+  }
+
+  const handleClickBlockExplorerButton = () => {
+    setCounter(counter + 1)
+    setPageModel('BlockExplorer')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Block Explorer') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
     setContactAddress('')
@@ -312,6 +337,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
 
     setIsDisabledButton(true);
     setUploadingButton(t('Summitting...') as string);
+
 
     try {
       let TokenProcessTxId: any = null;
@@ -436,6 +462,49 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     setRightButtonIcon('')
   }
 
+  const handleClickBlockRewardsButton = () => {
+    setPageModel('BlockRewards')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Block Rewards') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+
+  const handleClickBlocksButton = () => {
+    setPageModel('Blocks')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Blocks') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+  console.log("handleClickBlocksButton", handleClickBlocksButton)
+
+  const handleClickAddressesButton = () => {
+    setPageModel('Addresses')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Addresses') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+
+  const handleClickNodesButton = () => {
+    setPageModel('Nodes')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Nodes') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+
+  const handleClickNodesMemoryPoolButton = () => {
+    setPageModel('MemoryPool')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setTitle(t('Memory Pool') as string)
+    setRightButtonText('')
+    setRightButtonIcon('')
+  }
+  console.log("handleClickNodesMemoryPoolButton", handleClickNodesMemoryPoolButton)
+
+
   const handleClickCheckPinCodeButton = () => {
     setPageModel('CheckPinCode')
     setTitle(t('Check Pin Code') as string)
@@ -462,6 +531,8 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
     toast.success(t('Change pin code success') as string, { duration: 2500, position: 'top-center' })
     handleWalletGoHome()
   }
+
+  const NotFinished = false
 
 
   return (
@@ -607,8 +678,45 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                         <Grid item xs={12} sx={{ py: 1 }}>
                           <Card>
                             <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>handleClickBlockExplorerButton()}>
+                                <Icon icon='clarity:blocks-group-line' fontSize={34} />
+                              </IconButton>
+                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickBlockExplorerButton()}
+                                >
+                                <Typography sx={{
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                >
+                                  {t('Block Explorer') as string}
+                                </Typography>
+                                <Box sx={{ display: 'flex'}}>
+                                  <Typography variant='body2' sx={{
+                                    color: `secondary.primary`,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    flex: 1
+                                  }}>
+                                    {t('Blocks, Txs, Address, Rewards') as string}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box textAlign="right">
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickBlockExplorerButton()}>
+                                    <Icon icon='mdi:chevron-right' fontSize={30} />
+                                </IconButton>
+                              </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
                               <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>null}>
-                                <Icon icon='material-symbols:support-agent' fontSize={34} />
+                              <Icon icon='material-symbols:help-outline' fontSize={34} />
                               </IconButton>
                               <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
                                 >
@@ -619,7 +727,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   whiteSpace: 'nowrap',
                                 }}
                                 >
-                                  {t('Support') as string}
+                                  {t('Version') as string} {authConfig.AppVersion}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
                                   <Link href={`https://discord.com/invite/aAkMH9Q3AY`} target='_blank'>
@@ -645,38 +753,6 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                       {t('Twitter') as string}
                                     </Typography>
                                   </Link>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </Card>
-                        </Grid>
-                        <Grid item xs={12} sx={{ py: 1 }}>
-                          <Card>
-                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
-                              <IconButton sx={{ p: 0, ml: 1 }} onClick={()=>null}>
-                                <Icon icon='material-symbols:help-outline' fontSize={34} />
-                              </IconButton>
-                              <Box sx={{ ml: 2.5, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>null}
-                                >
-                                <Typography sx={{
-                                  color: 'text.primary',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                                >
-                                  {t('Version') as string}
-                                </Typography>
-                                <Box sx={{ display: 'flex'}}>
-                                  <Typography variant='body2' sx={{
-                                    color: `secondary.primary`,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    flex: 1
-                                  }}>
-                                    {authConfig.AppVersion}
-                                  </Typography>
                                 </Box>
                               </Box>
                             </Box>
@@ -1101,6 +1177,255 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                     </Grid>
                 </Grid>
               </Grid>
+            )}
+
+            {pageModel == 'BlockExplorer' && (
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{height: 'calc(100%)'}}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickBlockRewardsButton()}>
+                                    <Icon icon='material-symbols:rewarded-ads-outline' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickBlockRewardsButton()}
+                                    >
+                                    <Typography sx={{
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Block Rewards') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Block rewards in last 24 hours') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickBlockRewardsButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        {NotFinished && (
+                          <Grid item xs={12} sx={{ py: 1 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickTermsOfUseButton()}>
+                                      <Icon icon='clarity:blocks-group-line' fontSize={38} />
+                                  </IconButton>
+                                  <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickTermsOfUseButton()}
+                                      >
+                                      <Typography sx={{
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      }}
+                                      >
+                                      {t('Blocks') as string}
+                                      </Typography>
+                                      <Box sx={{ display: 'flex'}}>
+                                      <Typography variant='body2' sx={{
+                                          color: `secondary.primary`,
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          flex: 1
+                                      }}>
+                                          {t('Blocks') as string}
+                                      </Typography>
+                                      </Box>
+                                  </Box>
+                                  <Box textAlign="right">
+                                      <IconButton sx={{ p: 0 }} onClick={()=>handleClickTermsOfUseButton()}>
+                                          <Icon icon='mdi:chevron-right' fontSize={30} />
+                                      </IconButton>
+                                  </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
+                        )}
+                        {NotFinished && (
+                          <Grid item xs={12} sx={{ py: 1 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                      <Icon icon='grommet-icons:transaction' fontSize={38} />
+                                  </IconButton>
+                                  <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickPrivacyPolicyButton()}
+                                      >
+                                      <Typography sx={{
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      }}
+                                      >
+                                      {t('Txs') as string}
+                                      </Typography>
+                                      <Box sx={{ display: 'flex'}}>
+                                      <Typography variant='body2' sx={{
+                                          color: `secondary.primary`,
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          flex: 1
+                                      }}>
+                                          {t('Transactions') as string}
+                                      </Typography>
+                                      </Box>
+                                  </Box>
+                                  <Box textAlign="right">
+                                      <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                          <Icon icon='mdi:chevron-right' fontSize={30} />
+                                      </IconButton>
+                                  </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
+                        )}
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickAddressesButton()}>
+                                    <Icon icon='clarity:wallet-solid' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickAddressesButton()}
+                                    >
+                                    <Typography sx={{
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Addresses') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Addresses balance ranking') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickAddressesButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        <Grid item xs={12} sx={{ py: 1 }}>
+                          <Card>
+                            <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                <IconButton sx={{ p: 0 }} onClick={()=>handleClickNodesButton()}>
+                                    <Icon icon='fa6-solid:share-nodes' fontSize={38} />
+                                </IconButton>
+                                <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickNodesButton()}
+                                    >
+                                    <Typography sx={{
+                                    color: 'text.primary',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    }}
+                                    >
+                                    {t('Nodes') as string}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex'}}>
+                                    <Typography variant='body2' sx={{
+                                        color: `secondary.primary`,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        flex: 1
+                                    }}>
+                                        {t('Mining & light node') as string}
+                                    </Typography>
+                                    </Box>
+                                </Box>
+                                <Box textAlign="right">
+                                    <IconButton sx={{ p: 0 }} onClick={()=>handleClickNodesButton()}>
+                                        <Icon icon='mdi:chevron-right' fontSize={30} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                          </Card>
+                        </Grid>
+                        {NotFinished && (
+                          <Grid item xs={12} sx={{ py: 1 }}>
+                            <Card>
+                              <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 0.7}}>
+                                  <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                      <Icon icon='mdi:pool' fontSize={38} />
+                                  </IconButton>
+                                  <Box sx={{ cursor: 'pointer', ml: 2, display: 'flex', flexDirection: 'column', width: '100%' }} onClick={()=>handleClickPrivacyPolicyButton()}
+                                      >
+                                      <Typography sx={{
+                                      color: 'text.primary',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      }}
+                                      >
+                                      {t('Memory Pool') as string}
+                                      </Typography>
+                                      <Box sx={{ display: 'flex'}}>
+                                      <Typography variant='body2' sx={{
+                                          color: `secondary.primary`,
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          flex: 1
+                                      }}>
+                                          {t('Memory Pool') as string}
+                                      </Typography>
+                                      </Box>
+                                  </Box>
+                                  <Box textAlign="right">
+                                      <IconButton sx={{ p: 0 }} onClick={()=>handleClickPrivacyPolicyButton()}>
+                                          <Icon icon='mdi:chevron-right' fontSize={30} />
+                                      </IconButton>
+                                  </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
+                        )}
+                    </Grid>
+                </Grid>
+              </Grid>
+            )}
+
+            {pageModel == 'BlockRewards' && (
+              <BlockRewards />
+            )}
+
+            {pageModel == 'Addresses' && (
+              <Addresses />
+            )}
+
+            {pageModel == 'Nodes' && (
+              <Nodes />
             )}
 
             {pageModel == 'Language' && (
