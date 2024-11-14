@@ -64,8 +64,6 @@ export const MyProcessTxIdsAddToken = async (currentWalletJwk: any, MyProcessTxI
         }
         const GetMyProcessTxIdsAddTokenResult = await message(data);
 
-        console.log("MyProcessTxIdsAddToken GetMyProcessTxIdsAddTokenResult", GetMyProcessTxIdsAddTokenResult)
-        
         if(GetMyProcessTxIdsAddTokenResult && GetMyProcessTxIdsAddTokenResult.length == 43) {
             const MsgContent = await AoGetRecord(MyProcessTxId, GetMyProcessTxIdsAddTokenResult)
 
@@ -83,7 +81,7 @@ export const MyProcessTxIdsAddToken = async (currentWalletJwk: any, MyProcessTxI
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelToken = async (currentWalletJwk: any, MyProcessTxId: string, TokenId: string) => {
@@ -101,7 +99,7 @@ export const MyProcessTxIdsDelToken = async (currentWalletJwk: any, MyProcessTxI
         }
         const GetMyProcessTxIdsDelTokenResult = await message(data);
         console.log("MyProcessTxIdsDelToken GetMyProcessTxIdsDelTokenResult", GetMyProcessTxIdsDelTokenResult)
-        
+
         if(GetMyProcessTxIdsDelTokenResult && GetMyProcessTxIdsDelTokenResult.length == 43) {
             const MsgContent = await AoGetRecord(MyProcessTxId, GetMyProcessTxIdsDelTokenResult)
 
@@ -119,7 +117,7 @@ export const MyProcessTxIdsDelToken = async (currentWalletJwk: any, MyProcessTxI
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -173,7 +171,7 @@ export const MyProcessTxIdsAddChatroom = async (currentWalletJwk: any, MyProcess
         console.log("MyProcessTxIdsAddChatroom Data", Data)
         const GetMyProcessTxIdsAddChatroomResult = await message(Data);
         console.log("MyProcessTxIdsAddChatroom GetMyProcessTxIdsAddChatroomResult", GetMyProcessTxIdsAddChatroomResult)
-        
+
         if(GetMyProcessTxIdsAddChatroomResult && GetMyProcessTxIdsAddChatroomResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddChatroomResult)
 
@@ -191,7 +189,7 @@ export const MyProcessTxIdsAddChatroom = async (currentWalletJwk: any, MyProcess
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelChatroom = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, ChatroomId: string) => {
@@ -207,7 +205,7 @@ export const MyProcessTxIdsDelChatroom = async (currentWalletJwk: any, MyProcess
         console.log("MyProcessTxIdsDelChatroom Data", Data)
         const GetMyProcessTxIdsDelChatroomResult = await message(Data);
         console.log("MyProcessTxIdsDelChatroom GetMyProcessTxIdsDelChatroomResult", GetMyProcessTxIdsDelChatroomResult)
-        
+
         if(GetMyProcessTxIdsDelChatroomResult && GetMyProcessTxIdsDelChatroomResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelChatroomResult)
 
@@ -225,7 +223,7 @@ export const MyProcessTxIdsDelChatroom = async (currentWalletJwk: any, MyProcess
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -280,7 +278,7 @@ export const MyProcessTxIdsAddGuess = async (currentWalletJwk: any, MyProcessTxI
         console.log("MyProcessTxIdsAddGuess Data", Data)
         const GetMyProcessTxIdsAddGuessResult = await message(Data);
         console.log("MyProcessTxIdsAddGuess GetMyProcessTxIdsAddGuessResult", GetMyProcessTxIdsAddGuessResult)
-        
+
         if(GetMyProcessTxIdsAddGuessResult && GetMyProcessTxIdsAddGuessResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddGuessResult)
 
@@ -298,7 +296,7 @@ export const MyProcessTxIdsAddGuess = async (currentWalletJwk: any, MyProcessTxI
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelGuess = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, GuessId: string) => {
@@ -314,7 +312,7 @@ export const MyProcessTxIdsDelGuess = async (currentWalletJwk: any, MyProcessTxI
         console.log("MyProcessTxIdsDelGuess Data", Data)
         const GetMyProcessTxIdsDelGuessResult = await message(Data);
         console.log("MyProcessTxIdsDelGuess GetMyProcessTxIdsDelGuessResult", GetMyProcessTxIdsDelGuessResult)
-        
+
         if(GetMyProcessTxIdsDelGuessResult && GetMyProcessTxIdsDelGuessResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelGuessResult)
 
@@ -332,7 +330,7 @@ export const MyProcessTxIdsDelGuess = async (currentWalletJwk: any, MyProcessTxI
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -387,7 +385,7 @@ export const MyProcessTxIdsAddLottery = async (currentWalletJwk: any, MyProcessT
         console.log("MyProcessTxIdsAddLottery Data", Data)
         const GetMyProcessTxIdsAddLotteryResult = await message(Data);
         console.log("MyProcessTxIdsAddLottery GetMyProcessTxIdsAddLotteryResult", GetMyProcessTxIdsAddLotteryResult)
-        
+
         if(GetMyProcessTxIdsAddLotteryResult && GetMyProcessTxIdsAddLotteryResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddLotteryResult)
 
@@ -405,7 +403,7 @@ export const MyProcessTxIdsAddLottery = async (currentWalletJwk: any, MyProcessT
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelLottery = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, LotteryId: string) => {
@@ -421,7 +419,7 @@ export const MyProcessTxIdsDelLottery = async (currentWalletJwk: any, MyProcessT
         console.log("MyProcessTxIdsDelLottery Data", Data)
         const GetMyProcessTxIdsDelLotteryResult = await message(Data);
         console.log("MyProcessTxIdsDelLottery GetMyProcessTxIdsDelLotteryResult", GetMyProcessTxIdsDelLotteryResult)
-        
+
         if(GetMyProcessTxIdsDelLotteryResult && GetMyProcessTxIdsDelLotteryResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelLotteryResult)
 
@@ -439,7 +437,7 @@ export const MyProcessTxIdsDelLottery = async (currentWalletJwk: any, MyProcessT
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -496,7 +494,7 @@ export const MyProcessTxIdsAddBlog = async (currentWalletJwk: any, MyProcessTxId
         console.log("MyProcessTxIdsAddBlog Data", Data)
         const GetMyProcessTxIdsAddBlogResult = await message(Data);
         console.log("MyProcessTxIdsAddBlog GetMyProcessTxIdsAddBlogResult", GetMyProcessTxIdsAddBlogResult)
-        
+
         if(GetMyProcessTxIdsAddBlogResult && GetMyProcessTxIdsAddBlogResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddBlogResult)
 
@@ -514,7 +512,7 @@ export const MyProcessTxIdsAddBlog = async (currentWalletJwk: any, MyProcessTxId
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelBlog = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, BlogId: string) => {
@@ -530,7 +528,7 @@ export const MyProcessTxIdsDelBlog = async (currentWalletJwk: any, MyProcessTxId
         console.log("MyProcessTxIdsDelBlog Data", Data)
         const GetMyProcessTxIdsDelBlogResult = await message(Data);
         console.log("MyProcessTxIdsDelBlog GetMyProcessTxIdsDelBlogResult", GetMyProcessTxIdsDelBlogResult)
-        
+
         if(GetMyProcessTxIdsDelBlogResult && GetMyProcessTxIdsDelBlogResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelBlogResult)
 
@@ -548,7 +546,7 @@ export const MyProcessTxIdsDelBlog = async (currentWalletJwk: any, MyProcessTxId
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -605,7 +603,7 @@ export const MyProcessTxIdsAddSwap = async (currentWalletJwk: any, MyProcessTxId
         console.log("MyProcessTxIdsAddSwap Data", Data)
         const GetMyProcessTxIdsAddSwapResult = await message(Data);
         console.log("MyProcessTxIdsAddSwap GetMyProcessTxIdsAddSwapResult", GetMyProcessTxIdsAddSwapResult)
-        
+
         if(GetMyProcessTxIdsAddSwapResult && GetMyProcessTxIdsAddSwapResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddSwapResult)
 
@@ -623,7 +621,7 @@ export const MyProcessTxIdsAddSwap = async (currentWalletJwk: any, MyProcessTxId
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelSwap = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, SwapId: string) => {
@@ -639,7 +637,7 @@ export const MyProcessTxIdsDelSwap = async (currentWalletJwk: any, MyProcessTxId
         console.log("MyProcessTxIdsDelSwap Data", Data)
         const GetMyProcessTxIdsDelSwapResult = await message(Data);
         console.log("MyProcessTxIdsDelSwap GetMyProcessTxIdsDelSwapResult", GetMyProcessTxIdsDelSwapResult)
-        
+
         if(GetMyProcessTxIdsDelSwapResult && GetMyProcessTxIdsDelSwapResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelSwapResult)
 
@@ -657,7 +655,7 @@ export const MyProcessTxIdsDelSwap = async (currentWalletJwk: any, MyProcessTxId
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 
@@ -714,7 +712,7 @@ export const MyProcessTxIdsAddProject = async (currentWalletJwk: any, MyProcessT
         console.log("MyProcessTxIdsAddProject Data", Data)
         const GetMyProcessTxIdsAddProjectResult = await message(Data);
         console.log("MyProcessTxIdsAddProject GetMyProcessTxIdsAddProjectResult", GetMyProcessTxIdsAddProjectResult)
-        
+
         if(GetMyProcessTxIdsAddProjectResult && GetMyProcessTxIdsAddProjectResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsAddProjectResult)
 
@@ -732,7 +730,7 @@ export const MyProcessTxIdsAddProject = async (currentWalletJwk: any, MyProcessT
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }
 
 export const MyProcessTxIdsDelProject = async (currentWalletJwk: any, MyProcessTxId: string, myAoConnectTxId: string, ProjectId: string) => {
@@ -748,7 +746,7 @@ export const MyProcessTxIdsDelProject = async (currentWalletJwk: any, MyProcessT
         console.log("MyProcessTxIdsDelProject Data", Data)
         const GetMyProcessTxIdsDelProjectResult = await message(Data);
         console.log("MyProcessTxIdsDelProject GetMyProcessTxIdsDelProjectResult", GetMyProcessTxIdsDelProjectResult)
-        
+
         if(GetMyProcessTxIdsDelProjectResult && GetMyProcessTxIdsDelProjectResult.length == 43) {
             const MsgContent = await AoGetRecord(myAoConnectTxId, GetMyProcessTxIdsDelProjectResult)
 
@@ -766,5 +764,5 @@ export const MyProcessTxIdsDelProject = async (currentWalletJwk: any, MyProcessT
             return { status: 'error', msg: Error.message };
         }
     }
-  
+
 }

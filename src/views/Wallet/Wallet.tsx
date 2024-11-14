@@ -586,6 +586,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     setTitle(t('Manage Assets') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('')
+    handleGetAllTokensData()
   }
 
   const handleClickViewTokenButton = (Token: any) => {
@@ -709,6 +710,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const handleGetMySavingTokensData = async () => {
     const getMyAoTokensData = getMyAoTokens(currentAddress, encryptWalletDataKey)
+    console.log("getMyAoTokensData00000", JSON.stringify(getMyAoTokensData))
     if(getMyAoTokensData) {
       setMySavingTokensData(getMyAoTokensData)
     }
@@ -748,7 +750,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
     handleGetMySavingTokensBalance()
 
-    handleGetAllTokensData()
+    setIsDisabledManageAssets(false)
+
+    //handleGetAllTokensData()
 
   }
 
