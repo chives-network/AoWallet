@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getMyLatestFiles } from 'src/functions/ChivesDrive'
 import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
-import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
+import { getXweWalletImageThumbnail, getChivesMyFiles, setChivesMyFiles } from 'src/functions/ChivesWallets'
 
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
@@ -32,15 +32,21 @@ const Img = styled('img')(({ theme }) => ({
   }
 }))
 
-const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
+const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
 
   const { t } = useTranslation()
 
   const [myFiles, setMyFiles] = useState<any | null>(null);
 
   const getMyFiles = async (currentAddress: string) => {
+    const getChivesMyFilesData = getChivesMyFiles(currentAddress, encryptWalletDataKey);
+    setMyFiles(getChivesMyFilesData); //Get Data From LocalStorage
+
     const getMyLatestFilesData = await getMyLatestFiles(currentAddress);
-    setMyFiles(getMyLatestFilesData)
+    if(getMyLatestFilesData)  {
+      setMyFiles(getMyLatestFilesData)
+      setChivesMyFiles(currentAddress, getMyLatestFilesData, encryptWalletDataKey)
+    }
   }
 
   useEffect(() => {

@@ -911,6 +911,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 setLeftIcon={setLeftIcon}
                 setTitle={setTitle}
                 setRightButtonIcon={setRightButtonIcon}
+                encryptWalletDataKey={encryptWalletDataKey}
               />
             :
               <Fragment></Fragment>

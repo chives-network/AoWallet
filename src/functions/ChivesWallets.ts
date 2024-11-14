@@ -631,6 +631,34 @@ export function setAllAoTokens(Address: string, AllAoTokens: any, encryptWalletD
     return true
 }
 
+export function getChivesMyFiles(Address: string, encryptWalletDataKey: string) {
+  if(typeof window !== 'undefined')  {
+      const chivesMyFilesData = window.localStorage.getItem('chivesMyFiles')
+      const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesMyFilesData as string, encryptWalletDataKey)
+      const chivesMyFilesObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
+
+      return chivesMyFilesObject[Address] ?? []
+  }
+}
+
+export function setChivesMyFiles(Address: string, MyFiles: any, encryptWalletDataKey: string) {
+  if (Address && Address.length === 43 && typeof window !== 'undefined') {
+      const chivesAllFilesData = window.localStorage.getItem('chivesMyFiles')
+      const DecryptWalletData = DecryptWalletDataAES256GCMV1(chivesAllFilesData as string, encryptWalletDataKey)
+      const chivesAllFilesObject = DecryptWalletData ? JSON.parse(DecryptWalletData) : {}
+      chivesAllFilesObject[Address] = MyFiles
+      const EncryptWalletData = EncryptWalletDataAES256GCMV1(JSON.stringify(chivesAllFilesObject), encryptWalletDataKey)
+      window.localStorage.setItem('chivesMyFiles', EncryptWalletData)
+      if(authConfig.isChromeExtension && chrome && chrome.storage && chrome.storage.sync)   {
+          chrome.storage.sync.set({ ['chivesMyFiles']: EncryptWalletData }, () => {
+              console.log('Data saved to chrome.storage:', EncryptWalletData);
+          });
+      }
+  }
+
+  return true
+}
+
 export function getAllAoTokens(Address: string, encryptWalletDataKey: string) {
     if(typeof window !== 'undefined')  {
         const chivesAllAoTokensData = window.localStorage.getItem(chivesAllAoTokens)

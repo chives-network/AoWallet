@@ -25,7 +25,7 @@ import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
 
   const { t } = useTranslation()
 
@@ -237,6 +237,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                     setLeftIcon={setLeftIcon}
                     setTitle={setTitle}
                     setRightButtonIcon={setRightButtonIcon}
+                    encryptWalletDataKey={encryptWalletDataKey}
                   />
                 )}
 
