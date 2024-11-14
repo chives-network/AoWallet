@@ -11,6 +11,9 @@ import Typography from '@mui/material/Typography'
 import toast from 'react-hot-toast'
 import authConfig from 'src/configs/auth'
 
+import ShareIcon from '@mui/icons-material/Share';
+import { Share } from '@capacitor/share';
+
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import CardMedia from '@mui/material/CardMedia'
@@ -69,6 +72,16 @@ const XweViewFile = ({ currentTx, currentAddress, currentToken, innerWidth } : a
                   </Typography>
                 </Box>
               )}
+
+            <Grid item sx={{ mt: 2, px: 2, mb: 1 }}>
+              <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={async ()=>{
+                await Share.share({
+                  text: t('This is my file on Chives Storage. Url: ') as string + `${authConfig.backEndApiXwe}/tx/${currentTx.table.id}/${currentTx.table.item_name}`,
+                });
+              }}>
+              {t('Share') as string}
+              </Button>
+            </Grid>
 
               <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 2}}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1.5 }}>
