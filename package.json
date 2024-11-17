@@ -48,6 +48,7 @@
     "bip39": "^3.1.0",
     "bip39-web-crypto": "^4.0.1",
     "chart.js": "4.3.0",
+    "chia-wallet-lib": "^1.1.0",
     "classnames": "2.5.1",
     "cleave.js": "1.6.0",
     "clipboard-copy": "4.0.1",
