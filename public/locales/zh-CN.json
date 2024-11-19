@@ -143,5 +143,15 @@
   "Drive": "网盘",
   "Total Size": "全部大小",
   "Successfully submitted to blockchain": "成功提交到区块链",
-  "This is my file on Chives Storage. Url: ": "这是我在Chives存储上面的一个文件, 链接: "
+  "This is my file on Chives Storage. Url: ": "这是我在Chives存储上面的一个文件, 链接: ",
+  "Block Explorer": "区块浏览器",
+  "Block Rewards": "区块奖励",
+  "Block rewards in last 24 hours": "过去24小时区块奖励",
+  "Blocks": "区块",
+  "Transactions": "交易",
+  "Addresses": "地址",
+  "Addresses balance ranking": "地址余额排名",
+  "Nodes": "节点",
+  "Mining & light node": "挖矿与轻节点",
+  "Memory Pool": "内存池"
 }

@@ -144,6 +144,16 @@
   "Drive": "Drive",
   "Total Size": "Total Size",
   "Successfully submitted to blockchain": "Successfully submitted to blockchain",
-  "This is my file on Chives Storage. Url: ": "This is my file on Chives Storage. Url: "
+  "This is my file on Chives Storage. Url: ": "This is my file on Chives Storage. Url: ",
+  "Block Explorer": "Block Explorer",
+  "Block Rewards": "Block Rewards",
+  "Block rewards in last 24 hours": "Block rewards in last 24 hours",
+  "Blocks": "Blocks",
+  "Transactions": "Transactions",
+  "Addresses": "Addresses",
+  "Addresses balance ranking": "Addresses balance ranking",
+  "Nodes": "Nodes",
+  "Mining & light node": "Mining & light node",
+  "Memory Pool": "Memory Pool"
 
 }
