@@ -17,7 +17,11 @@ import authConfig from 'src/configs/auth'
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import { FormatBalanceString } from 'src/functions/AoConnect/AoConnect'
-import { formatTimestamp } from 'src/configs/functions'
+import { formatTimestamp, formatHash } from 'src/configs/functions'
+
+import addressName from 'src/configs/addressname'
+
+const addressMap: any = addressName
 
 const Addresses = () => {
   // ** Hook
@@ -132,7 +136,7 @@ const Addresses = () => {
                           textAlign: 'left'
                         }}
                       >
-                        {Item.id}
+                        {addressMap[Item.id] ? addressMap[Item.id] : formatHash(Item.id, 10)}
                       </Typography>
                       <Box sx={{ display: 'flex' }}>
                         <Typography

@@ -144,7 +144,7 @@ const BlockRewards = () => {
                             textAlign: 'left'
                           }}
                         >
-                          {t('Rewards in last 24 hours')} {(Index+1)}
+                          {(Index+1)}
                         </Typography>
                       </Box>
                     </Box>

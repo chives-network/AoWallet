@@ -465,7 +465,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
   const handleClickBlockRewardsButton = () => {
     setPageModel('BlockRewards')
     setLeftIcon('ic:twotone-keyboard-arrow-left')
-    setTitle(t('Block Rewards') as string)
+    setTitle(t('Block rewards in last 24 hours') as string)
     setRightButtonText('')
     setRightButtonIcon('')
   }
