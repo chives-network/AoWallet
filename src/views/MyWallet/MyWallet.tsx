@@ -45,6 +45,8 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
+import { getAccount } from 'src/functions/ChivesCoin'
+
 import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import Rollbar from "rollbar"
@@ -119,6 +121,11 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
     }
   }
 
+  const GetXccAccount = async () => {
+    const Data = await getAccount()
+    console.log("getAccountData", Data)
+  }
+
   const [walletBalanceMap, setWalletBalanceMap] = useState<any>({})
   const [getAllWalletsData, setGetAllWalletsData] = useState<any>([])
   const [getWalletNicknamesData, setGetWalletNicknamesData] = useState<any>({})
@@ -155,6 +162,10 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
       setGetAllWalletsData(getAllWallets(encryptWalletDataKey))
       setGetWalletNicknamesData(getWalletNicknames(encryptWalletDataKey))
     }
+
+
+    GetXccAccount()
+
   }, [refreshWalletData])
 
   useEffect(() => {

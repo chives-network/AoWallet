@@ -14,7 +14,6 @@ import Arweave from 'arweave'
 import crypto from 'crypto'
 
 import * as bip39 from 'bip39'
-
 import { mnemonicToSeed } from "bip39-web-crypto"
 import { getKeyPairFromSeed } from "human-crypto-keys"
 
