@@ -45,7 +45,7 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
-import { getAccount } from 'src/functions/ChivesCoin'
+import { getAccountByMnemonic24 } from 'src/functions/ChivesCoin'
 
 import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
@@ -122,7 +122,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
   }
 
   const GetXccAccount = async () => {
-    const Data = await getAccount()
+    const Data = await getAccountByMnemonic24("erupt front arch cat tornado head hobby sunny stamp toddler fiction apple unhappy galaxy refuse upon tiny merge scrap thunder tiger domain future guitar")
     console.log("getAccountData", Data)
   }
 
