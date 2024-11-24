@@ -13,29 +13,31 @@ import { Share } from '@capacitor/share';
 import toast from 'react-hot-toast'
 
 
-const ReceiveMoney = ({ currentAddress, currentToken } : any) => {
+const ReceiveMoney = ({ currentAddress, currentToken, currentAddressXcc } : any) => {
 
   const { t } = useTranslation()
+
+  const addressShow = currentToken == 'Xcc' ? currentAddressXcc : currentAddress
 
   return (
     <Grid container direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ minHeight: '100%', p: 2 }}>
       <Grid item>
-        <QRCode value={currentAddress} size={180} />
+        <QRCode value={addressShow} size={180} />
       </Grid>
       <Grid item>
         <Typography variant="body1"
           sx={{mt: 3, wordWrap: 'break-word', wordBreak: 'break-all', textAlign: 'center', maxWidth: '100%', fontSize: '0.8125rem !important' }}
           onClick={()=>{
-              navigator.clipboard.writeText(currentAddress);
+              navigator.clipboard.writeText(addressShow);
               toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
           }}>
-          {currentAddress}
+          {addressShow}
         </Typography>
       </Grid>
       <Grid item>
         <Button variant="outlined" sx={{mt: 3}} startIcon={<ContentCopyIcon />}
           onClick={()=>{
-              navigator.clipboard.writeText(currentAddress);
+              navigator.clipboard.writeText(addressShow);
               toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
           }}>
           {t('Copy') as string}
@@ -49,7 +51,7 @@ const ReceiveMoney = ({ currentAddress, currentToken } : any) => {
       <Grid item sx={{ mt: 4, width: '100%' }}>
         <Button variant="contained" startIcon={<ShareIcon />} fullWidth onClick={async ()=>{
           await Share.share({
-            text: currentAddress,
+            text: addressShow,
           });
         }}>
         {t('Share') as string}

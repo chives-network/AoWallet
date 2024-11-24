@@ -1015,6 +1015,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
               <ReceiveMoney
                 currentAddress={currentAddress}
                 currentToken={currentToken}
+                currentAddressXcc={currentAddressXcc}
               />
             )}
 

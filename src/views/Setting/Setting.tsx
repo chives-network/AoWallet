@@ -690,7 +690,7 @@ const Setting = ({ encryptWalletDataKey, setEncryptWalletDataKey }: any) => {
                                   whiteSpace: 'nowrap',
                                 }}
                                 >
-                                  {t('Block Explorer') as string}
+                                  {t('Chivesweave Block Explorer') as string}
                                 </Typography>
                                 <Box sx={{ display: 'flex'}}>
                                   <Typography variant='body2' sx={{

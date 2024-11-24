@@ -115,17 +115,30 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                   {t('Txs') as string}
                 </Typography>
               </Grid>
-              <Grid item sx={{mx: 2}}>
-                <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} onClick={()=> Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
-                  <Send />
-                </IconButton>
-                <Typography sx={{
-                              color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
-                            }}
-                            onClick={()=>Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
-                  {t('Send') as string}
-                </Typography>
-              </Grid>
+              {(currentToken == 'Ar' || currentToken == 'Xwe') && (
+                <Grid item sx={{mx: 2}}>
+                  <IconButton disabled={Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? false : true} onClick={()=> Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
+                    <Send />
+                  </IconButton>
+                  <Typography sx={{
+                                color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`,
+                              }}
+                              onClick={()=>Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 && handleClickSendButton()}>
+                    {t('Send') as string}
+                  </Typography>
+                </Grid>
+              )}
+              {(currentToken == 'Xcc') && (
+                <Grid item sx={{mx: 2}}>
+                  <IconButton disabled={true} >
+                    <Send />
+                  </IconButton>
+                  <Typography sx={{ color: Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe) > 0 ? `` : `secondary.dark`, }} >
+                    {t('Send') as string}
+                  </Typography>
+                </Grid>
+              )}
+
             </Grid>
 
             <Fragment>

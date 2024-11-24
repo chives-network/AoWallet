@@ -51,6 +51,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
   const contentHeightFixed = {}
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
+  const [currentAddressXcc, setCurrentAddressXcc] = useState<string>("")
   const [pageModel, setPageModel] = useState<string>('MainFaucet')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('')
@@ -378,7 +379,9 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
     const getCurrentWalletTemp = getCurrentWallet(encryptWalletDataKey)
     setChooseWallet(getCurrentWalletTemp)
-
+    if(getCurrentWalletTemp && getCurrentWalletTemp.xcc && getCurrentWalletTemp.xcc.addressList) {
+      setCurrentAddressXcc(getCurrentWalletTemp.xcc.addressList[0])
+    }
     if(currentToken == 'Ar' && currentAddress && currentAddress.length == 43) {
       handleGetAllFaucetsData()
     }
@@ -458,7 +461,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
                             textAlign: 'left'
                           }}
                         >
-                          {formatHash(currentAddress, 8)}
+                          {formatHash(currentToken == 'Xcc' ? currentAddressXcc : currentAddress, 8)}
                         </Typography>
                         <Typography
                           sx={{
@@ -469,7 +472,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
                             textAlign: 'left'
                           }}
                         >
-                          {currentToken == 'Ar' ? 'Arweave' : 'Chivesweave'}
+                          {currentToken == 'Ar' ? 'Arweave' : currentToken == 'Xwe' ? 'Chivesweave' : 'Chivescoin'}
                         </Typography>
                       </Box>
                       <Box textAlign="right">
@@ -582,71 +585,90 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
                     {currentToken == 'Xwe' && ChivesweaveFaucetList && ChivesweaveFaucetList.map((Faucet: any, Index: number) => {
 
-                    return (
-                      <Fragment key={Index}>
-                        { true && (
-                          <Grid item xs={12} sx={{ py: 2 }}>
-                            <Card>
-                              <CardContent>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                  <CustomAvatar
-                                    skin='light'
-                                    color={'primary'}
-                                    sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
-                                    src={'https://web.aowallet.org/images/logo/Xwe.png'}
-                                  >
-                                  </CustomAvatar>
-                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography sx={{ fontWeight: 600 }}>{Faucet.Project}</Typography>
-                                    <Typography variant='caption' sx={{ letterSpacing: '0.4px', cursor: 'pointer' }}>
-                                      {formatHash(currentAddress, 8)}
-                                    </Typography>
-                                  </Box>
-                                </Box>
-
-                                <Divider
-                                  sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
-                                />
-
-                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                  <Icon icon='f7:money-dollar-circle' />
-                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.GetAmount}</Typography>
-                                  </Box>
-                                </Box>
-
-                                <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                  <Icon icon='mdi:clock-time-three-outline' />
-                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.Rule}</Typography>
-                                  </Box>
-                                </Box>
-
-                                {Faucet.Requirement && (
-                                  <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Icon icon='material-symbols:money-bag-outline' />
+                      return (
+                        <Fragment key={Index}>
+                          { true && (
+                            <Grid item xs={12} sx={{ py: 2 }}>
+                              <Card>
+                                <CardContent>
+                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <CustomAvatar
+                                      skin='light'
+                                      color={'primary'}
+                                      sx={{ mr: 3, width: 38, height: 38, fontSize: '1.5rem' }}
+                                      src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                                    >
+                                    </CustomAvatar>
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement') as string}: {Faucet.Requirement}</Typography>
+                                      <Typography sx={{ fontWeight: 600 }}>{Faucet.Project}</Typography>
+                                      <Typography variant='caption' sx={{ letterSpacing: '0.4px', cursor: 'pointer' }}>
+                                        {formatHash(currentAddress, 8)}
+                                      </Typography>
                                     </Box>
                                   </Box>
-                                )}
 
-                                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                  <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
-                                    <Button disabled={isDisabledButtonXwe[Faucet.Code]} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromXweFaucet(Faucet)}>
-                                        {t('Get Xwe') as string}
-                                    </Button>
+                                  <Divider
+                                    sx={{ mb: theme => `${theme.spacing(4)} !important`, mt: theme => `${theme.spacing(4.75)} !important` }}
+                                  />
+
+                                  <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='f7:money-dollar-circle' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Get Amount') as string}: {Faucet.GetAmount}</Typography>
+                                    </Box>
                                   </Box>
-                                </Box>
 
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        )}
-                      </Fragment>
-                    )
+                                  <Box sx={{ mb: 2, display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                    <Icon icon='mdi:clock-time-three-outline' />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography sx={{ fontSize: '0.875rem', py: 1 }}>{t('Rule') as string}: {Faucet.Rule}</Typography>
+                                    </Box>
+                                  </Box>
+
+                                  {Faucet.Requirement && (
+                                    <Box sx={{ display: 'flex', '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                      <Icon icon='material-symbols:money-bag-outline' />
+                                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography sx={{ fontSize: '0.875rem', py: 0.8 }}>{t('Requirement') as string}: {Faucet.Requirement}</Typography>
+                                      </Box>
+                                    </Box>
+                                  )}
+
+                                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Box sx={{ '& svg': { mr: 3, mt: 1, fontSize: '1.375rem', color: 'text.secondary' } }}>
+                                      <Button disabled={isDisabledButtonXwe[Faucet.Code]} sx={{ textTransform: 'none', mt: 3, ml: 2 }} size="small" variant='outlined' onClick={() => handelGetAmountFromXweFaucet(Faucet)}>
+                                          {t('Get Xwe') as string}
+                                      </Button>
+                                    </Box>
+                                  </Box>
+
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                          )}
+                        </Fragment>
+                      )
 
                     })}
+
+                    {currentToken == 'Xcc' && (
+                      <Fragment>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left',
+                            mt: 4,
+                            ml: 4
+                          }}
+                        >
+                          {t('No Faucet for Xcc now, will open soon')}
+                        </Typography>
+                      </Fragment>
+                    )}
+
                   </Grid>
                   <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
