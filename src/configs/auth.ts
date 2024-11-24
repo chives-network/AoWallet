@@ -38,7 +38,9 @@ const config = {
   isChromeExtension: false,
   tokenNameXwe: 'Xwe',
   tokenFullNameXwe: 'Chivesweave',
-  backEndApiXwe: 'https://api.chivesweave.org'
+  backEndApiXwe: 'https://api.chivesweave.org',
+  backEndApiXcc: 'https://explorer.chivescoin.org',
+  backEndApiXch: 'https://api.chivesweave.org'
 }
 
 export default config;

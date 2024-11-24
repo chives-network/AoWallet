@@ -24,6 +24,8 @@ import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken
 
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
+import { getWalletBalanceXcc, getWalletBalanceXch } from 'src/functions/ChivesCoin'
+
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
 import { formatHash, ansiRegex } from 'src/configs/functions'
@@ -441,11 +443,15 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
       if(chooseWallet && chooseWallet.xcc && chooseWallet.xcc.addressList && chooseWallet.xcc.addressList.length > 0)  {
         setCurrentAddressXcc(chooseWallet.xcc.addressList[0])
+        const getWalletBalanceXccData = await getWalletBalanceXcc(chooseWallet.xcc)
+        console.log("getWalletBalanceXccData", getWalletBalanceXccData)
         setCurrentBalanceXcc('1234')
       }
 
       if(chooseWallet && chooseWallet.xch && chooseWallet.xch.addressList && chooseWallet.xch.addressList.length > 0)  {
         setCurrentAddressXch(chooseWallet.xch.addressList[0])
+        const getWalletBalanceXchData = await getWalletBalanceXch(chooseWallet.xcc)
+        console.log("getWalletBalanceXchData", getWalletBalanceXchData)
         setCurrentBalanceXch('0.1234')
       }
 

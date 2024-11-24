@@ -256,7 +256,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                         skin='light'
                         color={'primary'}
                         sx={{ mr: 0, width: 43, height: 43 }}
-                        src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                        src={'https://web.aowallet.org/images/logo/Xcc.png'}
                       >
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
@@ -310,7 +310,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                         skin='light'
                         color={'primary'}
                         sx={{ mr: 0, width: 43, height: 43 }}
-                        src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                        src={'https://web.aowallet.org/images/logo/Xch.png'}
                       >
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>

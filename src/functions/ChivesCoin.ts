@@ -6,6 +6,9 @@ import { bech32m } from 'bech32';
 
 import { puzzles } from './Xcc/puzzles'
 
+import axios from 'axios'
+import authConfig from '../configs/auth'
+
 export async function getAccountByRandom() {
 
   const mnemonic12 = generateMnemonic()
@@ -159,4 +162,70 @@ export const derivePrivateKeyPath = (privateKey: PrivateKey, path: number[], har
   }
 
   return privateKey
+}
+
+export const getWalletBalanceXcc = async (WalletXcc: any) => {
+
+  const address = WalletXcc.addressList.join(',')
+
+  const requestConfig = {
+    timeout: 10000, // 设置超时时间为10秒
+    headers: {
+      'Content-Type': 'application/json', // 设置请求头
+      // 其他自定义请求头
+    },
+  };
+
+  try {
+    const response = await axios.post(
+      authConfig.backEndApiXcc + '/api_getaddressbalance.php',
+      { address },
+      requestConfig
+    );
+    console.log('Response data:', response.data);
+    if(response.data && response.data.code !== undefined && response.data.code == 0) {
+
+      return  response.data.balance
+    }
+
+    return response.data;
+  }
+  catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+
+}
+
+export const getWalletBalanceXch = async (WalletXcc: any) => {
+
+  const address = WalletXcc.addressList.join(',')
+
+  const getWalletBalanceXccData = await axios.post(authConfig.backEndApiXch + '/api_getaddressbalance.php', { address },  {
+    timeout: 10000,
+    headers: {
+    'Content-Type': 'application/json',
+    }
+  } ).then(res=>res.data);
+
+  if(getWalletBalanceXccData && getWalletBalanceXccData.code !== undefined && getWalletBalanceXccData.code == 0) {
+
+    return  getWalletBalanceXccData.balance
+  }
+  else {
+
+    return null
+  }
+
 }
