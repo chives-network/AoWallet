@@ -276,6 +276,11 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({}) // Xwe
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
 
+  const [currentAddressXcc, setCurrentAddressXcc] = useState<string>("")
+  const [currentAddressXch, setCurrentAddressXch] = useState<string>("")
+  const [currentBalanceXcc, setCurrentBalanceXcc] = useState<string>("")
+  const [currentBalanceXch, setCurrentBalanceXch] = useState<string>("")
+
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
@@ -433,6 +438,18 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
           setIsDisabledButton(false)
         }
       }
+
+      if(chooseWallet && chooseWallet.xcc && chooseWallet.xcc.addressList && chooseWallet.xcc.addressList.length > 0)  {
+        setCurrentAddressXcc(chooseWallet.xcc.addressList[0])
+        setCurrentBalanceXcc('1234')
+      }
+
+      if(chooseWallet && chooseWallet.xch && chooseWallet.xch.addressList && chooseWallet.xch.addressList.length > 0)  {
+        setCurrentAddressXch(chooseWallet.xch.addressList[0])
+        setCurrentBalanceXch('0.1234')
+      }
+
+      console.log("chooseWallet", chooseWallet)
 
     };
     processWallets();
@@ -902,8 +919,12 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentToken={currentToken}
                 currentTxsInMemory={currentTxsInMemory}
                 currentAddress={currentAddress}
+                currentAddressXcc={currentAddressXcc}
+                currentAddressXch={currentAddressXch}
                 currentBalance={currentBalance}
                 currentBalanceXwe={currentBalanceXwe}
+                currentBalanceXcc={currentBalanceXcc}
+                currentBalanceXch={currentBalanceXch}
                 currentBalanceReservedRewards={currentBalanceReservedRewards}
                 handleClickReceiveButton={handleClickReceiveButton}
                 handleClickAllTxsButton={handleClickAllTxsButton}
@@ -1046,6 +1067,8 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentToken={currentToken}
                 currentBalance={currentBalance}
                 currentBalanceXwe={currentBalanceXwe}
+                currentBalanceXcc={currentBalanceXcc}
+                currentBalanceXch={currentBalanceXch}
                 currentFee={currentFee}
                 handleWalletSendMoney={handleWalletSendMoney}
                 uploadingButton={uploadingButton}

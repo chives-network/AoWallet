@@ -18,7 +18,7 @@ export async function getAccountByRandom() {
   return {mnemonic12, mnemonic24}
 }
 
-export async function getAccountByMnemonic24(mnemonic24: string) {
+export async function getAccountByMnemonicXcc(mnemonic24: string, addressRecords = 5) {
 
   console.log("mnemonic24 ", mnemonic24)
 
@@ -37,13 +37,45 @@ export async function getAccountByMnemonic24(mnemonic24: string) {
 
   const keyPairs: any[] = []
   const addressList : string[] = []
-  for(let i=0; i<5; i++) {
-    const getKeyPairsData = getKeyPairs(privateKey, 2, i)
+  const puzzleHashList : string[] = []
+  for(let i=0; i<addressRecords; i++) {
+    const getKeyPairsData = getKeyPairsXcc(privateKey, 2, i, false)
     keyPairs.push(getKeyPairsData)
     addressList.push(getKeyPairsData.address)
+    puzzleHashList.push(getKeyPairsData.puzzleHash)
   }
 
-  return {mnemonic24, MasterPrivateKey: privateKeyHex, MasterPublicKey: publicKeyHex, fingerprint, keyPairs, addressList}
+  return {mnemonic24, MasterPrivateKey: privateKeyHex, MasterPublicKey: publicKeyHex, fingerprint, keyPairs, addressList, puzzleHashList}
+}
+
+export async function getAccountByMnemonicXch(mnemonic24: string, addressRecords = 5) {
+
+  console.log("mnemonic24 ", mnemonic24)
+
+  if(validateMnemonic(mnemonic24)==false)  {
+
+    return
+  }
+
+  const seeds24 = mnemonicToSeedSync(mnemonic24);
+
+  const privateKey = PrivateKey.fromSeed(seeds24)
+  const publicKey = privateKey.getG1()
+  const fingerprint = publicKey.getFingerprint()
+  const privateKeyHex = privateKey.toHex()
+  const publicKeyHex = publicKey.toHex()
+
+  const keyPairs: any[] = []
+  const addressList : string[] = []
+  const puzzleHashList : string[] = []
+  for(let i=0; i<addressRecords; i++) {
+    const getKeyPairsData = getKeyPairsXch(privateKey, 2, i, false)
+    keyPairs.push(getKeyPairsData)
+    addressList.push(getKeyPairsData.address)
+    puzzleHashList.push(getKeyPairsData.puzzleHash)
+  }
+
+  return {mnemonic24, MasterPrivateKey: privateKeyHex, MasterPublicKey: publicKeyHex, fingerprint, keyPairs, addressList, puzzleHashList}
 }
 
 /*
@@ -60,8 +92,8 @@ First wallet puzzlehash (non-observer): 2bb0d313f1d5a0d6f615b421a6aec868a72d3cd0
 
 */
 
-export const getKeyPairs = (privateKey: PrivateKey, Observer: number, Index: number): any => {
-  const derivePrivateKeyData = derivePrivateKeyPath(privateKey, [12381, 9699, Observer, Index], false)
+export const getKeyPairsXcc = (privateKey: PrivateKey, Observer: number, Index: number, hardened: boolean): any => {
+  const derivePrivateKeyData = derivePrivateKeyPath(privateKey, [12381, 9699, Observer, Index], hardened)
   const publicKey = derivePrivateKeyData.getG1()
   const puzzle = puzzles.wallet.curry([
       Program.fromBytes(
@@ -73,6 +105,23 @@ export const getKeyPairs = (privateKey: PrivateKey, Observer: number, Index: num
   ])
   const words = bech32m.toWords(puzzle.hash());
   const address = bech32m.encode('xcc', words);
+
+  return {privateKey: derivePrivateKeyData.toHex(), publicKey: publicKey.toHex(), address, puzzleHash: puzzle.hashHex()}
+}
+
+export const getKeyPairsXch = (privateKey: PrivateKey, Observer: number, Index: number, hardened: boolean): any => {
+  const derivePrivateKeyData = derivePrivateKeyPath(privateKey, [12381, 8444, Observer, Index], hardened)
+  const publicKey = derivePrivateKeyData.getG1()
+  const puzzle = puzzles.wallet.curry([
+      Program.fromBytes(
+          syntheticPublicKey(
+              publicKey,
+              Program.deserializeHex('ff0980').hash()
+          ).toBytes()
+      ),
+  ])
+  const words = bech32m.toWords(puzzle.hash());
+  const address = bech32m.encode('xch', words);
 
   return {privateKey: derivePrivateKeyData.toHex(), publicKey: publicKey.toHex(), address, puzzleHash: puzzle.hashHex()}
 }

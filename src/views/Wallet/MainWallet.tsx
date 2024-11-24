@@ -25,9 +25,30 @@ import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentBalance, currentBalanceXwe, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentAddressXcc, currentAddressXch, currentBalance, currentBalanceXwe, currentBalanceXcc, currentBalanceXch, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
 
   const { t } = useTranslation()
+
+  let balanceShow = 0
+  let addressShow = ''
+  switch(currentToken){
+    case 'Ar':
+      balanceShow = currentBalance
+      addressShow = currentAddress
+      break;
+    case 'Xwe':
+      balanceShow = currentBalanceXwe
+      addressShow = currentAddress
+      break;
+    case 'Xcc':
+      balanceShow = currentBalanceXcc
+      addressShow = currentAddressXcc
+      break;
+    case 'Xch':
+      balanceShow = currentBalanceXch
+      addressShow = currentAddressXch
+      break;
+  }
 
   return (
     <Grid container spacing={2}>
@@ -43,7 +64,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
             >
             </CustomAvatar>
             <Typography variant="h5" mt={6} onClick={()=>{handleSwitchBlockchain()}} >
-              {Number(currentToken == 'Ar' ? currentBalance : currentBalanceXwe)} {currentToken}
+              {Number(balanceShow)} {currentToken}
             </Typography>
             {currentToken == "Xwe" && currentTxsInMemory && currentTxsInMemory['receive'] && currentTxsInMemory['receive'][currentAddress] && (
               <Box sx={{ position: 'absolute', top: 5, right: 20 }}>
@@ -75,10 +96,10 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
             )}
 
             <Typography variant="h6" mt={2} onClick={()=>{
-              navigator.clipboard.writeText(currentAddress);
+              navigator.clipboard.writeText(addressShow);
               toast.success(t('Copied success') as string, { duration: 1000, position: 'top-center' })
             }}>
-              {formatHash(currentAddress, 6)}
+              {formatHash(addressShow, 6)}
             </Typography>
             <Grid container spacing={4} justifyContent="center" mt={2}>
               <Grid item sx={{mx: 2}}>
@@ -177,6 +198,114 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                 <Grid item xs={12} sx={{ py: 0 }}>
                   <Card>
                     <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Xwe')}}>
+                      <CustomAvatar
+                        skin='light'
+                        color={'primary'}
+                        sx={{ mr: 0, width: 43, height: 43 }}
+                        src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                      >
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left'
+                          }}
+                        >
+                          {formatHash(currentAddress, 8)}
+                        </Typography>
+                        <Box sx={{ display: 'flex' }}>
+                          <Typography
+                            variant='body2'
+                            sx={{
+                              color: `primary.dark`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              flex: 1,
+                              textAlign: 'left'
+                            }}
+                          >
+                            {Number(currentBalanceXwe)} {authConfig.tokenNameXwe}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box textAlign="right">
+                        <Typography variant='h6' sx={{
+                          color: `info.dark`,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          mr: 2,
+                          ml: 2
+                        }}>
+                          {Number(currentBalanceXwe) > 0 ? Number(currentBalanceXwe).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
+
+                <Grid item xs={12} sx={{ py: 0 }}>
+                  <Card>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Xcc')}}>
+                      <CustomAvatar
+                        skin='light'
+                        color={'primary'}
+                        sx={{ mr: 0, width: 43, height: 43 }}
+                        src={'https://web.aowallet.org/images/logo/Xwe.png'}
+                      >
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left'
+                          }}
+                        >
+                          {formatHash(currentAddress, 8)}
+                        </Typography>
+                        <Box sx={{ display: 'flex' }}>
+                          <Typography
+                            variant='body2'
+                            sx={{
+                              color: `primary.dark`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              flex: 1,
+                              textAlign: 'left'
+                            }}
+                          >
+                            {Number(currentBalanceXwe)} {authConfig.tokenNameXwe}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box textAlign="right">
+                        <Typography variant='h6' sx={{
+                          color: `info.dark`,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          mr: 2,
+                          ml: 2
+                        }}>
+                          {Number(currentBalanceXwe) > 0 ? Number(currentBalanceXwe).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
+
+                <Grid item xs={12} sx={{ py: 0 }}>
+                  <Card>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Xch')}}>
                       <CustomAvatar
                         skin='light'
                         color={'primary'}

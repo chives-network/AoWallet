@@ -32,6 +32,7 @@ const config = {
   chivesIsSetPassword: 'ChivesIsSetPassword',
   chivesAllAoFaucets: 'ChivesAllAoFaucets',
   AoConnectChatRoom: 'AoConnectChatRoom',
+  ChivesCoinWallets: 'ChivesCoinWallets',
   EncryptGrade: 'PIN',
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
   isChromeExtension: false,

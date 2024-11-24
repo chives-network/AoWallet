@@ -23,6 +23,8 @@ import authConfig from '../configs/auth'
 
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
+import { getAccountByMnemonicXcc, getAccountByMnemonicXch } from 'src/functions/ChivesCoin'
+
 const arweave = Arweave.init(urlToSettings(authConfig.backEndApi))
 const chivesweave = Arweave.init(urlToSettings(authConfig.backEndApiXwe))
 
@@ -36,7 +38,6 @@ const chivesMyAoTokens: string = authConfig.chivesMyAoTokens
 const chivesAllAoTokens: string = authConfig.chivesAllAoTokens
 const chivesIsSetPassword: string = authConfig.chivesIsSetPassword
 const chivesAllAoFaucets: string = authConfig.chivesAllAoFaucets
-
 
 
 export function calculateSHA256(input: string) {
@@ -259,27 +260,16 @@ export async function generateArWallet12MnemonicData (encryptWalletDataKey: stri
     try {
         const mnemonic = bip39.generateMnemonic()
         const ArWalletJsonData = await jwkFromMnemonic(mnemonic)
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, mnemonic)
+        const xcc = await getAccountByMnemonicXcc(mnemonic, 50)
+        const xch = await getAccountByMnemonicXch(mnemonic, 10)
+        console.log("generateArWallet12MnemonicData xcc", xcc)
+        console.log("generateArWallet12MnemonicData xch", xch)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, mnemonic, xcc, xch)
 
         return ImportJsonFileWalletAddress
     }
     catch (error) {
-        console.log('Error generateArWalletJsonData:', error);
-    }
-}
-
-export async function generateArWalletJsonData (encryptWalletDataKey: string) {
-
-    try {
-        const ArWalletJsonData = await arweave.wallets.generate()
-
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ArWalletJsonData, encryptWalletDataKey, '')
-
-        return ImportJsonFileWalletAddress
-
-    }
-    catch (error) {
-        console.log('Error generateArWalletJsonData:', error);
+        console.log('Error generateArWallet12MnemonicData:', error);
     }
 }
 
@@ -288,11 +278,13 @@ export async function jwkToAddress (jwk: any) {
     return await arweave.wallets.jwkToAddress(jwk as any)
 }
 
-export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: string, mnemonic: string) {
+export async function importWalletJsonFile (wallet: any, encryptWalletDataKey: string, mnemonic: string, xcc: any, xch: any) {
 
     const mnemonicToJwkValue: any = {}
     mnemonicToJwkValue.jwk = wallet
     mnemonicToJwkValue.mnemonic = mnemonic
+    mnemonicToJwkValue.xcc = xcc
+    mnemonicToJwkValue.xch = xch
 
     //Get Wallet Data From LocalStorage
     const chivesWalletsList = window.localStorage.getItem(chivesWallets)
