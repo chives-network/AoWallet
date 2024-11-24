@@ -37,10 +37,12 @@ const config = {
   AoConnectBlockTxIds: ['tXnvoxbygi1OIgYzcFC1Qjgrf2Sq9MHgoYBKJkXMV2E'],
   isChromeExtension: false,
   tokenNameXwe: 'Xwe',
+  tokenNameXcc: 'Xcc',
+  tokenNameXch: 'Xch',
   tokenFullNameXwe: 'Chivesweave',
   backEndApiXwe: 'https://api.chivesweave.org',
   backEndApiXcc: 'https://explorer.chivescoin.org',
-  backEndApiXch: 'https://api.chivesweave.org'
+  backEndApiXch: 'https://explorer.chivescoin.org'
 }
 
 export default config;

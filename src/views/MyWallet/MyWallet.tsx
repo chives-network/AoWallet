@@ -674,6 +674,13 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                         {t("Create Wallet")}
                       </Button>
                     </Box>
+                    <Box sx={{width: '100%'}}>
+                      <Typography sx={{mt: 6, color: 'text.secondary'}}>{`${t(`Support Blockchain`)}`}:</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>1 Arweave</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>2 Chivesweave</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>3 Chivescoin</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>4 Chia</Typography>
+                    </Box>
                   </Grid>
                 </Grid>
               </Fragment>
@@ -722,6 +729,11 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                       <Button sx={{mt: 5}} disabled={chooseWalletName == '' || importKeyValue == '' ? true : false} fullWidth variant='contained' onClick={handleWalletImportKeyData}>
                         {t("Import Key")}
                       </Button>
+                    </Box>
+                    <Box sx={{width: '100%'}}>
+                      <Typography sx={{mt: 6, color: 'text.secondary'}}>{`${t(`Support Blockchain`)}`}:</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>1 Arweave</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>2 Chivesweave</Typography>
                     </Box>
                   </Grid>
                 </Grid>
@@ -773,6 +785,13 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                         {t("Import Mnemonic")}
                       </Button>
                     </Box>
+                    <Box sx={{width: '100%'}}>
+                      <Typography sx={{mt: 6, color: 'text.secondary'}}>{`${t(`Support Blockchain`)}`}:</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>1 Arweave</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>2 Chivesweave</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>3 Chivescoin</Typography>
+                      <Typography sx={{mt: 2, ml: 4, color: 'text.secondary'}}>4 Chia</Typography>
+                    </Box>
                   </Grid>
                 </Grid>
 
@@ -814,6 +833,11 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
                           </label>
                         </Box>
                       </CardContent>
+                    </Box>
+                    <Box sx={{width: '100%'}}>
+                      <Typography sx={{mt: 6, ml: 14, color: 'text.secondary'}}>{`${t(`Support Blockchain`)}`}:</Typography>
+                      <Typography sx={{mt: 2, ml: 18, color: 'text.secondary'}}>1 Arweave</Typography>
+                      <Typography sx={{mt: 2, ml: 18, color: 'text.secondary'}}>2 Chivesweave</Typography>
                     </Box>
                   </Grid>
                 </Grid>

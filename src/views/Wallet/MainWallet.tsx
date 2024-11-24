@@ -269,7 +269,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                             textAlign: 'left'
                           }}
                         >
-                          {formatHash(currentAddress, 8)}
+                          {formatHash(currentAddressXcc, 8)}
                         </Typography>
                         <Box sx={{ display: 'flex' }}>
                           <Typography
@@ -283,7 +283,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                               textAlign: 'left'
                             }}
                           >
-                            {Number(currentBalanceXwe)} {authConfig.tokenNameXwe}
+                            {Number(currentBalanceXcc)} {authConfig.tokenNameXcc}
                           </Typography>
                         </Box>
                       </Box>
@@ -296,7 +296,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                           mr: 2,
                           ml: 2
                         }}>
-                          {Number(currentBalanceXwe) > 0 ? Number(currentBalanceXwe).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                          {Number(currentBalanceXcc) > 0 ? Number(currentBalanceXcc).toFixed(4).replace(/\.?0*$/, '') : '0'}
                         </Typography>
                       </Box>
                     </Box>
@@ -309,7 +309,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                       <CustomAvatar
                         skin='light'
                         color={'primary'}
-                        sx={{ mr: 0, width: 43, height: 43 }}
+                        sx={{ ml: 1, mr: 0, width: 40, height: 40 }}
                         src={'https://web.aowallet.org/images/logo/Xch.png'}
                       >
                       </CustomAvatar>
@@ -323,7 +323,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                             textAlign: 'left'
                           }}
                         >
-                          {formatHash(currentAddress, 8)}
+                          {formatHash(currentAddressXch, 8)}
                         </Typography>
                         <Box sx={{ display: 'flex' }}>
                           <Typography
@@ -337,7 +337,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                               textAlign: 'left'
                             }}
                           >
-                            {Number(currentBalanceXwe)} {authConfig.tokenNameXwe}
+                            {Number(currentBalanceXch)} {authConfig.tokenNameXch}
                           </Typography>
                         </Box>
                       </Box>
@@ -350,7 +350,7 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                           mr: 2,
                           ml: 2
                         }}>
-                          {Number(currentBalanceXwe) > 0 ? Number(currentBalanceXwe).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                          {Number(currentBalanceXch) > 0 ? Number(currentBalanceXch).toFixed(4).replace(/\.?0*$/, '') : '0'}
                         </Typography>
                       </Box>
                     </Box>

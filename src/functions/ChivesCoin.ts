@@ -208,24 +208,46 @@ export const getWalletBalanceXcc = async (WalletXcc: any) => {
 
 }
 
-export const getWalletBalanceXch = async (WalletXcc: any) => {
+export const getWalletBalanceXch = async (WalletXch: any) => {
 
-  const address = WalletXcc.addressList.join(',')
+  const address = WalletXch.addressList.join(',')
 
-  const getWalletBalanceXccData = await axios.post(authConfig.backEndApiXch + '/api_getaddressbalance.php', { address },  {
-    timeout: 10000,
+  const requestConfig = {
+    timeout: 10000, // 设置超时时间为10秒
     headers: {
-    'Content-Type': 'application/json',
+      'Content-Type': 'application/json', // 设置请求头
+      // 其他自定义请求头
+    },
+  };
+
+  try {
+    const response = await axios.post(
+      authConfig.backEndApiXch + '/api_getaddressbalance.php',
+      { address },
+      requestConfig
+    );
+    console.log('Response data:', response.data);
+    if(response.data && response.data.code !== undefined && response.data.code == 0) {
+
+      return  response.data.balance
     }
-  } ).then(res=>res.data);
 
-  if(getWalletBalanceXccData && getWalletBalanceXccData.code !== undefined && getWalletBalanceXccData.code == 0) {
-
-    return  getWalletBalanceXccData.balance
+    return response.data;
   }
-  else {
-
-    return null
+  catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
   }
 
 }

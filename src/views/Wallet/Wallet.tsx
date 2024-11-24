@@ -445,14 +445,14 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
         setCurrentAddressXcc(chooseWallet.xcc.addressList[0])
         const getWalletBalanceXccData = await getWalletBalanceXcc(chooseWallet.xcc)
         console.log("getWalletBalanceXccData", getWalletBalanceXccData)
-        setCurrentBalanceXcc('1234')
+        setCurrentBalanceXcc(getWalletBalanceXccData)
       }
 
       if(chooseWallet && chooseWallet.xch && chooseWallet.xch.addressList && chooseWallet.xch.addressList.length > 0)  {
         setCurrentAddressXch(chooseWallet.xch.addressList[0])
         const getWalletBalanceXchData = await getWalletBalanceXch(chooseWallet.xcc)
         console.log("getWalletBalanceXchData", getWalletBalanceXchData)
-        setCurrentBalanceXch('0.1234')
+        setCurrentBalanceXch('0')
       }
 
       console.log("chooseWallet", chooseWallet)
