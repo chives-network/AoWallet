@@ -51,36 +51,6 @@ export async function getAccountByMnemonicXcc(mnemonic24: string, addressRecords
   return {mnemonic24, MasterPrivateKey: privateKeyHex, MasterPublicKey: publicKeyHex, fingerprint, keyPairs, addressList, puzzleHashList}
 }
 
-export async function getAccountByMnemonicXch(mnemonic24: string, addressRecords = 5) {
-
-  console.log("mnemonic24 ", mnemonic24)
-
-  if(validateMnemonic(mnemonic24)==false)  {
-
-    return
-  }
-
-  const seeds24 = mnemonicToSeedSync(mnemonic24);
-
-  const privateKey = PrivateKey.fromSeed(seeds24)
-  const publicKey = privateKey.getG1()
-  const fingerprint = publicKey.getFingerprint()
-  const privateKeyHex = privateKey.toHex()
-  const publicKeyHex = publicKey.toHex()
-
-  const keyPairs: any[] = []
-  const addressList : string[] = []
-  const puzzleHashList : string[] = []
-  for(let i=0; i<addressRecords; i++) {
-    const getKeyPairsData = getKeyPairsXch(privateKey, 2, i, false)
-    keyPairs.push(getKeyPairsData)
-    addressList.push(getKeyPairsData.address)
-    puzzleHashList.push(getKeyPairsData.puzzleHash)
-  }
-
-  return {mnemonic24, MasterPrivateKey: privateKeyHex, MasterPublicKey: publicKeyHex, fingerprint, keyPairs, addressList, puzzleHashList}
-}
-
 /*
 Fingerprint: 781749357
 Master private key (m): 2a0f20cf205820e35dcc740569847cf9c37943d7d87ca97169f2d8cce11d4ff8
@@ -108,23 +78,6 @@ export const getKeyPairsXcc = (privateKey: PrivateKey, Observer: number, Index: 
   ])
   const words = bech32m.toWords(puzzle.hash());
   const address = bech32m.encode('xcc', words);
-
-  return {privateKey: derivePrivateKeyData.toHex(), publicKey: publicKey.toHex(), address, puzzleHash: puzzle.hashHex()}
-}
-
-export const getKeyPairsXch = (privateKey: PrivateKey, Observer: number, Index: number, hardened: boolean): any => {
-  const derivePrivateKeyData = derivePrivateKeyPath(privateKey, [12381, 8444, Observer, Index], hardened)
-  const publicKey = derivePrivateKeyData.getG1()
-  const puzzle = puzzles.wallet.curry([
-      Program.fromBytes(
-          syntheticPublicKey(
-              publicKey,
-              Program.deserializeHex('ff0980').hash()
-          ).toBytes()
-      ),
-  ])
-  const words = bech32m.toWords(puzzle.hash());
-  const address = bech32m.encode('xch', words);
 
   return {privateKey: derivePrivateKeyData.toHex(), publicKey: publicKey.toHex(), address, puzzleHash: puzzle.hashHex()}
 }
@@ -179,50 +132,6 @@ export const getWalletBalanceXcc = async (WalletXcc: any) => {
   try {
     const response = await axios.post(
       authConfig.backEndApiXcc + '/api_getaddressbalance.php',
-      { address },
-      requestConfig
-    );
-    console.log('Response data:', response.data);
-    if(response.data && response.data.code !== undefined && response.data.code == 0) {
-
-      return  response.data.balance
-    }
-
-    return response.data;
-  }
-  catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('Axios error:', error.message);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-      }
-    } else {
-      console.error('Unexpected error:', error);
-    }
-    throw error;
-  }
-
-}
-
-export const getWalletBalanceXch = async (WalletXch: any) => {
-
-  const address = WalletXch.addressList.join(',')
-
-  const requestConfig = {
-    timeout: 10000, // 设置超时时间为10秒
-    headers: {
-      'Content-Type': 'application/json', // 设置请求头
-      // 其他自定义请求头
-    },
-  };
-
-  try {
-    const response = await axios.post(
-      authConfig.backEndApiXch + '/api_getaddressbalance.php',
       { address },
       requestConfig
     );

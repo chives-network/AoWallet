@@ -45,7 +45,7 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import CheckPinKeyboard from '../Layout/CheckPinKeyboard'
 
-import { getAccountByMnemonicXcc, getAccountByMnemonicXch } from 'src/functions/ChivesCoin'
+import { getAccountByMnemonicXcc } from 'src/functions/ChivesCoin'
 
 import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
@@ -264,10 +264,8 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
           }
           else {
             const xcc = await getAccountByMnemonicXcc(importMnemonicValue, 50)
-            const xch = await getAccountByMnemonicXch(importMnemonicValue, 10)
             console.log("getAccountData xcc", xcc)
-            console.log("getAccountData xch", xch)
-            const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, importMnemonicValue, xcc, xch)
+            const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, importMnemonicValue, xcc)
             if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
                 setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
                 setChooseWalletName('')
@@ -299,7 +297,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
         toast.error(t('Wallet exist, not need import again') as string, { duration: 2500, position: 'top-center' })
       }
       else {
-        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, '', null, null)
+        const ImportJsonFileWalletAddress = await importWalletJsonFile(ImportWallet, encryptWalletDataKey, '', null)
         if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
             setWalletNickname(ImportJsonFileWalletAddress, chooseWalletName, encryptWalletDataKey)
             setChooseWalletName('')
@@ -423,7 +421,7 @@ const MyWallet = ({ currentToken, setCurrentTab, encryptWalletDataKey, setDisabl
 
   const handleImportWalletJsonFile = async (file: File) => {
     const jsonFileContent: string = await readFileText(file)
-    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey, '', null, null)
+    const ImportJsonFileWalletAddress = await importWalletJsonFile(JSON.parse(jsonFileContent), encryptWalletDataKey, '', null)
 
     if(ImportJsonFileWalletAddress && ImportJsonFileWalletAddress.length == 43) {
         setWalletNickname(ImportJsonFileWalletAddress, ImportJsonFileWalletAddress.slice(0, 6), encryptWalletDataKey)

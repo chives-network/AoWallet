@@ -24,7 +24,7 @@ import { MyProcessTxIdsGetTokens, MyProcessTxIdsAddToken, MyProcessTxIdsDelToken
 
 import { GetArWalletAllTxs } from 'src/functions/Arweave'
 
-import { getWalletBalanceXcc, getWalletBalanceXch } from 'src/functions/ChivesCoin'
+import { getWalletBalanceXcc } from 'src/functions/ChivesCoin'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -279,9 +279,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
 
   const [currentAddressXcc, setCurrentAddressXcc] = useState<string>("")
-  const [currentAddressXch, setCurrentAddressXch] = useState<string>("")
   const [currentBalanceXcc, setCurrentBalanceXcc] = useState<string>("")
-  const [currentBalanceXch, setCurrentBalanceXch] = useState<string>("")
 
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
@@ -446,13 +444,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
         const getWalletBalanceXccData = await getWalletBalanceXcc(chooseWallet.xcc)
         console.log("getWalletBalanceXccData", getWalletBalanceXccData)
         setCurrentBalanceXcc(getWalletBalanceXccData)
-      }
-
-      if(chooseWallet && chooseWallet.xch && chooseWallet.xch.addressList && chooseWallet.xch.addressList.length > 0)  {
-        setCurrentAddressXch(chooseWallet.xch.addressList[0])
-        const getWalletBalanceXchData = await getWalletBalanceXch(chooseWallet.xcc)
-        console.log("getWalletBalanceXchData", getWalletBalanceXchData)
-        setCurrentBalanceXch('0')
       }
 
       console.log("chooseWallet", chooseWallet)
@@ -926,11 +917,9 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentTxsInMemory={currentTxsInMemory}
                 currentAddress={currentAddress}
                 currentAddressXcc={currentAddressXcc}
-                currentAddressXch={currentAddressXch}
                 currentBalance={currentBalance}
                 currentBalanceXwe={currentBalanceXwe}
                 currentBalanceXcc={currentBalanceXcc}
-                currentBalanceXch={currentBalanceXch}
                 currentBalanceReservedRewards={currentBalanceReservedRewards}
                 handleClickReceiveButton={handleClickReceiveButton}
                 handleClickAllTxsButton={handleClickAllTxsButton}
@@ -1074,7 +1063,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 currentBalance={currentBalance}
                 currentBalanceXwe={currentBalanceXwe}
                 currentBalanceXcc={currentBalanceXcc}
-                currentBalanceXch={currentBalanceXch}
                 currentFee={currentFee}
                 handleWalletSendMoney={handleWalletSendMoney}
                 uploadingButton={uploadingButton}

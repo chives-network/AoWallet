@@ -25,7 +25,7 @@ import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentAddressXcc, currentAddressXch, currentBalance, currentBalanceXwe, currentBalanceXcc, currentBalanceXch, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentAddressXcc, currentBalance, currentBalanceXwe, currentBalanceXcc, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
 
   const { t } = useTranslation()
 
@@ -43,10 +43,6 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
     case 'Xcc':
       balanceShow = currentBalanceXcc
       addressShow = currentAddressXcc
-      break;
-    case 'Xch':
-      balanceShow = currentBalanceXch
-      addressShow = currentAddressXch
       break;
   }
 
@@ -297,60 +293,6 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                           ml: 2
                         }}>
                           {Number(currentBalanceXcc) > 0 ? Number(currentBalanceXcc).toFixed(4).replace(/\.?0*$/, '') : '0'}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Card>
-                </Grid>
-
-                <Grid item xs={12} sx={{ py: 0 }}>
-                  <Card>
-                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}} onClick={()=>{handleSwitchBlockchain('Xch')}}>
-                      <CustomAvatar
-                        skin='light'
-                        color={'primary'}
-                        sx={{ ml: 1, mr: 0, width: 40, height: 40 }}
-                        src={'https://web.aowallet.org/images/logo/Xch.png'}
-                      >
-                      </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
-                        <Typography
-                          sx={{
-                            color: 'text.primary',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            textAlign: 'left'
-                          }}
-                        >
-                          {formatHash(currentAddressXch, 8)}
-                        </Typography>
-                        <Box sx={{ display: 'flex' }}>
-                          <Typography
-                            variant='body2'
-                            sx={{
-                              color: `primary.dark`,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              flex: 1,
-                              textAlign: 'left'
-                            }}
-                          >
-                            {Number(currentBalanceXch)} {authConfig.tokenNameXch}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box textAlign="right">
-                        <Typography variant='h6' sx={{
-                          color: `info.dark`,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          mr: 2,
-                          ml: 2
-                        }}>
-                          {Number(currentBalanceXch) > 0 ? Number(currentBalanceXch).toFixed(4).replace(/\.?0*$/, '') : '0'}
                         </Typography>
                       </Box>
                     </Box>

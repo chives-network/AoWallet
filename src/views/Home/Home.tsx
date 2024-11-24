@@ -25,8 +25,7 @@ const HomeModel = () => {
     else {
       if(currentToken == "Ar") setCurrentToken('Xwe');
       if(currentToken == "Xwe") setCurrentToken('Xcc');
-      if(currentToken == "Xcc") setCurrentToken('Xch');
-      if(currentToken == "Xch") setCurrentToken('Ar');
+      if(currentToken == "Xcc") setCurrentToken('Ar');
     }
   }
 
