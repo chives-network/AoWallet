@@ -67,6 +67,10 @@ export async function sendAmount(walletData: any, target: string, amount: string
     const quantity = amount && amount.length > 0 && amount != "" ? arweave.ar.arToWinston(new BigNumber(amount).toString()) : '0' ;
 
     //Check Fee and Send Amount must smaller than wallet balance
+    console.log('sendAmount target', target)
+    console.log('sendAmount tags', tags)
+    console.log('sendAmount amount', amount)
+    console.log('sendAmount data', data)
 
     const txSettings:any = {}
     if(target && target.length == 43 && Number(quantity) > 0) {
@@ -77,6 +81,7 @@ export async function sendAmount(walletData: any, target: string, amount: string
 
     //Make Tx Data
     const tx = await arweave.createTransaction(txSettings)
+    console.log('sendAmount tx', tx)
 
     //Add Tags
     for (const tag of tags || []) { tx.addTag(tag.name, tag.value) }
@@ -95,74 +100,76 @@ export async function sendAmount(walletData: any, target: string, amount: string
     //console.log('quantity', Number(quantity));
 
     if (!tx.chunks?.chunks?.length) {
-		const txResult = await arweave.transactions.post(tx);
-		if(txResult.status==200) {
-			console.log('Transaction sent', txResult);
+      const txResult = await arweave.transactions.post(tx);
+      if(txResult.status==200) {
+        console.log('Transaction sent', txResult);
 
-            //Update the upload process
-            fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
+              //Update the upload process
+              fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
 
-                return {
-                ...prevProgress,
-                [fileName]: 100,
-                };
-            });
-		}
-		else if(txResult.status==400) {
-			console.error(txResult.statusText, txResult);
-		}
-		else {
-			console.log('Unknow error', txResult);
-		}
+                  return {
+                  ...prevProgress,
+                  [fileName]: 100,
+                  };
+              });
+      }
+      else if(txResult.status==400) {
+        console.error(txResult.statusText, txResult);
+      }
+      else {
+        console.log('Unknow error', txResult);
+      }
+      console.log('sendAmount txResult', txResult)
 
-		return txResult;
-	}
+      return txResult;
+    }
 
     //Upload Data if have Chunks
     const UploadChunksStatus: any = {}
     const uploader = await arweave.transactions.getUploader(tx)
-	const storageKey = 'uploader:' + tx.id
-	localStorage.setItem(storageKey, JSON.stringify(uploader))
-	UploadChunksStatus[tx.id] ??= {}
-	UploadChunksStatus[tx.id].upload = 0
+    const storageKey = 'uploader:' + tx.id
+    console.log('sendAmount storageKey', storageKey)
+    localStorage.setItem(storageKey, JSON.stringify(uploader))
+    UploadChunksStatus[tx.id] ??= {}
+    UploadChunksStatus[tx.id].upload = 0
     console.log('Begin upload data txid', tx.id)
 
     //console.log('uploader begin: ', uploader)
     let uploadRecords = 0
-	while (!uploader.isComplete) {
-		await uploader.uploadChunk()
-		localStorage.setItem(storageKey, JSON.stringify(uploader))
-		UploadChunksStatus[tx.id].upload = uploader.pctComplete
+    while (!uploader.isComplete) {
+      await uploader.uploadChunk()
+      localStorage.setItem(storageKey, JSON.stringify(uploader))
+      UploadChunksStatus[tx.id].upload = uploader.pctComplete
 
-        //Update the upload process
-        fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
+          //Update the upload process
+          fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
 
-            return {
-            ...prevProgress,
-            [fileName]: uploader.pctComplete,
-            };
-        });
+              return {
+              ...prevProgress,
+              [fileName]: uploader.pctComplete,
+              };
+          });
 
-        //console.log("uploader processing: ",uploadRecords, uploader.pctComplete)
-        uploadRecords = uploadRecords + 1
-	}
-	if(uploader.isComplete) {
-		localStorage.removeItem(storageKey)
-		setTimeout(() => delete UploadChunksStatus[tx.id], 1000)
-		console.log('Transaction sent: ', tx)
+          //console.log("uploader processing: ",uploadRecords, uploader.pctComplete)
+          uploadRecords = uploadRecords + 1
+    }
+    if(uploader.isComplete) {
+      localStorage.removeItem(storageKey)
+      setTimeout(() => delete UploadChunksStatus[tx.id], 1000)
+      console.log('Transaction sent: ', tx)
 
-        //Update the upload process
-        fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
+          //Update the upload process
+          fileName && fileName.length > 0 && setUploadProgress && setUploadProgress((prevProgress) => {
 
-            return {
-            ...prevProgress,
-            [fileName]: uploader.pctComplete,
-            };
-        });
-	}
-	else {
-		console.error('Transaction error', tx)
-	}
+              return {
+              ...prevProgress,
+              [fileName]: uploader.pctComplete,
+              };
+          });
+    }
+    else {
+      console.error('Transaction error', tx)
+    }
 
     //console.log('uploader end: ', uploader)
     //console.log('UploadChunksStatus: ', UploadChunksStatus)
@@ -191,7 +198,7 @@ export async function getHash (data: string | Uint8Array) {
 
 export async function getProcessedData(walletData: any, walletAddress: string, data: any, Manifest: boolean, BundleTypeArray: string[]): Promise<ArTxParams['data']> {
 	if (typeof data === 'string') { return data }
-    console.log("getProcessedData Input File Data:", data)
+  console.log("getProcessedData Input File Data:", data)
 	if (!walletData) { throw 'multiple files unsupported for current account' }
     if (walletData && walletData.jwk && data && data.length > 0) {
         const bundleItems: any[] = []
@@ -223,7 +230,6 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
             console.log("dataContentList", dataContentList)
             dataItems = dataItemsList.concat(dataContentList)
             console.log("dataItems______________________", dataItems)
-
         }
         else {
             //Other Case
@@ -237,23 +243,26 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
         const trustedAddresses = walletAddress ? [walletAddress] : []
         const deduplicated = await deduplicate(dataItems, trustedAddresses)
         const deduplicatedDataItems = dataItems.map((item: any, i: number) => deduplicated[i] || item)
-        console.log("getProcessedData deduplicated:", deduplicated)
+        console.log("ChivesDrive getProcessedData deduplicated:", deduplicated)
         bundleItems.push(...deduplicatedDataItems.filter((item: any): item is Exclude<typeof item, string> => typeof item !== 'string'))
-        console.log("getProcessedData bundleItems 1:", bundleItems)
+        console.log("ChivesDrive getProcessedData bundleItems 1:", bundleItems)
         if(Manifest)  {
             try {
                 const paths = data.map((item: any) => item.path || '')
                 const index = paths.find((path: any) => path === 'index.html')
                 const manifest = generateManifest(paths, deduplicatedDataItems, index)
                 bundleItems.push(await createDataItem(walletData, { ...manifest }))
-                console.log("getProcessedData bundleItems 2:", bundleItems)
+                console.log("ChivesDrive getProcessedData bundleItems 2:", bundleItems)
             }
             catch (e) {
                 console.warn('manifest generation failed')
             }
         }
 
-        return (await createBundle(walletData, bundleItems)).getRaw()
+        const getRaw = (await createBundle(walletData, bundleItems)).getRaw()
+        console.log("ChivesDrive getProcessedData getRaw():", getRaw)
+
+        return getRaw
     }
     else {
         throw 'multiple files unsupported for '

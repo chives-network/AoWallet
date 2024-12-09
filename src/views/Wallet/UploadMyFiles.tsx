@@ -245,7 +245,7 @@ const UploadMyFiles = ({ currentAddress, chooseWallet, setLeftIcon, setDisabledF
       const amount = ""
       const data = getProcessedDataValue
 
-      console.log("getChivesLanguageData", getChivesLanguageData)
+      console.log("uploadMultiFiles getChivesLanguageData", getChivesLanguageData)
       setIsEncryptFile(false)
 
       //Make the tags

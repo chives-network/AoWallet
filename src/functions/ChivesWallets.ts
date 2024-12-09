@@ -1220,16 +1220,16 @@ export async function getProcessedData(walletData: any, walletAddress: string, d
         const trustedAddresses = walletAddress ? [walletAddress] : []
         const deduplicated = await deduplicate(dataItems, trustedAddresses)
         const deduplicatedDataItems = dataItems.map((item: any, i: number) => deduplicated[i] || item)
-        console.log("getProcessedData deduplicatedDataItems:", deduplicatedDataItems)
+        console.log("ChivesWallets getProcessedData deduplicatedDataItems:", deduplicatedDataItems)
         bundleItems.push(...deduplicatedDataItems.filter((item: any): item is Exclude<typeof item, string> => typeof item !== 'string'))
-        console.log("getProcessedData bundleItems 1:", bundleItems)
+        console.log("ChivesWallets getProcessedData bundleItems 1:", bundleItems)
         if(Manifest)  {
             try {
                 const paths = data.map((item: any) => item.path || '')
                 const index = paths.find((path: any) => path === 'index.html')
                 const manifest = generateManifest(paths, deduplicatedDataItems, index)
                 bundleItems.push(await createDataItem(walletData, { ...manifest }))
-                console.log("getProcessedData bundleItems 2:", bundleItems)
+                console.log("ChivesWallets getProcessedData bundleItems 2:", bundleItems)
             }
             catch (e) {
                 console.warn('manifest generation failed')
