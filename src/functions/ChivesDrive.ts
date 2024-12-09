@@ -379,6 +379,7 @@ async function createBundle (walletData: any, items: Awaited<ReturnType<typeof c
     // @ts-ignore
     const { bundleAndSignData, signers } = await import('../../scripts/arbundles')
     const signer = new signers.ArweaveSigner(walletData.jwk)
+    console.log("createBundle 00000", items, signers)
 
     return bundleAndSignData(items, signer)
 }
