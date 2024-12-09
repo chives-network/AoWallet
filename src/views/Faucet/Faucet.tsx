@@ -77,7 +77,6 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
     setRightButtonText(t('QR') as string)
     setRightButtonIcon('solar:dollar-linear')
     setChooseFaucet(null)
-    console.log("chooseWallet", chooseWallet)
   }
 
   const LeftIconOnClick = () => {

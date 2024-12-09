@@ -446,8 +446,6 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
         setCurrentBalanceXcc(getWalletBalanceXccData)
       }
 
-      console.log("chooseWallet", chooseWallet)
-
     };
     processWallets();
   }, [currentAddress, currentToken, pageModel, activeTab, page])

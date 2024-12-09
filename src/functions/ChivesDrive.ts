@@ -69,11 +69,6 @@ export async function sendAmount(walletData: any, target: string, amount: string
     const quantity = amount && amount.length > 0 && amount != "" ? arweave.ar.arToWinston(new BigNumber(amount).toString()) : '0' ;
 
     //Check Fee and Send Amount must smaller than wallet balance
-    console.log('sendAmount target', target)
-    console.log('sendAmount tags', tags)
-    console.log('sendAmount amount', amount)
-    console.log('sendAmount data', data)
-
     const txSettings:any = {}
     if(target && target.length == 43 && Number(quantity) > 0) {
 	    txSettings.target = target
@@ -83,7 +78,6 @@ export async function sendAmount(walletData: any, target: string, amount: string
 
     //Make Tx Data
     const tx = await arweave.createTransaction(txSettings)
-    console.log('sendAmount tx', tx)
 
     //Add Tags
     for (const tag of tags || []) { tx.addTag(tag.name, tag.value) }
@@ -121,7 +115,6 @@ export async function sendAmount(walletData: any, target: string, amount: string
       else {
         console.log('Unknow error', txResult);
       }
-      console.log('sendAmount txResult', txResult)
 
       return txResult;
     }
@@ -130,7 +123,6 @@ export async function sendAmount(walletData: any, target: string, amount: string
     const UploadChunksStatus: any = {}
     const uploader = await arweave.transactions.getUploader(tx)
     const storageKey = 'uploader:' + tx.id
-    console.log('sendAmount storageKey', storageKey)
     localStorage.setItem(storageKey, JSON.stringify(uploader))
     UploadChunksStatus[tx.id] ??= {}
     UploadChunksStatus[tx.id].upload = 0
@@ -378,7 +370,6 @@ async function createDataItem (walletData: any, item: ArDataItemParams) {
 
 async function createBundle (walletData: any, items: Awaited<ReturnType<typeof createDataItem>>[]) {
     const signer = new ArweaveSigner(walletData.jwk)
-    console.log("createBundle 00000", items, signer)
 
     return bundleAndSignData(items, signer)
 }

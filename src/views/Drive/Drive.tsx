@@ -84,7 +84,6 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
     setTitle(t('Drive') as string)
     setRightButtonText('')
     setRightButtonIcon('ic:sharp-add-circle-outline')
-    console.log("chooseWallet", chooseWallet)
   }
 
   const LeftIconOnClick = () => {
