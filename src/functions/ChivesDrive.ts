@@ -2,6 +2,8 @@ import { PromisePool } from '@supercharge/promise-pool'
 
 import { TxRecordType } from 'src/types/apps/Chivesweave'
 
+import { bundleAndSignData, createData, ArweaveSigner } from "@irys/bundles";
+
 // @ts-ignore
 import BigNumber from 'bignumber.js'
 
@@ -365,9 +367,8 @@ export function generateManifest (localPaths: string[], transactions: Array<{ id
 
 async function createDataItem (walletData: any, item: ArDataItemParams) {
     // @ts-ignore
-    const { createData, signers } = await import('../../scripts/arbundles')
     const { data, tags, target } = item
-    const signer = new signers.ArweaveSigner(walletData.jwk)
+    const signer = new ArweaveSigner(walletData.jwk)
     const anchor = arweave.utils.bufferTob64(crypto.getRandomValues(new Uint8Array(32))).slice(0, 32)
     const dataItem = createData(data, signer, { tags, target, anchor })
     await dataItem.sign(signer)
@@ -376,10 +377,8 @@ async function createDataItem (walletData: any, item: ArDataItemParams) {
 }
 
 async function createBundle (walletData: any, items: Awaited<ReturnType<typeof createDataItem>>[]) {
-    // @ts-ignore
-    const { bundleAndSignData, signers } = await import('../../scripts/arbundles')
-    const signer = new signers.ArweaveSigner(walletData.jwk)
-    console.log("createBundle 00000", items, signers)
+    const signer = new ArweaveSigner(walletData.jwk)
+    console.log("createBundle 00000", items, signer)
 
     return bundleAndSignData(items, signer)
 }
