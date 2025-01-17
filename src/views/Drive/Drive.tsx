@@ -3,6 +3,7 @@ import { useState, useEffect, Fragment } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -27,6 +28,7 @@ import authConfig from '../../configs/auth'
 
 import { getWalletBalance, getCurrentWalletAddress, getCurrentWallet, getTxsInMemoryXwe } from 'src/functions/ChivesWallets'
 import { BalancePlus } from 'src/functions/AoConnect/AoConnect'
+import CloudIcon from '@mui/icons-material/Cloud'
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -67,7 +69,6 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
   const [RightButtonText, setRightButtonText] = useState<string>('')
   const [RightButtonIcon, setRightButtonIcon] = useState<string>('')
 
-
   const [page, setPage] = useState<number>(0)
   const [innerHeight, setInnerHeight] = useState<number | string>(0)
 
@@ -79,7 +80,8 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
   const [allTotalFiles, setAllTotalFiles] = useState<number | null>(null) // Xwe
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isLoadingFinished, setIsLoadingFinished] = useState<boolean>(false)
+  const [isLoadingFinishedMy, setIsLoadingFinishedMy] = useState<boolean>(false)
+  const [isLoadingFinishedAll, setIsLoadingFinishedAll] = useState<boolean>(false)
 
 
   const handleWalletGoHome = () => {
@@ -92,11 +94,24 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
     setLeftIcon('mdi:image-outline')
   }
 
+  const handleWalletGoAllDrive = () => {
+    setRefreshWalletData(refreshWalletData+1)
+    setPageModel('AllDrive')
+    setLeftIcon('')
+    setTitle(t('Drive') as string)
+    setRightButtonText('')
+    setRightButtonIcon('ic:sharp-add-circle-outline')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+  }
+
   const LeftIconOnClick = () => {
     switch(pageModel) {
       case 'UploadMyFiles':
       case 'ViewFile':
         handleWalletGoHome()
+        break
+      case 'ViewFileFromAllDrive':
+        handleWalletGoAllDrive()
         break
       case 'MyDrive':
         setPageModel('AllDrive')
@@ -104,7 +119,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
         break
       case 'AllDrive':
         setPageModel('MyDrive')
-        setLeftIcon('AllDrive')
+        setLeftIcon('ic:twotone-keyboard-arrow-left')
         break
     }
   }
@@ -189,7 +204,12 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
       }
 
-      if(currentAddress && currentAddress.length == 43 && isLoadingFinished == false && pageModel == 'MyDrive')  {
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'AllDrive' && page == 0)  {
+        //setRightButtonIcon('ic:sharp-add-circle-outline')
+        //setLeftIcon('mdi:image-outline')
+      }
+
+      if(currentAddress && currentAddress.length == 43 && isLoadingFinishedMy == false && pageModel == 'MyDrive')  {
         setIsLoading(true)
         const getMyLatestFilesData = await getMyLatestFiles(currentAddress, 'Root', page, 15);
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length > 0)  {
@@ -199,14 +219,14 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
           setMyTotalFiles(getMyLatestFilesData.total)
         }
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length == 0) {
-          setIsLoadingFinished(true)
+          setIsLoadingFinishedMy(true)
           setMyTotalFiles(getMyLatestFilesData.total)
         }
         setIsLoading(false)
         console.log("getMyLatestFilesData", getMyLatestFilesData)
       }
 
-      if(currentAddress && currentAddress.length == 43 && isLoadingFinished == false && pageModel == 'AllDrive')  {
+      if(currentAddress && currentAddress.length == 43 && isLoadingFinishedAll == false && pageModel == 'AllDrive')  {
         setIsLoading(true)
         const getMyLatestFilesData = await getAllLatestFiles(page, 18);
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length > 0)  {
@@ -216,7 +236,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
           setAllTotalFiles(getMyLatestFilesData.total)
         }
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length == 0) {
-          setIsLoadingFinished(true)
+          setIsLoadingFinishedAll(true)
           setAllTotalFiles(getMyLatestFilesData.total)
         }
         setIsLoading(false)
@@ -226,6 +246,13 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
     };
     processWallets();
   }, [currentAddress, pageModel, page])
+
+  const handleClickImageInAllDrive = (Item: any) => {
+    setCurrentTx(Item)
+    setPageModel('ViewFileFromAllDrive')
+    setLeftIcon('ic:twotone-keyboard-arrow-left')
+    setRightButtonIcon('')
+  }
 
 
   return (
@@ -259,7 +286,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
               </Box>
               {allFiles && allFiles.length > 0 && allFiles.map((Item: any, Index: number)=>(
                 <Grid item key={Index} xs={6} sm={6} md={3} lg={3}>
-                  <ImageRectangle item={Item} backEndApi={authConfig.backEndApiXwe} FileType={'image'}/>
+                  <ImageRectangle item={Item} backEndApi={authConfig.backEndApiXwe} FileType={'image'} handleClickImageInAllDrive={handleClickImageInAllDrive} />
                 </Grid>
               ))}
               {isLoading == false && allTotalFiles != null && Number(allTotalFiles) == 0 && (
@@ -280,7 +307,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   </Box>
                 </Box>
               )}
-              {isLoading && isLoadingFinished == false && (
+              {isLoading && isLoadingFinishedAll == false && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
@@ -292,7 +319,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   </Grid>
                 </Fragment>
               )}
-              {isLoadingFinished == true && Number(allTotalFiles) > 0 && (
+              {isLoadingFinishedAll == true && Number(allTotalFiles) > 0 && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
@@ -308,9 +335,6 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
           {pageModel == "MyDrive" && (
             <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 0 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 0, pb: 0, width: '100%' }}>
-
-              </Box>
               {myFiles && myFiles.length > 0 && myFiles.map((Item: any, Index: number)=>(
                 <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                   <Card>
@@ -373,8 +397,8 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                 </Grid>
               ))}
               {isLoading == false && myTotalFiles != null && Number(myTotalFiles) == 0 && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
+                <Box sx={{ display: 'flex', pt: 2, pb: 0, width: '100%', flexDirection: 'column' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'left', px: 4, pt: 3 }}
                             onClick={ ()=>{
                               if(Number(currentBalanceXwe) < 0.01) {
                                 toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
@@ -388,9 +412,14 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                             }}>
                     <Img alt='Upload img' src='/images/misc/upload.png' />
                   </Box>
+                  <Box sx={{ m: 5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    <Typography sx={{m: 2, pl: 2}}>{`${t(`You can upload image, pdf, Word, Excel, PowerPoint, and other files to my drive.`)}`}</Typography>
+                    <Typography sx={{m: 2, pl: 2}}>{`${t(`Alternatively, you can browse the public files on the blockchain.`)}`}</Typography>
+                    <Button sx={{m: 2}} variant="outlined" onClick={()=>handleWalletGoAllDrive()} startIcon={<CloudIcon />} >Browse Public Files</Button>
+                  </Box>
                 </Box>
               )}
-              {isLoading && isLoadingFinished == false && (
+              {isLoading && isLoadingFinishedMy == false && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
@@ -402,7 +431,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   </Grid>
                 </Fragment>
               )}
-              {isLoadingFinished == true && Number(myTotalFiles) > 0 && (
+              {isLoadingFinishedMy == true && Number(myTotalFiles) > 0 && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>
@@ -428,6 +457,16 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
           )}
 
           {pageModel == "ViewFile" && (
+            <XweViewFile
+              currentTx={currentTx}
+              currentAddress={currentAddress}
+              currentToken={'Xwe'}
+              page={page}
+              setPage={setPage}
+            />
+          )}
+
+          {pageModel == "ViewFileFromAllDrive" && (
             <XweViewFile
               currentTx={currentTx}
               currentAddress={currentAddress}
