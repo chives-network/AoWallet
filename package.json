@@ -31,6 +31,7 @@
     "@emotion/styled": "11.11.0",
     "@iconify/react": "4.1.0",
     "@ionic/pwa-elements": "^3.3.0",
+    "@irys/bundles": "^0.0.2",
     "@mui/icons-material": "^5.16.4",
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.19",

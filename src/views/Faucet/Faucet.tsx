@@ -293,7 +293,7 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
 
     }
     else {
-      console.log("GetFaucetFromFaucetTokenId chooseWallet", chooseWallet)
+      console.log("GetFaucetFromFaucetTokenId chooseWallet")
     }
   }
 
