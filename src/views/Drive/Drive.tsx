@@ -97,7 +97,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
   const RightButtonOnClick = () => {
     if(Number(currentBalanceXwe) < 0.01) {
-      toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 2500, position: 'top-center' })
+      toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
     }
     else {
       setPageModel('UploadMyFiles')
@@ -291,7 +291,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
                             onClick={ ()=>{
                               if(Number(currentBalanceXwe) < 0.01) {
-                                toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 2500, position: 'top-center' })
+                                toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
                               }
                               else {
                                 setPageModel('UploadMyFiles')

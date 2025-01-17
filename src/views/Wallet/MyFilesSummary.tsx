@@ -65,7 +65,7 @@ const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPa
           <IconButton sx={{ py: 0 }}
                     onClick={ ()=>{
                       if(currentBalanceXwe < 0.01) {
-                        toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 2500, position: 'top-center' })
+                        toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
                       }
                       else {
                         setPageModel('UploadMyFiles')
@@ -144,7 +144,7 @@ const MyFilesSummary = ({ currentAddress, currentBalanceXwe, setCurrentTx, setPa
           <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
                     onClick={ ()=>{
                       if(currentBalanceXwe < 0.01) {
-                        toast.error(t('Balance is insufficient, you can get 0.1 Xwe in Faucet page') as string, { duration: 2500, position: 'top-center' })
+                        toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
                       }
                       else {
                         setPageModel('UploadMyFiles')
