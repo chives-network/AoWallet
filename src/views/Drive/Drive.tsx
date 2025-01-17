@@ -21,7 +21,9 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import UploadMyFiles from '../Wallet/UploadMyFiles'
 import XweViewFile from '../Wallet/XweViewFile'
-import CardMedia from '@mui/material/CardMedia'
+import ImageRectangle from './ImageRectangle'
+
+import authConfig from '../../configs/auth'
 
 import { getWalletBalance, getCurrentWalletAddress, getCurrentWallet, getTxsInMemoryXwe } from 'src/functions/ChivesWallets'
 import { BalancePlus } from 'src/functions/AoConnect/AoConnect'
@@ -256,19 +258,8 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
               </Box>
               {allFiles && allFiles.length > 0 && allFiles.map((Item: any, Index: number)=>(
-                <Grid item xs={12} sx={{ py: 0 }} key={Index}>
-                  <Card>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}
-                            onClick={ ()=>{
-                              setCurrentTx(Item)
-                              setPageModel('ViewFile')
-                              setLeftIcon('ic:twotone-keyboard-arrow-left')
-                              setRightButtonIcon('')
-                            }}>
-                      <CardMedia component="img" image={getXweWalletImageThumbnail(Item)} sx={{ 'width':'50%', objectFit: 'none', borderRadius: 1, mr: 1 }}/>
-                      <CardMedia component="img" image={getXweWalletImageThumbnail(Item)} sx={{ 'width':'50%', objectFit: 'none', borderRadius: 1, ml: 1 }}/>
-                    </Box>
-                  </Card>
+                <Grid item key={Index} xs={6} sm={6} md={3} lg={3}>
+                  <ImageRectangle item={Item} backEndApi={authConfig.backEndApiXwe} FileType={'image'}/>
                 </Grid>
               ))}
               {isLoading == false && allTotalFiles != null && Number(allTotalFiles) == 0 && (
