@@ -21,6 +21,7 @@ import { styled } from '@mui/material/styles'
 import Header from '../Layout/Header'
 import UploadMyFiles from '../Wallet/UploadMyFiles'
 import XweViewFile from '../Wallet/XweViewFile'
+import CardMedia from '@mui/material/CardMedia'
 
 import { getWalletBalance, getCurrentWalletAddress, getCurrentWallet, getTxsInMemoryXwe } from 'src/functions/ChivesWallets'
 import { BalancePlus } from 'src/functions/AoConnect/AoConnect'
@@ -257,60 +258,15 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
               {allFiles && allFiles.length > 0 && allFiles.map((Item: any, Index: number)=>(
                 <Grid item xs={12} sx={{ py: 0 }} key={Index}>
                   <Card>
-                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, py: 1}}
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}
                             onClick={ ()=>{
                               setCurrentTx(Item)
                               setPageModel('ViewFile')
                               setLeftIcon('ic:twotone-keyboard-arrow-left')
                               setRightButtonIcon('')
                             }}>
-                      <CustomAvatar
-                        skin='light'
-                        color={'primary'}
-                        sx={{ mr: 0, width: 43, height: 43 }}
-                        src={getXweWalletImageThumbnail(Item)}
-                      >
-                      </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '60%', ml: 1.5 }}>
-                        <Typography
-                          sx={{
-                            color: 'text.primary',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            textAlign: 'left'
-                          }}
-                        >
-                          {Item.table.item_name}
-                        </Typography>
-                        <Box sx={{ display: 'flex' }}>
-                          <Typography
-                            variant='body2'
-                            sx={{
-                              color: `primary.dark`,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              flex: 1,
-                              textAlign: 'left'
-                            }}
-                          >
-                            {formatTimestamp(Item.table.timestamp)}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box textAlign="right" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                        <Typography variant='h6' sx={{
-                          color: `info.dark`,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          mr: 2,
-                          ml: 2
-                        }}>
-                          {formatStorageSize(Item.table.data_size)}
-                        </Typography>
-                      </Box>
+                      <CardMedia component="img" image={getXweWalletImageThumbnail(Item)} sx={{ 'width':'50%', objectFit: 'none', borderRadius: 1, mr: 1 }}/>
+                      <CardMedia component="img" image={getXweWalletImageThumbnail(Item)} sx={{ 'width':'50%', objectFit: 'none', borderRadius: 1, ml: 1 }}/>
                     </Box>
                   </Card>
                 </Grid>
