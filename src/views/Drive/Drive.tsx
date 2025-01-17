@@ -10,7 +10,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import CircularProgress from '@mui/material/CircularProgress'
 import toast from 'react-hot-toast'
 
-import { getMyLatestFiles } from 'src/functions/ChivesDrive'
+import { getMyLatestFiles, getAllLatestFiles } from 'src/functions/ChivesDrive'
 import { formatStorageSize, formatTimestamp } from 'src/configs/functions'
 import { getXweWalletImageThumbnail } from 'src/functions/ChivesWallets'
 
@@ -57,7 +57,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
   const [currentAddress, setCurrentAddress] = useState<string>("")
   const [chooseWallet, setChooseWallet] = useState<any>(null)
-  const [pageModel, setPageModel] = useState<string>('MainDrive')
+  const [pageModel, setPageModel] = useState<string>('MyDrive')
   const [HeaderHidden, setHeaderHidden] = useState<boolean>(false)
   const [LeftIcon, setLeftIcon] = useState<string>('')
   const [Title, setTitle] = useState<string>(t('Drive') as string)
@@ -70,8 +70,10 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
   const [currentBalanceXwe, setCurrentBalanceXwe] = useState<string>("") // Xwe
   const [currentTxsInMemory, setCurrentTxsInMemory] = useState<any>({}) // Xwe
-  const [totalFiles, setTotalFiles] = useState<number | null>(null) // Xwe
   const [myFiles, setMyFiles] = useState<any[]>([]) // Xwe
+  const [myTotalFiles, setMyTotalFiles] = useState<number | null>(null) // Xwe
+  const [allFiles, setAllFiles] = useState<any[]>([]) // Xwe
+  const [allTotalFiles, setAllTotalFiles] = useState<number | null>(null) // Xwe
   const [currentTx, setCurrentTx] = useState<any>({}) // Xwe
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoadingFinished, setIsLoadingFinished] = useState<boolean>(false)
@@ -79,11 +81,12 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
   const handleWalletGoHome = () => {
     setRefreshWalletData(refreshWalletData+1)
-    setPageModel('MainDrive')
+    setPageModel('MyDrive')
     setLeftIcon('')
     setTitle(t('Drive') as string)
     setRightButtonText('')
     setRightButtonIcon('ic:sharp-add-circle-outline')
+    setLeftIcon('mdi:image-outline')
   }
 
   const LeftIconOnClick = () => {
@@ -91,6 +94,14 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
       case 'UploadMyFiles':
       case 'ViewFile':
         handleWalletGoHome()
+        break
+      case 'MyDrive':
+        setPageModel('AllDrive')
+        setLeftIcon('ic:twotone-keyboard-arrow-left')
+        break
+      case 'AllDrive':
+        setPageModel('MyDrive')
+        setLeftIcon('AllDrive')
         break
     }
   }
@@ -155,7 +166,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
   useEffect(() => {
     const processWallets = async () => {
-      if(currentAddress && currentAddress.length == 43 && pageModel == 'MainDrive' && page == 0)  {
+      if(currentAddress && currentAddress.length == 43 && pageModel == 'MyDrive' && page == 0)  {
 
         //For Xwe
         const currentBalanceTempXwe = await getWalletBalance(currentAddress, 'Xwe');
@@ -171,21 +182,39 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
         }
 
         setRightButtonIcon('ic:sharp-add-circle-outline')
+        setLeftIcon('mdi:image-outline')
 
       }
 
-      if(currentAddress && currentAddress.length == 43 && isLoadingFinished == false && pageModel == 'MainDrive')  {
+      if(currentAddress && currentAddress.length == 43 && isLoadingFinished == false && pageModel == 'MyDrive')  {
         setIsLoading(true)
         const getMyLatestFilesData = await getMyLatestFiles(currentAddress, 'Root', page, 15);
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length > 0)  {
           setMyFiles((preV: any)=>(
             [...preV, ...getMyLatestFilesData.data]
           ))
-          setTotalFiles(getMyLatestFilesData.total)
+          setMyTotalFiles(getMyLatestFilesData.total)
         }
         if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length == 0) {
           setIsLoadingFinished(true)
-          setTotalFiles(getMyLatestFilesData.total)
+          setMyTotalFiles(getMyLatestFilesData.total)
+        }
+        setIsLoading(false)
+        console.log("getMyLatestFilesData", getMyLatestFilesData)
+      }
+
+      if(currentAddress && currentAddress.length == 43 && isLoadingFinished == false && pageModel == 'AllDrive')  {
+        setIsLoading(true)
+        const getMyLatestFilesData = await getAllLatestFiles(page, 18);
+        if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length > 0)  {
+          setAllFiles((preV: any)=>(
+            [...preV, ...getMyLatestFilesData.data]
+          ))
+          setAllTotalFiles(getMyLatestFilesData.total)
+        }
+        if(getMyLatestFilesData && getMyLatestFilesData.data && getMyLatestFilesData.data.length == 0) {
+          setIsLoadingFinished(true)
+          setAllTotalFiles(getMyLatestFilesData.total)
         }
         setIsLoading(false)
         console.log("getMyLatestFilesData", getMyLatestFilesData)
@@ -193,7 +222,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
 
     };
     processWallets();
-  }, [currentAddress, page])
+  }, [currentAddress, pageModel, page])
 
 
   return (
@@ -220,7 +249,117 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
             }}
             >
 
-          {pageModel == "MainDrive" && (
+          {pageModel == "AllDrive" && (
+            <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 0 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 0, pb: 0, width: '100%' }}>
+
+              </Box>
+              {allFiles && allFiles.length > 0 && allFiles.map((Item: any, Index: number)=>(
+                <Grid item xs={12} sx={{ py: 0 }} key={Index}>
+                  <Card>
+                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, py: 1}}
+                            onClick={ ()=>{
+                              setCurrentTx(Item)
+                              setPageModel('ViewFile')
+                              setLeftIcon('ic:twotone-keyboard-arrow-left')
+                              setRightButtonIcon('')
+                            }}>
+                      <CustomAvatar
+                        skin='light'
+                        color={'primary'}
+                        sx={{ mr: 0, width: 43, height: 43 }}
+                        src={getXweWalletImageThumbnail(Item)}
+                      >
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '60%', ml: 1.5 }}>
+                        <Typography
+                          sx={{
+                            color: 'text.primary',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left'
+                          }}
+                        >
+                          {Item.table.item_name}
+                        </Typography>
+                        <Box sx={{ display: 'flex' }}>
+                          <Typography
+                            variant='body2'
+                            sx={{
+                              color: `primary.dark`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              flex: 1,
+                              textAlign: 'left'
+                            }}
+                          >
+                            {formatTimestamp(Item.table.timestamp)}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box textAlign="right" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                        <Typography variant='h6' sx={{
+                          color: `info.dark`,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          mr: 2,
+                          ml: 2
+                        }}>
+                          {formatStorageSize(Item.table.data_size)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
+              ))}
+              {isLoading == false && allTotalFiles != null && Number(allTotalFiles) == 0 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
+                            onClick={ ()=>{
+                              if(Number(currentBalanceXwe) < 0.01) {
+                                toast.error(t('Balance is insufficient, you can get 0.05 Xwe in Faucet page for new user') as string, { duration: 2500, position: 'top-center' })
+                              }
+                              else {
+                                setPageModel('UploadMyFiles')
+                                setLeftIcon('ic:twotone-keyboard-arrow-left')
+                                setTitle(t('Upload My Files') as string)
+                                setRightButtonIcon('')
+                              }
+                            }}>
+                    <Img alt='Upload img' src='/images/misc/upload.png' />
+                  </Box>
+                </Box>
+              )}
+              {isLoading && isLoadingFinished == false && (
+                <Fragment>
+                  <Grid container spacing={5}>
+                      <Grid item xs={12}>
+                          <Box sx={{ mt: 5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                              <CircularProgress sx={{ mb: 4 }} />
+                              <Typography sx={{mt: 3}}>{`${t(`Loading`)}`} ...</Typography>
+                          </Box>
+                      </Grid>
+                  </Grid>
+                </Fragment>
+              )}
+              {isLoadingFinished == true && Number(allTotalFiles) > 0 && (
+                <Fragment>
+                  <Grid container spacing={5}>
+                      <Grid item xs={12}>
+                          <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                              <Typography sx={{mt: 3}}>{`${t(`Loaded All Files`)}`}</Typography>
+                          </Box>
+                      </Grid>
+                  </Grid>
+                </Fragment>
+              )}
+            </Grid>
+          )}
+
+          {pageModel == "MyDrive" && (
             <Grid container alignItems="left" justifyContent="center" spacing={2} sx={{ minHeight: '100%', pt: 0, pl: 0 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 0, pb: 0, width: '100%' }}>
 
@@ -286,7 +425,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   </Card>
                 </Grid>
               ))}
-              {isLoading == false && totalFiles != null && Number(totalFiles) == 0 && (
+              {isLoading == false && myTotalFiles != null && Number(myTotalFiles) == 0 && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 0, width: '100%' }}>
                   <Box sx={{ display: 'flex', alignItems: 'left', px: 4, pt: 3 }}
                             onClick={ ()=>{
@@ -316,7 +455,7 @@ const Drive = ({ encryptWalletDataKey, setDisabledFooter }: any) => {
                   </Grid>
                 </Fragment>
               )}
-              {isLoadingFinished == true && Number(totalFiles) > 0 && (
+              {isLoadingFinished == true && Number(myTotalFiles) > 0 && (
                 <Fragment>
                   <Grid container spacing={5}>
                       <Grid item xs={12}>

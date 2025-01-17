@@ -38,6 +38,23 @@ export async function getMyLatestFiles(Address: string, Folder = 'Root', From = 
   }
 }
 
+export async function getAllLatestFiles(PageId = 0, PageSize = 8) {
+  try {
+    const response = await axios.get(authConfig.backEndApiXwe + '/file/image/' + PageId + '/' + PageSize + '');
+    if(response && response.data) {
+
+        return response.data
+    }
+    else {
+
+      return
+    }
+  }
+  catch (error) {
+      console.error(`Error getMyLatestFiles:`, error);
+  }
+}
+
 export async function createTransaction(walletData: any, target: string, amount: string, tags: any, data: string | Uint8Array | ArrayBuffer | undefined) {
     const quantity = amount && amount.length > 0 && amount != "" ? arweave.ar.arToWinston(new BigNumber(amount).toString()) : '0' ;
 
