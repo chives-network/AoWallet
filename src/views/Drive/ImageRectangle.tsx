@@ -5,9 +5,6 @@ import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 
-// ** Next Imports
-import Link from 'next/link'
-
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ReactAudioPlayer from 'react-audio-player';

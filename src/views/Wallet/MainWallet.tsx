@@ -25,7 +25,7 @@ import { GetAppAvatar } from 'src/functions/AoConnect/Token'
 import MyFilesSummary from './MyFilesSummary'
 
 
-const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentAddressXcc, currentBalance, currentBalanceXwe, currentBalanceXcc, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
+const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, currentAddress, currentAddressXcc, currentBalance, currentBalanceXwe, currentBalanceXcc, currentBalanceReservedRewards, handleClickReceiveButton, handleClickAllTxsButton, handleClickSendButton, currentAoBalance, currentAoWalletBalance, mySavingTokensData, myAoTokensBalance, handleClickViewTokenButton, isDisabledManageAssets, handleClickManageAssetsButton, isDisabledButton, setCurrentTx, setPageModel, setLeftIcon, setTitle, setRightButtonIcon, encryptWalletDataKey } : any) => {
 
   const { t } = useTranslation()
 
@@ -382,6 +382,86 @@ const MainWallet = ({ handleSwitchBlockchain, currentToken, currentTxsInMemory, 
                             ml: 2
                           }}>
                             {Number(currentAoBalance) > 0 ? Number(currentAoBalance).toFixed(4).replace(/\.?0*$/, '') : '0'}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Card>
+                  </Grid>
+                )}
+
+                {currentToken && currentToken == "Ar" && (
+                  <Grid item xs={12} sx={{ py: 0 }}>
+                    <Card>
+                      <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1}}
+                        onClick={() => {
+                          const AoWalletTokenMap = {
+                            "TokenData": {
+                              "Data-Protocol": "ao",
+                              "Variant": "ao.TN.1",
+                              "Type": "Message",
+                              "From-Process": "NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ",
+                              "From-Module": "JdN3ffZQaFE33-s20LSp2uLhm9Z94wnG59aLRnBAecU",
+                              "Ref_": "2316",
+                              "Release": "ChivesToken",
+                              "TokenHolders": "148",
+                              "Denomination": "3",
+                              "TotalSupply": "21000000.0",
+                              "Ticker": "AOW",
+                              "Name": "AoWallet",
+                              "Logo": "WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630",
+                              "Version": "20240819"
+                            },
+                            "TokenSort": "100",
+                            "TokenId": "NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ",
+                            "TokenGroup": "AoWallet"
+                          };
+                          handleClickViewTokenButton(AoWalletTokenMap);
+                        }}>
+                        <CustomAvatar
+                          skin='light'
+                          color={'primary'}
+                          sx={{ mr: 0, width: 43, height: 43 }}
+                          src={'https://arweave.net/WqlWUAkpKaojk8Z_WRo0jsNb_Zvd5imm2oM-YOlY630'}
+                        >
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', ml: 1.5 }}>
+                          <Typography
+                            sx={{
+                              color: 'text.primary',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              textAlign: 'left'
+                            }}
+                          >
+                            AoWallet
+                          </Typography>
+                          <Box sx={{ display: 'flex' }}>
+                            <Typography
+                              variant='body2'
+                              sx={{
+                                color: `primary.dark`,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                flex: 1,
+                                textAlign: 'left'
+                              }}
+                            >
+                              {formatHash(authConfig.AoWalletProcessTxId, 6)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box textAlign="right">
+                          <Typography variant='h6' sx={{
+                            color: `info.dark`,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            mr: 2,
+                            ml: 2
+                          }}>
+                            {Number(currentAoWalletBalance) > 0 ? Number(currentAoWalletBalance).toFixed(4).replace(/\.?0*$/, '') : '0'}
                           </Typography>
                         </Box>
                       </Box>

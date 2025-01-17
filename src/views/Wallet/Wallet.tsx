@@ -283,6 +283,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
 
   const [currentFee, setCurrentFee] = useState<number>(0)
   const [currentAoBalance, setCurrentAoBalance] = useState<string>("")
+  const [currentAoWalletBalance, setCurrentAoWalletBalance] = useState<string>("")
   const [myAoTokensBalance, setMyAoTokensBalance] = useState<any>({})
 
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
@@ -389,8 +390,13 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
           setCurrentBalance(Number(currentBalanceTempAr).toFixed(4).replace(/\.?0*$/, ''))
         }
         if(currentToken == "Ar")  {
+          console.log("authConfig.AoWalletProcessTxId", authConfig.AoWalletProcessTxId)
+          const AoWalletBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoWalletProcessTxId, String(currentAddress))
+          setCurrentAoWalletBalance(FormatBalance(AoWalletBalanceDryRunData, 3))
+
           const AoTokenBalanceDryRunData = await AoTokenBalanceDryRun(authConfig.AoTokenProcessTxId, String(currentAddress))
           setCurrentAoBalance(FormatBalance(AoTokenBalanceDryRunData, 12))
+
           handleGetMySavingTokensData() // Get Balanes For AO Token
         }
 
@@ -607,6 +613,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
     setTitle(t('View Asset') as string)
     setRightButtonText(t('') as string)
     setRightButtonIcon('mdi:qrcode')
+    console.log("Token", Token)
     try {
         if(Token && Token.TokenData) {
           setChooseToken({...Token, ...Token.TokenData})
@@ -923,6 +930,7 @@ const Wallet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, specifyTo
                 handleClickAllTxsButton={handleClickAllTxsButton}
                 handleClickSendButton={handleClickSendButton}
                 currentAoBalance={currentAoBalance}
+                currentAoWalletBalance={currentAoWalletBalance}
                 mySavingTokensData={mySavingTokensData}
                 myAoTokensBalance={myAoTokensBalance}
                 handleClickViewTokenButton={handleClickViewTokenButton}

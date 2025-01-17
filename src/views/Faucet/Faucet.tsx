@@ -48,11 +48,13 @@ const Faucet = ({ currentToken, handleSwitchBlockchain, setCurrentTab, setSpecif
   // ** Hook
   const { t } = useTranslation()
 
+  /*
   useEffect(() => {
     if(currentToken == 'Ar')  {
       handleSwitchBlockchain()
     }
   }, []);
+  */
 
   const contentHeightFixed = {}
 

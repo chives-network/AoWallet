@@ -10,7 +10,7 @@ const config = {
   AoConnectWebSite: "https://www.ao.link",
   AoConnectAoLink: "https://www.ao.link/#",
   AoTokenProcessTxId: "Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk",
-  AoWalletProcessTxId: "Dkey3Xt4z_dvZ6WDSAW7YdIz29y0QwNXUMEaNYuSG00",
+  AoWalletProcessTxId: "NYGM5NIrdGdq_h7ySkSt-efftYsO27ZRlO4JMRppYHQ",
   AoConnectModule: 'JdN3ffZQaFE33-s20LSp2uLhm9Z94wnG59aLRnBAecU',
   AoConnectScheduler: 'fcoN_xJeisVsPXA-trzVAuIiqO3ydLQxM-L4XbrQKzY',
   AoConnectMyProcessTxIds: 'w6HQkGKz9VKszy1pT9JcqWUlElv5smxDI_Inv1OOeqc',
