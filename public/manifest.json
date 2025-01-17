@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AoWallet & Arweave Wallet",
   "short_name": "AoWallet",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Supply AO & AR & Chivesweave Blockchain. Personal Drive, Upload files free.",
   "icons": {
     "16": "/icons/icon16.png",
